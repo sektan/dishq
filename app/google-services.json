@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "1065480470289",
+    "firebase_url": "https://dishq-production.firebaseio.com",
+    "project_id": "dishq-production",
+    "storage_bucket": "dishq-production.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065480470289:android:aa7f97b45e36c894",
+        "android_client_info": {
+          "package_name": "version1.dishq.dishq"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065480470289-voc31fk43e4q24e2gunvukbreheei5og.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "version1.dishq.dishq",
+            "certificate_hash": "4ED128EC345F0ADF8429203EE9104471EB034AD1"
+          }
+        },
+        {
+          "client_id": "1065480470289-kljstaji734o68q9m39f0mm4mpt4t2j1.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1065480470289-fa2sfel9s88t4svp6nee7l1cklol8nda.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEAczNnsLVmz7-AEmimiFyQRWLgaxkBwk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1065480470289-kljstaji734o68q9m39f0mm4mpt4t2j1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
