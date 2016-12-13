@@ -1,8 +1,10 @@
 package version1.dishq.dishq.server;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
 
 /**
@@ -13,6 +15,12 @@ import version1.dishq.dishq.server.Response.VersionCheckResponse;
 public interface RestApi {
 
     @POST("api/getandroidappdetails/")
-    Call<VersionCheckResponse> checkVersion();
+    Call<VersionCheckResponse> checkVersion(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId, @Query("version_name")String versionName, @Query("version_number")int versionCode);
+
+    @GET("api/appclose/")
+    Call<ResponseBody> appClose(@Query("uid")int UniqueIdentifier, @Query("user_id")int UserId);
+
+    @GET("api/apptobackground/")
+    Call<ResponseBody> appToBackground(@Query("uid")int UniqueIdentifier, @Query("user_id")int UserId);
 
 }

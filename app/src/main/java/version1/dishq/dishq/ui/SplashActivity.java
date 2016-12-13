@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -35,8 +36,16 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.Response.VersionCheckResponse;
+import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -56,6 +65,10 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
+    public String versionName;
+    public int versionCode = 0;
+    public String uniqueIdentifier;
+    public int userId = -1;
     private static String lat = "0.0";
     private static String lang = "0.0";
 
@@ -73,6 +86,17 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
         }
 
         checkGPS();
+
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = pInfo.versionName;
+            versionCode = pInfo.versionCode;
+
+            Log.e("dfdd", pInfo.versionName + pInfo.versionCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -256,6 +280,68 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     }
 
     private void checkVersion() {
+        RestApi restApi = Config.createService(RestApi.class);
+        Call<VersionCheckResponse> request = restApi.checkVersion(uniqueIdentifier, userId, versionName, versionCode);
+        request.enqueue(new Callback<VersionCheckResponse>() {
+            @Override
+            public void onResponse(Call<VersionCheckResponse> call, Response<VersionCheckResponse> response) {
+                Log.d("MainActivity", "Success");
+                try {
+                    if(response.isSuccessful()) {
+                        VersionCheckResponse.VersionCheckData body = response.body().versionCheckData;
+                        if(body!=null) {
+                            if(body.getShowUpdatePopup()) {
+                                if(body.getDoForceUpdate()) {
+                                    showAlert("Update YW8", "Update the app for best performance", true);
+                                }else {
+
+                                    showAlert("Update YW8", "Update the app for best performance", false);
+                                }
+                            }else {
+
+                            }
+                        }
+
+                    } else {
+                        String error = response.errorBody().string();
+                        Log.d("VersionCheck", error);
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<VersionCheckResponse> call, Throwable t) {
+                Log.d("MainActivity", "Failure");
+                if(!Util.checkAndShowNetworkPopup(SplashActivity.this)) {
+                    //checkVersion(versionName, versionCode);
+                }
+            }
+        });
+
+    }
+
+    public void showAlert(String title, String message, boolean force) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message).setCancelable(false)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
+                    }
+                });
+        if(!force){
+            builder.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+        }
+
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
 
     }
 
