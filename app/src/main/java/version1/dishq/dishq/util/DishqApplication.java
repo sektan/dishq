@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 
@@ -20,11 +19,50 @@ import java.util.TimerTask;
 public final class DishqApplication extends android.support.multidex.MultiDexApplication {
 
     public static DishqApplication application;
-
+    private static SharedPreferences prefs;
+    private static String uniqueId;
+    private static String accessToken;
+    private static String tokenType;
     public boolean wasInBackground = true;
 
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        application = this;
+        uniqueId = getPrefs().getString(Constants.UNIQUE_IDENTIFIER, null);
+        accessToken = getPrefs().getString(Constants.ACCESS_TOKEN, null);
+        tokenType = getPrefs().getString(Constants.TOKEN_TYPE, null);
+        Util.ACCESS_TOKEN = tokenType + " " + accessToken;
+        registerActivityLifecycleCallbacks(activityCallbacks);
+    }
+
+    public static SharedPreferences getPrefs(){
+        if(prefs == null){
+            prefs = application.getSharedPreferences(Constants.DISHQ_APP_PREFS, MODE_PRIVATE);
+        }
+        return prefs;
+    }
+
+    public static void setAccessToken(String accessToken, String tokenType) {
+        DishqApplication.accessToken = accessToken;
+        DishqApplication.tokenType = tokenType;
+        Util.ACCESS_TOKEN = tokenType + " " + accessToken;
+    }
+
+    public static String getAccessToken(){
+        return Util.ACCESS_TOKEN;
+    }
+
+    public static String getUniqueID() {
+        return DishqApplication.uniqueId;
+    }
+
+    public static void setUniqueId(String uniqueId) {
+        DishqApplication.uniqueId = uniqueId;
+    }
 
     Application.ActivityLifecycleCallbacks activityCallbacks = new ActivityLifecycleCallbacks() {
         @Override
@@ -65,12 +103,6 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 
         }
     };
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        registerActivityLifecycleCallbacks(activityCallbacks);
-    }
 
     public static synchronized DishqApplication getInstance() {
         return application;

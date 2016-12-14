@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">dishq</string>
+
+    <string name="facebook_app_id">1738469866425993</string>
 </resources>

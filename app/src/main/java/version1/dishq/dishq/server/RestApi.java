@@ -14,8 +14,8 @@ import version1.dishq.dishq.server.Response.VersionCheckResponse;
 
 public interface RestApi {
 
-    @POST("api/getandroidappdetails/")
-    Call<VersionCheckResponse> checkVersion(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId, @Query("version_name")String versionName, @Query("version_number")int versionCode);
+    @GET("api/getandroidappdetails/")
+    Call<VersionCheckResponse> checkVersion(@Query("version_number")int versionCode, @Query("version_name")String versionName, @Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
 
     @GET("api/appclose/")
     Call<ResponseBody> appClose(@Query("uid")int UniqueIdentifier, @Query("user_id")int UserId);

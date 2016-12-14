@@ -7,8 +7,8 @@ android {
         applicationId "version1.dishq.dishq"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.1.9"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -30,6 +30,9 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:multidex:1.0.1'
+
+    //Facebook
+    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
 
     //retrofit and OkHttp
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
