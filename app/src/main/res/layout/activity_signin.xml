@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_login_button"
@@ -12,8 +13,36 @@
         android:gravity="center_horizontal"
         android:visibility="gone" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/connect_with"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="470dp"
+            android:alpha="0.87"
+            android:gravity="center_horizontal"
+            android:text="@string/connect_with"
+            android:textSize="@dimen/visible_text_reading_size" />
+
+        <Button
+            android:id="@+id/google_sign_up"
+            android:layout_below="@+id/connect_with"
+            android:layout_width="136dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="28dp" />
+
+        <Button
+            android:id="@+id/fb"
+            android:layout_below="@+id/google_sign_up"
+            android:layout_width="136dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="34dp" />
+    </RelativeLayout>
+
+</RelativeLayout>

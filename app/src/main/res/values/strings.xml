@@ -1,5 +1,11 @@
 <resources>
+    <!-- Android Manifest -->
+    <string name="facebook_app_id">1738469866425993</string>
     <string name="app_name">dishq</string>
 
-    <string name="facebook_app_id">1738469866425993</string>
+    <!-- signIn/signUp -->
+    <string name="connect_with">Connect with</string>
+    <string name="backend_facebook">facebook</string>
+    <string name="grant_type_conv_token">convert_token</string>
+    <string name="backend_google">google-oauth2</string>
 </resources>

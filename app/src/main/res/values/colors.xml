@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#00bfa5</color>
+    <color name="colorPrimaryDark">#00bfa5</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="offWhite">#80ffffff</color>
+    <color name="blueGreen">#00bfa5</color>
+    <color name="cardFirst">#0500bfa5</color>
+    <color name="cardOne">#1500bfa5</color>
+    <color name="cardTwo">#3000bfa5</color>
+    <color name="cardThree">#4500bfa5</color>
+    <color name="cardFour">#6000bfa5</color>
+    <color name="cardGreen">#1000bfa5</color>
+    <color name="lightGray">#f8f8f8</color>
+    <color name="lightGreen">#22bea3</color>
+    <color name="black">#000000</color>
+    <color name="lightPurple">#7b53c0</color>
+    <color name="red">#ff4d4d</color>
+    <color name="rowGreen">#e8f6f4</color>
+    <color name="rowPurple">#f1eef6</color>
+    <color name="greyWhite">#fafafa</color>
 </resources>
