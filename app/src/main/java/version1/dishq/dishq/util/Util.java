@@ -1,17 +1,19 @@
 package version1.dishq.dishq.util;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 /**
  * Created by dishq on 13-12-2016.
@@ -20,12 +22,11 @@ import android.widget.Toast;
 
 public class Util {
 
-//    uniqueIdentifier = FirebaseInstanceId.getInstance().getToken();
-//    Log.d(TAG, "The uniqueIdentification: " + uniqueIdentifier);
-
     static String ACCESS_TOKEN = "";
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
     @SuppressLint("StaticFieldLeak")
     private static Activity currentAct;
+
     public static boolean checkAndShowNetworkPopup(final Activity activity) {
         currentAct = activity;
         if (!isOnline(false)) {
@@ -71,5 +72,34 @@ public class Util {
         }
 
         return true;
+    }
+
+    public static void showAlert(String title, String message, final Activity activity) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
+        builder.setTitle(title);
+        builder.setMessage(message).setCancelable(false)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_DENIED) {
+                            ActivityCompat.requestPermissions(activity,
+                                    new String[]{Manifest.permission.GET_ACCOUNTS},
+                                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                        }
+                    }
+                });
+
+
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+        TextView message1 = (TextView) alert.findViewById(android.R.id.message);
+        assert message != null;
+        message1.setLineSpacing(0, 1.5f);
+
     }
 }

@@ -6,9 +6,13 @@
     <!-- signIn/signUp -->
     <string name="connect_with">Connect with</string>
     <string name="backend_facebook">facebook</string>
-    <string name="grant_type_conv_token">convert_token</string>
+    <string name="conv_token">convert_token</string>
     <string name="backend_google">google-oauth2</string>
     <string name="server_client_id">
         1065480470289-fa2sfel9s88t4svp6nee7l1cklol8nda.apps.googleusercontent.com
+    </string>
+    <string name="client_id">FDv2hh91hLDZioTfI5zGV98DwmqLdix7aJJYfYGB</string>
+    <string name="client_secret">
+        uYl8MUXsU5pAnGgFQdTxvBhqROE5OinbXUzls5hpMtmjUvaPrWJppr8WThodCi7Qw0TcsjhYJJnzkxItGZA19TtWRSVIRY5GPhP2VXUyp7joPDFToDR0tNbXu58myMGg
     </string>
 </resources>

@@ -2,9 +2,12 @@ package version1.dishq.dishq.server;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import version1.dishq.dishq.server.Request.SignUpHelper;
+import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
 
 /**
@@ -22,5 +25,8 @@ public interface RestApi {
 
     @GET("api/apptobackground/")
     Call<ResponseBody> appToBackground(@Query("uid")int UniqueIdentifier, @Query("user_id")int UserId);
+
+    @POST("api/auth/signup/")
+    Call<SignUpResponse> createNewUser(@Body SignUpHelper signUpHelper);
 
 }
