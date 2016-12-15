@@ -23,6 +23,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static String uniqueId;
     private static String accessToken;
     private static String tokenType;
+    private static String facebookOrGoogle;
     public boolean wasInBackground = true;
 
     private Timer mActivityTransitionTimer;
@@ -36,6 +37,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         accessToken = getPrefs().getString(Constants.ACCESS_TOKEN, null);
         tokenType = getPrefs().getString(Constants.TOKEN_TYPE, null);
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
+        facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
         registerActivityLifecycleCallbacks(activityCallbacks);
     }
 
@@ -56,12 +58,20 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         return Util.ACCESS_TOKEN;
     }
 
-    public static String getUniqueID() {
-        return DishqApplication.uniqueId;
+    public static void setFacebookOrGoogle(String facebookOrGoogle) {
+        DishqApplication.facebookOrGoogle = facebookOrGoogle;
+    }
+
+    public static String getFacebookOrGoogle() {
+        return DishqApplication.facebookOrGoogle;
     }
 
     public static void setUniqueId(String uniqueId) {
         DishqApplication.uniqueId = uniqueId;
+    }
+
+    public static String getUniqueID() {
+        return DishqApplication.uniqueId;
     }
 
     Application.ActivityLifecycleCallbacks activityCallbacks = new ActivityLifecycleCallbacks() {

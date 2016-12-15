@@ -8,4 +8,7 @@
     <string name="backend_facebook">facebook</string>
     <string name="grant_type_conv_token">convert_token</string>
     <string name="backend_google">google-oauth2</string>
+    <string name="server_client_id">
+        1065480470289-fa2sfel9s88t4svp6nee7l1cklol8nda.apps.googleusercontent.com
+    </string>
 </resources>
