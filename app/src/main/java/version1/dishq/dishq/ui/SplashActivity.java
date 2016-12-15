@@ -66,6 +66,7 @@ public class SplashActivity extends BaseActivity {
 
     }
 
+    //Timer set for the display time of the splashScreen
     Thread timer = new Thread() {
         public void run() {
             try {
@@ -84,6 +85,7 @@ public class SplashActivity extends BaseActivity {
         }
     };
 
+    //Method to check if the internet is connected or not
     private void checkInternetConnection() {
         SharedPreferences settings;
         final String PREFS_NAME = "MyPrefsFile";
@@ -104,6 +106,7 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
+    //Check for internet
     private void checkNetwork() {
         if (!Util.checkAndShowNetworkPopup(this)) {
             //Check for version
@@ -115,6 +118,7 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
+    //Method to make an api call to check the version of the app
     private void checkVersion() {
         //Creating a service to make a restApi call
         RestApi restApi = Config.createService(RestApi.class);
@@ -129,19 +133,21 @@ public class SplashActivity extends BaseActivity {
                         if(body!=null) {
                             if(body.getShowUpdatePopup()) {
                                 if(body.getDoForceUpdate()) {
+                                    Log.d(TAG, "Update is required and is mandatory");
                                     showAlert("Update Dishq", "Update the app for best performance", true);
                                 }else {
-
+                                    Log.d(TAG, "Update is required but not mandatory");
                                     showAlert("Update Dishq", "Update the app for best performance", false);
                                 }
                             }else {
+                                //To check which activity to open after the splashScreen
                                 checkWhereToGo();
                             }
                         }
 
                     } else {
                         String error = response.errorBody().string();
-                        Log.d(TAG, error);
+                        Log.d(TAG, "Error: "+error);
                     }
                 }catch (IOException e) {
                     e.printStackTrace();
@@ -153,6 +159,7 @@ public class SplashActivity extends BaseActivity {
             public void onFailure(Call<VersionCheckResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
                 if(!Util.checkAndShowNetworkPopup(SplashActivity.this)) {
+                    //To check the version of the app
                     checkVersion();
                 }
             }
@@ -160,13 +167,24 @@ public class SplashActivity extends BaseActivity {
 
     }
 
+    //Method to find out which activity to open next
     private void checkWhereToGo() {
         if (!DishqApplication.getAccessToken().equals("null null")) {
-            //Intent to start home page when access token
-            Intent startHomeActivity = new Intent(SplashActivity.this, HomeActivity.class);
-            startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(startHomeActivity);
+
+            if(DishqApplication.getIsNewUser()) {
+                //Intent to start OnBoarding
+                Intent startHomeActivity = new Intent(SplashActivity.this, OnBoardingActivity.class);
+                startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(startHomeActivity);
+            }else{
+                //Intent to start home page
+                Intent startHomeActivity = new Intent(SplashActivity.this, HomeActivity.class);
+                startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(startHomeActivity);
+            }
+
         } else {
             //Intent to start the SignIn Activity after the splash screen
             Intent i = new Intent(SplashActivity.this, SignInActivity.class);
@@ -176,6 +194,7 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
+    //Method to show an alert when an update of the app is required
     public void showAlert(String title, String message, boolean force) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle(title);
@@ -186,6 +205,7 @@ public class SplashActivity extends BaseActivity {
                     }
                 });
         if(!force){
+            //Update isn't mandatory
             builder.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     checkWhereToGo();

@@ -9,17 +9,26 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class SignUpResponse {
+
+    @SerializedName("is_new_user")
+    @Expose
+    private Boolean isNewUser;
+
     @SerializedName("access_token")
     @Expose
     private String accessToken;
 
+    @SerializedName("expires_in")
+    @Expose
+    private int expiresIn;
+
+    @SerializedName("user_data")
+    @Expose
+    private UserDataInfo userDataInfo;
+
     @SerializedName("token_type")
     @Expose
     private String tokenType;
-
-    @SerializedName("expires_in")
-    @Expose
-    private String expiresIn;
 
     @SerializedName("refresh_token")
     @Expose
@@ -28,6 +37,14 @@ public class SignUpResponse {
     @SerializedName("scope")
     @Expose
     private String responseScope;
+
+    public Boolean getIsNewUser() {
+        return isNewUser;
+    }
+
+    public void setIsNewUser(Boolean isNewUser) {
+        this.isNewUser = isNewUser;
+    }
 
     public String getAccessToken() {
         return accessToken;
@@ -45,11 +62,11 @@ public class SignUpResponse {
         this.tokenType = tokenType;
     }
 
-    public String getExpiresIn() {
+    public int getExpiresIn() {
         return expiresIn;
     }
 
-    public void setExpiresIn(String expiresIn) {
+    public void setExpiresIn(int expiresIn) {
         this.expiresIn = expiresIn;
     }
 
@@ -67,5 +84,31 @@ public class SignUpResponse {
 
     public void setResponseScope(String responseScope) {
         this.responseScope = responseScope;
+    }
+
+    private class UserDataInfo {
+        @SerializedName("user_id")
+        @Expose
+        private int userId;
+
+        @SerializedName("firstname")
+        @Expose
+        private String firstName;
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
     }
 }

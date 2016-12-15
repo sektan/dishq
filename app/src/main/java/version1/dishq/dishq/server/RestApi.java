@@ -4,11 +4,13 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
+import version1.dishq.dishq.server.Response.tastePrefData;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -28,5 +30,8 @@ public interface RestApi {
 
     @POST("api/auth/signup/")
     Call<SignUpResponse> createNewUser(@Body SignUpHelper signUpHelper);
+
+    @GET("api/tastepref/fetchformdata/")
+    Call<tastePrefData> fetchTastePref(@Header("Authorization")String accessToken);
 
 }

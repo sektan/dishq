@@ -335,15 +335,30 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
                 progressDialog.dismiss();
                 Log.d(TAG, "success");
-                SignUpResponse body = response.body();
-                if (body != null) {
-                    //Storing the AccessToken in shared preferences
-                    DishqApplication.getPrefs().edit().putString(Constants.ACCESS_TOKEN, body.getAccessToken()).apply();
-                    DishqApplication.getPrefs().edit().putString(Constants.REFRESH_TOKEN, body.getRefreshToken()).apply();
-                    DishqApplication.getPrefs().edit().putString(Constants.TOKEN_TYPE, body.getTokenType()).apply();
-                    DishqApplication.setAccessToken(body.getAccessToken(), body.getTokenType());
-                    startHomePageActivity();
+                try {
+                    if(response.isSuccessful()) {
+                        SignUpResponse body = response.body();
+                        if (body != null) {
+                            //Storing the AccessToken in shared preferences
+                            DishqApplication.getPrefs().edit().putString(Constants.ACCESS_TOKEN, body.getAccessToken()).apply();
+                            DishqApplication.getPrefs().edit().putString(Constants.REFRESH_TOKEN, body.getRefreshToken()).apply();
+                            DishqApplication.getPrefs().edit().putString(Constants.TOKEN_TYPE, body.getTokenType()).apply();
+                            DishqApplication.setAccessToken(body.getAccessToken(), body.getTokenType());
+
+                            //Storing the status of new/old user
+                            Boolean isNewUser = true;
+                            DishqApplication.getPrefs().edit().putBoolean(Constants.IS_NEW_USER, true).apply();
+                            DishqApplication.setIsNewUser(isNewUser);
+                            startHomePageActivity();
+                        }
+                    }else {
+                        String error = response.errorBody().string();
+                        Log.d(TAG, error);
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
                 }
+
             }
 
             @Override

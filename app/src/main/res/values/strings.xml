@@ -3,7 +3,7 @@
     <string name="facebook_app_id">1738469866425993</string>
     <string name="app_name">dishq</string>
 
-    <!-- signIn/signUp -->
+    <!-- signIn -->
     <string name="connect_with">Connect with</string>
     <string name="backend_facebook">facebook</string>
     <string name="conv_token">convert_token</string>
@@ -15,4 +15,6 @@
     <string name="client_secret">
         uYl8MUXsU5pAnGgFQdTxvBhqROE5OinbXUzls5hpMtmjUvaPrWJppr8WThodCi7Qw0TcsjhYJJnzkxItGZA19TtWRSVIRY5GPhP2VXUyp7joPDFToDR0tNbXu58myMGg
     </string>
+    <string name="facebook">facebook</string>
+    <string name="google">google</string>
 </resources>

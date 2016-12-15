@@ -10,6 +10,7 @@ public class Constants {
     public static final String REFRESH_TOKEN = "refresh_token";
     public static final String TOKEN_TYPE = "token_type";
     public static final String UNIQUE_IDENTIFIER = "unique_identifier";
-    public static final String DISHQ_APP_PREFS = "yw8_app_prefs";
+    static final String DISHQ_APP_PREFS = "yw8_app_prefs";
     public static final String FACEBOOK_OR_GOOGLE = "facebook_or_google";
+    public static final String IS_NEW_USER = "is_new_user";
 }
