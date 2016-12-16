@@ -21,6 +21,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     public static DishqApplication application;
     private static SharedPreferences prefs;
     private static String uniqueId;
+    private static int userID;
     private static String accessToken;
     private static String tokenType;
     private static String facebookOrGoogle;
@@ -40,6 +41,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
         facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
         IS_NEW_USER = getPrefs().getBoolean(Constants.IS_NEW_USER, false);
+        userID = getPrefs().getInt(Constants.USER_ID, 0);
         registerActivityLifecycleCallbacks(activityCallbacks);
     }
 
@@ -84,6 +86,13 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         return DishqApplication.uniqueId;
     }
 
+    public static int getUserID() {
+        return DishqApplication.userID;
+    }
+
+    public static void setUserID(int userID) {
+        DishqApplication.userID = userID;
+    }
     Application.ActivityLifecycleCallbacks activityCallbacks = new ActivityLifecycleCallbacks() {
         @Override
         public void onActivityCreated(Activity activity, Bundle bundle) {

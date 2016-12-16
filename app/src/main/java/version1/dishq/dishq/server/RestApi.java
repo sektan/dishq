@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
-import version1.dishq.dishq.server.Response.tastePrefData;
+import version1.dishq.dishq.server.Response.TastePrefData;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -23,15 +23,15 @@ public interface RestApi {
     Call<VersionCheckResponse> checkVersion(@Query("version_number")int versionCode, @Query("version_name")String versionName, @Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
 
     @GET("api/appclose/")
-    Call<ResponseBody> appClose(@Query("uid")int UniqueIdentifier, @Query("user_id")int UserId);
+    Call<ResponseBody> appClose(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
 
     @GET("api/apptobackground/")
-    Call<ResponseBody> appToBackground(@Query("uid")int UniqueIdentifier, @Query("user_id")int UserId);
+    Call<ResponseBody> appToBackground(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
 
-    @POST("api/auth/signup/")
-    Call<SignUpResponse> createNewUser(@Body SignUpHelper signUpHelper);
+    @POST("api/auth/signin/")
+    Call<SignUpResponse> createNewUser(@Header("Authorization")String authorization, @Body SignUpHelper signUpHelper);
 
     @GET("api/tastepref/fetchformdata/")
-    Call<tastePrefData> fetchTastePref(@Header("Authorization")String accessToken);
+    Call<TastePrefData> fetchTastePref(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
 
 }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +15,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import version1.dishq.dishq.modals.AllergyModal;
+import version1.dishq.dishq.modals.FavCuisinesModal;
+import version1.dishq.dishq.modals.FoodChoicesModal;
+import version1.dishq.dishq.modals.HomeCuisinesModal;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -24,8 +32,32 @@ public class Util {
 
     static String ACCESS_TOKEN = "";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
+
+    //Array lists for onBoarding food preferences
+    public static ArrayList<AllergyModal> allergyModals = new ArrayList<>();
+    public static ArrayList<FoodChoicesModal> foodChoicesModals = new ArrayList<>();
+    public static ArrayList<FavCuisinesModal> favCuisinesModals = new ArrayList<>();
+    public static ArrayList<HomeCuisinesModal> homeCuisinesModals = new ArrayList<>();
+
+    private static int foodChoiceSelected;
+
     @SuppressLint("StaticFieldLeak")
     private static Activity currentAct;
+
+    public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
+            "opensanslight.ttf"),
+            opensansregular = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
+                    "opensansregular.ttf"),
+            opensanssemibold = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
+                    "opensanssemibold.ttf");
+
+    public static int getFoodChoiceSelected() {
+        return foodChoiceSelected;
+    }
+
+    public static void setFoodChoiceSelected(int foodChoiceSelected) {
+        Util.foodChoiceSelected = foodChoiceSelected;
+    }
 
     public static boolean checkAndShowNetworkPopup(final Activity activity) {
         currentAct = activity;

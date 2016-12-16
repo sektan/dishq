@@ -17,4 +17,14 @@
     </string>
     <string name="facebook">facebook</string>
     <string name="google">google</string>
+
+    <!-- OnBoarding -->
+    <string name="hi_name">Hi %s</string>
+    <string name="tell_about_prefs">Tell us a bit about your food \n preferences</string>
+    <string name="are_you">Are you&#46;&#46;&#46;</string>
+    <string name="vegetarian">VEGETARIAN</string>
+    <string name="eggetarian">EGGETARIAN</string>
+    <string name="non_veg">NON_VEG</string>
+    <string name="your_home_cuisine">Your home cuisine&#63;</string>
+    <string name="pick_one">&#40;Pick 1&#41;</string>
 </resources>

@@ -26,6 +26,10 @@ public class SignUpHelper {
     @Expose
     private String clientSecret;
 
+    @SerializedName("uid")
+    @Expose
+    private String uniqueIdentifier;
+
     @SerializedName("gcm_device_registration_id")
     @Expose
     private String gcmDeviceRegId;
@@ -35,11 +39,12 @@ public class SignUpHelper {
     private String accessToken;
 
     //Constructor for the class
-    public SignUpHelper(String grantType, String backendAuth, String clientId, String clientSecret, String gcmDeviceRegId, String accessToken){
+    public SignUpHelper(String grantType, String backendAuth, String clientId, String clientSecret, String uniqueIdentifier, String gcmDeviceRegId, String accessToken){
         this.grantType = grantType;
         this.backendAuth = backendAuth;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
+        this.uniqueIdentifier = uniqueIdentifier;
         this.gcmDeviceRegId = gcmDeviceRegId;
         this.accessToken = accessToken;
     }

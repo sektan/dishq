@@ -175,6 +175,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 progressDialog = new ProgressDialog(SignInActivity.this);
                 progressDialog.show();
                 fetchAccessToken(facebookAccessToken);
+                Log.d(TAG, "Facebook Access Token: " + facebookAccessToken);
             }
 
             @Override
@@ -283,11 +284,18 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public void startHomePageActivity() {
-        Intent i = new Intent(SignInActivity.this.getApplicationContext(), HomeActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
-        startActivity(i);
+    public void checkWhichActivity(Boolean isNewUser) {
+        if(isNewUser) {
+            Intent i = new Intent(SignInActivity.this.getApplicationContext(), OnBoardingActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(i);
+        }else {
+            Intent i = new Intent(SignInActivity.this.getApplicationContext(), HomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(i);
+        }
     }
 
     private void signIn() {
@@ -327,9 +335,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         //Creating an APIRequest
         final SignUpHelper signUpHelper = new SignUpHelper(DishqApplication.getContext().getString(R.string.conv_token),
                 backend, DishqApplication.getContext().getString(R.string.client_id),
-                DishqApplication.getContext().getString(R.string.client_secret), gcmDeviceRegId, accessToken);
+                DishqApplication.getContext().getString(R.string.client_secret), DishqApplication.getUniqueID(), gcmDeviceRegId, accessToken);
+        String authorization = "Bearer" +" " + backend + " " + accessToken;
         RestApi restApi = Config.createService(RestApi.class);
-        Call<SignUpResponse> call = restApi.createNewUser(signUpHelper);
+        Call<SignUpResponse> call = restApi.createNewUser(authorization, signUpHelper);
         call.enqueue(new Callback<SignUpResponse>() {
             @Override
             public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
@@ -337,8 +346,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 Log.d(TAG, "success");
                 try {
                     if(response.isSuccessful()) {
-                        SignUpResponse body = response.body();
+                        SignUpResponse.NewUserDataInfo body = response.body().newUserDataInfo;
                         if (body != null) {
+                            Log.d(TAG, "AccessToken: " + body.getAccessToken());
                             //Storing the AccessToken in shared preferences
                             DishqApplication.getPrefs().edit().putString(Constants.ACCESS_TOKEN, body.getAccessToken()).apply();
                             DishqApplication.getPrefs().edit().putString(Constants.REFRESH_TOKEN, body.getRefreshToken()).apply();
@@ -346,10 +356,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             DishqApplication.setAccessToken(body.getAccessToken(), body.getTokenType());
 
                             //Storing the status of new/old user
-                            Boolean isNewUser = true;
-                            DishqApplication.getPrefs().edit().putBoolean(Constants.IS_NEW_USER, true).apply();
-                            DishqApplication.setIsNewUser(isNewUser);
-                            startHomePageActivity();
+                            DishqApplication.getPrefs().edit().putBoolean(Constants.IS_NEW_USER, body.getIsNewUser()).apply();
+                            DishqApplication.setIsNewUser(body.getIsNewUser());
+                            checkWhichActivity(body.getIsNewUser());
                         }
                     }else {
                         String error = response.errorBody().string();
@@ -393,6 +402,4 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             // permissions this app might request
         }
     }
-
-
 }

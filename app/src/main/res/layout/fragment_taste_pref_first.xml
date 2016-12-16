@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/onboardingfirst"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="9dp"
+        android:layout_marginStart="9dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/hi_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hi_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_24" />
+
+        <TextView
+            android:id="@+id/tell_about_prefs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/tell_about_prefs"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_20" />
+
+        <Button
+            android:id="@+id/are_you"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/are_you_button"
+            android:clickable="false"
+            android:textColor="@color/white"
+            android:text="@string/are_you"
+            android:textSize="@dimen/text_size_22" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp">
+
+            <ImageView
+                android:id="@+id/veg_dish"
+                android:layout_width="match_parent"
+                android:layout_height="115dp"
+                android:contentDescription="@string/vegetarian"
+                android:src="@drawable/veg_dish" />
+
+            <TextView
+                android:id="@+id/vegetarian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="95dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/vegetarian"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/egg_dish"
+                android:layout_width="wrap_content"
+                android:layout_height="115dp"
+                android:contentDescription="@string/eggetarian"
+                android:src="@drawable/egg_dish" />
+
+            <TextView
+                android:id="@+id/eggetarian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="95dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/eggetarian"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/non_veg_dish"
+                android:layout_width="wrap_content"
+                android:layout_height="115dp"
+                android:contentDescription="@string/non_veg"
+                android:src="@drawable/non_veg_dish" />
+
+            <TextView
+                android:id="@+id/non_veg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="95dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/non_veg"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

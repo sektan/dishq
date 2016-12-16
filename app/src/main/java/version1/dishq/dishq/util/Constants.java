@@ -13,4 +13,5 @@ public class Constants {
     static final String DISHQ_APP_PREFS = "yw8_app_prefs";
     public static final String FACEBOOK_OR_GOOGLE = "facebook_or_google";
     public static final String IS_NEW_USER = "is_new_user";
+    public static final String USER_ID = "user_id";
 }
