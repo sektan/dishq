@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 
 import java.io.IOException;
 
@@ -41,6 +42,7 @@ public class OnBoardingActivity extends BaseActivity {
     private String TAG = "OnBoardingActivity";
     public int currentPage;
     public static CustomViewPager pager;
+    private Button doneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,7 @@ public class OnBoardingActivity extends BaseActivity {
                 //pager.setPagingEnabled(CustomViewPager.SwipeDirection.UP);
                 //Done button should be made visible
                 //HomeActivity should be called
+
             }
         }
     }
