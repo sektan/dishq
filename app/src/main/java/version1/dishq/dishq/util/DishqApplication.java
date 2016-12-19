@@ -27,6 +27,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static String facebookOrGoogle;
     private static Boolean IS_NEW_USER;
     public boolean wasInBackground = true;
+    private static String userName;
 
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
@@ -39,6 +40,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         accessToken = getPrefs().getString(Constants.ACCESS_TOKEN, null);
         tokenType = getPrefs().getString(Constants.TOKEN_TYPE, null);
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
+        userName = getPrefs().getString(Constants.USER_NAME, null);
         facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
         IS_NEW_USER = getPrefs().getBoolean(Constants.IS_NEW_USER, false);
         userID = getPrefs().getInt(Constants.USER_ID, 0);
@@ -60,6 +62,14 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 
     public static String getAccessToken(){
         return Util.ACCESS_TOKEN;
+    }
+
+    public static String getUserName() {
+        return DishqApplication.userName;
+    }
+
+    public static void setUserName(String userName) {
+        DishqApplication.userName = userName;
     }
 
     public static void setFacebookOrGoogle(String facebookOrGoogle) {

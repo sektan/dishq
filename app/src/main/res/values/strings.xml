@@ -26,5 +26,10 @@
     <string name="eggetarian">EGGETARIAN</string>
     <string name="non_veg">NON_VEG</string>
     <string name="your_home_cuisine">Your home cuisine&#63;</string>
+    <string name="your_fav_cuisine">Your fav cuisine&#63;</string>
     <string name="pick_one">&#40;Pick 1&#41;</string>
+    <string name="pick_three">&#40;Pick 3&#41;</string>
+    <string name="allergy">Food you avoid or are \n allergic to&#63;</string>
+    <string name="optional">&#40;Optional&#41;</string>
+    <string name="done">Done</string>
 </resources>

@@ -31,7 +31,7 @@
             android:alpha="0.87"
             android:gravity="start|center_horizontal"
             android:text="@string/connect_with"
-            android:textSize="@dimen/visible_text_reading_size" />
+            android:textSize="@dimen/text_size_20" />
 
         <Button
             android:id="@+id/google_sign_up"
@@ -40,7 +40,10 @@
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
             android:text="@string/google"
-            android:background="@color/black"
+            android:textSize="@dimen/text_size_16"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:background="@drawable/signin_button_shape"
             android:textColor="@color/white" />
 
         <Button
@@ -50,7 +53,10 @@
             android:layout_width="136dp"
             android:layout_height="35dp"
             android:text="@string/facebook"
-            android:background="@color/black"
+            android:textSize="@dimen/text_size_16"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:background="@drawable/signin_button_shape"
             android:textColor="@color/white" />
     </RelativeLayout>
 

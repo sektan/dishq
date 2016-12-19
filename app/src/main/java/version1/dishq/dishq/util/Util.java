@@ -40,6 +40,9 @@ public class Util {
     public static ArrayList<HomeCuisinesModal> homeCuisinesModals = new ArrayList<>();
 
     private static int foodChoiceSelected;
+    public static Boolean homeCuisineSelected = false;
+    public static int favCuisineCount = 0;
+    public static int homeCuisineCount = 0;
 
     @SuppressLint("StaticFieldLeak")
     private static Activity currentAct;
@@ -134,4 +137,5 @@ public class Util {
         message1.setLineSpacing(0, 1.5f);
 
     }
+
 }

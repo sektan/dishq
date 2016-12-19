@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.modals.FoodChoicesModal;
+import version1.dishq.dishq.ui.OnBoardingActivity;
+import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -23,7 +25,6 @@ public class TastePrefFragment1 extends Fragment implements View.OnClickListener
     private TextView hiName, aboutPrefs, vegetarian, eggetarian, nonVeg;
     private Button areYou;
     private ImageView vegDish, eggDish, nonVegDish;
-    private FoodChoicesModal foodChoicesModal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class TastePrefFragment1 extends Fragment implements View.OnClickListener
     //For linking to xml ids of views
     protected void setTags(View view) {
         hiName = (TextView) view.findViewById(R.id.hi_name);
+        hiName.setText("Hi " + DishqApplication.getUserName());
         aboutPrefs = (TextView) view.findViewById(R.id.tell_about_prefs);
         vegetarian = (TextView) view.findViewById(R.id.vegetarian);
         eggetarian = (TextView) view.findViewById(R.id.eggetarian);
@@ -50,14 +52,13 @@ public class TastePrefFragment1 extends Fragment implements View.OnClickListener
         nonVegDish.setOnClickListener(this);
     }
 
-    //For setting the font of the text visivle to the user
+    //For setting the font of the text visible to the user
     protected void setTypeFace() {
         hiName.setTypeface(Util.opensanslight);
         aboutPrefs.setTypeface(Util.opensanslight);
         vegetarian.setTypeface(Util.opensansregular);
         eggetarian.setTypeface(Util.opensansregular);
-        nonVeg.setTypeface(Util.opensansregular);
-        areYou.setTypeface(Util.opensanslight);
+        nonVeg.setTypeface(Util.opensansregular);areYou.setTypeface(Util.opensanslight);
     }
 
     public static TastePrefFragment1 newInstance(String text) {
@@ -68,30 +69,50 @@ public class TastePrefFragment1 extends Fragment implements View.OnClickListener
         return f;
     }
 
+    protected void settingOnClick(int n, TextView textView) {
+        for (int i = 0; i < Util.foodChoicesModals.size(); i++) {
+            if (Util.foodChoicesModals.get(i).getFoodChoiceValue() == n) {
+                Util.foodChoicesModals.get(i).setFoodChoiceCurrSel(true);
+                textView.setText(Util.foodChoicesModals.get(i).getFoodChoiceName());
+                Util.setFoodChoiceSelected(Util.foodChoicesModals.get(i).getFoodChoiceValue());
+            }
+        }
+
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
             case R.id.veg_dish:
-                foodChoicesModal.setFoodChoiceCurrSel(true);
-                vegetarian.setText(foodChoicesModal.getFoodChoiceName());
-                Util.setFoodChoiceSelected(foodChoicesModal.getFoodChoiceValue());
-                showNext();
-            break;
+                if(Util.foodChoicesModals!=null) {
+                    settingOnClick(1, vegetarian);
+                    showNext();
+                }
+                break;
             case R.id.egg_dish:
-                foodChoicesModal.setFoodChoiceCurrSel(true);
-                eggetarian.setText(foodChoicesModal.getFoodChoiceName());
-                Util.setFoodChoiceSelected(foodChoicesModal.getFoodChoiceValue());
-                showNext();
+                if(Util.foodChoicesModals!=null) {
+                    settingOnClick(2, eggetarian);
+                    showNext();
+                }
                 break;
             case R.id.non_veg_dish:
-                foodChoicesModal.setFoodChoiceCurrSel(true);
-                nonVeg.setText(foodChoicesModal.getFoodChoiceName());
-                Util.setFoodChoiceSelected(foodChoicesModal.getFoodChoiceValue());
-                showNext();
+                if(Util.foodChoicesModals!=null){
+                    settingOnClick(3, nonVeg);
+                    showNext();
+                }
+
+                break;
         }
     }
 
     void showNext() {
+        if(Util.getFoodChoiceSelected()!=0) {
+            if (OnBoardingActivity.pager.getCurrentItem() == 0) {
+                //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.DOWN);
+                OnBoardingActivity.pager.setCurrentItem(1);
+            }
+        }
 
     }
 }

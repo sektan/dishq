@@ -6,7 +6,7 @@
     <dimen name="visible_text_reading_size">16sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="user_profile_reading_text">18sp</dimen>
-    <dimen name="home_page_button_text">16sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
     <dimen name="points_text">30sp</dimen>
     <dimen name="user_profile_points_text">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>

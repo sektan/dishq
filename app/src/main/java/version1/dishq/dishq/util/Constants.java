@@ -14,4 +14,5 @@ public class Constants {
     public static final String FACEBOOK_OR_GOOGLE = "facebook_or_google";
     public static final String IS_NEW_USER = "is_new_user";
     public static final String USER_ID = "user_id";
+    public static final String USER_NAME = "user_name";
 }

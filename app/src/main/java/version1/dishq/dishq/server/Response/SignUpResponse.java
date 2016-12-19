@@ -37,7 +37,7 @@ public class SignUpResponse {
 
         @SerializedName("user_data")
         @Expose
-        private UserDataInfo userDataInfo;
+        public UserDataInfo userDataInfo;
 
         @SerializedName("token_type")
         @Expose

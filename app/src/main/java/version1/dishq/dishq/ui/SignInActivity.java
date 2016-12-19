@@ -358,6 +358,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             //Storing the status of new/old user
                             DishqApplication.getPrefs().edit().putBoolean(Constants.IS_NEW_USER, body.getIsNewUser()).apply();
                             DishqApplication.setIsNewUser(body.getIsNewUser());
+
+                            DishqApplication.getPrefs().edit().putString(Constants.USER_NAME, body.userDataInfo.getFirstName()).apply();
+                            DishqApplication.setUserName(body.userDataInfo.getFirstName());
                             checkWhichActivity(body.getIsNewUser());
                         }
                     }else {
