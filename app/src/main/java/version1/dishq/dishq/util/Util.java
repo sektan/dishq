@@ -42,6 +42,7 @@ public class Util {
     private static int foodChoiceSelected;
     public static Boolean homeCuisineSelected = false;
     public static int favCuisineCount = 0;
+    public static int favCuisineTotal = 0;
     public static int homeCuisineCount = 0;
 
     @SuppressLint("StaticFieldLeak")
@@ -54,8 +55,16 @@ public class Util {
             opensanssemibold = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
                     "opensanssemibold.ttf");
 
+    public static int getFavCuisinetotal() {
+        return Util.favCuisineTotal;
+    }
+
+    public static void setFavCuisinetotal(int favCuisineTotal) {
+        Util.favCuisineTotal = favCuisineTotal;
+    }
+
     public static int getFoodChoiceSelected() {
-        return foodChoiceSelected;
+        return Util.foodChoiceSelected;
     }
 
     public static void setFoodChoiceSelected(int foodChoiceSelected) {

@@ -1,7 +1,9 @@
 package version1.dishq.dishq.tastePrefFragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,6 @@ import static version1.dishq.dishq.R.color.white;
 
 public class TastePrefFragment2 extends Fragment {
 
-    private HomeCuisinesModal homeCuisinesModal;
     private FlowLayout homeCuisineContainer;
     CheckedTextView child;
 
@@ -38,47 +39,56 @@ public class TastePrefFragment2 extends Fragment {
 
     //For linking to xml ids of views
     protected void setTags(View view) {
+        setTypeFace();
         homeCuisineContainer = (FlowLayout) view.findViewById(R.id.home_cuisine_container);
         homeCuisineContainer.removeAllViews();
         for (HomeCuisinesModal model : Util.homeCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, homeCuisineContainer, false);
             child.setText(model.getHomeCuisName());
             child.setTag(model);
-            if(model.getHomeCuisCurrentSelect()){
+            if (model.getHomeCuisCurrentSelect()) {
                 child.setChecked(true);
-            }
-            if(child.isChecked()) {
-                if(Util.homeCuisineSelected) {
-                    showNext();
-                }else {
-                    child.setBackgroundColor(DishqApplication.getContext().getResources().getColor(R.color.white));
-                    child.setTextColor(DishqApplication.getContext().getResources().getColor(R.color.black));
-                    Util.homeCuisineSelected = true;
-                    Util.homeCuisineCount++;
-                }
-
             }
             homeCuisineContainer.addView(child);
             child.setOnClickListener(new View.OnClickListener() {
 
                 @Override
-                public void onClick(View view) {
-                    if(Util.homeCuisineSelected) {
-                        showNext();
-                    }else {
-                        child.setBackgroundColor(DishqApplication.getContext().getResources().getColor(R.color.white));
-                        child.setTextColor(DishqApplication.getContext().getResources().getColor(R.color.black));
+                public void onClick(View v) {
+                    CheckedTextView view = (CheckedTextView) v;
+                    view.setChecked(!view.isChecked());
+                    HomeCuisinesModal model = (HomeCuisinesModal) view.getTag();
+                    if (view.isChecked()) {
+                        Log.d("Name of selected item", model.getHomeCuisName());
+                        model.setHomeCuisCurrentSelect(true);
                         Util.homeCuisineSelected = true;
-                        Util.homeCuisineCount++;
+                    }else{
+                        model.setHomeCuisCurrentSelect(false);
+                        Util.homeCuisineSelected = false;
                     }
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showNext();
+                        }
+                    }, 1000);
 
                 }
             });
+            if (Util.homeCuisineSelected) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showNext();
+                    }
+                }, 1000);
+            }
         }
-        if(Util.homeCuisineSelected) {
-            showNext();
-        }
+    }
 
+    //For setting the font of the text visible to the user
+    protected void setTypeFace() {
 
     }
 

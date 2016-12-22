@@ -15,5 +15,5 @@
     android:paddingTop="9.7dp"
     android:text="dfdfd"
     android:textAppearance="?android:attr/textAppearanceListItem"
-    android:textColor="@color/white"
+    android:textColor="@drawable/checked_text_color"
     android:textSize="14sp" />

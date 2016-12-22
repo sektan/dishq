@@ -1,7 +1,9 @@
 package version1.dishq.dishq.tastePrefFragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +24,9 @@ import version1.dishq.dishq.util.Util;
 
 public class TastePrefFragment3 extends Fragment {
 
-    private FavCuisinesModal favCuisinesModal;
     private FlowLayout favCuisineContainer;
     CheckedTextView child;
+    int checkcount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,28 +47,45 @@ public class TastePrefFragment3 extends Fragment {
             if (model.getFavCuisCurrentSelect()) {
                 child.setChecked(true);
             }
-            if (child.isChecked()) {
-                if (Util.favCuisineCount == 3) {
-                    showNext();
-                } else {
-                    child.setBackgroundColor(DishqApplication.getContext().getResources().getColor(R.color.white));
-                    child.setTextColor(DishqApplication.getContext().getResources().getColor(R.color.black));
-                }
-            }
-            favCuisineContainer.addView(child);
             child.setOnClickListener(new View.OnClickListener() {
 
                 @Override
-                public void onClick(View view) {
-                    child.setBackgroundColor(DishqApplication.getContext().getResources().getColor(R.color.white));
-                    child.setTextColor(DishqApplication.getContext().getResources().getColor(R.color.black));
-                    Util.favCuisineCount++;
-                    if (Util.favCuisineCount == 3) {
-                        showNext();
+                public void onClick(View v) {
+                    CheckedTextView view = (CheckedTextView) v;
+                    view.setChecked(!view.isChecked());
+                    FavCuisinesModal model = (FavCuisinesModal) view.getTag();
+                    if (view.isChecked()) {
+                        Log.d("Name of selected item", model.getFavCuisName());
+                        model.setFavCuisCurrentSelect(true);
+                        Util.favCuisineCount++;
+                        checkcount++;
+                        if (checkcount == 3) {
+                            Util.setFavCuisinetotal(checkcount);
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showNext();
+                                }
+                            }, 1000);
+                        }
+                    } else {
+                        model.setFavCuisCurrentSelect(false);
                     }
 
                 }
             });
+
+            favCuisineContainer.addView(child);
+            if (checkcount == 3) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showNext();
+                    }
+                }, 1000);
+            }
 
         }
 
@@ -81,11 +100,12 @@ public class TastePrefFragment3 extends Fragment {
     }
 
     void showNext() {
-        if (Util.favCuisineCount == 3) {
-            if (OnBoardingActivity.pager.getCurrentItem() == 1) {
-                //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.DOWN);
-                OnBoardingActivity.pager.setCurrentItem(2);
-            }
+        Log.d("showNext is selected", "count of fav dishes:" + Util.favCuisineCount);
+        Log.d("Next page", "next page is shown");
+        if (OnBoardingActivity.pager.getCurrentItem() == 2) {
+            //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.DOWN);
+            OnBoardingActivity.pager.setCurrentItem(3);
+
         }
 
     }

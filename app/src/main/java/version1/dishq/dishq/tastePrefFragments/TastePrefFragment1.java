@@ -1,6 +1,7 @@
 package version1.dishq.dishq.tastePrefFragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,11 @@ import version1.dishq.dishq.util.Util;
  * Package name version1.dishq.dishq.
  */
 
-public class TastePrefFragment1 extends Fragment implements View.OnClickListener {
+public class TastePrefFragment1 extends Fragment {
 
     private TextView hiName, aboutPrefs, vegetarian, eggetarian, nonVeg;
     private Button areYou;
-    private ImageView vegDish, eggDish, nonVegDish;
+    private ImageView vegDish, eggDish, nonVegDish, vegTick, eggTick, nonVegTick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,9 +48,57 @@ public class TastePrefFragment1 extends Fragment implements View.OnClickListener
         vegDish = (ImageView) view.findViewById(R.id.veg_dish);
         eggDish = (ImageView) view.findViewById(R.id.egg_dish);
         nonVegDish = (ImageView) view.findViewById(R.id.non_veg_dish);
-        vegDish.setOnClickListener(this);
-        eggDish.setOnClickListener(this);
-        nonVegDish.setOnClickListener(this);
+        vegTick = (ImageView) view.findViewById(R.id.veg_tick);
+        eggTick = (ImageView) view.findViewById(R.id.egg_tick);
+        nonVegTick = (ImageView) view.findViewById(R.id.non_veg_tick);
+        vegDish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Util.foodChoicesModals!=null) {
+                    vegTick.setVisibility(View.VISIBLE);
+                    settingOnClick(1, vegetarian);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showNext();
+                        }
+                    }, 1000);
+                }
+            }
+        });
+        eggDish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Util.foodChoicesModals!=null) {
+                    eggTick.setVisibility(View.VISIBLE);
+                    settingOnClick(3, eggetarian);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showNext();
+                        }
+                    }, 1000);
+                }
+            }
+        });
+        nonVegDish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Util.foodChoicesModals!=null){
+                    nonVegTick.setVisibility(View.VISIBLE);
+                    settingOnClick(2, nonVeg);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showNext();
+                        }
+                    }, 1000);
+                }
+            }
+        });
     }
 
     //For setting the font of the text visible to the user
@@ -70,40 +119,17 @@ public class TastePrefFragment1 extends Fragment implements View.OnClickListener
     }
 
     protected void settingOnClick(int n, TextView textView) {
-        for (int i = 0; i < Util.foodChoicesModals.size(); i++) {
-            if (Util.foodChoicesModals.get(i).getFoodChoiceValue() == n) {
-                Util.foodChoicesModals.get(i).setFoodChoiceCurrSel(true);
-                textView.setText(Util.foodChoicesModals.get(i).getFoodChoiceName());
-                Util.setFoodChoiceSelected(Util.foodChoicesModals.get(i).getFoodChoiceValue());
+        for (FoodChoicesModal modal : Util.foodChoicesModals) {
+            for(int i = 0; i< Util.foodChoicesModals.size(); i++) {
+                if(modal.getFoodChoiceValue() == n) {
+                    modal.setFoodChoiceCurrSel(true);
+                    textView.setText(modal.getFoodChoiceName());
+                    Util.setFoodChoiceSelected(modal.getFoodChoiceValue());
+                }
             }
+
         }
 
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-
-            case R.id.veg_dish:
-                if(Util.foodChoicesModals!=null) {
-                    settingOnClick(1, vegetarian);
-                    showNext();
-                }
-                break;
-            case R.id.egg_dish:
-                if(Util.foodChoicesModals!=null) {
-                    settingOnClick(2, eggetarian);
-                    showNext();
-                }
-                break;
-            case R.id.non_veg_dish:
-                if(Util.foodChoicesModals!=null){
-                    settingOnClick(3, nonVeg);
-                    showNext();
-                }
-
-                break;
-        }
     }
 
     void showNext() {

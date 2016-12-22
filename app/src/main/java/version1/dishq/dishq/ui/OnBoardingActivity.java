@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
@@ -65,6 +66,7 @@ public class OnBoardingActivity extends BaseActivity {
     }
 
     protected void setTags() {
+        doneButton = (Button) findViewById(R.id.done);
         pager = (CustomViewPager) findViewById(R.id.customViewPager);
        // pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
         PageListener pageListener = new PageListener();
@@ -75,26 +77,39 @@ public class OnBoardingActivity extends BaseActivity {
         public void onPageSelected(final int position) {
             Log.d("page", position + "");
             if (position == 0) {
+                doneButton.setVisibility(View.GONE);
                 if(Util.getFoodChoiceSelected()!=0) {
                     OnBoardingActivity.pager.setCurrentItem(1);
                 }
                 //pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
 
             }else if (position == 1) {
+                doneButton.setVisibility(View.GONE);
                 if (Util.homeCuisineSelected) {
                     OnBoardingActivity.pager.setCurrentItem(2);
                 }
                 //pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
 
             }else if (position == 2) {
-                if(Util.favCuisineCount == 3) {
+                doneButton.setVisibility(View.GONE);
+                if(Util.getFavCuisinetotal() == 3) {
                     //pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
                     OnBoardingActivity.pager.setCurrentItem(3);
                 }
             }else if (position == 3) {
-                //pager.setPagingEnabled(CustomViewPager.SwipeDirection.UP);
                 //Done button should be made visible
                 //HomeActivity should be called
+                doneButton.setVisibility(View.VISIBLE);
+                doneButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(OnBoardingActivity.this, HomeActivity.class);
+                        finish();
+                        startActivity(intent);
+                    }
+                });
+                //pager.setPagingEnabled(CustomViewPager.SwipeDirection.UP);
+
 
             }
         }
