@@ -5,6 +5,11 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Interpolator;
+
+import java.lang.reflect.Field;
+
+import version1.dishq.dishq.customViews.ScrollerCustomDuration;
 
 /**
  * Created by dishq on 5/26/16.
@@ -12,18 +17,18 @@ import android.view.View;
  */
 public class CustomViewPager extends ViewPager {
 
-    private boolean enabled;
-    private SwipeDirection enabledDirection;
-    private float initialYValue;
+    private ScrollerCustomDuration mScroller = null;
 
     public CustomViewPager(Context context) {
         super(context);
         init();
+        postInitViewPager();
     }
 
     public CustomViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+        postInitViewPager();
     }
 
     private void init() {
@@ -31,6 +36,32 @@ public class CustomViewPager extends ViewPager {
         setPageTransformer(true, new VerticalPageTransformer());
         // The easiest way to get rid of the overscroll drawing that happens on the left and right
         setOverScrollMode(OVER_SCROLL_NEVER);
+    }
+
+    /**
+     * Override the Scroller instance with our own class so we can change the duration
+     */
+
+    private void postInitViewPager() {
+        try {
+            Class<?> viewPager = ViewPager.class;
+            Field scroller = viewPager.getDeclaredField("mScroller");
+            scroller.setAccessible(true);
+            Field interpolator = viewPager.getDeclaredField("sInterpolator");
+            interpolator.setAccessible(true);
+
+            mScroller = new ScrollerCustomDuration(getContext(), (Interpolator) interpolator.get(null));
+            scroller.set(this, mScroller);
+        } catch (Exception e) {
+
+        }
+    }
+
+    /**
+     * Set the factor by which the duration will change
+     */
+    public void setScrollDurationFactor(double scrollFactor) {
+        mScroller.setScrollDurationFactor(scrollFactor);
     }
 
     private class VerticalPageTransformer implements ViewPager.PageTransformer {
@@ -76,61 +107,14 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        event = swapXY(event);
-        //if (this.IsSwipeAllowed(event)) {
-            return super.onTouchEvent(swapXY(event));
-//        }
-//        return false;
+        return super.onTouchEvent(swapXY(event));
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         event = swapXY(event);
-        //if (this.IsSwipeAllowed(event)) {
-            boolean intercepted = super.onInterceptTouchEvent(swapXY(event));
-            swapXY(event); // return touch coordinates to original reference frame for any child views
-            return intercepted;
-//        }
-//        return false;
+        boolean intercepted = super.onInterceptTouchEvent(swapXY(event));
+        swapXY(event); // return touch coordinates to original reference frame for any child views
+        return intercepted;
     }
-
-
-    public void setPagingEnabled(SwipeDirection direction) {
-        this.enabledDirection = direction;
-    }
-
-//    private boolean IsSwipeAllowed(MotionEvent event) {
-//        if(this.enabledDirection == SwipeDirection.BOTH) return true;
-//
-//        if(enabledDirection == SwipeDirection.NONE )//disable any swipe
-//            return false;
-//
-//        if(event.getAction()== MotionEvent.ACTION_DOWN) {
-//            initialYValue = event.getX();
-//            return true;
-//        }
-//
-//        if(event.getAction()== MotionEvent.ACTION_MOVE) {
-//            try {
-//                float diffY = event.getX() - initialYValue;
-//                if (diffY > 0 && enabledDirection == SwipeDirection.DOWN) {
-//                    return false;
-//                }else if (diffY < 0 && enabledDirection == SwipeDirection.UP) {
-//                    return false;
-//                }
-//            } catch (Exception exception) {
-//                exception.printStackTrace();
-//            }
-//        }
-//
-//        return true;
-//    }
-//
-    public enum SwipeDirection{
-        UP,
-        DOWN,
-        BOTH,
-        NONE
-    }
-
 }

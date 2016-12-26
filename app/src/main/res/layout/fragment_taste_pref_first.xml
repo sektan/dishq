@@ -60,7 +60,7 @@
                 android:src="@drawable/onboarding_tick_mark"
                 android:contentDescription="@string/vegetarian"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="57dp"
+                android:layout_marginTop="50dp"
                 android:visibility="gone"/>
 
             <TextView
@@ -91,9 +91,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/onboarding_tick_mark"
-                android:contentDescription="@string/vegetarian"
+                android:contentDescription="@string/eggetarian"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="57dp"
+                android:layout_marginTop="50dp"
                 android:visibility="gone"/>
 
             <TextView
@@ -124,9 +124,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/onboarding_tick_mark"
-                android:contentDescription="@string/vegetarian"
+                android:contentDescription="@string/non_veg"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="57dp"
+                android:layout_marginTop="50dp"
                 android:visibility="gone"/>
 
             <TextView

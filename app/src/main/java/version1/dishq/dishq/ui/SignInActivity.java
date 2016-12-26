@@ -355,10 +355,15 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             DishqApplication.getPrefs().edit().putString(Constants.TOKEN_TYPE, body.getTokenType()).apply();
                             DishqApplication.setAccessToken(body.getAccessToken(), body.getTokenType());
 
+                            //Storing userID
+                            DishqApplication.getPrefs().edit().putInt(Constants.USER_ID, body.userDataInfo.getUserId()).apply();
+                            DishqApplication.setUserID(body.userDataInfo.getUserId());
+
                             //Storing the status of new/old user
                             DishqApplication.getPrefs().edit().putBoolean(Constants.IS_NEW_USER, body.getIsNewUser()).apply();
                             DishqApplication.setIsNewUser(body.getIsNewUser());
 
+                            //Storing User Name
                             DishqApplication.getPrefs().edit().putString(Constants.USER_NAME, body.userDataInfo.getFirstName()).apply();
                             DishqApplication.setUserName(body.userDataInfo.getFirstName());
                             checkWhichActivity(body.getIsNewUser());

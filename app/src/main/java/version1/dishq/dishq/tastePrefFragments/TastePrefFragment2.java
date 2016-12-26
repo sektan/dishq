@@ -26,7 +26,6 @@ import static version1.dishq.dishq.R.color.white;
 
 public class TastePrefFragment2 extends Fragment {
 
-    private FlowLayout homeCuisineContainer;
     CheckedTextView child;
 
     @Override
@@ -40,7 +39,7 @@ public class TastePrefFragment2 extends Fragment {
     //For linking to xml ids of views
     protected void setTags(View view) {
         setTypeFace();
-        homeCuisineContainer = (FlowLayout) view.findViewById(R.id.home_cuisine_container);
+        FlowLayout homeCuisineContainer = (FlowLayout) view.findViewById(R.id.home_cuisine_container);
         homeCuisineContainer.removeAllViews();
         for (HomeCuisinesModal model : Util.homeCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, homeCuisineContainer, false);

@@ -54,25 +54,31 @@ public class TastePrefFragment1 extends Fragment {
         vegDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Util.foodChoicesModals!=null) {
-                    vegTick.setVisibility(View.VISIBLE);
-                    settingOnClick(1, vegetarian);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showNext();
-                        }
-                    }, 1000);
-                }
+                //if(Util.foodChoicesModals!=null) {
+                vegTick.setVisibility(View.VISIBLE);
+                nonVegTick.setVisibility(View.GONE);
+                eggTick.setVisibility(View.GONE);
+                //settingOnClick(1, vegetarian);
+                Util.setFoodChoiceSelected(1);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showNext();
+                    }
+                }, 1000);
+                //}
             }
         });
         eggDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Util.foodChoicesModals!=null) {
+                if (Util.foodChoicesModals != null) {
                     eggTick.setVisibility(View.VISIBLE);
-                    settingOnClick(3, eggetarian);
+                    vegTick.setVisibility(View.GONE);
+                    nonVegTick.setVisibility(View.GONE);
+                    //settingOnClick(3, eggetarian);
+                    Util.setFoodChoiceSelected(3);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -86,9 +92,12 @@ public class TastePrefFragment1 extends Fragment {
         nonVegDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Util.foodChoicesModals!=null){
+                if (Util.foodChoicesModals != null) {
                     nonVegTick.setVisibility(View.VISIBLE);
-                    settingOnClick(2, nonVeg);
+                    vegTick.setVisibility(View.GONE);
+                    eggTick.setVisibility(View.GONE);
+                    //settingOnClick(2, nonVeg);
+                    Util.setFoodChoiceSelected(2);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -107,7 +116,8 @@ public class TastePrefFragment1 extends Fragment {
         aboutPrefs.setTypeface(Util.opensanslight);
         vegetarian.setTypeface(Util.opensansregular);
         eggetarian.setTypeface(Util.opensansregular);
-        nonVeg.setTypeface(Util.opensansregular);areYou.setTypeface(Util.opensanslight);
+        nonVeg.setTypeface(Util.opensansregular);
+        areYou.setTypeface(Util.opensanslight);
     }
 
     public static TastePrefFragment1 newInstance(String text) {
@@ -120,8 +130,8 @@ public class TastePrefFragment1 extends Fragment {
 
     protected void settingOnClick(int n, TextView textView) {
         for (FoodChoicesModal modal : Util.foodChoicesModals) {
-            for(int i = 0; i< Util.foodChoicesModals.size(); i++) {
-                if(modal.getFoodChoiceValue() == n) {
+            for (int i = 0; i < Util.foodChoicesModals.size(); i++) {
+                if (modal.getFoodChoiceValue() == n) {
                     modal.setFoodChoiceCurrSel(true);
                     textView.setText(modal.getFoodChoiceName());
                     Util.setFoodChoiceSelected(modal.getFoodChoiceValue());
@@ -133,7 +143,7 @@ public class TastePrefFragment1 extends Fragment {
     }
 
     void showNext() {
-        if(Util.getFoodChoiceSelected()!=0) {
+        if (Util.getFoodChoiceSelected() != 0) {
             if (OnBoardingActivity.pager.getCurrentItem() == 0) {
                 //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.DOWN);
                 OnBoardingActivity.pager.setCurrentItem(1);

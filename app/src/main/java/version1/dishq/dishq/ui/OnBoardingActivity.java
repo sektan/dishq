@@ -68,6 +68,7 @@ public class OnBoardingActivity extends BaseActivity {
     protected void setTags() {
         doneButton = (Button) findViewById(R.id.done);
         pager = (CustomViewPager) findViewById(R.id.customViewPager);
+        pager.setScrollDurationFactor(3);
        // pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
         PageListener pageListener = new PageListener();
         pager.setOnPageChangeListener(pageListener);

@@ -120,6 +120,10 @@ public class SplashActivity extends BaseActivity {
 
     //Method to make an api call to check the version of the app
     private void checkVersion() {
+
+        if(DishqApplication.getUserID()!= 0) {
+            userId = DishqApplication.getUserID();
+        }
         //Creating a service to make a restApi call
         RestApi restApi = Config.createService(RestApi.class);
         Call<VersionCheckResponse> request = restApi.checkVersion(versionCode, versionName, uniqueIdentifier, userId);
