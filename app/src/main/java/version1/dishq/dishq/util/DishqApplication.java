@@ -7,9 +7,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.RestApi;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -116,9 +124,6 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 
         @Override
         public void onActivityResumed(Activity activity) {
-            if (wasInBackground) {
-                //Do app-wide came-here-from-background code
-            }
             stopActivityTransitionTimer();
         }
 
@@ -129,7 +134,19 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 
         @Override
         public void onActivityStopped(Activity activity) {
+            RestApi restApi = Config.createService(RestApi.class);
+            Call<ResponseBody> request = restApi.appToBackground(DishqApplication.getUniqueID(), DishqApplication.getUserID());
+            request.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.d("DishqApplication", "Success");
+                }
 
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.d("DishqApplication", "Failure");
+                }
+            });
         }
 
         @Override
@@ -140,6 +157,19 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         @Override
         public void onActivityDestroyed(Activity activity) {
 
+            RestApi restApi = Config.createService(RestApi.class);
+            Call<ResponseBody> request = restApi.appClose(DishqApplication.getUniqueID(), DishqApplication.getUserID());
+            request.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.d("DishqApplication", "Success");
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.d("DishqApplication", "Failure");
+                }
+            });
         }
     };
 

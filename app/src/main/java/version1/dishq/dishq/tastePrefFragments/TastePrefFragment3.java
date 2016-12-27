@@ -12,7 +12,9 @@ import android.widget.CheckedTextView;
 import com.wefika.flowlayout.FlowLayout;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.modals.FavCuisinesModal;
+import version1.dishq.dishq.modals.lists.FavCuisineSelect;
 import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -24,7 +26,6 @@ import version1.dishq.dishq.util.Util;
 
 public class TastePrefFragment3 extends Fragment {
 
-    private FlowLayout favCuisineContainer;
     CheckedTextView child;
     int checkcount = 0;
 
@@ -38,7 +39,7 @@ public class TastePrefFragment3 extends Fragment {
 
     //For linking to xml ids of views
     protected void setTags(View view) {
-        favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
+        FlowLayout favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, favCuisineContainer, false);
@@ -47,6 +48,7 @@ public class TastePrefFragment3 extends Fragment {
             if (model.getFavCuisCurrentSelect()) {
                 child.setChecked(true);
             }
+            favCuisineContainer.addView(child);
             child.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -58,6 +60,7 @@ public class TastePrefFragment3 extends Fragment {
                         Log.d("Name of selected item", model.getFavCuisName());
                         model.setFavCuisCurrentSelect(true);
                         Util.favCuisineCount++;
+                        Util.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
                         checkcount++;
                         if (checkcount == 3) {
                             Util.setFavCuisinetotal(checkcount);
@@ -76,7 +79,6 @@ public class TastePrefFragment3 extends Fragment {
                 }
             });
 
-            favCuisineContainer.addView(child);
             if (checkcount == 3) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -103,9 +105,12 @@ public class TastePrefFragment3 extends Fragment {
         Log.d("showNext is selected", "count of fav dishes:" + Util.favCuisineCount);
         Log.d("Next page", "next page is shown");
         if (OnBoardingActivity.pager.getCurrentItem() == 2) {
-            //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.DOWN);
+            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
             OnBoardingActivity.pager.setCurrentItem(3);
 
+        }else {
+            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
+            OnBoardingActivity.pager.setCurrentItem(2);
         }
 
     }

@@ -3,6 +3,7 @@ package version1.dishq.dishq.adapters;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -18,6 +19,9 @@ import version1.dishq.dishq.customViews.ScrollerCustomDuration;
 public class CustomViewPager extends ViewPager {
 
     private ScrollerCustomDuration mScroller = null;
+    private float initialYValue;
+    private SwipeDirection direction;
+
 
     public CustomViewPager(Context context) {
         super(context);
@@ -29,6 +33,7 @@ public class CustomViewPager extends ViewPager {
         super(context, attrs);
         init();
         postInitViewPager();
+        this.direction = SwipeDirection.all;
     }
 
     private void init() {
@@ -53,7 +58,7 @@ public class CustomViewPager extends ViewPager {
             mScroller = new ScrollerCustomDuration(getContext(), (Interpolator) interpolator.get(null));
             scroller.set(this, mScroller);
         } catch (Exception e) {
-
+            Log.e("Error:", "Error is:" +e);
         }
     }
 
@@ -107,14 +112,59 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(swapXY(event));
+        return this.IsSwipeAllowed(swapXY(event)) && super.onTouchEvent(swapXY(event));
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (this.IsSwipeAllowed(swapXY(event))) {
+            event = swapXY(event);
+            boolean intercepted = super.onInterceptTouchEvent(swapXY(event));
+            swapXY(event); // return touch coordinates to original reference frame for any child views
+            return intercepted;
+        }
+        return false;
+    }
+
+    public void setPagingEnabled(SwipeDirection direction) {
+        this.direction = direction;
+    }
+
+
+    private boolean IsSwipeAllowed(MotionEvent event) {
         event = swapXY(event);
-        boolean intercepted = super.onInterceptTouchEvent(swapXY(event));
-        swapXY(event); // return touch coordinates to original reference frame for any child views
-        return intercepted;
+        if(this.direction == SwipeDirection.all) return true;
+
+        if(direction == SwipeDirection.none )//disable any swipe
+            return false;
+
+        float width = getWidth();
+        float height = getHeight();
+
+        float newX = (event.getY() / height) * width;
+
+        if(event.getAction()==MotionEvent.ACTION_DOWN) {
+            initialYValue = newX;
+            return true;
+        }
+
+        if(event.getAction()==MotionEvent.ACTION_MOVE) {
+            try {
+                float diffY = newX - initialYValue;
+                if (diffY > 0 && direction == SwipeDirection.bottom ) {
+                    return false;
+                }else if (diffY < 0 && direction == SwipeDirection.top ) {
+                    return false;
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        return true;
+    }
+
+    public enum SwipeDirection {
+        all, top, bottom, none
     }
 }

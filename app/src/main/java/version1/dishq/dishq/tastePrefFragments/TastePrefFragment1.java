@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.modals.FoodChoicesModal;
 import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.DishqApplication;
@@ -25,7 +28,9 @@ public class TastePrefFragment1 extends Fragment {
 
     private TextView hiName, aboutPrefs, vegetarian, eggetarian, nonVeg;
     private Button areYou;
-    private ImageView vegDish, eggDish, nonVegDish, vegTick, eggTick, nonVegTick;
+    private RelativeLayout vegDish, eggDish, nonVegDish;
+    private ImageView vegTick, eggTick, nonVegTick;
+    private FrameLayout vegSelection, eggSelection, nonVegSelection;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,19 +50,26 @@ public class TastePrefFragment1 extends Fragment {
         nonVeg = (TextView) view.findViewById(R.id.non_veg);
         areYou = (Button) view.findViewById(R.id.are_you);
         setTypeFace();
-        vegDish = (ImageView) view.findViewById(R.id.veg_dish);
-        eggDish = (ImageView) view.findViewById(R.id.egg_dish);
-        nonVegDish = (ImageView) view.findViewById(R.id.non_veg_dish);
+        vegDish = (RelativeLayout) view.findViewById(R.id.veg_dish);
+        eggDish = (RelativeLayout) view.findViewById(R.id.egg_dish);
+        nonVegDish = (RelativeLayout) view.findViewById(R.id.non_veg_dish);
         vegTick = (ImageView) view.findViewById(R.id.veg_tick);
         eggTick = (ImageView) view.findViewById(R.id.egg_tick);
         nonVegTick = (ImageView) view.findViewById(R.id.non_veg_tick);
+        vegSelection = (FrameLayout) view.findViewById(R.id.veg_selection);
+        eggSelection = (FrameLayout) view.findViewById(R.id.egg_selection);
+        nonVegSelection = (FrameLayout) view.findViewById(R.id.non_veg_selection);
+
+        //Setting the onClickListeners
         vegDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if(Util.foodChoicesModals!=null) {
                 vegTick.setVisibility(View.VISIBLE);
                 nonVegTick.setVisibility(View.GONE);
                 eggTick.setVisibility(View.GONE);
+                vegSelection.setVisibility(View.VISIBLE);
+                eggSelection.setVisibility(View.GONE);
+                nonVegSelection.setVisibility(View.GONE);
                 //settingOnClick(1, vegetarian);
                 Util.setFoodChoiceSelected(1);
                 final Handler handler = new Handler();
@@ -67,7 +79,6 @@ public class TastePrefFragment1 extends Fragment {
                         showNext();
                     }
                 }, 1000);
-                //}
             }
         });
         eggDish.setOnClickListener(new View.OnClickListener() {
@@ -77,8 +88,11 @@ public class TastePrefFragment1 extends Fragment {
                     eggTick.setVisibility(View.VISIBLE);
                     vegTick.setVisibility(View.GONE);
                     nonVegTick.setVisibility(View.GONE);
+                    vegSelection.setVisibility(View.GONE);
+                    eggSelection.setVisibility(View.VISIBLE);
+                    nonVegSelection.setVisibility(View.GONE);
                     //settingOnClick(3, eggetarian);
-                    Util.setFoodChoiceSelected(3);
+                    Util.setFoodChoiceSelected(2);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -96,8 +110,11 @@ public class TastePrefFragment1 extends Fragment {
                     nonVegTick.setVisibility(View.VISIBLE);
                     vegTick.setVisibility(View.GONE);
                     eggTick.setVisibility(View.GONE);
+                    vegSelection.setVisibility(View.GONE);
+                    eggSelection.setVisibility(View.GONE);
+                    nonVegSelection.setVisibility(View.VISIBLE);
                     //settingOnClick(2, nonVeg);
-                    Util.setFoodChoiceSelected(2);
+                    Util.setFoodChoiceSelected(3);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -145,7 +162,7 @@ public class TastePrefFragment1 extends Fragment {
     void showNext() {
         if (Util.getFoodChoiceSelected() != 0) {
             if (OnBoardingActivity.pager.getCurrentItem() == 0) {
-                //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.DOWN);
+                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
                 OnBoardingActivity.pager.setCurrentItem(1);
             }
         }

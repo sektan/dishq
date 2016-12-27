@@ -12,7 +12,9 @@ import android.widget.CheckedTextView;
 import com.wefika.flowlayout.FlowLayout;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
+import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -41,39 +43,45 @@ public class TastePrefFragment2 extends Fragment {
         setTypeFace();
         FlowLayout homeCuisineContainer = (FlowLayout) view.findViewById(R.id.home_cuisine_container);
         homeCuisineContainer.removeAllViews();
+
+        final View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckedTextView view = (CheckedTextView) v;
+                view.setChecked(!view.isChecked());
+                HomeCuisinesModal model = (HomeCuisinesModal) view.getTag();
+                if (view.isChecked()) {
+                    Log.d("Name of selected item", model.getHomeCuisName());
+                    model.setHomeCuisCurrentSelect(true);
+                    Util.homeCuisineSelected = true;
+                    Util.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
+                }else{
+                    model.setHomeCuisCurrentSelect(false);
+                    Util.homeCuisineSelected = false;
+                }
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showNext();
+                    }
+                }, 1000);
+
+            }
+        };
         for (HomeCuisinesModal model : Util.homeCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, homeCuisineContainer, false);
             child.setText(model.getHomeCuisName());
             child.setTag(model);
-            if (model.getHomeCuisCurrentSelect()) {
-                child.setChecked(true);
+            child.setOnClickListener(clickListener);
+            child.setChecked(false);
+            if(child.isChecked()){
+                model.setHomeCuisCurrentSelect(true);
+            }
+            else{
+                model.setHomeCuisCurrentSelect(false);
             }
             homeCuisineContainer.addView(child);
-            child.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    CheckedTextView view = (CheckedTextView) v;
-                    view.setChecked(!view.isChecked());
-                    HomeCuisinesModal model = (HomeCuisinesModal) view.getTag();
-                    if (view.isChecked()) {
-                        Log.d("Name of selected item", model.getHomeCuisName());
-                        model.setHomeCuisCurrentSelect(true);
-                        Util.homeCuisineSelected = true;
-                    }else{
-                        model.setHomeCuisCurrentSelect(false);
-                        Util.homeCuisineSelected = false;
-                    }
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showNext();
-                        }
-                    }, 1000);
-
-                }
-            });
             if (Util.homeCuisineSelected) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -102,8 +110,11 @@ public class TastePrefFragment2 extends Fragment {
     void showNext() {
         if (Util.homeCuisineSelected) {
             if (OnBoardingActivity.pager.getCurrentItem() == 1) {
-                //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.DOWN);
+                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
                 OnBoardingActivity.pager.setCurrentItem(2);
+            }else {
+                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
+                OnBoardingActivity.pager.setCurrentItem(1);
             }
         }
 

@@ -32,10 +32,12 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import version1.dishq.dishq.BaseActivity;
+import version1.dishq.dishq.ui.SplashActivity;
 
 /**
  * Created by dishq on 14-12-2016.
  * Package name version1.dishq.dishq.
+ * Checking for the GPS
  */
 
 public class CheckForGps extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -47,20 +49,22 @@ public class CheckForGps extends BaseActivity implements GoogleApiClient.Connect
     private static final long FASTEST_INTERVAL = 1000 * 5;
     protected static final int REQUEST_CHECK_SETTINGS = 1000;
     final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
-    private GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient = null;
     private Location mLastLocation;
     private static String lat = "0.0";
     private static String lang = "0.0";
     private Activity activityForGps;
 
-    public void CheckForGps(Activity activity) {
+    public void checkForGps(Activity activity, GoogleApiClient googleApiClient) {
+        this.googleApiClient = googleApiClient;
         activityForGps = activity;
-        final int playServicesStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
-        if (playServicesStatus != ConnectionResult.SUCCESS) {
-            //If google play services in not available show an error dialog and return
-            final Dialog errorDialog = GoogleApiAvailability.getInstance().getErrorDialog(this, playServicesStatus, 0, null);
-            errorDialog.show();
-        }
+//        final int playServicesStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+//        if (playServicesStatus != ConnectionResult.SUCCESS) {
+//            //If google play services in not available show an error dialog and return
+//            final Dialog errorDialog = GoogleApiAvailability.getInstance().getErrorDialog(this, playServicesStatus, 0, null);
+//            errorDialog.show();
+//        }
+        Log.d("GPS", "Checking for GPS");
         createLocationRequest();
         if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // first check
@@ -69,6 +73,7 @@ public class CheckForGps extends BaseActivity implements GoogleApiClient.Connect
         } else if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             selfPermission();
+            getTheLocale();
         }
     }
 
@@ -94,7 +99,6 @@ public class CheckForGps extends BaseActivity implements GoogleApiClient.Connect
     }
 
     private void getTheLocale() {
-
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(LocationServices.API).addConnectionCallbacks(this)
@@ -117,7 +121,7 @@ public class CheckForGps extends BaseActivity implements GoogleApiClient.Connect
 
             result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
                 @Override
-                public void onResult(LocationSettingsResult result) {
+                public void onResult(@NonNull LocationSettingsResult result) {
                     final Status status = result.getStatus();
                     switch (status.getStatusCode()) {
 
@@ -182,6 +186,8 @@ public class CheckForGps extends BaseActivity implements GoogleApiClient.Connect
 
                 lat = "" + mLastLocation.getLatitude();
                 lang = "" + mLastLocation.getLongitude();
+                Util.setLatitude(lat);
+                Util.setLongitude(lang);
                 Log.d("LOCATION", "LOCATION" + mLastLocation.getLatitude());
 
             } else {
@@ -264,6 +270,8 @@ public class CheckForGps extends BaseActivity implements GoogleApiClient.Connect
             Log.d(TAG, "VALUES--6" + mLastLocation.getLatitude() + mLastLocation.getLongitude());
             lat = "" + mLastLocation.getLatitude();
             lang = "" + mLastLocation.getLongitude();
+            Util.setLatitude(lat);
+            Util.setLongitude(lang);
 
         } else {
             Log.d(TAG, "VALUES--6---");

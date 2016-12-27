@@ -22,6 +22,9 @@ import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
+import version1.dishq.dishq.modals.lists.DontEatSelect;
+import version1.dishq.dishq.modals.lists.FavCuisineSelect;
+import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -38,15 +41,35 @@ public class Util {
     public static ArrayList<FoodChoicesModal> foodChoicesModals = new ArrayList<>();
     public static ArrayList<FavCuisinesModal> favCuisinesModals = new ArrayList<>();
     public static ArrayList<HomeCuisinesModal> homeCuisinesModals = new ArrayList<>();
+    public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
+    public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
+    public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
 
     private static int foodChoiceSelected;
     public static Boolean homeCuisineSelected = false;
     public static int favCuisineCount = 0;
-    public static int favCuisineTotal = 0;
-    public static int homeCuisineCount = 0;
+    private static int favCuisineTotal = 0;
+    private static String latitude = "";
+    private static String longitude = "";
 
     @SuppressLint("StaticFieldLeak")
     private static Activity currentAct;
+
+    public static String getLatitude() {
+        return Util.latitude;
+    }
+
+    public static void setLatitude(String latitude) {
+        Util.latitude = latitude;
+    }
+
+    public static String getLongitude() {
+        return Util.longitude;
+    }
+
+    public static void setLongitude(String longitude) {
+        Util.longitude = longitude;
+    }
 
     public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
             "opensanslight.ttf"),

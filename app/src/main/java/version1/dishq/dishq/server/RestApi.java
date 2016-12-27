@@ -8,6 +8,8 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import version1.dishq.dishq.server.Request.SignUpHelper;
+import version1.dishq.dishq.server.Request.UserPrefRequest;
+import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
 import version1.dishq.dishq.server.Response.TastePrefData;
@@ -33,5 +35,14 @@ public interface RestApi {
 
     @GET("api/tastepref/fetchformdata/")
     Call<TastePrefData> fetchTastePref(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
+
+    @POST("api/tastepref/saveorupdate/")
+    Call<ResponseBody> sendUserPref(@Header("Authorization")String authorization, @Body UserPrefRequest userPrefRequest);
+
+    @GET("api/search/dish/")
+    Call<HomeDishesResponse> fetchPersonalDishes(@Header("Authorization")String authorization, @Query("uid") String uid,
+                                                 @Query("latitude")String latitude, @Query("longitude")String longitude,
+                                                 @Query("food_mood_id")int foodMoodId, @Query("class_name")String quickFilterName,
+                                                 @Query("entity_id")int quickFilterEntityId);
 
 }

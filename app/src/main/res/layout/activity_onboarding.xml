@@ -18,6 +18,7 @@
         android:layout_alignParentBottom="true"
         android:textAllCaps="true"
         android:textAlignment="center"
+        android:gravity="center"
         android:background="@drawable/done_button_shape"
         android:textColor="@color/black"
         android:visibility="gone"

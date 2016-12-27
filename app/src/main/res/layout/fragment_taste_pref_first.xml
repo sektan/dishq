@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="9dp"
-        android:layout_marginStart="9dp"
         android:orientation="vertical">
 
         <TextView
@@ -18,6 +17,8 @@
             android:layout_height="wrap_content"
             android:text="@string/hi_name"
             android:textColor="@color/white"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="20dp"
             android:textSize="@dimen/text_size_24" />
 
         <TextView
@@ -25,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
+            android:layout_marginStart="14dp"
             android:text="@string/tell_about_prefs"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_20" />
@@ -35,23 +37,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textAlignment="center"
+            android:paddingStart="14dp"
+            android:paddingEnd="20dp"
             android:background="@drawable/onboarding_ques_button"
             android:clickable="false"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             android:text="@string/are_you"
             android:textSize="@dimen/text_size_22" />
 
         <RelativeLayout
+            android:id="@+id/veg_dish"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp">
+            android:layout_height="115dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/veg_dish">
 
-            <ImageView
-                android:id="@+id/veg_dish"
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/veg_selection"
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:contentDescription="@string/vegetarian"
-                android:src="@drawable/veg_dish" />
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:visibility="gone"
+                android:foreground="@color/black"/>
 
             <ImageView
                 android:id="@+id/veg_tick"
@@ -75,16 +84,20 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="6dp"
+            android:id="@+id/egg_dish"
+            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="115dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/egg_dish">
 
-            <ImageView
-                android:id="@+id/egg_dish"
-                android:layout_width="wrap_content"
-                android:layout_height="115dp"
-                android:contentDescription="@string/eggetarian"
-                android:src="@drawable/egg_dish" />
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/egg_selection"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:visibility="gone"
+                android:foreground="@color/black"/>
 
             <ImageView
                 android:id="@+id/egg_tick"
@@ -108,16 +121,20 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginTop="6dp"
+            android:id="@+id/non_veg_dish"
+            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="115dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/non_veg_dish">
 
-            <ImageView
-                android:id="@+id/non_veg_dish"
-                android:layout_width="wrap_content"
-                android:layout_height="115dp"
-                android:contentDescription="@string/non_veg"
-                android:src="@drawable/non_veg_dish" />
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/non_veg_selection"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:visibility="gone"
+                android:foreground="@color/black"/>
 
             <ImageView
                 android:id="@+id/non_veg_tick"

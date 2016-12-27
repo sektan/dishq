@@ -14,6 +14,7 @@ import com.wefika.flowlayout.FlowLayout;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.modals.AllergyModal;
+import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.ui.HomeActivity;
 import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.DishqApplication;
@@ -58,6 +59,7 @@ public class TastePrefFragment4 extends Fragment {
                         Log.d("Name of selected item", model.getAllergyName());
                         model.setAllergyCurrentlySelect(true);
                         Util.favCuisineCount++;
+                        Util.dontEatSelects.add(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
                     }else {
                         model.setAllergyCurrentlySelect(false);
                     }
