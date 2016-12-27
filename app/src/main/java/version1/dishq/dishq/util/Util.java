@@ -19,12 +19,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import version1.dishq.dishq.modals.AllergyModal;
+import version1.dishq.dishq.modals.DishDataModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
+import version1.dishq.dishq.server.Response.DishDataInfo;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -44,6 +46,8 @@ public class Util {
     public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
     public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
     public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
+
+    public static ArrayList<DishDataModal> dishDataModals = new ArrayList<>();
 
     private static int foodChoiceSelected;
     public static Boolean homeCuisineSelected = false;

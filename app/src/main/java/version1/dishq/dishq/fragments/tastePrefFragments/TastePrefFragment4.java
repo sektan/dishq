@@ -1,13 +1,11 @@
-package version1.dishq.dishq.tastePrefFragments;
+package version1.dishq.dishq.fragments.tastePrefFragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 
 import com.wefika.flowlayout.FlowLayout;
@@ -15,9 +13,6 @@ import com.wefika.flowlayout.FlowLayout;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
-import version1.dishq.dishq.ui.HomeActivity;
-import version1.dishq.dishq.ui.OnBoardingActivity;
-import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**

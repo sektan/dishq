@@ -1,4 +1,4 @@
-package version1.dishq.dishq.tastePrefFragments;
+package version1.dishq.dishq.fragments.tastePrefFragments;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,10 +16,7 @@ import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 import version1.dishq.dishq.ui.OnBoardingActivity;
-import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
-
-import static version1.dishq.dishq.R.color.white;
 
 /**
  * Created by dishq on 16-12-2016.

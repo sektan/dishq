@@ -1,7 +1,15 @@
 package version1.dishq.dishq.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -10,6 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.RestApi;
@@ -24,13 +33,51 @@ import version1.dishq.dishq.util.Util;
 public class HomeActivity extends BaseActivity {
 
     private static final String TAG = "HomeActivity";
+    private int noOfPages = 0;
+    public static ViewPager viewPager;
+    private TextView greetingHeader, greetingContext;
+    private Button greetingButton;
+    private RelativeLayout rlGreeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setTags();
         fetchHomeDishResults();
     }
+
+    protected void setTags() {
+        viewPager = (ViewPager) findViewById(R.id.homeViewPager);
+        rlGreeting = (RelativeLayout) findViewById(R.id.rl_greeting);
+        greetingHeader = (TextView) findViewById(R.id.greeting_heading);
+        greetingContext = (TextView) findViewById(R.id.greeting_context);
+        greetingButton = (Button) findViewById(R.id.greeting_button);
+        setFonts();
+    }
+
+    protected void setFonts() {
+        greetingHeader.setTypeface(Util.opensanslight);
+        greetingContext.setTypeface(Util.opensanslight);
+        greetingButton.setTypeface(Util.opensanssemibold);
+    }
+
+    public void greetingsShownView(HomeDishesResponse.HomeData body) {
+        rlGreeting.setVisibility(View.VISIBLE);
+        if(body!=null) {
+            greetingHeader.setText(body.greetingsInfo.getGreetingMessage());
+            greetingContext.setText(body.greetingsInfo.getContextMessage());
+            greetingButton.setOnClickListener(onClickListener);
+            rlGreeting.setOnClickListener(onClickListener);
+        }
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            rlGreeting.setVisibility(View.GONE);
+        }
+    };
 
     public void fetchHomeDishResults() {
         String latitude = Util.getLatitude();
@@ -47,6 +94,15 @@ public class HomeActivity extends BaseActivity {
                         HomeDishesResponse.HomeData body = response.body().homeData;
                         if(body!=null) {
                             Log.d(TAG, "Body is not null");
+                            Boolean showGreeting = body.getShowGreeting();
+                            if(showGreeting) {
+                                greetingsShownView(body);
+                            }
+                            for(int i = 0; i <body.dishDataInfos.size(); i++) {
+
+                            }
+                            noOfPages = body.dishDataInfos.size();
+                            viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
                         }
 
                     }else {
@@ -63,6 +119,30 @@ public class HomeActivity extends BaseActivity {
                 Log.d(TAG, "Failure");
             }
         });
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a HomeScreenFragment (defined as a static inner class below).
+            return HomeScreenFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // Show total pages.
+            return noOfPages;
+        }
 
     }
 }

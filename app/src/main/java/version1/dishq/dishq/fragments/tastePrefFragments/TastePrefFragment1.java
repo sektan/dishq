@@ -1,4 +1,4 @@
-package version1.dishq.dishq.tastePrefFragments;
+package version1.dishq.dishq.fragments.tastePrefFragments;
 
 import android.os.Bundle;
 import android.os.Handler;

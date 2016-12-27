@@ -1,11 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="This is the homepage"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/homeViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_greeting"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.7"
+            android:background="@color/black">
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/greeting_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:textSize="@dimen/text_size_45"/>
+
+        <TextView
+            android:id="@+id/greeting_context"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="270dp"
+            android:layout_marginStart="34dp"
+            android:layout_marginEnd="34dp"
+            android:textSize="@dimen/text_size_30"/>
+
+        <Button
+            android:id="@+id/greeting_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/greeting_button_shape"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:paddingStart="35dp"
+            android:paddingEnd="35dp"
+            android:layout_marginBottom="60dp"
+            android:text="Explore Now!"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

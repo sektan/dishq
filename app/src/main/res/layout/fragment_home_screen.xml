@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_home_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="14dp">
+
+        <Button
+            android:id="@+id/hamburger"
+            android:layout_width="28dp"
+            android:layout_height="29dp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/hamburger" />
+
+        <Button
+            android:id="@+id/mood"
+            android:layout_width="28dp"
+            android:layout_height="29dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/mood" />
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/food_tags"
+        android:layout_above="@+id/rl_fav_dine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#30000000"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_fav_dine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp">
+
+        <Button
+            android:id="@+id/favourites"
+            android:layout_width="28dp"
+            android:layout_height="29dp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/fav" />
+
+        <Button
+            android:id="@+id/dining"
+            android:layout_width="28dp"
+            android:layout_height="29dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/eat" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
