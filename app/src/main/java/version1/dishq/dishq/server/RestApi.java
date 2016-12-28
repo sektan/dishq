@@ -7,6 +7,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
@@ -45,4 +46,6 @@ public interface RestApi {
                                                  @Query("food_mood_id")int foodMoodId, @Query("class_name")String quickFilterName,
                                                  @Query("entity_id")int quickFilterEntityId);
 
+    @POST("api/ugc/dishfavourite/")
+    Call<ResponseBody> addRemoveFavDish(@Header("Authorization")String authorization, @Body FavDishAddRemHelper favDishAddRemHelper);
 }

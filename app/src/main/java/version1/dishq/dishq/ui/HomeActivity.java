@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
 import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.DishqApplication;
@@ -99,7 +103,7 @@ public class HomeActivity extends BaseActivity {
                                 greetingsShownView(body);
                             }
                             for(int i = 0; i <body.dishDataInfos.size(); i++) {
-
+                                    Util.dishDataModals = body.dishDataInfos;
                             }
                             noOfPages = body.dishDataInfos.size();
                             viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
@@ -121,11 +125,8 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -133,9 +134,12 @@ public class HomeActivity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
+
+            HomeScreenFragment fragment = new HomeScreenFragment();
+            fragment.setArguments(Util.dishDataModals.get(position).toBundle());
             // getItem is called to instantiate the fragment for the given page.
             // Return a HomeScreenFragment (defined as a static inner class below).
-            return HomeScreenFragment.newInstance(position + 1);
+            return fragment;
         }
 
         @Override
