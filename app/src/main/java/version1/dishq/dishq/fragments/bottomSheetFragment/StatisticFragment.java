@@ -77,7 +77,7 @@ public class StatisticFragment extends BottomSheetDialogFragment {
                 case 2:
                     return RecipeFragment.newInstance("ThirdFragment, Instance 3");
                 default:
-                    return DineoutFragment.newInstance("FourthFragment, Default");
+                    return DineoutFragment.newInstance("FirstFragment, Default");
             }
         }
 

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import version1.dishq.dishq.R;
 
@@ -15,10 +16,12 @@ import version1.dishq.dishq.R;
 
 public class DineoutFragment extends Fragment {
 
+    private Button showMore;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
-
+        showMore = (Button) v.findViewById(R.id.dineout_show);
         return v;
     }
 
