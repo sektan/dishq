@@ -6,13 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.fragments.bottomSheetFragment.HomeBottomSheetFragment;
+import version1.dishq.dishq.fragments.bottomSheetFragment.StatisticFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
@@ -90,19 +84,33 @@ public class HomeScreenFragment extends Fragment {
         dineButton = (Button) rootView.findViewById(R.id.dining);
         setFont();
 
+        if (dishDataInfo != null) {
+            String imageUrl = dishDataInfo.getDishPhoto().get(0);
+            Picasso.with(DishqApplication.getContext())
+                    .load(imageUrl)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            rlHomeScreen.setBackground(new BitmapDrawable(bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+        }
+
         dineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
-//                View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottomsheet_home, null);
-//
-//                bottomSheetDialog.setContentView(sheetView);
-//                bottomSheetDialog.show();
-                //Initializing a bottom sheet
-                BottomSheetDialogFragment bottomSheetDialogFragment = new HomeBottomSheetFragment();
+                new StatisticFragment().show(getActivity().getSupportFragmentManager(), "dialog");
 
-                //show it
-                bottomSheetDialogFragment.show(getFragmentManager(), bottomSheetDialogFragment.getTag());
             }
         });
 
@@ -205,29 +213,6 @@ public class HomeScreenFragment extends Fragment {
         }
         foodTags.setText(String.valueOf(dishTags));
 
-
-        if (dishDataInfo != null) {
-            String imageUrl = dishDataInfo.getDishPhoto().get(0);
-            Picasso.with(DishqApplication.getContext())
-                    .load(imageUrl)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            rlHomeScreen.setBackground(new BitmapDrawable(bitmap));
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
-        }
-
         return rootView;
     }
 
@@ -236,6 +221,5 @@ public class HomeScreenFragment extends Fragment {
 
         foodTags.setTypeface(Util.opensanslight);
     }
-
 
 }
