@@ -1,9 +1,7 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -13,21 +11,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import version1.dishq.dishq.customViews.Item;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import version1.dishq.dishq.R;
 
@@ -60,65 +49,36 @@ public class StatisticFragment extends BottomSheetDialogFragment {
     }
 
     private void initViewPager() {
-        CustomPagerAdapter adapter = new CustomPagerAdapter(getContext());
-        viewPager.setAdapter(adapter);
+        BottomSheetAdapter viewAdapter = new BottomSheetAdapter(getFragmentManager());
+        viewPager.setAdapter(viewAdapter);
         viewPager.setOffscreenPageLimit(10);
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    private class BottomSheetAdapter extends FragmentPagerAdapter {
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
-        protected TextView mMainText;
-        protected TextView mSubText;
-
-        public ItemViewHolder(View v) {
-            super(v);
-            mMainText = (TextView) v.findViewById(R.id.main_text);
-            mSubText = (TextView) v.findViewById(R.id.sub_text);
-        }
-    }
-
-    public class ItemAdapter extends RecyclerView.Adapter<ItemViewHolder> {
-        private List<Item> items;
-
-        public ItemAdapter(List<Item> items) {
-            this.items = items;
-        }
-
-        @Override
-        public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_dineout, viewGroup, false);
-            return new ItemViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ItemViewHolder viewHolder, final int position) {
-            final Item item = items.get(position);
-            viewHolder.mMainText.setText(item.name);
-            viewHolder.mSubText.setText(item.value);
-            viewHolder.mMainText.setTextColor(ResourcesCompat.getColor(getResources(), position % 2 == 0 ? R.color.black : R.color.black, null));
-        }
-
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
         private int[] imageResId = {
-
+            R.drawable.dineout_inactive,
+                R.drawable.delivery_inactive,
+                R.drawable.cooking_inactive
         };
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+        BottomSheetAdapter(FragmentManager fm) {
+            super(fm);
         }
 
         @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+        public Fragment getItem(int pos) {
+            switch (pos) {
+                case 0:
+                    return DineoutFragment.newInstance("FirstFragment, Instance 1");
+                case 1:
+                    return DeliveryFragment.newInstance("SecondFragment, Instance 2");
+                case 2:
+                    return RecipeFragment.newInstance("ThirdFragment, Instance 3");
+                default:
+                    return DineoutFragment.newInstance("FourthFragment, Default");
+            }
         }
 
         @Override
@@ -126,93 +86,15 @@ public class StatisticFragment extends BottomSheetDialogFragment {
             return 3;
         }
 
-        public void addFrag(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            Drawable image = ContextCompat.getDrawable(getContext(), imageResId[position]);
+            image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
+            SpannableString sb = new SpannableString(" ");
+            ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+            sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return sb;
         }
     }
 
-    public class CustomPagerAdapter extends PagerAdapter {
-
-        private Context mContext;
-
-        public CustomPagerAdapter(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
-            //CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.bottom_sheet_adapter, collection, false);
-
-            //View rootView = View.inflate(getContext(), R.layout.adapter, null);
-            RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-            ArrayList<Item> items = new ArrayList<>();
-
-            if (position == 0) {
-                items.add(new Item("Coffee 1", "1"));
-                items.add(new Item("Coffee 2", "2"));
-                items.add(new Item("Coffee 3", "3"));
-                items.add(new Item("Coffee 4", "4"));
-                items.add(new Item("Coffee 5", "5"));
-                items.add(new Item("Coffee 6", "6"));
-                items.add(new Item("Coffee 7", "7"));
-                items.add(new Item("Coffee 8", "8"));
-                items.add(new Item("Coffee 9", "9"));
-                items.add(new Item("Coffee 10", "10"));
-            } else {
-                items.add(new Item("Milk 1", "1"));
-                items.add(new Item("Milk 2", "2"));
-                items.add(new Item("Milk 3", "3"));
-                items.add(new Item("Milk 4", "4"));
-                items.add(new Item("Milk 5", "5"));
-                items.add(new Item("Milk 6", "6"));
-                items.add(new Item("Milk 7", "7"));
-                items.add(new Item("Milk 8", "8"));
-                items.add(new Item("Milk 9", "9"));
-                items.add(new Item("Milk 10", "10"));
-            }
-
-            ItemAdapter mAdapter = new ItemAdapter(items);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            mRecyclerView.setAdapter(mAdapter);
-            Paint paint = new Paint();
-            paint.setStrokeWidth(1);
-            paint.setColor(ResourcesCompat.getColor(getResources(), R.color.black, null));
-            paint.setAntiAlias(true);
-            paint.setPathEffect(new DashPathEffect(new float[]{25.0f, 25.0f}, 0));
-            mRecyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).showLastDivider().paint(paint).build()); //.marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
-
-            collection.addView(rootView);
-            return rootView;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup collection, int position, Object view) {
-            collection.removeView((View) view);
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            //CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
-            return position == 0 ? "Coffee" : "Milk";
-        }
-
-    }
 }
