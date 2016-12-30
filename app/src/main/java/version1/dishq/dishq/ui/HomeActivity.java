@@ -102,6 +102,7 @@ public class HomeActivity extends BaseActivity {
                             if(showGreeting) {
                                 greetingsShownView(body);
                             }
+                            Util.setDefaultTab(body.getDefaultTab());
                             for(int i = 0; i <body.dishDataInfos.size(); i++) {
                                     Util.dishDataModals = body.dishDataInfos;
                             }

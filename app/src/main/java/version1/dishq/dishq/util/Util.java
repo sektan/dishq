@@ -54,6 +54,24 @@ public class Util {
     private static int favCuisineTotal = 0;
     private static String latitude = "";
     private static String longitude = "";
+    private static int genericDishIdTab = 0;
+    private static String defaultTab = "";
+
+    public static String getDefaultTab() {
+        return defaultTab;
+    }
+
+    public static void setDefaultTab(String defaultTab) {
+        Util.defaultTab = defaultTab;
+    }
+
+    public static int getGenericDishIdTab() {
+        return Util.genericDishIdTab;
+    }
+
+    public static void setGenericDishIdTab(int genericDishIdTab) {
+        Util.genericDishIdTab = genericDishIdTab;
+    }
 
     @SuppressLint("StaticFieldLeak")
     private static Activity currentAct;

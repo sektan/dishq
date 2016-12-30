@@ -1,13 +1,23 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.Response.DineoutTabResponse;
+import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.util.DishqApplication;
+import version1.dishq.dishq.util.Util;
 
 /**
  * Created by dishq on 29-12-2016.
@@ -16,7 +26,14 @@ import version1.dishq.dishq.R;
 
 public class DineoutFragment extends Fragment {
 
+    private static final String TAG = "DineoutFragment";
     private Button showMore;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fetchDineoutRest();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,5 +48,27 @@ public class DineoutFragment extends Fragment {
         b.putString("msg", text);
         f.setArguments(b);
         return f;
+    }
+
+    public void fetchDineoutRest() {
+
+        int genericDishId = Util.getGenericDishIdTab();
+        String latitude = "12.92923258", longitude = "77.63082482", source = "homescreen";
+        int showMore = 0;
+        RestApi restApi = Config.createService(RestApi.class);
+        Call<DineoutTabResponse> call = restApi.addDineRestOptions(DishqApplication.getAccessToken(),
+                genericDishId, DishqApplication.getUniqueID(), source, latitude,
+                longitude, showMore);
+        call.enqueue(new Callback<DineoutTabResponse>() {
+            @Override
+            public void onResponse(Call<DineoutTabResponse> call, Response<DineoutTabResponse> response) {
+                Log.d(TAG, "Success");
+            }
+
+            @Override
+            public void onFailure(Call<DineoutTabResponse> call, Throwable t) {
+                Log.d(TAG, "Failure");
+            }
+        });
     }
 }

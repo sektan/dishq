@@ -109,6 +109,7 @@ public class HomeScreenFragment extends Fragment {
         dineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
                 new StatisticFragment().show(getActivity().getSupportFragmentManager(), "dialog");
 
             }

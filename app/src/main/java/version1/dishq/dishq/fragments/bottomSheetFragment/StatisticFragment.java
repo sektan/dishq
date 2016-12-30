@@ -16,9 +16,11 @@ import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.util.Util;
 
 /**
  * Created by dishq on 29-12-2016.
@@ -51,17 +53,57 @@ public class StatisticFragment extends BottomSheetDialogFragment {
     private void initViewPager() {
         BottomSheetAdapter viewAdapter = new BottomSheetAdapter(getFragmentManager());
         viewPager.setAdapter(viewAdapter);
-        viewPager.setOffscreenPageLimit(10);
+        viewPager.setOffscreenPageLimit(3);
+        PageListener pageListener = new PageListener();
+        viewPager.setOnPageChangeListener(pageListener);
         tabLayout.setupWithViewPager(viewPager);
+        if(Util.getDefaultTab().equals("dineout")){
+            TabLayout.Tab tab = tabLayout.getTabAt(0);
+            if (tab != null) {
+                tab.select();
+            }
+            tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
+            tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+            tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+        }else if(Util.getDefaultTab().equals("delivery")) {
+            TabLayout.Tab tab = tabLayout.getTabAt(1);
+            if (tab != null) {
+                tab.select();
+            }
+            tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+            tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+            tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+        }else if(Util.getDefaultTab().equals("recipe")){
+            TabLayout.Tab tab = tabLayout.getTabAt(2);
+            if (tab != null) {
+                tab.select();
+            }
+            tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+            tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+            tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+        }
+    }
+
+    public class PageListener extends ViewPager.SimpleOnPageChangeListener {
+        public void onPageSelected(final int position) {
+            Log.d("page", position + " ");
+            if (position == 0) {
+                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
+                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+            } else if (position == 1) {
+                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+            } else if (position == 2) {
+                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+            }
+        }
     }
 
     private class BottomSheetAdapter extends FragmentPagerAdapter {
-
-        private int[] imageResId = {
-            R.drawable.dineout_inactive,
-                R.drawable.delivery_inactive,
-                R.drawable.cooking_inactive
-        };
 
         BottomSheetAdapter(FragmentManager fm) {
             super(fm);
@@ -86,15 +128,6 @@ public class StatisticFragment extends BottomSheetDialogFragment {
             return 3;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Drawable image = ContextCompat.getDrawable(getContext(), imageResId[position]);
-            image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
-            SpannableString sb = new SpannableString(" ");
-            ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
-            sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            return sb;
-        }
     }
 
 }

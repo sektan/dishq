@@ -6,10 +6,13 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
+import version1.dishq.dishq.server.Response.DeliveryTabResponse;
+import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
@@ -41,11 +44,21 @@ public interface RestApi {
     Call<ResponseBody> sendUserPref(@Header("Authorization")String authorization, @Body UserPrefRequest userPrefRequest);
 
     @GET("api/search/dish/")
-    Call<HomeDishesResponse> fetchPersonalDishes(@Header("Authorization")String authorization, @Query("uid") String uid,
+    Call<HomeDishesResponse> fetchPersonalDishes(@Header("Authorization")String authorization, @Query("uid")String uid,
                                                  @Query("latitude")String latitude, @Query("longitude")String longitude,
                                                  @Query("food_mood_id")int foodMoodId, @Query("class_name")String quickFilterName,
                                                  @Query("entity_id")int quickFilterEntityId);
 
     @POST("api/ugc/dishfavourite/")
     Call<ResponseBody> addRemoveFavDish(@Header("Authorization")String authorization, @Body FavDishAddRemHelper favDishAddRemHelper);
+
+    @GET("api/restaurant/dish/{generic_dish_id}/dineout/")
+    Call<DineoutTabResponse> addDineRestOptions(@Header("Authorization")String authorization, @Path("generic_dish_id")int genericDishId,
+                                            @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
+                                            @Query("longitude")String longitude, @Query("showmore")int showMore);
+
+    @GET("api/restaurant/dish/{generic_dish_id}/delivery/")
+    Call<DeliveryTabResponse> addDelivRestOptions(@Header("Authorization")String authorization, @Path("generic_dish_id")int genericDishId,
+                                                  @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
+                                                  @Query("longitude")String longitude, @Query("showmore")int showMore);
 }
