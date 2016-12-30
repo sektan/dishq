@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,6 +60,19 @@ public class DeliveryFragment extends Fragment {
             @Override
             public void onResponse(Call<DeliveryTabResponse> call, Response<DeliveryTabResponse> response) {
                 Log.d(TAG, "Success");
+                try {
+                    if(response.isSuccessful()) {
+                        DeliveryTabResponse.DeliveryRestaurants body = response.body().deliveryRestaurants;
+                        if(body!=null) {
+                            Log.d(TAG, "the body is not empty");
+                        }
+                    }else {
+                        String error = response.errorBody().string();
+                        Log.d(TAG, "Error: " + error);
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

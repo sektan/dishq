@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +65,19 @@ public class DineoutFragment extends Fragment {
             @Override
             public void onResponse(Call<DineoutTabResponse> call, Response<DineoutTabResponse> response) {
                 Log.d(TAG, "Success");
+                try {
+                    if(response.isSuccessful()) {
+                        DineoutTabResponse.DineoutRestaurants body = response.body().dineoutRestaurants;
+                        if(body!=null) {
+                            Log.d(TAG, "body is not null");
+                        }
+                    }else {
+                        String error = response.errorBody().string();
+                        Log.d(TAG, "Error: " + error);
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
