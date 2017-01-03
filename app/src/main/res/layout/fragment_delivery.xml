@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/delivery_rest_cardlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/delivery_show" />
+
+    <Button
+        android:id="@+id/delivery_show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="delivery"/>
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:background="#00000000"
+        android:gravity="center"
+        android:text="show more"
+        android:textAllCaps="false"
+        android:textColor="@color/black" />
 
-</LinearLayout>
+</RelativeLayout>

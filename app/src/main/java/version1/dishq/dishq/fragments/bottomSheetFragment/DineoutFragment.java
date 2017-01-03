@@ -17,6 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.adapters.bottomSheetAdapters.DineoutAdapter;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.RestApi;
@@ -50,6 +51,8 @@ public class DineoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
+        DineoutAdapter dineoutAdapter = new DineoutAdapter(Util.dineoutTabResponses);
+        mRecyclerView.setAdapter(dineoutAdapter);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);

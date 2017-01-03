@@ -25,6 +25,7 @@ import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
+import version1.dishq.dishq.server.Response.DeliveryTabResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 
@@ -49,6 +50,8 @@ public class Util {
 
     public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<DishDataInfo>();
     public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutTabResponses = new ArrayList<>();
+    public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
+    public static ArrayList<DeliveryTabResponse.DeliveryDishData> deliveryDishDatas = new ArrayList<>();
 
     private static int foodChoiceSelected;
     public static Boolean homeCuisineSelected = false;
@@ -58,6 +61,33 @@ public class Util {
     private static String longitude = "";
     private static int genericDishIdTab = 0;
     private static String defaultTab = "";
+    private static String recipeUrl = "";
+    private static String recipeDishPhoto = "";
+    private static String recipeDishName = "";
+
+    public static String getRecipeDishName() {
+        return recipeDishName;
+    }
+
+    public static void setRecipeDishName(String recipeDishName) {
+        Util.recipeDishName = recipeDishName;
+    }
+
+    public static String getRecipeDishPhoto() {
+        return recipeDishPhoto;
+    }
+
+    public static void setRecipeDishPhoto(String recipeDishPhoto) {
+        Util.recipeDishPhoto = recipeDishPhoto;
+    }
+
+    public static String getRecipeUrl() {
+        return recipeUrl;
+    }
+
+    public static void setRecipeUrl(String recipeUrl) {
+        Util.recipeUrl = recipeUrl;
+    }
 
     public static String getDefaultTab() {
         return defaultTab;

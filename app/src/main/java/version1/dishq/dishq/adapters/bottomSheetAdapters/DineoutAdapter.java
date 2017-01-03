@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
+
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.util.DishqApplication;
@@ -25,6 +27,11 @@ import version1.dishq.dishq.util.Util;
  */
 
 public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutRestInfoAdapter> {
+
+    private ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos;
+    public DineoutAdapter (ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos) {
+        this.dineoutRestInfos = dineoutRestInfos;
+    }
 
     @Override
     public DineoutRestInfoAdapter onCreateViewHolder(ViewGroup viewGroup, int viewType) {
