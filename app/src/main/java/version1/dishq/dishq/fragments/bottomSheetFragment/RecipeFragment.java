@@ -29,8 +29,6 @@ import version1.dishq.dishq.util.Util;
 public class RecipeFragment extends Fragment {
 
     private WebView wvRecipe;
-    private RelativeLayout rlRecipe;
-    private TextView recipeDishName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,30 +39,6 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recipe, container, false);
         wvRecipe = (WebView) v.findViewById(R.id.recipe_webview);
-        rlRecipe = (RelativeLayout) v.findViewById(R.id.rl_recipe);
-        recipeDishName = (TextView) v.findViewById(R.id.recipe_dish_name);
-
-        recipeDishName.setText(Util.getRecipeDishName());
-        Picasso.with(DishqApplication.getContext())
-                .load(Util.getRecipeDishPhoto())
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        rlRecipe.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
-
-        String url = Util.getRecipeUrl();
         wvRecipe.setWebViewClient(new webBrowser());
         wvRecipe.getSettings().setLoadsImagesAutomatically(true);
         wvRecipe.getSettings().setJavaScriptEnabled(true);

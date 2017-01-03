@@ -3,6 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dineout_card_view"
     android:layout_width="match_parent"
+    android:layout_marginTop="10dp"
     android:layout_height="150dp"
     card_view:cardCornerRadius="4dp">
 
@@ -11,111 +12,127 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/dineout_rest_name"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8.7dp"
-            android:maxLines="2"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_20" />
+            android:background="@drawable/hs_rl_button_bg_top">
 
-        <TextView
-            android:id="@+id/dineout_rest_addr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/dineout_rest_name"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="12dp"
-            android:maxLines="2"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_12" />
+            <TextView
+                android:id="@+id/dineout_rest_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:maxLines="2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_20" />
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/dineout_cv_drive_cost"
+            <TextView
+                android:id="@+id/dineout_rest_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dineout_rest_name"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="1dp"
+                android:maxLines="2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_12" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="6dp"
-            card_view:cardBackgroundColor="#50000000"
-            card_view:cardCornerRadius="4dp">
+            android:layout_marginEnd="10dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/dineout_cv_drive_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:cardBackgroundColor="#50000000"
+                card_view:cardCornerRadius="4dp">
 
-                <TextView
-                    android:id="@+id/dineout_rest_cuisine"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/ll_cost_drive"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_12" />
-
-                <LinearLayout
-                    android:id="@+id/ll_cost_drive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="13dp"
-                    android:layout_marginStart="11dp"
-                    android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/dineout_rup_1"
+                        android:id="@+id/dineout_rest_cuisine"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rupee"
                         android:textColor="@color/white"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="11dp"
                         android:textSize="@dimen/text_size_12" />
 
-                    <TextView
-                        android:id="@+id/dineout_rup_2"
+                    <LinearLayout
+                        android:id="@+id/ll_cost_drive"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rupee"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
+                        android:layout_below="@id/dineout_rest_cuisine"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="11dp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/dineout_rup_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rupee"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
+                        <TextView
+                            android:id="@+id/dineout_rup_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rupee"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_12" />
 
-                    <TextView
-                        android:id="@+id/dineout_rup_4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rupee"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
+                        <TextView
+                            android:id="@+id/dineout_rup_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rupee"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_12" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/vertical_line"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
+                        <TextView
+                            android:id="@+id/dineout_rup_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rupee"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_12" />
 
-                    <TextView
-                        android:id="@+id/dineout_drive_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/dineout_rup_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rupee"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_12" />
 
-            </RelativeLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:text="@string/vertical_line"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <TextView
+                            android:id="@+id/dineout_drive_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_12" />
+                    </LinearLayout>
+
+                </RelativeLayout>
 
 
-        </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

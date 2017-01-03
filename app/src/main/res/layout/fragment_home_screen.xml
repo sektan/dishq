@@ -7,12 +7,15 @@
     android:fitsSystemWindows="true">
 
     <include layout="@layout/content_home"/>
+    <!--
     <include
         android:id="@+id/bottomSheet"
         layout="@layout/bottom_sheet_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/bottom_sheet_behavior" />
+
+        -->
 
 
 </android.support.design.widget.CoordinatorLayout>

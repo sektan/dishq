@@ -81,52 +81,6 @@ public class StatisticFragment extends BottomSheetDialogFragment {
     private void initViewPager() {
         adapter = new BottomSheetAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d("page", position + " ");
-//                if (tabLayout != null) {
-//                    if (position == 0) {
-//                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-//                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-//                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-//                    } else if (position == 1) {
-//                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-//                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
-//                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-//                    } else if (position == 2) {
-//                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-//                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-//                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
-//                    }
-//                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.d("page", position + " ");
-//                if (tabLayout != null) {
-//                    if (position == 0) {
-//                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-//                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-//                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-//                    } else if (position == 1) {
-//                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-//                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
-//                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-//                    } else if (position == 2) {
-//                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-//                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-//                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
-//                    }
-//                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -156,8 +110,57 @@ public class StatisticFragment extends BottomSheetDialogFragment {
                     tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                     tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
                 }
+
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                        Log.d("page", position + " ");
+                        if (tabLayout != null) {
+                            if (position == 0) {
+                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
+                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                            } else if (position == 1) {
+                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                            } else if (position == 2) {
+                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        Log.d("page", position + " ");
+                        if (tabLayout != null) {
+                            if (position == 0) {
+                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
+                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                            } else if (position == 1) {
+                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                            } else if (position == 2) {
+                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
             }
         });
+
+
 
     }
 
