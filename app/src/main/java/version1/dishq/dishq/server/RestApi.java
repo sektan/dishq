@@ -7,13 +7,15 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.FoodFilters;
+import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilters.SearchFilter;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
-import version1.dishq.dishq.server.Response.VersionCheckResponse;
 import version1.dishq.dishq.server.Response.TastePrefData;
+import version1.dishq.dishq.server.Response.VersionCheckResponse;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -48,4 +50,10 @@ public interface RestApi {
 
     @POST("api/ugc/dishfavourite/")
     Call<ResponseBody> addRemoveFavDish(@Header("Authorization")String authorization, @Body FavDishAddRemHelper favDishAddRemHelper);
+
+    @GET("api/search/filters/")
+    Call<FoodFilters> getFoodFilters(@Header("Authorization") String authorization);
+
+    @GET("api/search/suggest/foodmood/")
+    Call<SearchFilter> getSearchFilters(@Query("query") String searchKey, @Query("uid") String UniqueIdentifier, @Query("user_id") int UserId);
 }
