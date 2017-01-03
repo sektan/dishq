@@ -145,20 +145,6 @@ public class TastePrefFragment1 extends Fragment {
         return f;
     }
 
-    protected void settingOnClick(int n, TextView textView) {
-        for (FoodChoicesModal modal : Util.foodChoicesModals) {
-            for (int i = 0; i < Util.foodChoicesModals.size(); i++) {
-                if (modal.getFoodChoiceValue() == n) {
-                    modal.setFoodChoiceCurrSel(true);
-                    textView.setText(modal.getFoodChoiceName());
-                    Util.setFoodChoiceSelected(modal.getFoodChoiceValue());
-                }
-            }
-
-        }
-
-    }
-
     void showNext() {
         if (Util.getFoodChoiceSelected() != 0) {
             if (OnBoardingActivity.pager.getCurrentItem() == 0) {

@@ -136,6 +136,16 @@
 
     </android.support.v7.widget.CardView>
 
+    <FrameLayout
+        android:id="@+id/frame_click"
+        android:layout_marginStart="10dp"
+        android:layout_width="340dp"
+        android:layout_height="260dp"
+        android:layout_below="@+id/cv_dish_name_type_info"
+        android:background="#00000000">
+
+    </FrameLayout>
+
     <Button
         android:id="@+id/food_tags"
         android:layout_above="@+id/rl_fav_dine"

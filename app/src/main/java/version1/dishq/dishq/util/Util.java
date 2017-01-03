@@ -25,6 +25,7 @@ import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
+import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 
 /**
@@ -47,6 +48,7 @@ public class Util {
     public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
 
     public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<DishDataInfo>();
+    public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutTabResponses = new ArrayList<>();
 
     private static int foodChoiceSelected;
     public static Boolean homeCuisineSelected = false;

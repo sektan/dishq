@@ -32,4 +32,8 @@
     <string name="allergy">Food you avoid or are \n allergic to&#63;</string>
     <string name="optional">&#40;Optional&#41;</string>
     <string name="done">Done</string>
+
+    <!-- BottomSheet -->
+    <string name="rupee">\u20B9</string>
+    <string name="vertical_line">&#124;</string>
 </resources>

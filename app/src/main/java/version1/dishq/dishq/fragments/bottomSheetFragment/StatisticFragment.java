@@ -19,6 +19,9 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.util.Util;
 
@@ -52,12 +55,54 @@ public class StatisticFragment extends BottomSheetDialogFragment {
 
     private void initViewPager() {
         BottomSheetAdapter viewAdapter = new BottomSheetAdapter(getFragmentManager());
+        viewAdapter.addFrag(new DineoutFragment());
+        viewAdapter.addFrag(new DeliveryFragment());
+        viewAdapter.addFrag(new RecipeFragment());
         viewPager.setAdapter(viewAdapter);
-        viewPager.setOffscreenPageLimit(3);
-        PageListener pageListener = new PageListener();
-        viewPager.setOnPageChangeListener(pageListener);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d("page", position + " ");
+                if (position == 0) {
+                    tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                } else if (position == 1) {
+                    tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                } else if (position == 2) {
+                    tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d("page", position + " ");
+                if (position == 0) {
+                    tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                } else if (position == 1) {
+                    tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                } else if (position == 2) {
+                    tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
-        if(Util.getDefaultTab().equals("dineout")){
+        if (Util.getDefaultTab().equals("dineout")) {
             TabLayout.Tab tab = tabLayout.getTabAt(0);
             if (tab != null) {
                 tab.select();
@@ -65,7 +110,7 @@ public class StatisticFragment extends BottomSheetDialogFragment {
             tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
             tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
             tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-        }else if(Util.getDefaultTab().equals("delivery")) {
+        } else if (Util.getDefaultTab().equals("delivery")) {
             TabLayout.Tab tab = tabLayout.getTabAt(1);
             if (tab != null) {
                 tab.select();
@@ -73,7 +118,7 @@ public class StatisticFragment extends BottomSheetDialogFragment {
             tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
             tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
             tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-        }else if(Util.getDefaultTab().equals("recipe")){
+        } else if (Util.getDefaultTab().equals("recipe")) {
             TabLayout.Tab tab = tabLayout.getTabAt(2);
             if (tab != null) {
                 tab.select();
@@ -84,49 +129,32 @@ public class StatisticFragment extends BottomSheetDialogFragment {
         }
     }
 
-    public class PageListener extends ViewPager.SimpleOnPageChangeListener {
-        public void onPageSelected(final int position) {
-            Log.d("page", position + " ");
-            if (position == 0) {
-                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-            } else if (position == 1) {
-                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
-                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-            } else if (position == 2) {
-                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
-            }
-        }
-    }
-
     private class BottomSheetAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
 
         BottomSheetAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
-        public Fragment getItem(int pos) {
-            switch (pos) {
-                case 0:
-                    return DineoutFragment.newInstance("FirstFragment, Instance 1");
-                case 1:
-                    return DeliveryFragment.newInstance("SecondFragment, Instance 2");
-                case 2:
-                    return RecipeFragment.newInstance("ThirdFragment, Instance 3");
-                default:
-                    return DineoutFragment.newInstance("FirstFragment, Default");
-            }
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return mFragmentList.size();
         }
+
+        void addFrag(Fragment fragment) {
+            mFragmentList.add(fragment);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return null;
+        }
+
 
     }
 

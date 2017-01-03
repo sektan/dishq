@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class HomeScreenFragment extends Fragment {
     private TextView dishName, dishType;
     private Button foodTags, dineButton;
     private ToggleButton favButton;
+    private FrameLayout frameClick;
 
     public HomeScreenFragment() {
     }
@@ -82,6 +84,7 @@ public class HomeScreenFragment extends Fragment {
         foodTags = (Button) rootView.findViewById(R.id.food_tags);
         favButton = (ToggleButton) rootView.findViewById(R.id.favourites);
         dineButton = (Button) rootView.findViewById(R.id.dining);
+        frameClick = (FrameLayout) rootView.findViewById(R.id.frame_click);
         setFont();
 
         if (dishDataInfo != null) {
@@ -105,6 +108,14 @@ public class HomeScreenFragment extends Fragment {
                         }
                     });
         }
+
+        frameClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
+                new StatisticFragment().show(getActivity().getSupportFragmentManager(), "dialog");
+            }
+        });
 
         dineButton.setOnClickListener(new View.OnClickListener() {
             @Override
