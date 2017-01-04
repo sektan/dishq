@@ -43,23 +43,17 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.fragments.tastePrefFragments.TastePrefFragment1;
-import version1.dishq.dishq.fragments.tastePrefFragments.TastePrefFragment2;
-import version1.dishq.dishq.fragments.tastePrefFragments.TastePrefFragment3;
-import version1.dishq.dishq.fragments.tastePrefFragments.TastePrefFragment4;
 import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.server.Config;
-import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.Response.TastePrefData;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.Constants;
@@ -75,8 +69,6 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private String TAG = "OnBoardingActivity";
-    public static CustomViewPager pager;
-    private Button doneButton;
     private GoogleApiClient googleApiClient;
     LocationRequest mLocationRequest;
     private static final long INTERVAL = 1000 * 10;
@@ -98,7 +90,6 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
             return;
         }
         setContentView(R.layout.activity_onboarding);
-        setTags();
         fetchTastePref();
     }
 
@@ -114,49 +105,13 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
         hideSoftKeyboard();
     }
 
-    protected void setTags() {
-
-
-//        pager = (CustomViewPager) findViewById(R.id.customViewPager);
-//        pager.setScrollDurationFactor(5);
-//        pager.setPagingEnabled(CustomViewPager.SwipeDirection.none);
-//        PageListener pageListener = new PageListener();
-//        pager.setOnPageChangeListener(pageListener);
-    }
-
     public void addFragments() {
         FragmentManager fm = getSupportFragmentManager();
-
         //add
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.onboarding_screen1, new TastePrefFragment1());
         ft.addToBackStack(null);
         ft.commit();
-    }
-
-    public void addNextFrag() {
-
-        FragmentManager fm = getSupportFragmentManager();
-        //replace
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.onboarding_screen2, new TastePrefFragment2());
-        ft.addToBackStack(null);
-        ft.commit();
-
-    }
-
-    public void replaceFragmentWithAnimation(Fragment fragment, String tag, int fFragmentResId, int sFragmentResId){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.hide(getSupportFragmentManager().findFragmentById(fFragmentResId));
-        transaction.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top);
-        transaction.replace(sFragmentResId, fragment);
-        transaction.addToBackStack(tag);
-        transaction.commit();
-    }
-
-    public void showNext() {
-        replaceFragmentWithAnimation(new TastePrefFragment2(), "2nd Fragment",
-                R.id.onboarding_screen1, R.id.onboarding_screen2);
     }
 
     public void checkGPS() {
@@ -351,7 +306,6 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
         } catch (Exception e) {
             Log.d("LOCATION", "LOCATIONeee" + e.getMessage());
         }
-
     }
 
     public void selfPermission() {
@@ -494,9 +448,6 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
                                 Log.d(TAG, "Data has been filled: " + Util.homeCuisinesModals.size());
                             }
                             addFragments();
-                            //sendUserPrefData();
-
-                            //pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
                         }
                     } else {
                         String error = response.errorBody().string();
@@ -513,8 +464,6 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
             }
         });
     }
-
-
 
     protected void stopLocationUpdates() {
 
@@ -544,6 +493,4 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
         super.onStop();
         stopLocationUpdates();
     }
-
-
 }

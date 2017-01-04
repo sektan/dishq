@@ -14,10 +14,8 @@ import android.widget.CheckedTextView;
 import com.wefika.flowlayout.FlowLayout;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
-import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -96,14 +94,6 @@ public class TastePrefFragment2 extends Fragment {
     //For setting the font of the text visible to the user
     protected void setTypeFace() {
 
-    }
-
-    public static TastePrefFragment2 newInstance(String text) {
-        TastePrefFragment2 f = new TastePrefFragment2();
-        Bundle b = new Bundle();
-        b.putString("msg", text);
-        f.setArguments(b);
-        return f;
     }
 
     void showNext() {

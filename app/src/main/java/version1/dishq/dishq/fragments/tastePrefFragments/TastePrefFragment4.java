@@ -88,14 +88,6 @@ public class TastePrefFragment4 extends Fragment {
         }
     }
 
-    public static TastePrefFragment4 newInstance(String text) {
-        TastePrefFragment4 f = new TastePrefFragment4();
-        Bundle b = new Bundle();
-        b.putString("msg", text);
-        f.setArguments(b);
-        return f;
-    }
-
     public void sendUserPrefData() {
         RestApi restApi = Config.createService(RestApi.class);
         String authorization = DishqApplication.getAccessToken();

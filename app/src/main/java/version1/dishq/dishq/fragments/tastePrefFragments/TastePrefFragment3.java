@@ -14,10 +14,8 @@ import android.widget.CheckedTextView;
 import com.wefika.flowlayout.FlowLayout;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
-import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -92,14 +90,6 @@ public class TastePrefFragment3 extends Fragment {
 
         }
 
-    }
-
-    public static TastePrefFragment3 newInstance(String text) {
-        TastePrefFragment3 f = new TastePrefFragment3();
-        Bundle b = new Bundle();
-        b.putString("msg", text);
-        f.setArguments(b);
-        return f;
     }
 
     void showNext() {

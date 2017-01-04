@@ -15,13 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.CustomViewPager;
-import version1.dishq.dishq.modals.FoodChoicesModal;
-import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
-
-import static version1.dishq.dishq.ui.OnBoardingActivity.*;
 
 /**
  * Created by dishq on 16-12-2016.
@@ -74,7 +69,6 @@ public class TastePrefFragment1 extends Fragment {
                 vegSelection.setVisibility(View.VISIBLE);
                 eggSelection.setVisibility(View.GONE);
                 nonVegSelection.setVisibility(View.GONE);
-                //settingOnClick(1, vegetarian);
                 Util.setFoodChoiceSelected(1);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -95,7 +89,6 @@ public class TastePrefFragment1 extends Fragment {
                     vegSelection.setVisibility(View.GONE);
                     eggSelection.setVisibility(View.VISIBLE);
                     nonVegSelection.setVisibility(View.GONE);
-                    //settingOnClick(3, eggetarian);
                     Util.setFoodChoiceSelected(2);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -117,7 +110,6 @@ public class TastePrefFragment1 extends Fragment {
                     vegSelection.setVisibility(View.GONE);
                     eggSelection.setVisibility(View.GONE);
                     nonVegSelection.setVisibility(View.VISIBLE);
-                    //settingOnClick(2, nonVeg);
                     Util.setFoodChoiceSelected(3);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -141,25 +133,15 @@ public class TastePrefFragment1 extends Fragment {
         areYou.setTypeface(Util.opensanslight);
     }
 
-    public static TastePrefFragment1 newInstance(String text) {
-        TastePrefFragment1 f = new TastePrefFragment1();
-        Bundle b = new Bundle();
-        b.putString("msg", text);
-        f.setArguments(b);
-        return f;
-    }
-
     void showNext() {
         if (Util.getFoodChoiceSelected() != 0) {
             Fragment fragment = new TastePrefFragment2();
             FragmentManager fm = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            //ft.hide(getActivity().getSupportFragmentManager().findFragmentById(R.id.onboarding_screen1));
-            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+             ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
             ft.replace(R.id.onboarding_screen2, fragment);
             ft.addToBackStack(null);
             ft.commit();
         }
-
     }
 }

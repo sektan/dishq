@@ -1,6 +1,5 @@
 package version1.dishq.dishq.fragments.homeScreenFragment;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.fragments.bottomSheetFragment.StatisticFragment;
+import version1.dishq.dishq.fragments.bottomSheetFragment.BottomSheetFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
@@ -116,8 +115,8 @@ public class HomeScreenFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
-                new StatisticFragment().show(getActivity().getSupportFragmentManager(), "dialog");
-//                ((StatisticFragment) getActivity().getSupportFragmentManager().findFragmentById(DishqApplication.))
+                new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
+//                ((BottomSheetFragment) getActivity().getSupportFragmentManager().findFragmentById(DishqApplication.))
 //                        .addInnerFrag();
             }
         });
@@ -126,7 +125,7 @@ public class HomeScreenFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
-                new StatisticFragment().show(getActivity().getSupportFragmentManager(), "dialog");
+                new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
 
             }
         });
