@@ -34,6 +34,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static String tokenType;
     private static String facebookOrGoogle;
     private static Boolean IS_NEW_USER;
+    private static Boolean ON_BOARDING_DONE;
     public boolean wasInBackground = true;
     private static String userName;
 
@@ -52,6 +53,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
         IS_NEW_USER = getPrefs().getBoolean(Constants.IS_NEW_USER, false);
         userID = getPrefs().getInt(Constants.USER_ID, 0);
+        ON_BOARDING_DONE = getPrefs().getBoolean(Constants.ON_BOARDING_DONE, false);
         registerActivityLifecycleCallbacks(activityCallbacks);
     }
 
@@ -87,6 +89,17 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     public static String getFacebookOrGoogle() {
         return DishqApplication.facebookOrGoogle;
     }
+
+
+    public static Boolean getOnBoardingDone() {
+        return DishqApplication.ON_BOARDING_DONE;
+    }
+
+    public static void setOnBoardingDone(Boolean onBoardingDone) {
+        DishqApplication.ON_BOARDING_DONE = onBoardingDone;
+    }
+
+
 
     public static Boolean getIsNewUser() {
         return DishqApplication.IS_NEW_USER;
@@ -173,9 +186,6 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         }
     };
 
-    public static synchronized DishqApplication getInstance() {
-        return application;
-    }
     public static Context getContext() {
         return application;
     }

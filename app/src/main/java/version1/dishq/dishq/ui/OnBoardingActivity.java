@@ -61,6 +61,7 @@ import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.Response.TastePrefData;
 import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -499,6 +500,9 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
                     if(response.isSuccessful()) {
                         TastePrefData.FoodPreferencesInfo body = response.body().foodPreferencesinfo;
                         if(body!=null) {
+                            Boolean onBoardingCompleted = true;
+                            DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, onBoardingCompleted).apply();
+                            DishqApplication.setOnBoardingDone(onBoardingCompleted);
                             Log.d(TAG, "");
                             Util.allergyModals.clear();
                             Util.foodChoicesModals.clear();

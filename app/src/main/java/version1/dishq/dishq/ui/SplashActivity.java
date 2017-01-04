@@ -226,12 +226,14 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     private void checkWhereToGo() {
         if (!DishqApplication.getAccessToken().equals("null null")) {
 
-            if (DishqApplication.getIsNewUser()) {
-                //Intent to start OnBoarding
-                Intent startHomeActivity = new Intent(SplashActivity.this, OnBoardingActivity.class);
+            if (!DishqApplication.getOnBoardingDone()) {
+                if (DishqApplication.getIsNewUser()) {
+                    //Intent to start OnBoarding
+                    Intent startHomeActivity = new Intent(SplashActivity.this, OnBoardingActivity.class);
                 startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
                 startActivity(startHomeActivity);
+            }
             } else {
                 //Check for gps
                 checkGPS();

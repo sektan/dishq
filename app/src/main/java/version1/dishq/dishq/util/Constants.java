@@ -15,4 +15,5 @@ public class Constants {
     public static final String IS_NEW_USER = "is_new_user";
     public static final String USER_ID = "user_id";
     public static final String USER_NAME = "user_name";
+    public static final String ON_BOARDING_DONE = "on_boarding_done";
 }
