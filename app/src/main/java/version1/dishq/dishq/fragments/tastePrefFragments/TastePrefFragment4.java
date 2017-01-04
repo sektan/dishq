@@ -1,18 +1,30 @@
 package version1.dishq.dishq.fragments.tastePrefFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 
 import com.wefika.flowlayout.FlowLayout;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
+import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.Request.UserPrefRequest;
+import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.ui.HomeActivity;
+import version1.dishq.dishq.ui.OnBoardingActivity;
+import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -22,8 +34,10 @@ import version1.dishq.dishq.util.Util;
 
 public class TastePrefFragment4 extends Fragment {
 
+    private final static String TAG = "TastePrefFragment4";
     private FlowLayout allergyContainer;
     CheckedTextView child;
+    Button doneButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +49,13 @@ public class TastePrefFragment4 extends Fragment {
 
     //For linking to xml ids of views
     protected void setTags(View view) {
+        doneButton = (Button) view.findViewById(R.id.done);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               sendUserPrefData();
+            }
+        });
         allergyContainer = (FlowLayout) view.findViewById(R.id.allergy_container);
         allergyContainer.removeAllViews();
         for (AllergyModal model : Util.allergyModals) {
@@ -73,6 +94,30 @@ public class TastePrefFragment4 extends Fragment {
         b.putString("msg", text);
         f.setArguments(b);
         return f;
+    }
+
+    public void sendUserPrefData() {
+        RestApi restApi = Config.createService(RestApi.class);
+        String authorization = DishqApplication.getAccessToken();
+        final UserPrefRequest userPrefRequest = new UserPrefRequest(Util.getFoodChoiceSelected(), Util.homeCuisineSelects,
+                Util.favCuisineSelects, Util.dontEatSelects);
+        Call<ResponseBody> request = restApi.sendUserPref(authorization, userPrefRequest);
+        request.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, "Success");
+                Intent startHomeActivity = new Intent(getActivity(), HomeActivity.class);
+                startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                getActivity().finish();
+                startActivity(startHomeActivity);
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "Failure");
+            }
+        });
     }
 
 }

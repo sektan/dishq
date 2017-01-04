@@ -3,6 +3,8 @@ package version1.dishq.dishq.fragments.tastePrefFragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,8 @@ import version1.dishq.dishq.modals.FoodChoicesModal;
 import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
+
+import static version1.dishq.dishq.ui.OnBoardingActivity.*;
 
 /**
  * Created by dishq on 16-12-2016.
@@ -147,10 +151,14 @@ public class TastePrefFragment1 extends Fragment {
 
     void showNext() {
         if (Util.getFoodChoiceSelected() != 0) {
-            if (OnBoardingActivity.pager.getCurrentItem() == 0) {
-                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-                OnBoardingActivity.pager.setCurrentItem(1);
-            }
+            Fragment fragment = new TastePrefFragment2();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            //ft.hide(getActivity().getSupportFragmentManager().findFragmentById(R.id.onboarding_screen1));
+            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+            ft.replace(R.id.onboarding_screen2, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
         }
 
     }

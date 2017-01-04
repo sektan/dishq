@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -114,21 +115,57 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
     }
 
     protected void setTags() {
-        doneButton = (Button) findViewById(R.id.done);
-        pager = (CustomViewPager) findViewById(R.id.customViewPager);
-        pager.setScrollDurationFactor(5);
-        pager.setPagingEnabled(CustomViewPager.SwipeDirection.none);
-        PageListener pageListener = new PageListener();
-        pager.setOnPageChangeListener(pageListener);
+
+
+//        pager = (CustomViewPager) findViewById(R.id.customViewPager);
+//        pager.setScrollDurationFactor(5);
+//        pager.setPagingEnabled(CustomViewPager.SwipeDirection.none);
+//        PageListener pageListener = new PageListener();
+//        pager.setOnPageChangeListener(pageListener);
+    }
+
+    public void addFragments() {
+        FragmentManager fm = getSupportFragmentManager();
+
+        //add
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.onboarding_screen1, new TastePrefFragment1());
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void addNextFrag() {
+
+        FragmentManager fm = getSupportFragmentManager();
+        //replace
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.onboarding_screen2, new TastePrefFragment2());
+        ft.addToBackStack(null);
+        ft.commit();
+
+    }
+
+    public void replaceFragmentWithAnimation(Fragment fragment, String tag, int fFragmentResId, int sFragmentResId){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.hide(getSupportFragmentManager().findFragmentById(fFragmentResId));
+        transaction.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top);
+        transaction.replace(sFragmentResId, fragment);
+        transaction.addToBackStack(tag);
+        transaction.commit();
+    }
+
+    public void showNext() {
+        replaceFragmentWithAnimation(new TastePrefFragment2(), "2nd Fragment",
+                R.id.onboarding_screen1, R.id.onboarding_screen2);
     }
 
     public void checkGPS() {
         createLocationRequest();
-        if (ContextCompat.checkSelfPermission(OnBoardingActivity.this,
+        if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // first check
             getTheLocale();
 
-        } else if (ContextCompat.checkSelfPermission(OnBoardingActivity.this,
+        } else if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             selfPermission();
         }
@@ -405,86 +442,10 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
         }
     }
 
-    public class PageListener extends ViewPager.SimpleOnPageChangeListener {
-        public void onPageSelected(final int position) {
-            Log.d("page", position + "");
-            if (position == 0) {
-                doneButton.setVisibility(View.GONE);
-                if(Util.getFoodChoiceSelected()!=0) {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-                    OnBoardingActivity.pager.setCurrentItem(1);
-                }else {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
-                    OnBoardingActivity.pager.setCurrentItem(0);
-                }
-
-            }else if (position == 1) {
-                doneButton.setVisibility(View.GONE);
-                if (Util.homeCuisineSelected) {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-                    OnBoardingActivity.pager.setCurrentItem(2);
-                }else {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
-                    OnBoardingActivity.pager.setCurrentItem(1);
-                }
-
-            }else if (position == 2) {
-                doneButton.setVisibility(View.GONE);
-                if(Util.getFavCuisinetotal() == 3) {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-                    OnBoardingActivity.pager.setCurrentItem(3);
-                }else {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
-                    OnBoardingActivity.pager.setCurrentItem(2);
-                }
-            }else if (position == 3) {
-                //Done button should be made visible
-                //Call for updating user preferences done here
-                //HomeActivity should be called
-                pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
-                doneButton.setVisibility(View.VISIBLE);
-                doneButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        sendUserPrefData();
-                    }
-                });
-            }
-        }
-    }
-
     public void hideSoftKeyboard() {
         if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
-
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-
-        MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int pos) {
-            switch (pos) {
-                case 0:
-                    return TastePrefFragment1.newInstance("FirstFragment, Instance 1");
-                case 1:
-                    return TastePrefFragment2.newInstance("SecondFragment, Instance 2");
-                case 2:
-                    return TastePrefFragment3.newInstance("ThirdFragment, Instance 3");
-                case 3:
-                    return TastePrefFragment4.newInstance("FourthFragment, Instance 4");
-                default:
-                    return TastePrefFragment4.newInstance("FourthFragment, Default");
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 4;
         }
     }
 
@@ -497,9 +458,9 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
             public void onResponse(Call<TastePrefData> call, Response<TastePrefData> response) {
                 Log.d(TAG, "Success");
                 try {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         TastePrefData.FoodPreferencesInfo body = response.body().foodPreferencesinfo;
-                        if(body!=null) {
+                        if (body != null) {
                             Boolean onBoardingCompleted = true;
                             DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, onBoardingCompleted).apply();
                             DishqApplication.setOnBoardingDone(onBoardingCompleted);
@@ -513,7 +474,7 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
                                 Util.allergyModals.add(new AllergyModal(body.foodAllergiesInfos.get(i).getAllergyClassName(),
                                         body.foodAllergiesInfos.get(i).getAllergyCurrentlySelect(), body.foodAllergiesInfos.get(i).getAllergyEntityId(),
                                         body.foodAllergiesInfos.get(i).getAllergyName(), body.foodAllergiesInfos.get(i).getAllergyFoodChoice()));
-                            Log.d(TAG, "Data has been filled: " + Util.allergyModals.size());
+                                Log.d(TAG, "Data has been filled: " + Util.allergyModals.size());
                             }
                             for (int j = 0; j < body.foodChoicesInfos.size(); j++) {
                                 Util.foodChoicesModals.add(new FoodChoicesModal(body.foodChoicesInfos.get(j).getFoodChoiceCurrSel(),
@@ -532,20 +493,16 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
                                         body.homeCuisineInfos.get(l).getHomeCuisName()));
                                 Log.d(TAG, "Data has been filled: " + Util.homeCuisinesModals.size());
                             }
-                            pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-                            OnBoardingActivity.this.runOnUiThread(new Runnable() {
+                            addFragments();
+                            //sendUserPrefData();
 
-                                @Override
-                                public void run() {
-
-                                }
-                            });
+                            //pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
                         }
-                    }else {
+                    } else {
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                     }
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -557,25 +514,8 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
         });
     }
 
-    public void sendUserPrefData() {
-        RestApi restApi = Config.createService(RestApi.class);
-        String authorization = DishqApplication.getAccessToken();
-        final UserPrefRequest userPrefRequest = new UserPrefRequest(Util.getFoodChoiceSelected(), Util.homeCuisineSelects,
-                Util.favCuisineSelects, Util.dontEatSelects);
-        Call<ResponseBody> request = restApi.sendUserPref(authorization, userPrefRequest);
-        request.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, "Success");
-                checkGPS();
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "Failure");
-            }
-        });
-    }
+
     protected void stopLocationUpdates() {
 
         Log.d(TAG, "Remove Location");
@@ -604,4 +544,6 @@ public class OnBoardingActivity extends BaseActivity implements GoogleApiClient.
         super.onStop();
         stopLocationUpdates();
     }
+
+
 }

@@ -73,8 +73,7 @@ import version1.dishq.dishq.util.Util;
  */
 
 
-
-public class SignInActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener{
+public class SignInActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     private static final String TAG = "SignUpActivity";
     private static GoogleApiClient googleApiClient;
@@ -259,6 +258,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
 
     }
+
     public void checkGPS() {
         createLocationRequest();
         if (ContextCompat.checkSelfPermission(SignInActivity.this,
@@ -411,12 +411,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void checkWhichActivity(Boolean isNewUser) {
-        if(isNewUser) {
-            Intent i = new Intent(SignInActivity.this.getApplicationContext(), OnBoardingActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(i);
-        }else {
+        if (!DishqApplication.getOnBoardingDone()) {
+           // if (isNewUser) {
+                Intent i = new Intent(SignInActivity.this, OnBoardingActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(i);
+           // }
+        } else {
             //Check for gps
 
             checkGPS();
@@ -461,7 +463,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         final SignUpHelper signUpHelper = new SignUpHelper(DishqApplication.getContext().getString(R.string.conv_token),
                 backend, DishqApplication.getContext().getString(R.string.client_id),
                 DishqApplication.getContext().getString(R.string.client_secret), DishqApplication.getUniqueID(), gcmDeviceRegId, accessToken);
-        String authorization = "Bearer" +" " + backend + " " + accessToken;
+        String authorization = "Bearer" + " " + backend + " " + accessToken;
         RestApi restApi = Config.createService(RestApi.class);
         Call<SignUpResponse> call = restApi.createNewUser(authorization, signUpHelper);
         call.enqueue(new Callback<SignUpResponse>() {
@@ -470,7 +472,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 progressDialog.dismiss();
                 Log.d(TAG, "success");
                 try {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         SignUpResponse.NewUserDataInfo body = response.body().newUserDataInfo;
                         if (body != null) {
                             Log.d(TAG, "AccessToken: " + body.getAccessToken());
@@ -493,11 +495,11 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             DishqApplication.setUserName(body.userDataInfo.getFirstName());
                             checkWhichActivity(body.getIsNewUser());
                         }
-                    }else {
+                    } else {
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                     }
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
@@ -699,7 +701,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         try {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         } catch (Exception e) {
-            Log.d(TAG, "Exception:" +e);
+            Log.d(TAG, "Exception:" + e);
         }
     }
 

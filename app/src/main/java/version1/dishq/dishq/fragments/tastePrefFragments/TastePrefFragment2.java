@@ -3,6 +3,8 @@ package version1.dishq.dishq.fragments.tastePrefFragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,13 +108,14 @@ public class TastePrefFragment2 extends Fragment {
 
     void showNext() {
         if (Util.homeCuisineSelected) {
-            if (OnBoardingActivity.pager.getCurrentItem() == 1) {
-                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-                OnBoardingActivity.pager.setCurrentItem(2);
-            }else {
-                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
-                OnBoardingActivity.pager.setCurrentItem(1);
-            }
+            Fragment fragment = new TastePrefFragment3();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            //ft.hide(getActivity().getSupportFragmentManager().findFragmentById(R.id.onboarding_screen2));
+            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+            ft.replace(R.id.onboarding_screen3, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
         }
 
     }

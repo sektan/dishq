@@ -3,6 +3,8 @@ package version1.dishq.dishq.fragments.tastePrefFragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,13 +105,15 @@ public class TastePrefFragment3 extends Fragment {
     void showNext() {
         Log.d("showNext is selected", "count of fav dishes:" + Util.favCuisineCount);
         Log.d("Next page", "next page is shown");
-        if (OnBoardingActivity.pager.getCurrentItem() == 2) {
-            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-            OnBoardingActivity.pager.setCurrentItem(3);
-
-        }else {
-            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
-            OnBoardingActivity.pager.setCurrentItem(2);
+        if (checkcount == 3) {
+            Fragment fragment = new TastePrefFragment4();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            //ft.hide(getActivity().getSupportFragmentManager().findFragmentById(R.id.onboarding_screen3));
+            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+            ft.replace(R.id.onboarding_screen4, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
         }
 
     }

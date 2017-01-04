@@ -84,8 +84,9 @@ public class HomeActivity extends BaseActivity {
     };
 
     public void fetchHomeDishResults() {
-        String latitude = Util.getLatitude();
-        String longitude = Util.getLongitude();
+//        String latitude = Util.getLatitude();
+//        String longitude = Util.getLongitude();
+        String latitude = "12.92923258", longitude = "77.63082482";
         RestApi restApi = Config.createService(RestApi.class);
         Call<HomeDishesResponse> call = restApi.fetchPersonalDishes(DishqApplication.getAccessToken(), DishqApplication.getUniqueID(),
                 latitude, longitude, -1, "", -1);

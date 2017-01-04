@@ -207,7 +207,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -219,7 +218,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 }
             }
         });
-
     }
 
     //Method to find out which activity to open next
