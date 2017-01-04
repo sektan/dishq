@@ -122,29 +122,6 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                 foodMoodFilterList = data.getFoodMoodFilters();
                 quickFilterList = data.getQuickFilters();
 
-                if (foodMoodFilterList != null && foodMoodFilterList.size() <= 0) {
-                    FoodMoodFilter filter = new FoodMoodFilter();
-                    filter.setFoodMoodId(101);
-                    filter.setName("STARVING");
-                    foodMoodFilterList.add(filter);
-
-                    filter = new FoodMoodFilter();
-                    filter.setFoodMoodId(102);
-                    filter.setName("HEALTHY");
-                    foodMoodFilterList.add(filter);
-
-                    filter = new FoodMoodFilter();
-                    filter.setFoodMoodId(103);
-                    filter.setName("SICK");
-                    foodMoodFilterList.add(filter);
-
-                    filter = new FoodMoodFilter();
-                    filter.setFoodMoodId(104);
-                    filter.setName("ADVENTUROUS");
-                    foodMoodFilterList.add(filter);
-
-                }
-
                 initializeFragments();
             }
 

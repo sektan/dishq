@@ -23,7 +23,7 @@ public class FilterPresenter {
     public void getFilterResults(final FilterResultsCallback callback) {
         RestApi restApi = Config.createService(RestApi.class);
         // TODO Change the authorization
-        Call<FoodFilters> call = restApi.getFoodFilters("Bearer wgdM8XnsWRzgcLSXhMAdzqhFtZOUYI");
+        Call<FoodFilters> call = restApi.getFoodFilters("Bearer 9cIl2ANA2PaYWdABtHIZMCl2rxhu06");
         call.enqueue(new Callback<FoodFilters>() {
             @Override
             public void onResponse(Call<FoodFilters> call, Response<FoodFilters> response) {
