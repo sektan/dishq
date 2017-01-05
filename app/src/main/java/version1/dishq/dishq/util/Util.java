@@ -49,9 +49,8 @@ public class Util {
     public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
 
     public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<DishDataInfo>();
-    public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutTabResponses = new ArrayList<>();
+    public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos = new ArrayList<>();
     public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
-    public static ArrayList<DeliveryTabResponse.DeliveryDishData> deliveryDishDatas = new ArrayList<>();
 
     private static int foodChoiceSelected;
     public static Boolean homeCuisineSelected = false;
@@ -62,24 +61,6 @@ public class Util {
     private static int genericDishIdTab = 0;
     private static String defaultTab = "";
     private static String recipeUrl = "";
-    private static String recipeDishPhoto = "";
-    private static String recipeDishName = "";
-
-    public static String getRecipeDishName() {
-        return recipeDishName;
-    }
-
-    public static void setRecipeDishName(String recipeDishName) {
-        Util.recipeDishName = recipeDishName;
-    }
-
-    public static String getRecipeDishPhoto() {
-        return recipeDishPhoto;
-    }
-
-    public static void setRecipeDishPhoto(String recipeDishPhoto) {
-        Util.recipeDishPhoto = recipeDishPhoto;
-    }
 
     public static String getRecipeUrl() {
         return recipeUrl;

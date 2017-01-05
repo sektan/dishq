@@ -18,6 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="27dp"
             android:background="@drawable/onboarding_ques_button"
             android:clickable="false"
             android:text="@string/your_home_cuisine"
@@ -31,6 +33,7 @@
             android:layout_below="@+id/your_home_cuisine"
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
             android:layout_height="wrap_content"
             android:text="@string/pick_one"
             android:textSize="@dimen/text_size_16"
@@ -44,8 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start|top"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            />
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp" />
 
 </RelativeLayout>

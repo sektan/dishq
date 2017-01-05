@@ -5,7 +5,10 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.customViews.OnSwipeListener;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -35,7 +39,17 @@ public class TastePrefFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_taste_pref_first, container, false);
         setTags(v);
-
+        final OnboardingSwipeListener myOnSwipeListener = new OnboardingSwipeListener();
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(myOnSwipeListener.onSwipe(OnSwipeListener.Direction.up)){
+                   return true;
+               }
+                Log.d("Gesture return", "false");
+                return false;
+            }
+        });
         return v;
     }
 
@@ -142,6 +156,13 @@ public class TastePrefFragment1 extends Fragment {
             ft.replace(R.id.onboarding_screen2, fragment);
             ft.addToBackStack(null);
             ft.commit();
+        }
+    }
+
+    private class OnboardingSwipeListener extends OnSwipeListener {
+        @Override
+        public boolean onSwipe(Direction direction) {
+            return true;
         }
     }
 }

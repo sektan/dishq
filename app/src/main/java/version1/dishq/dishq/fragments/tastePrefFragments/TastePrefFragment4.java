@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.wefika.flowlayout.FlowLayout;
 
@@ -37,7 +38,8 @@ public class TastePrefFragment4 extends Fragment {
     private final static String TAG = "TastePrefFragment4";
     private FlowLayout allergyContainer;
     CheckedTextView child;
-    Button doneButton;
+    Button allergyCuisine, doneButton;
+    TextView optional;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class TastePrefFragment4 extends Fragment {
     //For linking to xml ids of views
     protected void setTags(View view) {
         doneButton = (Button) view.findViewById(R.id.done);
+        allergyCuisine = (Button) view.findViewById(R.id.allergy_cuisine);
+        optional = (TextView) view.findViewById(R.id.optional);
+        setTypeFace();
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +66,7 @@ public class TastePrefFragment4 extends Fragment {
         for (AllergyModal model : Util.allergyModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, allergyContainer, false);
             child.setText(model.getAllergyName());
+            child.setTypeface(Util.opensansregular);
             child.setTag(model);
 
             allergyContainer.addView(child);
@@ -86,6 +92,17 @@ public class TastePrefFragment4 extends Fragment {
             }
 
         }
+    }
+
+    //For setting the font of the text visible to the user
+    protected void setTypeFace() {
+        if(allergyCuisine!=null) {
+            allergyCuisine.setTypeface(Util.opensanslight);
+        }
+        if(optional!=null) {
+            optional.setTypeface(Util.opensanslight);
+        }
+        doneButton.setTypeface(Util.opensanssemibold);
     }
 
     public void sendUserPrefData() {

@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <include layout="@layout/content_home"/>
-    <!--
-    <include
-        android:id="@+id/bottomSheet"
-        layout="@layout/bottom_sheet_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/bottom_sheet_behavior" />
 
-        -->
 
 
 </android.support.design.widget.CoordinatorLayout>

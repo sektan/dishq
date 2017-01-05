@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.wefika.flowlayout.FlowLayout;
 
@@ -25,6 +27,8 @@ import version1.dishq.dishq.util.Util;
 
 public class TastePrefFragment3 extends Fragment {
 
+    Button favCuisine;
+    TextView pickThree;
     CheckedTextView child;
     int checkcount = 0;
 
@@ -38,11 +42,20 @@ public class TastePrefFragment3 extends Fragment {
 
     //For linking to xml ids of views
     protected void setTags(View view) {
+        favCuisine = (Button) view.findViewById(R.id.your_home_cuisine);
+        if(favCuisine!=null) {
+            favCuisine.setTypeface(Util.opensanslight);
+        }
+        pickThree = (TextView) view.findViewById(R.id.pick_three);
+        if(pickThree!=null) {
+            pickThree.setTypeface(Util.opensanslight);
+        }
         FlowLayout favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, favCuisineContainer, false);
             child.setText(model.getFavCuisName());
+            child.setTypeface(Util.opensansregular);
             child.setTag(model);
             if (model.getFavCuisCurrentSelect()) {
                 child.setChecked(true);
@@ -77,7 +90,6 @@ public class TastePrefFragment3 extends Fragment {
 
                 }
             });
-
             if (checkcount == 3) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -87,9 +99,7 @@ public class TastePrefFragment3 extends Fragment {
                     }
                 }, 1000);
             }
-
         }
-
     }
 
     void showNext() {

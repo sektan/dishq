@@ -2,11 +2,15 @@ package version1.dishq.dishq.adapters.bottomSheetAdapters;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -22,10 +26,7 @@ import version1.dishq.dishq.util.Util;
 
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryRestInfoAdapter>{
 
-    private ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos;
-
-    public DeliveryAdapter (ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos) {
-        this.deliveryRestInfos = deliveryRestInfos;
+    public DeliveryAdapter () {
     }
 
     @Override
@@ -39,7 +40,28 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
     @Override
     public void onBindViewHolder(final DeliveryRestInfoAdapter holder, int position) {
         DeliveryTabResponse.DeliveryRestInfo deliveryRestInfo = Util.deliveryRestInfos.get(position);
-        ArrayList<DeliveryTabResponse.DeliveryDishData> delPhotos = deliveryRestInfo.deliveryDishDatas;
+        ArrayList<DeliveryTabResponse.DeliveryDishData> delPhotos = deliveryRestInfo.getDeliveryDishDatas();
+        DeliveryTabResponse.DeliveryDishData listOfPhotos1 = delPhotos.get(0);
+        DeliveryTabResponse.DeliveryDishData listOfPhotos2 = delPhotos.get(1);
+        DeliveryTabResponse.DeliveryDishData listOfPhotos3 = delPhotos.get(2);
+        ArrayList<String> photos1 = listOfPhotos1.getDelivPhoto();
+        ArrayList<String> photos2 = listOfPhotos2.getDelivPhoto();
+        ArrayList<String> photos3 = listOfPhotos3.getDelivPhoto();
+        String imageUrl1 = photos1.get(0);
+        Log.d("ImageUrls", "First image url: " + imageUrl1);
+        String imageUrl2 = photos2.get(0);
+        Log.d("ImageUrls", "Second image url: " + imageUrl2);
+        String imageUrl3 = photos3.get(0);
+        Log.d("ImageUrls", "Third image url: " + imageUrl3);
+        Picasso.with(DishqApplication.getContext())
+                .load(imageUrl1)
+                .into(holder.dishImage1);
+        Picasso.with(DishqApplication.getContext())
+                .load(imageUrl2)
+                .into(holder.dishImage2);
+        Picasso.with(DishqApplication.getContext())
+                .load(imageUrl3)
+                .into(holder.dishImage3);
         holder.rlDelivery.setBackgroundColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.black));
         holder.delRestName.setText(deliveryRestInfo.getDelivRestName());
         int delPriceLvl = deliveryRestInfo.getDelivPriceLvl();
@@ -72,12 +94,16 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
         protected TextView delRestName, delRestCuisine, delRup1,
                 delRup2, delRup3, delRup4, delDriveTime;
+        protected ImageView dishImage1, dishImage2, dishImage3;
 
         protected RelativeLayout rlDelivery;
 
         public DeliveryRestInfoAdapter(View view) {
             super(view);
 
+            dishImage1 = (ImageView) view.findViewById(R.id.del_dish_image1);
+            dishImage2 = (ImageView) view.findViewById(R.id.del_dish_image2);
+            dishImage3 = (ImageView) view.findViewById(R.id.del_dish_image3);
             delRestName = (TextView) view.findViewById(R.id.del_rest_name);
             delRestCuisine = (TextView) view.findViewById(R.id.del_rest_cuisine);
             delRup1 = (TextView) view.findViewById(R.id.del_rup_1);

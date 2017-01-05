@@ -1,5 +1,6 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -29,6 +30,7 @@ import version1.dishq.dishq.util.Util;
 public class RecipeFragment extends Fragment {
 
     private WebView wvRecipe;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.show();
         View v = inflater.inflate(R.layout.fragment_recipe, container, false);
         wvRecipe = (WebView) v.findViewById(R.id.recipe_webview);
         wvRecipe.setWebViewClient(new webBrowser());
@@ -44,7 +48,7 @@ public class RecipeFragment extends Fragment {
         wvRecipe.getSettings().setJavaScriptEnabled(true);
         wvRecipe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         wvRecipe.loadUrl(Util.getRecipeUrl());
-
+        progressDialog.dismiss();
         return v;
     }
 

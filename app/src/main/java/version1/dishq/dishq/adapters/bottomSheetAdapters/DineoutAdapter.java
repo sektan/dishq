@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.util.ArrayList;
-
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.util.DishqApplication;
@@ -28,9 +26,7 @@ import version1.dishq.dishq.util.Util;
 
 public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutRestInfoAdapter> {
 
-    private ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos;
-    public DineoutAdapter (ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos) {
-        this.dineoutRestInfos = dineoutRestInfos;
+    public DineoutAdapter () {
     }
 
     @Override
@@ -44,7 +40,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
 
     @Override
     public void onBindViewHolder(final DineoutAdapter.DineoutRestInfoAdapter holder, int position) {
-        DineoutTabResponse.DineoutRestInfo dineoutRestInfo = Util.dineoutTabResponses.get(position);
+        DineoutTabResponse.DineoutRestInfo dineoutRestInfo = Util.dineoutRestInfos.get(position);
         String imageUrl = dineoutRestInfo.getDineRestPhoto().get(0);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)
@@ -101,7 +97,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
 
     @Override
     public int getItemCount() {
-        return Util.dineoutTabResponses.size();
+        return Util.dineoutRestInfos.size();
     }
 
     public static class DineoutRestInfoAdapter extends RecyclerView.ViewHolder {
@@ -115,13 +111,16 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             super(view);
 
             dineRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
+            dineRestName.setTypeface(Util.opensanssemibold);
             dineRestAddr = (TextView) view.findViewById(R.id.dineout_rest_addr);
+            dineRestAddr.setTypeface(Util.opensansregular);
             dineRestCuisine = (TextView) view.findViewById(R.id.dineout_rest_cuisine);
             dineRup1 = (TextView) view.findViewById(R.id.dineout_rup_1);
             dineRup2 = (TextView) view.findViewById(R.id.dineout_rup_2);
             dineRup3 = (TextView) view.findViewById(R.id.dineout_rup_3);
             dineRup4 = (TextView) view.findViewById(R.id.dineout_rup_4);
             dineDriveTime = (TextView) view.findViewById(R.id.dineout_drive_time);
+            dineDriveTime.setTypeface(Util.opensanssemibold);
             rlDineout = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
         }
     }

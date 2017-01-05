@@ -37,7 +37,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     //Facebook
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
-    //retrofit and OkHttp
+    //retrofit
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     //Flowlayout for dynamic view
@@ -49,6 +49,7 @@ dependencies {
     compile 'com.android.support:design:25.1.0'
     //Incorporating Picasso for loading images
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     //fireBase & google
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.android.gms:play-services-base:10.0.1'

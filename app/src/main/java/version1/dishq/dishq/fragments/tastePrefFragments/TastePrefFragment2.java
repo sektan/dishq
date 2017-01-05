@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.wefika.flowlayout.FlowLayout;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.customViews.OnSwipeListener;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 import version1.dishq.dishq.util.Util;
@@ -25,6 +28,8 @@ import version1.dishq.dishq.util.Util;
 
 public class TastePrefFragment2 extends Fragment {
 
+    Button homeCuisine;
+    TextView pickOne;
     CheckedTextView child;
 
     @Override
@@ -37,6 +42,8 @@ public class TastePrefFragment2 extends Fragment {
 
     //For linking to xml ids of views
     protected void setTags(View view) {
+        homeCuisine = (Button) view.findViewById(R.id.your_home_cuisine);
+        pickOne = (TextView) view.findViewById(R.id.pick_one);
         setTypeFace();
         FlowLayout homeCuisineContainer = (FlowLayout) view.findViewById(R.id.home_cuisine_container);
         homeCuisineContainer.removeAllViews();
@@ -69,6 +76,7 @@ public class TastePrefFragment2 extends Fragment {
         for (HomeCuisinesModal model : Util.homeCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, homeCuisineContainer, false);
             child.setText(model.getHomeCuisName());
+            child.setTypeface(Util.opensansregular);
             child.setTag(model);
             child.setOnClickListener(clickListener);
             child.setChecked(false);
@@ -93,20 +101,28 @@ public class TastePrefFragment2 extends Fragment {
 
     //For setting the font of the text visible to the user
     protected void setTypeFace() {
-
+        homeCuisine.setTypeface(Util.opensanslight);
+        pickOne.setTypeface(Util.opensanslight);
     }
 
+    //Calling the next Fragment
     void showNext() {
         if (Util.homeCuisineSelected) {
             Fragment fragment = new TastePrefFragment3();
             FragmentManager fm = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            //ft.hide(getActivity().getSupportFragmentManager().findFragmentById(R.id.onboarding_screen2));
             ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
             ft.replace(R.id.onboarding_screen3, fragment);
             ft.addToBackStack(null);
             ft.commit();
         }
 
+    }
+
+    private class OnboardingSwipeListener extends OnSwipeListener {
+        @Override
+        public boolean onSwipe(Direction direction) {
+            return true;
+        }
     }
 }

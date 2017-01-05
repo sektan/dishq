@@ -1,5 +1,6 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,11 +37,14 @@ public class DeliveryFragment extends Fragment {
     protected LayoutManagerType mCurrentLayoutManagerType;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView mRecyclerView;
+    private ProgressDialog progressDialog;
     private Button showMore;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.show();
         fetchDeliveryRest();
 
     }
@@ -52,14 +57,14 @@ public class DeliveryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_delivery, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.delivery_rest_cardlist);
-        DeliveryAdapter deliveryAdapter = new DeliveryAdapter(Util.deliveryRestInfos);
+        DeliveryAdapter deliveryAdapter = new DeliveryAdapter();
         mRecyclerView.setAdapter(deliveryAdapter);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
         showMore = (Button) v.findViewById(R.id.delivery_show);
-
+        showMore.setTypeface(Util.opensanssemibold);
         return v;
     }
 
@@ -96,6 +101,7 @@ public class DeliveryFragment extends Fragment {
             @Override
             public void onResponse(Call<DeliveryTabResponse> call, Response<DeliveryTabResponse> response) {
                 Log.d(TAG, "Success");
+                progressDialog.dismiss();
                 try {
                     if(response.isSuccessful()) {
                         DeliveryTabResponse.DeliveryRestaurants body = response.body().deliveryRestaurants;
@@ -106,10 +112,12 @@ public class DeliveryFragment extends Fragment {
                             }
                         }
                     }else {
+                        progressDialog.dismiss();
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
+                    progressDialog.dismiss();
                     e.printStackTrace();
                 }
             }
@@ -117,6 +125,7 @@ public class DeliveryFragment extends Fragment {
             @Override
             public void onFailure(Call<DeliveryTabResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
+                progressDialog.dismiss();
             }
         });
     }

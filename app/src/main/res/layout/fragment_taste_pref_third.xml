@@ -13,6 +13,8 @@
         android:foreground="@drawable/onboardingthird"/>
 
     <Button
+        android:paddingStart="20dp"
+        android:paddingEnd="34dp"
         android:id="@+id/your_fav_cuisine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,6 +31,7 @@
         android:id="@+id/pick_three"
         android:layout_width="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
         android:layout_below="@+id/your_fav_cuisine"
         android:layout_height="wrap_content"
         android:text="@string/pick_three"
@@ -43,8 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start|top"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
             >
 
         </com.wefika.flowlayout.FlowLayout>
