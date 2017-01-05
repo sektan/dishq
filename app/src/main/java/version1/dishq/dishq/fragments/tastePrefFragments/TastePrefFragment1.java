@@ -3,7 +3,11 @@ package version1.dishq.dishq.fragments.tastePrefFragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,9 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.CustomViewPager;
-import version1.dishq.dishq.modals.FoodChoicesModal;
-import version1.dishq.dishq.ui.OnBoardingActivity;
+import version1.dishq.dishq.customViews.OnSwipeListener;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -36,7 +38,17 @@ public class TastePrefFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_taste_pref_first, container, false);
         setTags(v);
-
+        final OnboardingSwipeListener myOnSwipeListener = new OnboardingSwipeListener();
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (myOnSwipeListener.onSwipe(OnSwipeListener.Direction.up)) {
+                    return true;
+                }
+                Log.d("Gesture return", "false");
+                return false;
+            }
+        });
         return v;
     }
 
@@ -70,7 +82,6 @@ public class TastePrefFragment1 extends Fragment {
                 vegSelection.setVisibility(View.VISIBLE);
                 eggSelection.setVisibility(View.GONE);
                 nonVegSelection.setVisibility(View.GONE);
-                //settingOnClick(1, vegetarian);
                 Util.setFoodChoiceSelected(1);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -91,7 +102,6 @@ public class TastePrefFragment1 extends Fragment {
                     vegSelection.setVisibility(View.GONE);
                     eggSelection.setVisibility(View.VISIBLE);
                     nonVegSelection.setVisibility(View.GONE);
-                    //settingOnClick(3, eggetarian);
                     Util.setFoodChoiceSelected(2);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -113,7 +123,6 @@ public class TastePrefFragment1 extends Fragment {
                     vegSelection.setVisibility(View.GONE);
                     eggSelection.setVisibility(View.GONE);
                     nonVegSelection.setVisibility(View.VISIBLE);
-                    //settingOnClick(2, nonVeg);
                     Util.setFoodChoiceSelected(3);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -137,21 +146,22 @@ public class TastePrefFragment1 extends Fragment {
         areYou.setTypeface(Util.opensanslight);
     }
 
-    public static TastePrefFragment1 newInstance(String text) {
-        TastePrefFragment1 f = new TastePrefFragment1();
-        Bundle b = new Bundle();
-        b.putString("msg", text);
-        f.setArguments(b);
-        return f;
-    }
-
     void showNext() {
         if (Util.getFoodChoiceSelected() != 0) {
-            if (OnBoardingActivity.pager.getCurrentItem() == 0) {
-                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-                OnBoardingActivity.pager.setCurrentItem(1);
-            }
+            Fragment fragment = new TastePrefFragment2();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+            ft.replace(R.id.onboarding_screen2, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
         }
+    }
 
+    private class OnboardingSwipeListener extends OnSwipeListener {
+        @Override
+        public boolean onSwipe(Direction direction) {
+            return true;
+        }
     }
 }

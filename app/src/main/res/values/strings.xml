@@ -36,4 +36,8 @@
     <!-- BottomSheet -->
     <string name="rupee">\u20B9</string>
     <string name="vertical_line">&#124;</string>
+    <string name="show_more">show more</string>
+    <string name="delivery_image_1">delivery image 1</string>
+    <string name="delivery_image_2">delivery image 2</string>
+    <string name="delivery_image_3">delivery image 3</string>
 </resources>

@@ -1,7 +1,6 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,27 +35,34 @@ public class DineoutFragment extends Fragment {
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView mRecyclerView;
     private Button showMore;
+    private Boolean hasMoreResults = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchDineoutRest();
-    }
-
-    private enum LayoutManagerType {
-        LINEAR_LAYOUT_MANAGER
+        fetchDineoutRest(0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
-        DineoutAdapter dineoutAdapter = new DineoutAdapter(Util.dineoutTabResponses);
+        DineoutAdapter dineoutAdapter = new DineoutAdapter();
         mRecyclerView.setAdapter(dineoutAdapter);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
         showMore = (Button) v.findViewById(R.id.dineout_show);
+        showMore.setTypeface(Util.opensanssemibold);
+        if (hasMoreResults) {
+            showMore.setVisibility(View.VISIBLE);
+            showMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fetchDineoutRest(1);
+                }
+            });
+        }
         return v;
     }
 
@@ -82,26 +88,32 @@ public class DineoutFragment extends Fragment {
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 
-    public void fetchDineoutRest() {
+    public void fetchDineoutRest(final int showMoreOptions) {
 
         int genericDishId = Util.getGenericDishIdTab();
         String latitude = "12.92923258", longitude = "77.63082482", source = "homescreen";
-        int showMore = 0;
         RestApi restApi = Config.createService(RestApi.class);
         Call<DineoutTabResponse> call = restApi.addDineRestOptions(DishqApplication.getAccessToken(),
                 genericDishId, DishqApplication.getUniqueID(), source, latitude,
-                longitude, showMore);
+                longitude, showMoreOptions);
         call.enqueue(new Callback<DineoutTabResponse>() {
             @Override
             public void onResponse(Call<DineoutTabResponse> call, Response<DineoutTabResponse> response) {
                 Log.d(TAG, "Success");
                 try {
                     if(response.isSuccessful()) {
+                        if (showMoreOptions == 1) {
+                            showMore.setVisibility(View.GONE);
+                        } else {
+
+                        }
                         DineoutTabResponse.DineoutRestaurants body = response.body().dineoutRestaurants;
                         if(body!=null) {
                             Log.d(TAG, "body is not null");
+                            hasMoreResults = body.isHasMoreResults();
                             for(int i = 0; i <body.dineoutRestInfo.size(); i++) {
-                                Util.dineoutTabResponses = body.dineoutRestInfo;
+                                Util.dineoutRestInfos = body.dineoutRestInfo;
+
                             }
                         }
                     }else {
@@ -118,5 +130,9 @@ public class DineoutFragment extends Fragment {
                 Log.d(TAG, "Failure");
             }
         });
+    }
+
+    private enum LayoutManagerType {
+        LINEAR_LAYOUT_MANAGER
     }
 }

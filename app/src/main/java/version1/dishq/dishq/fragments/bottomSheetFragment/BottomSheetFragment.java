@@ -25,7 +25,7 @@ import version1.dishq.dishq.util.Util;
  * Package name version1.dishq.dishq.
  */
 
-public class StatisticFragment extends BottomSheetDialogFragment {
+public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     private BottomSheetAdapter adapter;
     private TabLayout tabLayout;

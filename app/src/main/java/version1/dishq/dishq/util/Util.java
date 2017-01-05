@@ -36,9 +36,7 @@ import version1.dishq.dishq.server.Response.DishDataInfo;
 
 public class Util {
 
-    static String ACCESS_TOKEN = "";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
-
     //Array lists for onBoarding food preferences
     public static ArrayList<AllergyModal> allergyModals = new ArrayList<>();
     public static ArrayList<FoodChoicesModal> foodChoicesModals = new ArrayList<>();
@@ -47,39 +45,27 @@ public class Util {
     public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
     public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
     public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
-
     public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<DishDataInfo>();
-    public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutTabResponses = new ArrayList<>();
+    public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos = new ArrayList<>();
     public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
-    public static ArrayList<DeliveryTabResponse.DeliveryDishData> deliveryDishDatas = new ArrayList<>();
-
-    private static int foodChoiceSelected;
     public static Boolean homeCuisineSelected = false;
     public static int favCuisineCount = 0;
+    public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
+            "opensanslight.ttf"),
+            opensansregular = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
+                    "opensansregular.ttf"),
+            opensanssemibold = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
+                    "opensanssemibold.ttf");
+    static String ACCESS_TOKEN = "";
+    private static int foodChoiceSelected;
     private static int favCuisineTotal = 0;
     private static String latitude = "";
     private static String longitude = "";
     private static int genericDishIdTab = 0;
     private static String defaultTab = "";
     private static String recipeUrl = "";
-    private static String recipeDishPhoto = "";
-    private static String recipeDishName = "";
-
-    public static String getRecipeDishName() {
-        return recipeDishName;
-    }
-
-    public static void setRecipeDishName(String recipeDishName) {
-        Util.recipeDishName = recipeDishName;
-    }
-
-    public static String getRecipeDishPhoto() {
-        return recipeDishPhoto;
-    }
-
-    public static void setRecipeDishPhoto(String recipeDishPhoto) {
-        Util.recipeDishPhoto = recipeDishPhoto;
-    }
+    @SuppressLint("StaticFieldLeak")
+    private static Activity currentAct;
 
     public static String getRecipeUrl() {
         return recipeUrl;
@@ -105,9 +91,6 @@ public class Util {
         Util.genericDishIdTab = genericDishIdTab;
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private static Activity currentAct;
-
     public static String getLatitude() {
         return Util.latitude;
     }
@@ -123,13 +106,6 @@ public class Util {
     public static void setLongitude(String longitude) {
         Util.longitude = longitude;
     }
-
-    public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
-            "opensanslight.ttf"),
-            opensansregular = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
-                    "opensansregular.ttf"),
-            opensanssemibold = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
-                    "opensanssemibold.ttf");
 
     public static int getFavCuisinetotal() {
         return Util.favCuisineTotal;

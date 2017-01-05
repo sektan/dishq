@@ -1,8 +1,6 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,14 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -29,6 +21,7 @@ import version1.dishq.dishq.util.Util;
 public class RecipeFragment extends Fragment {
 
     private WebView wvRecipe;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +30,8 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.show();
         View v = inflater.inflate(R.layout.fragment_recipe, container, false);
         wvRecipe = (WebView) v.findViewById(R.id.recipe_webview);
         wvRecipe.setWebViewClient(new webBrowser());
@@ -44,7 +39,7 @@ public class RecipeFragment extends Fragment {
         wvRecipe.getSettings().setJavaScriptEnabled(true);
         wvRecipe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         wvRecipe.loadUrl(Util.getRecipeUrl());
-
+        progressDialog.dismiss();
         return v;
     }
 

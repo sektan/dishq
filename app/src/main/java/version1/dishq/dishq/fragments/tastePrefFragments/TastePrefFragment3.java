@@ -3,19 +3,21 @@ package version1.dishq.dishq.fragments.tastePrefFragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.wefika.flowlayout.FlowLayout;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.CustomViewPager;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
-import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -25,6 +27,8 @@ import version1.dishq.dishq.util.Util;
 
 public class TastePrefFragment3 extends Fragment {
 
+    Button favCuisine;
+    TextView pickThree;
     CheckedTextView child;
     int checkcount = 0;
 
@@ -38,11 +42,20 @@ public class TastePrefFragment3 extends Fragment {
 
     //For linking to xml ids of views
     protected void setTags(View view) {
+        favCuisine = (Button) view.findViewById(R.id.your_home_cuisine);
+        if (favCuisine != null) {
+            favCuisine.setTypeface(Util.opensanslight);
+        }
+        pickThree = (TextView) view.findViewById(R.id.pick_three);
+        if (pickThree != null) {
+            pickThree.setTypeface(Util.opensanslight);
+        }
         FlowLayout favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, favCuisineContainer, false);
             child.setText(model.getFavCuisName());
+            child.setTypeface(Util.opensansregular);
             child.setTag(model);
             if (model.getFavCuisCurrentSelect()) {
                 child.setChecked(true);
@@ -77,7 +90,6 @@ public class TastePrefFragment3 extends Fragment {
 
                 }
             });
-
             if (checkcount == 3) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -87,29 +99,21 @@ public class TastePrefFragment3 extends Fragment {
                     }
                 }, 1000);
             }
-
         }
-
-    }
-
-    public static TastePrefFragment3 newInstance(String text) {
-        TastePrefFragment3 f = new TastePrefFragment3();
-        Bundle b = new Bundle();
-        b.putString("msg", text);
-        f.setArguments(b);
-        return f;
     }
 
     void showNext() {
         Log.d("showNext is selected", "count of fav dishes:" + Util.favCuisineCount);
         Log.d("Next page", "next page is shown");
-        if (OnBoardingActivity.pager.getCurrentItem() == 2) {
-            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.all);
-            OnBoardingActivity.pager.setCurrentItem(3);
-
-        }else {
-            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.top);
-            OnBoardingActivity.pager.setCurrentItem(2);
+        if (checkcount == 3) {
+            Fragment fragment = new TastePrefFragment4();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            //ft.hide(getActivity().getSupportFragmentManager().findFragmentById(R.id.onboarding_screen3));
+            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+            ft.replace(R.id.onboarding_screen4, fragment);
+            ft.addToBackStack(null);
+            ft.commit();
         }
 
     }

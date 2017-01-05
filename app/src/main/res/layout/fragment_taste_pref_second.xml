@@ -20,32 +20,34 @@
             android:layout_marginTop="26dp"
             android:background="@drawable/onboarding_ques_button"
             android:clickable="false"
+            android:paddingEnd="27dp"
+            android:paddingStart="16dp"
             android:text="@string/your_home_cuisine"
-            android:textAllCaps="false"
             android:textAlignment="center"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_22" />
 
         <TextView
             android:id="@+id/pick_one"
-            android:layout_below="@+id/your_home_cuisine"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/your_home_cuisine"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:text="@string/pick_one"
-            android:textSize="@dimen/text_size_16"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_16" />
 
         <com.wefika.flowlayout.FlowLayout
-            android:id="@+id/home_cuisine_container"
-            android:layout_below="@+id/pick_one"
-            android:layout_marginTop="10dp"
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/home_cuisine_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="start|top"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            />
+            android:layout_below="@+id/pick_one"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="10dp"
+            android:gravity="start|top" />
 
 </RelativeLayout>

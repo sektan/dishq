@@ -1,6 +1,5 @@
 package version1.dishq.dishq.fragments.homeScreenFragment;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -27,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.fragments.bottomSheetFragment.StatisticFragment;
+import version1.dishq.dishq.fragments.bottomSheetFragment.BottomSheetFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
@@ -88,10 +87,7 @@ public class HomeScreenFragment extends Fragment {
         setFont();
 
         if (dishDataInfo != null) {
-            String recipeUrl = dishDataInfo.getRecipeUrl();
-            Util.setRecipeUrl(recipeUrl);
             String imageUrl = dishDataInfo.getDishPhoto().get(0);
-            Util.setRecipeDishPhoto(imageUrl);
             Picasso.with(DishqApplication.getContext())
                     .load(imageUrl)
                     .into(new Target() {
@@ -115,18 +111,18 @@ public class HomeScreenFragment extends Fragment {
         frameClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
                 Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
-                new StatisticFragment().show(getActivity().getSupportFragmentManager(), "dialog");
-//                ((StatisticFragment) getActivity().getSupportFragmentManager().findFragmentById(DishqApplication.))
-//                        .addInnerFrag();
+                new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
             }
         });
 
         dineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
                 Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
-                new StatisticFragment().show(getActivity().getSupportFragmentManager(), "dialog");
+                new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
 
             }
         });
@@ -175,7 +171,6 @@ public class HomeScreenFragment extends Fragment {
         });
 
         if (this.dishDataInfo != null) {
-            Util.setRecipeDishName(String.valueOf(dishDataInfo.getDishName()));
             dishName.setText(String.valueOf(dishDataInfo.getDishName()));
             Boolean isVeg = dishDataInfo.getVeg();
             Boolean hasEgg = dishDataInfo.getHasEgg();
@@ -236,7 +231,7 @@ public class HomeScreenFragment extends Fragment {
 
     protected void setFont() {
         dishName.setTypeface(Util.opensanslight);
-
+        dishType.setTypeface(Util.opensanslight);
         foodTags.setTypeface(Util.opensanslight);
     }
 
