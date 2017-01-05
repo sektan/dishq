@@ -51,11 +51,6 @@ public class DineoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
-        DineoutAdapter dineoutAdapter = new DineoutAdapter();
-        mRecyclerView.setAdapter(dineoutAdapter);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
         showMore = (Button) v.findViewById(R.id.dineout_show);
         showMore.setTypeface(Util.opensanssemibold);
         if(hasMoreResults) {
@@ -117,8 +112,12 @@ public class DineoutFragment extends Fragment {
                             hasMoreResults = body.isHasMoreResults();
                             for(int i = 0; i <body.dineoutRestInfo.size(); i++) {
                                 Util.dineoutRestInfos = body.dineoutRestInfo;
-
                             }
+                            DineoutAdapter dineoutAdapter = new DineoutAdapter();
+                            mRecyclerView.setAdapter(dineoutAdapter);
+                            mLayoutManager = new LinearLayoutManager(getActivity());
+                            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                         }
                     }else {
                         String error = response.errorBody().string();

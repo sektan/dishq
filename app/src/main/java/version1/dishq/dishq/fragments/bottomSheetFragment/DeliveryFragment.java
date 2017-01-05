@@ -57,12 +57,6 @@ public class DeliveryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_delivery, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.delivery_rest_cardlist);
-        DeliveryAdapter deliveryAdapter = new DeliveryAdapter();
-        mRecyclerView.setAdapter(deliveryAdapter);
-
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
         showMore = (Button) v.findViewById(R.id.delivery_show);
         showMore.setTypeface(Util.opensanssemibold);
         return v;
@@ -101,7 +95,6 @@ public class DeliveryFragment extends Fragment {
             @Override
             public void onResponse(Call<DeliveryTabResponse> call, Response<DeliveryTabResponse> response) {
                 Log.d(TAG, "Success");
-                progressDialog.dismiss();
                 try {
                     if(response.isSuccessful()) {
                         DeliveryTabResponse.DeliveryRestaurants body = response.body().deliveryRestaurants;
@@ -110,6 +103,12 @@ public class DeliveryFragment extends Fragment {
                             for(int i = 0; i <body.deliveryRestInfo.size(); i++) {
                                 Util.deliveryRestInfos = body.deliveryRestInfo;
                             }
+                            progressDialog.dismiss();
+                            DeliveryAdapter deliveryAdapter = new DeliveryAdapter();
+                            mRecyclerView.setAdapter(deliveryAdapter);
+                            mLayoutManager = new LinearLayoutManager(getActivity());
+                            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                         }
                     }else {
                         progressDialog.dismiss();
