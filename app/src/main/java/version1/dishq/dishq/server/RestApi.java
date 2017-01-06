@@ -15,6 +15,7 @@ import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.Response.DeliveryTabResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
+import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.TastePrefData;
@@ -69,4 +70,7 @@ public interface RestApi {
     Call<DeliveryTabResponse> addDelivRestOptions(@Header("Authorization")String authorization, @Path("generic_dish_id")int genericDishId,
                                                   @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
                                                   @Query("longitude")String longitude, @Query("showmore")int showMore);
+
+    @GET("api/ugc/allfavourites/")
+    Call<FavouriteDishesResponse> getFavouriteDishes(@Header("Authorization")String authorization, @Query("uid")String uid);
 }
