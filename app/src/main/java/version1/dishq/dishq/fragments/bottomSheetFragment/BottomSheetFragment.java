@@ -160,8 +160,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             }
         });
 
-
-
     }
 
     private class BottomSheetAdapter extends FragmentPagerAdapter {
