@@ -1,14 +1,19 @@
 package version1.dishq.dishq.fragments.homeScreenFragment;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,7 +37,6 @@ import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.RestApi;
-import version1.dishq.dishq.ui.HomeActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -41,7 +45,7 @@ import version1.dishq.dishq.util.Util;
  * Package name version1.dishq.dishq.
  */
 
-public class HomeScreenFragment extends Fragment {
+public class HomeScreenFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * The fragment argument representing the section number for this
@@ -51,10 +55,12 @@ public class HomeScreenFragment extends Fragment {
     DishDataInfo dishDataInfo;
     private RelativeLayout rlHomeScreen;
     private ImageView vegTag, eggTag, nonVegTag, isSpicyTag, hasAlcoholTag;
-    private TextView dishName, dishType;
-    private Button foodTags, dineButton;
+    private TextView dishName, dishType, navUserName;
+    private Button foodTags, dineButton, hamburgerButton;
     private ToggleButton favButton;
     private FrameLayout frameClick;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     public HomeScreenFragment() {
     }
@@ -73,8 +79,9 @@ public class HomeScreenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_home_screen, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         rlHomeScreen = (RelativeLayout) rootView.findViewById(R.id.rl_home_screen);
+        hamburgerButton = (Button) rootView.findViewById(R.id.hamburger);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
         eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
         nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);
@@ -86,6 +93,26 @@ public class HomeScreenFragment extends Fragment {
         favButton = (ToggleButton) rootView.findViewById(R.id.favourites);
         dineButton = (Button) rootView.findViewById(R.id.dining);
         frameClick = (FrameLayout) rootView.findViewById(R.id.frame_click);
+        drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        hamburgerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                drawer.setDrawerListener(toggle);
+                toggle.syncState();
+                navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
+                navUserName = (TextView) rootView.findViewById(R.id.nav_user_name);
+                if(navUserName!=null) {
+                    navUserName.setTypeface(Util.opensanslight);
+                    navUserName.setText(DishqApplication.getUserName());
+                }
+                navigationView.setNavigationItemSelectedListener(HomeScreenFragment.this);
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
         setFont();
 
         if (dishDataInfo != null) {
@@ -113,6 +140,9 @@ public class HomeScreenFragment extends Fragment {
         frameClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
                 Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
                 Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
                 new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
@@ -122,6 +152,9 @@ public class HomeScreenFragment extends Fragment {
         dineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
                 Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
                 Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
                 new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
@@ -132,8 +165,11 @@ public class HomeScreenFragment extends Fragment {
         favButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
                 String source = "homescreen";
-                if(isChecked) {
+                if (isChecked) {
                     //The toggle is enabled
                     final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
                             source, dishDataInfo.getGenericDishId(), 1);
@@ -151,7 +187,7 @@ public class HomeScreenFragment extends Fragment {
                         }
                     });
 
-                }else {
+                } else {
                     //The toggle is disabled
                     final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
                             source, dishDataInfo.getGenericDishId(), 0);
@@ -195,15 +231,15 @@ public class HomeScreenFragment extends Fragment {
                 nonVegTag.setVisibility(View.VISIBLE);
             }
 
-            if(isSpicy) {
+            if (isSpicy) {
                 isSpicyTag.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 isSpicyTag.setVisibility(View.GONE);
             }
 
-            if(hasAlcohol) {
+            if (hasAlcohol) {
                 hasAlcoholTag.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 hasAlcoholTag.setVisibility(View.GONE);
             }
         }
@@ -236,5 +272,28 @@ public class HomeScreenFragment extends Fragment {
         dishType.setTypeface(Util.opensanslight);
         foodTags.setTypeface(Util.opensanslight);
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_fav) {
+            // Handle the camera action
+        } else if (id == R.id.nav_menufinder) {
+
+        } else if (id == R.id.nav_settings) {
+
+        } else if (id == R.id.nav_rate) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_about) {
+
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
 
 }
