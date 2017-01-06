@@ -22,9 +22,10 @@
 
     <View
         android:id="@+id/nav_line"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="20dp"
         android:layout_width="29dp"
-        android:layout_height="1.3dp"/>
+        android:layout_height="1.3dp"
+        android:background="#ffffff"/>
 
 </LinearLayout>

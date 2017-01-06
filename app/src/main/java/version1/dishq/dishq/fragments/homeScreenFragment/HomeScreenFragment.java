@@ -1,5 +1,6 @@
 package version1.dishq.dishq.fragments.homeScreenFragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -37,6 +38,7 @@ import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.ui.FavouritesActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -278,7 +280,9 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         int id = item.getItemId();
 
         if (id == R.id.nav_fav) {
-            // Handle the camera action
+            Intent intent = new Intent(getActivity(), FavouritesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else if (id == R.id.nav_menufinder) {
 
         } else if (id == R.id.nav_settings) {
