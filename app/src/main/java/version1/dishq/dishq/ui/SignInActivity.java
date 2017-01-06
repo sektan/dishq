@@ -16,6 +16,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -39,11 +40,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -59,6 +60,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Response.SignUpResponse;
@@ -75,24 +77,24 @@ import version1.dishq.dishq.util.Util;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
+    protected static final int REQUEST_CHECK_SETTINGS = 1000;
     private static final String TAG = "SignUpActivity";
-    private static GoogleApiClient googleApiClient;
-    private ProgressDialog progressDialog;
-    private CallbackManager callbackManager;
     private static final int RC_SIGN_IN = 9001;
-    private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
-    LocationRequest mLocationRequest;
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
-    private Location mLastLocation;
-    protected static final int REQUEST_CHECK_SETTINGS = 1000;
-    final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 1;
+    private static GoogleApiClient googleApiClient;
     private static String lat = "0.0";
     private static String lang = "0.0";
-    private String facebookAccessToken = "";
     private static String facebookOrGoogle = "";
+    final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 1;
+    private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
+    LocationRequest mLocationRequest;
     String ace = "";
     LoginButton loginButton;
+    private ProgressDialog progressDialog;
+    private CallbackManager callbackManager;
+    private Location mLastLocation;
+    private String facebookAccessToken = "";
     private Boolean GOOGLE_BUTTON_SELECTED, FACEBOOK_BUTTON_SELECTED;
     private Button facebookButton, googleButton;
 
@@ -192,7 +194,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
         if (googleButton != null) {
             GOOGLE_BUTTON_SELECTED = true;
-            googleButton.setOnClickListener(this);
+//            googleButton.setOnClickListener(this);
         }
     }
 
@@ -412,12 +414,12 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     public void checkWhichActivity(Boolean isNewUser) {
         if (!DishqApplication.getOnBoardingDone()) {
-           // if (isNewUser) {
-                Intent i = new Intent(SignInActivity.this, OnBoardingActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
-                startActivity(i);
-           // }
+            // if (isNewUser) {
+            Intent i = new Intent(SignInActivity.this, OnBoardingActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(i);
+            // }
         } else {
             //Check for gps
 
@@ -737,5 +739,11 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
         }
+    }
+
+    public void openDialog(View view) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+        dialogFragment.show(fragmentManager, "filters_dialog_fragment");
     }
 }

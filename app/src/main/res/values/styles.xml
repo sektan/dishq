@@ -13,6 +13,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabText</item>
+        <item name="tabIndicatorColor">#fff</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabPaddingStart">24dp</item>
+        <item name="tabPaddingEnd">24dp</item>
+        <item name="tabBackground">@drawable/dialog_fragment_tab_selector</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
 
+    <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">18sp</item>
+    </style>
 
 </resources>

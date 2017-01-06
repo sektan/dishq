@@ -26,7 +26,7 @@ import version1.dishq.dishq.util.Util;
 
 public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutRestInfoAdapter> {
 
-    public DineoutAdapter () {
+    public DineoutAdapter() {
     }
 
     @Override

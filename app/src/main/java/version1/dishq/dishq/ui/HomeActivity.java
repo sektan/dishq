@@ -17,15 +17,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,7 +50,6 @@ import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
 import version1.dishq.dishq.server.Config;
-import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.DishqApplication;
@@ -67,21 +63,27 @@ import version1.dishq.dishq.util.Util;
 public class HomeActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    protected static final int REQUEST_CHECK_SETTINGS = 1000;
     private static final String TAG = "HomeActivity";
-    private int noOfPages = 0;
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
     public static ViewPager viewPager;
+    private static String lat = "0.0";
+    private static String lang = "0.0";
+    final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
+    LocationRequest mLocationRequest;
+    private int noOfPages = 0;
     private TextView greetingHeader, greetingContext;
     private Button greetingButton;
     private RelativeLayout rlGreeting;
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            rlGreeting.setVisibility(View.GONE);
+        }
+    };
     private GoogleApiClient googleApiClient;
-    LocationRequest mLocationRequest;
-    private static final long INTERVAL = 1000 * 10;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
     private Location mLastLocation;
-    protected static final int REQUEST_CHECK_SETTINGS = 1000;
-    final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
-    private static String lat = "0.0";
-    private static String lang = "0.0";
     private ProgressDialog progressDialog;
 
     @Override
@@ -96,7 +98,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             errorDialog.show();
             return;
         }
-        if(Util.getLatitude().equals("") && Util.getLongitude().equals("")) {
+        if (Util.getLatitude().equals("") && Util.getLongitude().equals("")) {
             checkGPS();
         }
         setContentView(R.layout.activity_home);
@@ -128,13 +130,6 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             rlGreeting.setOnClickListener(onClickListener);
         }
     }
-
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            rlGreeting.setVisibility(View.GONE);
-        }
-    };
 
     public void fetchHomeDishResults() {
         String latitude = Util.getLatitude();
@@ -179,31 +174,6 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 progressDialog.dismiss();
             }
         });
-    }
-
-
-    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            HomeScreenFragment fragment = new HomeScreenFragment();
-            fragment.setArguments(Util.dishDataModals.get(position).toBundle());
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a HomeScreenFragment (defined as a static inner class below).
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            // Show total pages.
-            return noOfPages;
-        }
-
     }
 
     public void checkGPS() {
@@ -512,5 +482,29 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     protected void onStop() {
         super.onStop();
         stopLocationUpdates();
+    }
+
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            HomeScreenFragment fragment = new HomeScreenFragment();
+            fragment.setArguments(Util.dishDataModals.get(position).toBundle());
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a HomeScreenFragment (defined as a static inner class below).
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            // Show total pages.
+            return noOfPages;
+        }
+
     }
 }

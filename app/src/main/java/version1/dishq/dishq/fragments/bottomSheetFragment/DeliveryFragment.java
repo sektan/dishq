@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,10 +46,6 @@ public class DeliveryFragment extends Fragment {
         progressDialog.show();
         fetchDeliveryRest();
 
-    }
-
-    private enum LayoutManagerType {
-        LINEAR_LAYOUT_MANAGER
     }
 
     @Override
@@ -127,5 +122,9 @@ public class DeliveryFragment extends Fragment {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    private enum LayoutManagerType {
+        LINEAR_LAYOUT_MANAGER
     }
 }

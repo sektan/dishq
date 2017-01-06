@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,9 +42,9 @@ public class TastePrefFragment1 extends Fragment {
         v.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(myOnSwipeListener.onSwipe(OnSwipeListener.Direction.up)){
-                   return true;
-               }
+                if (myOnSwipeListener.onSwipe(OnSwipeListener.Direction.up)) {
+                    return true;
+                }
                 Log.d("Gesture return", "false");
                 return false;
             }
@@ -152,7 +151,7 @@ public class TastePrefFragment1 extends Fragment {
             Fragment fragment = new TastePrefFragment2();
             FragmentManager fm = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-             ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
             ft.replace(R.id.onboarding_screen2, fragment);
             ft.addToBackStack(null);
             ft.commit();

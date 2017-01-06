@@ -43,17 +43,13 @@ public class DineoutFragment extends Fragment {
         fetchDineoutRest(0);
     }
 
-    private enum LayoutManagerType {
-        LINEAR_LAYOUT_MANAGER
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
         showMore = (Button) v.findViewById(R.id.dineout_show);
         showMore.setTypeface(Util.opensanssemibold);
-        if(hasMoreResults) {
+        if (hasMoreResults) {
             showMore.setVisibility(View.VISIBLE);
             showMore.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,9 +97,9 @@ public class DineoutFragment extends Fragment {
                 Log.d(TAG, "Success");
                 try {
                     if(response.isSuccessful()) {
-                        if(showMoreOptions == 1) {
+                        if (showMoreOptions == 1) {
                             showMore.setVisibility(View.GONE);
-                        }else {
+                        } else {
 
                         }
                         DineoutTabResponse.DineoutRestaurants body = response.body().dineoutRestaurants;
@@ -133,5 +129,9 @@ public class DineoutFragment extends Fragment {
                 Log.d(TAG, "Failure");
             }
         });
+    }
+
+    private enum LayoutManagerType {
+        LINEAR_LAYOUT_MANAGER
     }
 }

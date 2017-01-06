@@ -26,7 +26,7 @@ import version1.dishq.dishq.util.Util;
 
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryRestInfoAdapter>{
 
-    public DeliveryAdapter () {
+    public DeliveryAdapter() {
     }
 
     @Override

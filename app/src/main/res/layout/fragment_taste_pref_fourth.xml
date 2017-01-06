@@ -13,41 +13,41 @@
         android:foreground="@drawable/onboardingfourth"/>
 
     <Button
-        android:paddingStart="15dp"
-        android:paddingEnd="17dp"
         android:id="@+id/allergy_cuisine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
         android:background="@drawable/onboarding_ques_button"
         android:clickable="false"
+        android:gravity="start|center_vertical"
+        android:paddingEnd="17dp"
+        android:paddingStart="15dp"
         android:text="@string/allergy"
         android:textAllCaps="false"
-        android:gravity="start|center_vertical"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_22" />
 
     <TextView
         android:id="@+id/optional"
         android:layout_width="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/allergy_cuisine"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/allergy_cuisine"
         android:layout_marginStart="14dp"
+        android:layout_marginTop="10dp"
         android:text="@string/optional"
-        android:textSize="@dimen/text_size_16"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_16" />
 
         <com.wefika.flowlayout.FlowLayout
-            android:id="@+id/allergy_container"
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/optional"
+            android:id="@+id/allergy_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="start|top"
+            android:layout_below="@+id/optional"
             android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp">
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="10dp"
+            android:gravity="start|top">
 
         </com.wefika.flowlayout.FlowLayout>
 
@@ -55,15 +55,15 @@
         android:id="@+id/done"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="19dp"
         android:layout_alignParentBottom="true"
-        android:textAllCaps="true"
-        android:textAlignment="center"
-        android:gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginStart="14dp"
         android:background="@drawable/done_button_shape"
-        android:textColor="@color/black"
-        android:text="@string/done"/>
+        android:gravity="center"
+        android:text="@string/done"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/black" />
 
 </RelativeLayout>

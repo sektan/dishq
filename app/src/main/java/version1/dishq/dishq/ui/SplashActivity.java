@@ -17,7 +17,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -26,7 +25,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -38,10 +36,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import java.io.FileDescriptor;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +46,6 @@ import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
 import version1.dishq.dishq.server.RestApi;
-import version1.dishq.dishq.util.CheckForGps;
 import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -64,21 +58,38 @@ import version1.dishq.dishq.util.Util;
 public class SplashActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private String TAG = "SplashActivity";
-    private boolean networkFailed;
+    protected static final int REQUEST_CHECK_SETTINGS = 1000;
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
+    private static String lat = "0.0";
+    private static String lang = "0.0";
+    final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
     public String versionName;
     public int versionCode = 0;
     public String uniqueIdentifier;
     public int userId = -1;
-    private GoogleApiClient googleApiClient;
     LocationRequest mLocationRequest;
-    private static final long INTERVAL = 1000 * 10;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
+    private String TAG = "SplashActivity";
+    private boolean networkFailed;
+    //Timer set for the display time of the splashScreen
+    Thread timer = new Thread() {
+        public void run() {
+            try {
+                sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                if (networkFailed) {
+                    Log.d(TAG, "Checking if there is an internet connection");
+                    checkInternetConnection();
+                } else {
+                    checkVersion();
+                }
+            }
+        }
+    };
+    private GoogleApiClient googleApiClient;
     private Location mLastLocation;
-    protected static final int REQUEST_CHECK_SETTINGS = 1000;
-    final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
-    private static String lat = "0.0";
-    private static String lang = "0.0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,24 +128,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
         super.onResume();
 
     }
-
-    //Timer set for the display time of the splashScreen
-    Thread timer = new Thread() {
-        public void run() {
-            try {
-                sleep(1500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                if (networkFailed) {
-                    Log.d(TAG, "Checking if there is an internet connection");
-                    checkInternetConnection();
-                } else {
-                    checkVersion();
-                }
-            }
-        }
-    };
 
     //Method to check if the internet is connected or not
     private void checkInternetConnection() {

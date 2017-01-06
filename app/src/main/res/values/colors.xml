@@ -20,5 +20,9 @@
     <color name="rowGreen">#e8f6f4</color>
     <color name="rowPurple">#f1eef6</color>
     <color name="greyWhite">#fafafa</color>
+
+    <color name="greyButton">#dfdfdf</color>
+    <color name="disabledTextColor">#b3b3b3</color>
+    <color name="searchBarBackground">#5a000000</color>
     <color name="rupeeGreen">#8ac651</color>
 </resources>

@@ -13,14 +13,14 @@
         android:foreground="@drawable/onboardingthird"/>
 
     <Button
-        android:paddingStart="20dp"
-        android:paddingEnd="34dp"
         android:id="@+id/your_fav_cuisine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
         android:background="@drawable/onboarding_ques_button"
         android:clickable="false"
+        android:paddingEnd="34dp"
+        android:paddingStart="20dp"
         android:text="@string/your_fav_cuisine"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -30,24 +30,24 @@
     <TextView
         android:id="@+id/pick_three"
         android:layout_width="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_below="@+id/your_fav_cuisine"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/your_fav_cuisine"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/pick_three"
-        android:textSize="@dimen/text_size_16"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_16" />
 
         <com.wefika.flowlayout.FlowLayout
-            android:id="@+id/fav_cuisine_container"
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/pick_three"
+            android:id="@+id/fav_cuisine_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="start|top"
+            android:layout_below="@+id/pick_three"
             android:layout_marginLeft="13dp"
             android:layout_marginRight="13dp"
+            android:layout_marginTop="10dp"
+            android:gravity="start|top"
             >
 
         </com.wefika.flowlayout.FlowLayout>

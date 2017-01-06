@@ -24,7 +24,6 @@ import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.ui.HomeActivity;
-import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -36,10 +35,10 @@ import version1.dishq.dishq.util.Util;
 public class TastePrefFragment4 extends Fragment {
 
     private final static String TAG = "TastePrefFragment4";
-    private FlowLayout allergyContainer;
     CheckedTextView child;
     Button allergyCuisine, doneButton;
     TextView optional;
+    private FlowLayout allergyContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +57,7 @@ public class TastePrefFragment4 extends Fragment {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               sendUserPrefData();
+                sendUserPrefData();
             }
         });
         allergyContainer = (FlowLayout) view.findViewById(R.id.allergy_container);
@@ -96,10 +95,10 @@ public class TastePrefFragment4 extends Fragment {
 
     //For setting the font of the text visible to the user
     protected void setTypeFace() {
-        if(allergyCuisine!=null) {
+        if (allergyCuisine != null) {
             allergyCuisine.setTypeface(Util.opensanslight);
         }
-        if(optional!=null) {
+        if (optional != null) {
             optional.setTypeface(Util.opensanslight);
         }
         doneButton.setTypeface(Util.opensanssemibold);
