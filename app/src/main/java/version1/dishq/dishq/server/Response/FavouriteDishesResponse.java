@@ -14,7 +14,7 @@ public class FavouriteDishesResponse {
 
     @SerializedName("data")
     @Expose
-    public FavouriteDishesInfo favouriteDishesInfos;
+    public ArrayList<FavouriteDishesInfo> favouriteDishesInfos;
 
     @SerializedName("response")
     @Expose
