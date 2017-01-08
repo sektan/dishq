@@ -6,15 +6,38 @@
     tools:context=".ui.FavouritesActivity"
     tools:showIn="@layout/activity_favourites">
 
-    <GridView
-        android:id="@+id/fav_gridview"
+    <include
+        android:id="@+id/favourites_toolbar"
+        layout="@layout/tool_bar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fav_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/favourites_toolbar"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="10.7dp"
+        android:layout_marginEnd="10.7dp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_no_fav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:columnWidth="100dp"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="24dp"
-        android:horizontalSpacing="10dp"
-        android:stretchMode="spacingWidthUniform" />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_below="@+id/favourites_toolbar"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center_vertical"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_20"
+            android:text="@string/no_fav"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -41,6 +41,7 @@
     <string name="delivery_image_2">delivery image 2</string>
     <string name="delivery_image_3">delivery image 3</string>
     <string name="home_screen_image">home screen image</string>
+    <string name="no_delivery_msg">No delivery places found</string>
 
     <!-- HomeActivity -->
     <string name="action_settings">Settings</string>
@@ -53,4 +54,21 @@
     <string name="rate">RATE</string>
     <string name="share">SHARE</string>
     <string name="about">ABOUT</string>
+
+    <!-- Toolbar -->
+    <string name="toolbar_back_button">toolbar back button</string>
+    <string name="toolbar_search_button">toolbar search button</string>
+
+    <!--FavouritesActivity -->
+    <string name="fav_header">My Favourites</string>
+    <string name="no_fav">Oops! Add dishes to favourites to see them here!</string>
+    <string name="veg_tag">veg_tag</string>
+    <string name="egg_tag">egg tag</string>
+    <string name="non_veg_tag">non-veg tag</string>
+    <string name="spicy_tag">spicy tag</string>
+    <string name="alcohol_tag">alcohol tag</string>
+
+    <!--MoodFilers -->
+    <string name="apply">APPLY</string>
+    <string name="reset">RESET</string>
 </resources>

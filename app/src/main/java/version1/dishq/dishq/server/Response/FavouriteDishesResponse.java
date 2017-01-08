@@ -27,7 +27,7 @@ public class FavouriteDishesResponse {
 
         @SerializedName("photo")
         @Expose
-        private ArrayList<String> favDishPhoto;
+        public ArrayList<String> favDishPhoto;
 
         @SerializedName("dish_type")
         @Expose
@@ -40,6 +40,10 @@ public class FavouriteDishesResponse {
         @SerializedName("recipe_url")
         @Expose
         private String favDishRecipeUrl;
+
+        @SerializedName("dish_nature")
+        @Expose
+        private int favDishNature;
 
         @SerializedName("generic_dish_id")
         @Expose
@@ -91,6 +95,14 @@ public class FavouriteDishesResponse {
 
         public void setFavDishRecipeUrl(String favDishRecipeUrl) {
             this.favDishRecipeUrl = favDishRecipeUrl;
+        }
+
+        public int getFavDishNature() {
+            return favDishNature;
+        }
+
+        public void setFavDishNature(int favDishNature) {
+            this.favDishNature = favDishNature;
         }
 
         public int getFavDishGenericDishId() {

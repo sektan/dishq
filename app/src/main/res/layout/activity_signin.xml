@@ -40,7 +40,6 @@
             android:layout_below="@+id/connect_with"
             android:layout_marginTop="5dp"
             android:background="@drawable/signin_button_shape"
-            android:onClick="openDialog"
             android:text="@string/google"
             android:textAlignment="center"
             android:textAllCaps="true"

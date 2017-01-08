@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -38,13 +40,16 @@ public class DeliveryFragment extends Fragment {
     protected RecyclerView mRecyclerView;
     private ProgressDialog progressDialog;
     private Button showMore;
+    private RelativeLayout rlNoDel;
+    private TextView noDelText;
+    private Boolean hasMoreResults = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.show();
-        fetchDeliveryRest();
+        fetchDeliveryRest(0);
 
     }
 
@@ -54,6 +59,19 @@ public class DeliveryFragment extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.delivery_rest_cardlist);
         showMore = (Button) v.findViewById(R.id.delivery_show);
         showMore.setTypeface(Util.opensanssemibold);
+        rlNoDel = (RelativeLayout) v.findViewById(R.id.rl_no_del);
+        noDelText = (TextView) v.findViewById(R.id.no_del_text);
+        noDelText.setTypeface(Util.opensanslight);
+
+        if (hasMoreResults) {
+            showMore.setVisibility(View.VISIBLE);
+            showMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fetchDeliveryRest(1);
+                }
+            });
+        }
         return v;
     }
 
@@ -79,22 +97,29 @@ public class DeliveryFragment extends Fragment {
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 
-    public void fetchDeliveryRest() {
+    public void fetchDeliveryRest(final int showMoreOptions) {
         String latitude = "12.92923258", longitude = "77.63082482", source = "homescreen";
-        int showMore = 0;
 
         RestApi restApi = Config.createService(RestApi.class);
         Call<DeliveryTabResponse> call = restApi.addDelivRestOptions(DishqApplication.getAccessToken(), Util.getGenericDishIdTab(),
-               DishqApplication.getUniqueID(), source, latitude, longitude, showMore);
+               DishqApplication.getUniqueID(), source, latitude, longitude, showMoreOptions);
         call.enqueue(new Callback<DeliveryTabResponse>() {
             @Override
             public void onResponse(Call<DeliveryTabResponse> call, Response<DeliveryTabResponse> response) {
                 Log.d(TAG, "Success");
                 try {
                     if(response.isSuccessful()) {
+                        if (showMoreOptions == 1) {
+                            showMore.setVisibility(View.GONE);
+                        } else {
+
+                        }
                         DeliveryTabResponse.DeliveryRestaurants body = response.body().deliveryRestaurants;
+                        Util.deliveryRestInfos.clear();
                         if(body!=null) {
                             Log.d(TAG, "the body is not empty");
+                            rlNoDel.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.VISIBLE);
                             for(int i = 0; i <body.deliveryRestInfo.size(); i++) {
                                 Util.deliveryRestInfos = body.deliveryRestInfo;
                             }
@@ -104,6 +129,9 @@ public class DeliveryFragment extends Fragment {
                             mLayoutManager = new LinearLayoutManager(getActivity());
                             mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+                        }else{
+                            rlNoDel.setVisibility(View.VISIBLE);
+                            mRecyclerView.setVisibility(View.GONE);
                         }
                     }else {
                         progressDialog.dismiss();

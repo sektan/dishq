@@ -741,9 +741,4 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public void openDialog(View view) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
-        dialogFragment.show(fragmentManager, "filters_dialog_fragment");
-    }
 }

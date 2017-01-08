@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,6 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.fragments.bottomSheetFragment.BottomSheetFragment;
+import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
@@ -58,7 +60,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     private RelativeLayout rlHomeScreen;
     private ImageView vegTag, eggTag, nonVegTag, isSpicyTag, hasAlcoholTag;
     private TextView dishName, dishType, navUserName;
-    private Button foodTags, dineButton, hamburgerButton;
+    private Button foodTags, dineButton, hamburgerButton, moodButton;
     private ToggleButton favButton;
     private FrameLayout frameClick;
     private DrawerLayout drawer;
@@ -84,6 +86,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         rlHomeScreen = (RelativeLayout) rootView.findViewById(R.id.rl_home_screen);
         hamburgerButton = (Button) rootView.findViewById(R.id.hamburger);
+        moodButton = (Button) rootView.findViewById(R.id.mood);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
         eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
         nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);
@@ -97,6 +100,15 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         frameClick = (FrameLayout) rootView.findViewById(R.id.frame_click);
         drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        moodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+                dialogFragment.show(fragmentManager, "filters_dialog_fragment");
+            }
+        });
 
         hamburgerButton.setOnClickListener(new View.OnClickListener() {
             @Override

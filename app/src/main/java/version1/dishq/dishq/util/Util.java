@@ -28,6 +28,7 @@ import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 import version1.dishq.dishq.server.Response.DeliveryTabResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
+import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -48,6 +49,7 @@ public class Util {
     public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<DishDataInfo>();
     public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos = new ArrayList<>();
     public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
+    public static ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> favouriteDishesInfos = new ArrayList<>();
     public static Boolean homeCuisineSelected = false;
     public static int favCuisineCount = 0;
     public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
@@ -64,6 +66,16 @@ public class Util {
     private static int genericDishIdTab = 0;
     private static String defaultTab = "";
     private static String recipeUrl = "";
+    private static int favPosition = 0;
+
+    public static int getFavPosition() {
+        return favPosition;
+    }
+
+    public static void setFavPosition(int favPosition) {
+        Util.favPosition = favPosition;
+    }
+
     @SuppressLint("StaticFieldLeak")
     private static Activity currentAct;
 

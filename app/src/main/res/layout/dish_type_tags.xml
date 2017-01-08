@@ -1,0 +1,69 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_veg_egg_non"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/veg_tag"
+            android:layout_width="13.7dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="5.7dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/homescreen_veg"
+            android:visibility="gone"
+            android:contentDescription="@string/veg_tag" />
+
+        <ImageView
+            android:id="@+id/egg_tag"
+            android:layout_width="13.7dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="5.7dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/homescreen_egg"
+            android:visibility="gone"
+            android:contentDescription="@string/egg_tag" />
+
+        <ImageView
+            android:id="@+id/non_veg_tag"
+            android:layout_width="13.7dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="5.7dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/homescreen_non_veg"
+            android:visibility="gone"
+            android:contentDescription="@string/non_veg_tag" />
+
+        <ImageView
+            android:id="@+id/spicy_tag"
+            android:layout_width="13.7dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/homescreen_spicy"
+            android:visibility="gone"
+            android:contentDescription="@string/spicy_tag" />
+
+        <ImageView
+            android:id="@+id/alcohol_tag"
+            android:layout_width="20dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/homescreen_alcohol"
+            android:visibility="gone"
+            android:contentDescription="@string/alcohol_tag" />
+
+    </LinearLayout>
+</RelativeLayout>

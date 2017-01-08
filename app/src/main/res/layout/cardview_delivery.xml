@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <ImageView
@@ -40,7 +40,7 @@
             android:id="@+id/cv_rl_del"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-        android:background="@drawable/hs_rl_button_bg_top">
+            android:background="@drawable/cardview_background">
 
         <TextView
             android:id="@+id/del_rest_name"

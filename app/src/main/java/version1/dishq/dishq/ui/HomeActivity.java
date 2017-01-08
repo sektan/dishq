@@ -152,6 +152,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                 greetingsShownView(body);
                             }
                             Util.setDefaultTab(body.getDefaultTab());
+                            Util.dishDataModals.clear();
                             for(int i = 0; i <body.dishDataInfos.size(); i++) {
                                     Util.dishDataModals = body.dishDataInfos;
                             }

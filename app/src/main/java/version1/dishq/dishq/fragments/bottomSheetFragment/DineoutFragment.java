@@ -1,5 +1,6 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,11 +36,14 @@ public class DineoutFragment extends Fragment {
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView mRecyclerView;
     private Button showMore;
+    private ProgressDialog progressDialog;
     private Boolean hasMoreResults = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.show();
         fetchDineoutRest(0);
     }
 
@@ -106,9 +110,11 @@ public class DineoutFragment extends Fragment {
                         if(body!=null) {
                             Log.d(TAG, "body is not null");
                             hasMoreResults = body.isHasMoreResults();
+                            Util.dineoutRestInfos.clear();
                             for(int i = 0; i <body.dineoutRestInfo.size(); i++) {
                                 Util.dineoutRestInfos = body.dineoutRestInfo;
                             }
+                            progressDialog.dismiss();
                             DineoutAdapter dineoutAdapter = new DineoutAdapter();
                             mRecyclerView.setAdapter(dineoutAdapter);
                             mLayoutManager = new LinearLayoutManager(getActivity());
@@ -116,10 +122,12 @@ public class DineoutFragment extends Fragment {
                             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                         }
                     }else {
+                        progressDialog.dismiss();
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
+                    progressDialog.dismiss();
                     e.printStackTrace();
                 }
             }
@@ -127,6 +135,7 @@ public class DineoutFragment extends Fragment {
             @Override
             public void onFailure(Call<DineoutTabResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
+                progressDialog.dismiss();
             }
         });
     }
