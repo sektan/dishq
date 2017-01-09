@@ -64,7 +64,7 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final FavGridViewInfoAdapter holder, final int position) {
+    public void onBindViewHolder(final FavGridViewInfoAdapter holder, int position) {
         ArrayList<String> imageUrls = Util.favouriteDishesInfos.get(position).favDishPhoto;
         String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
@@ -121,9 +121,9 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
                 String source = "favActivity";
 
                 removeDishFromFav(source, favGenericDishId);
-                Util.favouriteDishesInfos.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, getItemCount());
+                Util.favouriteDishesInfos.remove(favPos);
+                notifyItemRemoved(favPos);
+                notifyItemRangeChanged(favPos, getItemCount());
 
             }
         });

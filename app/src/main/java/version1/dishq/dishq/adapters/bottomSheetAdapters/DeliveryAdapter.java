@@ -1,5 +1,8 @@
 package version1.dishq.dishq.adapters.bottomSheetAdapters;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Response.DeliveryTabResponse;
+import version1.dishq.dishq.ui.DeliveryMenuActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -26,7 +30,10 @@ import version1.dishq.dishq.util.Util;
 
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryRestInfoAdapter>{
 
-    public DeliveryAdapter() {
+    private Context context;
+
+    public DeliveryAdapter(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -64,8 +71,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
                 .into(holder.dishImage3);
         holder.rlDelivery.setBackgroundColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.black));
         holder.delRestName.setText(deliveryRestInfo.getDelivRestName());
-        int delPriceLvl = deliveryRestInfo.getDelivPriceLvl();
 
+        int delPriceLvl = deliveryRestInfo.getDelivPriceLvl();
         if (delPriceLvl == 1) {
             holder.delRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
         }else if(delPriceLvl == 2) {
@@ -83,6 +90,16 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         }
 
         holder.delDriveTime.setText(deliveryRestInfo.getDeliveryTime());
+
+        holder.rlDelCardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DeliveryMenuActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ((Activity)context).finish();
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -96,7 +113,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
                 delRup2, delRup3, delRup4, delDriveTime;
         protected ImageView dishImage1, dishImage2, dishImage3;
 
-        protected RelativeLayout rlDelivery;
+        protected RelativeLayout rlDelivery, rlDelCardview;
 
         public DeliveryRestInfoAdapter(View view) {
             super(view);
@@ -112,6 +129,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             delRup4 = (TextView) view.findViewById(R.id.del_rup_4);
             delDriveTime = (TextView) view.findViewById(R.id.del_drive_time);
             rlDelivery = (RelativeLayout) view.findViewById(R.id.cv_rl_del);
+            rlDelCardview = (RelativeLayout) view.findViewById(R.id.rl_del);
         }
     }
 }

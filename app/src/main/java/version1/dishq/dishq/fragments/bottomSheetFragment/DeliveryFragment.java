@@ -124,7 +124,7 @@ public class DeliveryFragment extends Fragment {
                                 Util.deliveryRestInfos = body.deliveryRestInfo;
                             }
                             progressDialog.dismiss();
-                            DeliveryAdapter deliveryAdapter = new DeliveryAdapter();
+                            DeliveryAdapter deliveryAdapter = new DeliveryAdapter(getActivity());
                             mRecyclerView.setAdapter(deliveryAdapter);
                             mLayoutManager = new LinearLayoutManager(getActivity());
                             mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
