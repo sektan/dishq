@@ -46,7 +46,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
     @Override
     public void onBindViewHolder(final DeliveryRestInfoAdapter holder, int position) {
-        DeliveryTabResponse.DeliveryRestInfo deliveryRestInfo = Util.deliveryRestInfos.get(position);
+        final DeliveryTabResponse.DeliveryRestInfo deliveryRestInfo = Util.deliveryRestInfos.get(position);
         ArrayList<DeliveryTabResponse.DeliveryDishData> delPhotos = deliveryRestInfo.getDeliveryDishDatas();
         DeliveryTabResponse.DeliveryDishData listOfPhotos1 = delPhotos.get(0);
         DeliveryTabResponse.DeliveryDishData listOfPhotos2 = delPhotos.get(1);
@@ -94,6 +94,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         holder.rlDelCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.setDelRestId(deliveryRestInfo.getDelivRestId());
                 Intent intent = new Intent(context, DeliveryMenuActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 ((Activity)context).finish();

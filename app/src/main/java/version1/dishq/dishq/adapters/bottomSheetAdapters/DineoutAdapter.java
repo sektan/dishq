@@ -47,7 +47,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
 
     @Override
     public void onBindViewHolder(final DineoutAdapter.DineoutRestInfoAdapter holder, int position) {
-        DineoutTabResponse.DineoutRestInfo dineoutRestInfo = Util.dineoutRestInfos.get(position);
+        final DineoutTabResponse.DineoutRestInfo dineoutRestInfo = Util.dineoutRestInfos.get(position);
         String imageUrl = dineoutRestInfo.getDineRestPhoto().get(0);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)
@@ -70,6 +70,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         holder.rlDineout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.setDineRestId(dineoutRestInfo.getDineRestId());
                 Intent intent = new Intent(context, DineoutMenuActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 ((Activity)context).finish();

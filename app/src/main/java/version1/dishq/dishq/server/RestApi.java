@@ -81,7 +81,7 @@ public interface RestApi {
                                                  @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
                                                  @Query("longitude")String longitude, @Query("source_generic_dish_id")int genericDishId);
 
-    @GET("api/restaurant/{restaurant_id}/menu/dineout/")
+    @GET("api/restaurant/{restaurant_id}/menu/delivery/")
     Call<DeliveryMenuResponse> getDeliveryMenuOptions(@Header("Authorization")String authorization, @Path("restaurant_id")int restId,
                                                     @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
                                                     @Query("longitude")String longitude, @Query("source_generic_dish_id")int genericDishId);

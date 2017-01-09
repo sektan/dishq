@@ -67,6 +67,24 @@ public class Util {
     private static String defaultTab = "";
     private static String recipeUrl = "";
     private static int favPosition = 0;
+    private static int delRestId = 0;
+    private static int dineRestId = 0;
+
+    public static int getDineRestId() {
+        return dineRestId;
+    }
+
+    public static void setDineRestId(int dineRestId) {
+        Util.dineRestId = dineRestId;
+    }
+
+    public static int getDelRestId() {
+        return delRestId;
+    }
+
+    public static void setDelRestId(int delRestId) {
+        Util.delRestId = delRestId;
+    }
 
     public static int getFavPosition() {
         return favPosition;
