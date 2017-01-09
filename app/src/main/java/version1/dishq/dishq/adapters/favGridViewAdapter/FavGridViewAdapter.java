@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
@@ -89,7 +91,7 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
             @Override
             public void onClick(View view) {
                 Util.setFavPosition(favPos);
-                FragmentActivity activity = (FragmentActivity)(context);
+                FragmentActivity activity = (FragmentActivity) (context);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 FavDishDialogFragment dialogFragment = FavDishDialogFragment.getInstance();
                 dialogFragment.show(fm, "fav_dialog_fragment");
@@ -117,10 +119,15 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
             @Override
             public void onClick(View view) {
                 String source = "favActivity";
+
                 removeDishFromFav(source, favGenericDishId);
+                Util.favouriteDishesInfos.remove(position);
                 notifyItemRemoved(position);
+                notifyItemRangeChanged(position, getItemCount());
+
             }
         });
+
 
         final String favRecipeUrl = Util.favouriteDishesInfos.get(position).getFavDishRecipeUrl();
         holder.favEatButton.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +137,7 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
                 Util.setRecipeUrl(favRecipeUrl);
 
                 BottomSheetDialogFragment bottomSheetDialogFragment = new BottomSheetFragment();
-                bottomSheetDialogFragment.show(((FragmentActivity)context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                bottomSheetDialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
             }
         });
     }
