@@ -25,6 +25,7 @@ import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
+import version1.dishq.dishq.server.Response.DeliveryMenuResponse;
 import version1.dishq.dishq.server.Response.DeliveryTabResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
@@ -50,6 +51,8 @@ public class Util {
     public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos = new ArrayList<>();
     public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
     public static ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> favouriteDishesInfos = new ArrayList<>();
+    public static ArrayList<DeliveryMenuResponse.DeliveryMenuData> deliveryMenuInfos = new ArrayList<>();
+    public static DeliveryMenuResponse.DeliveryRestData deliveryRestData = null;
     public static Boolean homeCuisineSelected = false;
     public static int favCuisineCount = 0;
     public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),

@@ -184,40 +184,40 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                 }
                 String source = "homescreen";
                 if (isChecked) {
-                    //The toggle is enabled
-                    final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
-                            source, dishDataInfo.getGenericDishId(), 1);
-                    RestApi restApi = Config.createService(RestApi.class);
-                    Call<ResponseBody> call = restApi.addRemoveFavDish(DishqApplication.getAccessToken(), favDishAddRemHelper);
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Log.d(TAG, "Success");
-                        }
+                        //The toggle is enabled
+                        final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
+                                source, dishDataInfo.getGenericDishId(), 1);
+                        RestApi restApi = Config.createService(RestApi.class);
+                        Call<ResponseBody> call = restApi.addRemoveFavDish(DishqApplication.getAccessToken(), favDishAddRemHelper);
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Log.d(TAG, "Success");
+                            }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.d(TAG, "Failure");
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Log.d(TAG, "Failure");
+                            }
+                        });
 
-                } else {
-                    //The toggle is disabled
-                    final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
-                            source, dishDataInfo.getGenericDishId(), 0);
-                    RestApi restApi = Config.createService(RestApi.class);
-                    Call<ResponseBody> call = restApi.addRemoveFavDish(DishqApplication.getAccessToken(), favDishAddRemHelper);
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Log.d(TAG, "Success");
-                        }
+                    } else {
+                        //The toggle is disabled
+                        final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
+                                source, dishDataInfo.getGenericDishId(), 0);
+                        RestApi restApi = Config.createService(RestApi.class);
+                        Call<ResponseBody> call = restApi.addRemoveFavDish(DishqApplication.getAccessToken(), favDishAddRemHelper);
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Log.d(TAG, "Success");
+                            }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.d(TAG, "Failure");
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Log.d(TAG, "Failure");
+                            }
+                        });
                 }
             }
         });

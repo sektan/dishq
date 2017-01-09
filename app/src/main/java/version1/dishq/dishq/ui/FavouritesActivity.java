@@ -87,7 +87,7 @@ public class FavouritesActivity extends BaseActivity {
                         ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> body = response.body().favouriteDishesInfos;
                         if (body != null) {
                             Log.d(TAG, "body is not null");
-                            if(body.size() == 0) {
+                            if(body.isEmpty()) {
                                 rlNoFav.setVisibility(View.VISIBLE);
                                 favRecyclerView.setVisibility(View.GONE);
                             } else{
@@ -106,6 +106,8 @@ public class FavouritesActivity extends BaseActivity {
                     } else {
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
+                        rlNoFav.setVisibility(View.VISIBLE);
+                        favRecyclerView.setVisibility(View.GONE);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

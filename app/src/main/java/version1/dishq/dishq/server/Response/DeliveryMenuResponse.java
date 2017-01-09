@@ -51,7 +51,7 @@ public class DeliveryMenuResponse {
 
         @SerializedName("photo")
         @Expose
-        private ArrayList<String> delMenuPhoto;
+        public ArrayList<String> delMenuPhoto;
 
         @SerializedName("price")
         @Expose

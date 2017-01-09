@@ -71,4 +71,7 @@
     <!--MoodFilers -->
     <string name="apply">APPLY</string>
     <string name="reset">RESET</string>
+
+    <!--Menu Activity -->
+    <string name="cost_of_dish">\u20B9%d</string>
 </resources>

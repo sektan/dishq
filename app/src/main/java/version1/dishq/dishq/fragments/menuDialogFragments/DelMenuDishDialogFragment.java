@@ -1,11 +1,11 @@
-package version1.dishq.dishq.fragments.favPageFragment;
+package version1.dishq.dishq.fragments.menuDialogFragments;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,24 +25,29 @@ import version1.dishq.dishq.R;
 import version1.dishq.dishq.util.Util;
 
 /**
- * Created by dishq on 08-01-2017.
+ * Created by dishq on 09-01-2017.
  * Package name version1.dishq.dishq.
  */
 
-public class FavDishDialogFragment extends DialogFragment implements View.OnClickListener{
+public class DelMenuDishDialogFragment extends DialogFragment implements View.OnClickListener{
 
-    TextView favDishName, favDishType;
+    TextView delMenuDishName, delMenuDishType;
     private ImageView vegTag, eggTag, nonVegTag, isSpicyTag, hasAlcoholTag;
-    private Button favFoodTags;
-    private RelativeLayout rlFavview;
-    private FrameLayout favFrame;
+    private Button delMenuFoodTags;
+    private RelativeLayout rlDelMenuView;
+    private FrameLayout delMenuFrame;
 
-    public FavDishDialogFragment() {
+    public DelMenuDishDialogFragment() {
 
     }
 
-    public static FavDishDialogFragment getInstance() {
-        return new FavDishDialogFragment();
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    public static DelMenuDishDialogFragment getInstance() {
+        return new DelMenuDishDialogFragment();
     }
 
     @Override
@@ -61,33 +66,33 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.dialog_fragment_dish, container, false);
 
-        rlFavview = (RelativeLayout) rootView.findViewById(R.id.rl_fav_dish);
-        favFrame = (FrameLayout) rootView.findViewById(R.id.fav_frame);
-        favDishName = (TextView) rootView.findViewById(R.id.fav_dish_name);
-        favDishName.setTypeface(Util.opensanslight);
-        favDishType = (TextView) rootView.findViewById(R.id.fav_dish_type);
+        rlDelMenuView = (RelativeLayout) rootView.findViewById(R.id.rl_fav_dish);
+        delMenuFrame = (FrameLayout) rootView.findViewById(R.id.fav_frame);
+        delMenuDishName = (TextView) rootView.findViewById(R.id.fav_dish_name);
+        delMenuDishName.setTypeface(Util.opensanslight);
+        delMenuDishType = (TextView) rootView.findViewById(R.id.fav_dish_type);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
         eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
         nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);
         isSpicyTag = (ImageView) rootView.findViewById(R.id.spicy_tag);
         hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
-        favFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
+        delMenuFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
 
-        favFrame.setOnClickListener(new View.OnClickListener() {
+        delMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getDialog().dismiss();
             }
         });
 
-        ArrayList<String> imageUrls = Util.favouriteDishesInfos.get(Util.getFavPosition()).favDishPhoto;
+        ArrayList<String> imageUrls = Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuPhotoPopup();
         String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
                 .load(imageUrl)
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        rlFavview.setBackground(new BitmapDrawable(bitmap));
+                        rlDelMenuView.setBackground(new BitmapDrawable(bitmap));
                     }
 
                     @Override
@@ -101,9 +106,9 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
                     }
                 });
 
-        favDishName.setText(Util.favouriteDishesInfos.get(Util.getFavPosition()).getFavDishName());
+        delMenuDishName.setText(Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuDishName());
 
-        int favDishNature = Util.favouriteDishesInfos.get(Util.getFavPosition()).getFavDishNature();
+        int favDishNature = Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuDishNature();
         if (favDishNature == 1) {
             eggTag.setVisibility(View.GONE);
             vegTag.setVisibility(View.VISIBLE);
@@ -120,18 +125,14 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
         }
 
         String dishTags = "";
-        if (Util.favouriteDishesInfos != null) {
-            for (String s : Util.favouriteDishesInfos.get(Util.getFavPosition()).getFavDishTags()) {
+        if (Util.deliveryMenuInfos != null) {
+            for (String s : Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuTags()) {
                 dishTags += s + " ";
             }
         }
-        favFoodTags.setText(String.valueOf(dishTags));
+        delMenuFoodTags.setText(String.valueOf(dishTags));
 
         return rootView;
     }
 
-    @Override
-    public void onClick(View view) {
-
-    }
 }
