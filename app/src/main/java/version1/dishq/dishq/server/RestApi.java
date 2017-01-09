@@ -14,12 +14,14 @@ import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.Response.DeliveryTabResponse;
+import version1.dishq.dishq.server.Response.DineoutMenuResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.TastePrefData;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
+import version1.dishq.dishq.server.Response.DeliveryMenuResponse;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -73,4 +75,15 @@ public interface RestApi {
 
     @GET("api/ugc/allfavourites/")
     Call<FavouriteDishesResponse> getFavouriteDishes(@Header("Authorization")String authorization, @Query("uid")String uid);
+
+    @GET("api/restaurant/{restaurant_id}/menu/dineout/")
+    Call<DineoutMenuResponse> getDineoutMenuOptions(@Header("Authorization")String authorization, @Path("restaurant_id")int restId,
+                                                 @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
+                                                 @Query("longitude")String longitude, @Query("source_generic_dish_id")int genericDishId);
+
+    @GET("api/restaurant/{restaurant_id}/menu/dineout/")
+    Call<DeliveryMenuResponse> getDeliveryMenuOptions(@Header("Authorization")String authorization, @Path("restaurant_id")int restId,
+                                                    @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
+                                                    @Query("longitude")String longitude, @Query("source_generic_dish_id")int genericDishId);
+
 }

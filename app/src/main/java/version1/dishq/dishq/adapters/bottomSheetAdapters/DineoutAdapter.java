@@ -1,5 +1,8 @@
 package version1.dishq.dishq.adapters.bottomSheetAdapters;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,6 +19,8 @@ import com.squareup.picasso.Target;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
+import version1.dishq.dishq.ui.DeliveryMenuActivity;
+import version1.dishq.dishq.ui.DineoutMenuActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -26,7 +31,9 @@ import version1.dishq.dishq.util.Util;
 
 public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutRestInfoAdapter> {
 
-    public DineoutAdapter() {
+    Context context;
+    public DineoutAdapter(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -60,6 +67,15 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
 
                     }
                 });
+        holder.rlDineout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DineoutMenuActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ((Activity)context).finish();
+                context.startActivity(intent);
+            }
+        });
         holder.dineRestName.setText(dineoutRestInfo.getDineRestName());
         String dineRestAddress = "";
         for (String s : dineoutRestInfo.getDineRestAddr())

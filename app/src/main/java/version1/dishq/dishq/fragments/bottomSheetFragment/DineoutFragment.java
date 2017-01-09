@@ -115,7 +115,7 @@ public class DineoutFragment extends Fragment {
                                 Util.dineoutRestInfos = body.dineoutRestInfo;
                             }
                             progressDialog.dismiss();
-                            DineoutAdapter dineoutAdapter = new DineoutAdapter();
+                            DineoutAdapter dineoutAdapter = new DineoutAdapter(getActivity());
                             mRecyclerView.setAdapter(dineoutAdapter);
                             mLayoutManager = new LinearLayoutManager(getActivity());
                             mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
