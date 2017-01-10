@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.DeliveryMenuActivity"
+    tools:showIn="@layout/activity_delivery_menu">
+
+    <include android:id="@+id/content_delmenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/content_delivery_menu"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_delmenu_ordernow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#90000000"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7.3dp"
+            android:layout_marginEnd="11.3dp"
+            android:layout_marginStart="11.3dp"
+            android:layout_marginTop="9.3dp"
+            android:background="@drawable/delmenu_order_button_shape"
+            android:text="@string/order_now"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14" />
+    </RelativeLayout>
+
+</RelativeLayout>

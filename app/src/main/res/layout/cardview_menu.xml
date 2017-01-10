@@ -46,10 +46,8 @@
 
         <FrameLayout
             android:id="@+id/menu_frame"
-            android:layout_width="140dp"
-            android:layout_height="120dp"
-            android:layout_below="@+id/cv_menu_dish_name_type_info"
-            android:layout_marginStart="10dp"
+            android:layout_width="163.3dp"
+            android:layout_height="187.7dp"
             android:background="#00000000"/>
 
         <RelativeLayout
@@ -75,8 +73,8 @@
 
             <TextView
                 android:id="@+id/menu_cost"
-                android:layout_width="16.7dp"
-                android:layout_height="21.7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="6.7dp"
                 android:layout_marginEnd="14dp"

@@ -151,6 +151,9 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                 progressDialog.dismiss();
                                 greetingsShownView(body);
                             }
+                            if(progressDialog!=null  && progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
                             Util.setDefaultTab(body.getDefaultTab());
                             Util.dishDataModals.clear();
                             for(int i = 0; i <body.dishDataInfos.size(); i++) {

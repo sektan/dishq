@@ -73,9 +73,14 @@
     <string name="reset">RESET</string>
 
     <!--Menu Activity -->
-    <string name="cost_of_dish">\u20B9%d</string>
+    <string name="cost_of_dish">\u20B9%s</string>
     <string name="personalized_n_menu_n_for_you">Personalized \n menu \n for you</string>
     <string name="order_now">ORDER NOW</string>
     <string name="order_from">ORDER FROM</string>
     <string name="swiggy">Swiggy</string>
+    <string name="foodpanda">Foodpanda</string>
+    <string name="runnr">Runnr</string>
+    <string name="zomato">Zomato</string>
+    <string name="dineout">dineout</string>
+    <string name="chooser_title">Open With</string>
 </resources>

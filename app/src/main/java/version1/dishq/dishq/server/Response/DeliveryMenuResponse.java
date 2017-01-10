@@ -55,7 +55,7 @@ public class DeliveryMenuResponse {
 
         @SerializedName("price")
         @Expose
-        private int delMenuDishPrice;
+        private String delMenuDishPrice;
 
         @SerializedName("generic_dish_id")
         @Expose
@@ -125,11 +125,11 @@ public class DeliveryMenuResponse {
             this.delMenuPhoto = delMenuPhoto;
         }
 
-        public int getDelMenuDishPrice() {
+        public String getDelMenuDishPrice() {
             return delMenuDishPrice;
         }
 
-        public void setDelMenuDishPrice(int delMenuDishPrice) {
+        public void setDelMenuDishPrice(String delMenuDishPrice) {
             this.delMenuDishPrice = delMenuDishPrice;
         }
 

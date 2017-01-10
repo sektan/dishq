@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     tools:context="ui.DeliveryMenuActivity">
 
-    <include layout="@layout/content_delivery_menu"/>
+    <include layout="@layout/content_delmenu_full"/>
 
 </android.support.design.widget.CoordinatorLayout>

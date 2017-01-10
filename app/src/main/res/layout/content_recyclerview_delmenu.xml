@@ -4,195 +4,132 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/rl_del_menu_tb"
-        android:layout_width="match_parent"
-        android:layout_height="126dp">
-
-        <android.support.v7.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true">
-
-            <RelativeLayout
-                android:id="@+id/delmenu_rest_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#80000000">
-
-                <TextView
-                    android:id="@+id/delmenu_rest_type_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_14" />
-
-                <LinearLayout
-                    android:id="@+id/delmenu_price_drive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/delmenu_rest_type_text"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/delmenu_rup_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rupee"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <TextView
-                        android:id="@+id/delmenu_rup_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rupee"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <TextView
-                        android:id="@+id/delmenu_rup_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rupee"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <TextView
-                        android:id="@+id/delmenu_rup_4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rupee"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/vertical_line"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <TextView
-                        android:id="@+id/delmenu_drive_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12" />
-                </LinearLayout>
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_del_menu_content"
-        android:layout_width="match_parent"
+    <android.support.v7.widget.CardView
+        android:id="@+id/rl_cv_del_menu_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/rl_del_menu_tb">
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/rl_cv_del_menu_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="17dp"
-            android:layout_marginTop="10.7dp">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#09000000">
-
-                <TextView
-                    android:id="@+id/delmenu_tags"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_14" />
-
-                <TextView
-                    android:id="@+id/delmenu_rest_addr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/delmenu_tags"
-                    android:layout_marginBottom="8.7dp"
-                    android:layout_marginTop="14dp"
-                    android:textColor="#70000000" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <TextView
-            android:id="@+id/personalized_menu_text"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_cv_del_menu_content"
-            android:maxLines="3"
-            android:text="@string/personalized_n_menu_n_for_you"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_20" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/del_menu_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/personalized_menu_text" />
+        android:layout_marginBottom="17dp"
+        android:layout_marginTop="10.7dp">
 
         <RelativeLayout
-            android:id="@+id/rl_delmenu_order_from"
-            android:layout_width="match_parent"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/del_menu_recyclerview">
+            android:background="#09000000">
 
             <TextView
-                android:id="@+id/delmenu_order_text"
-                android:layout_width="match_parent"
+                android:id="@+id/delmenu_tags"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/order_from"
-                android:textAlignment="center"
+                android:layout_marginTop="9.3dp"
+                android:paddingStart="12.7dp"
+                android:paddingEnd="20dp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14" />
 
-            <LinearLayout
-                android:id="@+id/delmenu_deloptions"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/delmenu_rest_addr"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/delmenu_order_text"
-                android:layout_marginBottom="25dp"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/delmenu_ll_swiggy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:contentDescription="@string/swiggy"
-                        android:src="@drawable/order_swiggy" />
-
-                    <TextView
-                        android:id="@+id/swiggy_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/swiggy"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_12"
-                        android:layout_marginTop="13.7dp"/>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-
+                android:layout_below="@+id/delmenu_tags"
+                android:layout_marginBottom="8.7dp"
+                android:layout_marginTop="14dp"
+                android:paddingStart="12.7dp"
+                android:paddingEnd="20dp"
+                android:textColor="#70000000" />
         </RelativeLayout>
 
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/personalized_menu_text"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_cv_del_menu_content"
+        android:maxLines="3"
+        android:text="@string/personalized_n_menu_n_for_you"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_20" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/del_menu_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personalized_menu_text" />
+
+    <RelativeLayout
+        android:id="@+id/rl_delmenu_order_from"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/del_menu_recyclerview"
+        android:background="#10000000">
+
+        <TextView
+            android:id="@+id/delmenu_order_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/order_from"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14" />
+
+        <LinearLayout
+            android:id="@+id/delmenu_deloptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/delmenu_order_text"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/swiggy_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30.7dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_swiggy"
+                android:text="@string/swiggy"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+
+            <TextView
+                android:id="@+id/foodpanda_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_foodpanda"
+                android:text="@string/foodpanda"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+
+            <TextView
+                android:id="@+id/runnr_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_runnr"
+                android:text="@string/runnr"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+
+            <TextView
+                android:id="@+id/zomato_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_zomato"
+                android:text="@string/zomato"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12" />
+
+        </LinearLayout>
+
+
     </RelativeLayout>
+
 </RelativeLayout>
