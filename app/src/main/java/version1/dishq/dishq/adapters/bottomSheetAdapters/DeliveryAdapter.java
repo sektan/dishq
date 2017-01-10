@@ -96,8 +96,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             public void onClick(View view) {
                 Util.setDelRestId(deliveryRestInfo.getDelivRestId());
                 Intent intent = new Intent(context, DeliveryMenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                ((Activity)context).finish();
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //((Activity)context).finish();
                 context.startActivity(intent);
             }
         });

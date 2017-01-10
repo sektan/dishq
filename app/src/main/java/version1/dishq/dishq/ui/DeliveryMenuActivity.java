@@ -6,6 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -31,6 +34,9 @@ public class DeliveryMenuActivity extends BaseActivity {
     private static final String TAG = "DeliveryMenuActivity";
     private RecyclerView delMenuRecyclerView;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
+    private RelativeLayout rlTopContent;
+    private Button backButton, dineoutButton;
+    private TextView delMenuHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
