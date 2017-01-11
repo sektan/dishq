@@ -72,8 +72,6 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             public void onClick(View view) {
                 Util.setDineRestId(dineoutRestInfo.getDineRestId());
                 Intent intent = new Intent(context, DineoutMenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                ((Activity)context).finish();
                 context.startActivity(intent);
             }
         });

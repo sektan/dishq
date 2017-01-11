@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.DineoutMenuActivity"
+    tools:showIn="@layout/activity_dineout_menu">
+
+    <include android:id="@+id/content_dinemenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/content_dineout_menu"/>
+
+    <LinearLayout
+        android:id="@+id/rl_delmenu_ordernow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#90000000"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+
+        <Button
+            android:id="@+id/dinemenu_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7.3dp"
+            android:layout_marginEnd="11.3dp"
+            android:layout_marginStart="11.3dp"
+            android:layout_marginTop="9.3dp"
+            android:paddingLeft="58dp"
+            android:paddingRight="58dp"
+            android:background="@drawable/delmenu_order_button_shape"
+            android:text="@string/call"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14"
+            android:weightSum="0.5"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/dinemenu_directions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7.3dp"
+            android:layout_marginEnd="11.3dp"
+            android:layout_marginTop="9.3dp"
+            android:paddingLeft="45dp"
+            android:paddingRight="45dp"
+            android:background="@drawable/delmenu_order_button_shape"
+            android:text="@string/dineout_menu_directions"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14"
+            tools:ignore="ButtonStyle,RelativeOverlap"
+            android:weightSum="0.5"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package version1.dishq.dishq.adapters.deliveryMenuAdapter;
+package version1.dishq.dishq.adapters.menuAdapters;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -8,11 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,45 +23,37 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.fragments.menuDialogFragments.DelMenuDishDialogFragment;
-import version1.dishq.dishq.server.Config;
-import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
-import version1.dishq.dishq.server.RestApi;
-import version1.dishq.dishq.util.DishqApplication;
+import version1.dishq.dishq.fragments.menuDialogFragments.DineMenuDishDialogFragment;
 import version1.dishq.dishq.util.Util;
 
 import static version1.dishq.dishq.util.DishqApplication.getContext;
 
 /**
- * Created by dishq on 09-01-2017.
+ * Created by dishq on 11-01-2017.
  * Package name version1.dishq.dishq.
  */
 
-public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMenuMasonryAdapter.DelMenuInfoAdapter>{
+public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuMasonryAdapter.DineMenuInfoAdapter>{
 
-    private static final String TAG = "DelMenuMasonryAdapter";
+    private static final String TAG = "DineMenuMasonryAdapter";
     private Context context;
 
-    public DeliveryMenuMasonryAdapter(Context context) {
+    public DineoutMenuMasonryAdapter(Context context) {
         this.context = context;
     }
 
     @Override
-    public DelMenuInfoAdapter onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public DineMenuInfoAdapter onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview_menu, viewGroup, false);
-        return new DelMenuInfoAdapter(view);
+        return new DineMenuInfoAdapter(view);
     }
 
     @Override
-    public void onBindViewHolder(final DelMenuInfoAdapter holder, int position) {
-        ArrayList<String> imageUrls = Util.deliveryMenuInfos.get(position).delMenuPhoto;
+    public void onBindViewHolder(final DineMenuInfoAdapter holder, int position) {
+        ArrayList<String> imageUrls = Util.dineoutMenuInfos.get(position).dineMenuPhoto;
         String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
                 .load(imageUrl)
@@ -84,20 +74,20 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
                     }
                 });
 
-        final int delMenuPos = position;
-        holder.delMenuFrame.setOnClickListener(new View.OnClickListener() {
+        final int dineMenuPos = position;
+        holder.dineMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.setFavPosition(delMenuPos);
+                Util.setFavPosition(dineMenuPos);
                 FragmentActivity activity = (FragmentActivity) (context);
                 FragmentManager fm = activity.getSupportFragmentManager();
-                DelMenuDishDialogFragment dialogFragment = DelMenuDishDialogFragment.getInstance();
+                DineMenuDishDialogFragment dialogFragment = DineMenuDishDialogFragment.getInstance();
                 dialogFragment.show(fm, "fav_dialog_fragment");
             }
         });
 
-        holder.delMenuDishName.setText(Util.deliveryMenuInfos.get(position).getDelMenuDishName());
-        int delMenuDishNature = Util.deliveryMenuInfos.get(position).getDelMenuDishNature();
+        holder.dineMenuDishName.setText(Util.dineoutMenuInfos.get(position).getDineMenuDishName());
+        int delMenuDishNature = Util.dineoutMenuInfos.get(position).getDineMenuDishNature();
         if (delMenuDishNature == 1) {
             holder.eggTag.setVisibility(View.GONE);
             holder.vegTag.setVisibility(View.VISIBLE);
@@ -113,38 +103,38 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             holder.nonVegTag.setVisibility(View.VISIBLE);
         }
 
-        final int delMenuGenericDishId = Util.deliveryMenuInfos.get(position).getDelMenuGenericDishId();
-        holder.delMenuFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final int dineMenuGenericDishId = Util.dineoutMenuInfos.get(position).getDineMenuGenericDishId();
+        holder.dineMenuFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 String source = "deliverymenu";
                 if(isChecked) {
-                    addRemoveDishFromFav(source, delMenuGenericDishId, 1);
+                    Util.addRemoveDishFromFav(source, dineMenuGenericDishId, 1, TAG);
                 }else {
-                    addRemoveDishFromFav(source, delMenuGenericDishId, 0);
+                    Util.addRemoveDishFromFav(source, dineMenuGenericDishId, 0, TAG);
                 }
             }
         });
 
         Resources res = context.getResources();
-        String text = String.format(res.getString(R.string.cost_of_dish), Util.deliveryMenuInfos.get(position).getDelMenuDishPrice());
-        holder.delMenuDishCost.setText(text);
+        String text = String.format(res.getString(R.string.cost_of_dish), Util.dineoutMenuInfos.get(position).getDineMenuDishPrice());
+        holder.dineMenuDishCost.setText(text);
     }
 
     @Override
     public int getItemCount() {
-        return Util.deliveryMenuInfos.size();
+        return Util.dineoutMenuInfos.size();
     }
 
-    static class DelMenuInfoAdapter extends RecyclerView.ViewHolder {
+    static class DineMenuInfoAdapter extends RecyclerView.ViewHolder {
 
         private RelativeLayout rlCard;
         private ImageView vegTag, eggTag, nonVegTag, isSpicyTag, hasAlcoholTag;
-        private TextView delMenuDishName, delMenuDishCost;
-        private ToggleButton delMenuFav;
-        private FrameLayout delMenuFrame;
+        private TextView dineMenuDishName, dineMenuDishCost;
+        private ToggleButton dineMenuFav;
+        private FrameLayout dineMenuFrame;
 
-        public DelMenuInfoAdapter(View view) {
+        public DineMenuInfoAdapter(View view) {
             super(view);
 
             rlCard = (RelativeLayout) view.findViewById(R.id.cv_rl_menu);
@@ -153,28 +143,12 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             nonVegTag = (ImageView) view.findViewById(R.id.non_veg_tag);
             isSpicyTag = (ImageView) view.findViewById(R.id.spicy_tag);
             hasAlcoholTag = (ImageView) view.findViewById(R.id.alcohol_tag);
-            delMenuDishName = (TextView) view.findViewById(R.id.menu_dish_name);
-            delMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
-            delMenuFav = (ToggleButton) view.findViewById(R.id.menu_favourites);
-            delMenuFrame = (FrameLayout) view.findViewById(R.id.menu_frame);
+            dineMenuDishName = (TextView) view.findViewById(R.id.menu_dish_name);
+            dineMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
+            dineMenuFav = (ToggleButton) view.findViewById(R.id.menu_favourites);
+            dineMenuFrame = (FrameLayout) view.findViewById(R.id.menu_frame);
         }
     }
 
-    private void addRemoveDishFromFav(String source, int delGenericDishId, int checked) {
-        final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
-                source, delGenericDishId, checked);
-        RestApi restApi = Config.createService(RestApi.class);
-        Call<ResponseBody> call = restApi.addRemoveFavDish(DishqApplication.getAccessToken(), favDishAddRemHelper);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, "Success");
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "Failure");
-            }
-        });
-    }
 }

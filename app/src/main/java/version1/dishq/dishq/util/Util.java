@@ -7,17 +7,25 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;
@@ -25,11 +33,15 @@ import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
+import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DeliveryMenuResponse;
 import version1.dishq.dishq.server.Response.DeliveryTabResponse;
+import version1.dishq.dishq.server.Response.DineoutMenuResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
+import version1.dishq.dishq.server.RestApi;
 
 /**
  * Created by dishq on 13-12-2016.
@@ -52,7 +64,9 @@ public class Util {
     public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
     public static ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> favouriteDishesInfos = new ArrayList<>();
     public static ArrayList<DeliveryMenuResponse.DeliveryMenuData> deliveryMenuInfos = new ArrayList<>();
+    public static ArrayList<DineoutMenuResponse.DineoutMenuData> dineoutMenuInfos = new ArrayList<>();
     public static DeliveryMenuResponse.DeliveryRestData deliveryRestData = null;
+    public static DineoutMenuResponse.DineoutRestData dineoutRestData = null;
     public static Boolean homeCuisineSelected = false;
     public static int favCuisineCount = 0;
     public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
@@ -154,6 +168,42 @@ public class Util {
 
     public static void setFoodChoiceSelected(int foodChoiceSelected) {
         Util.foodChoiceSelected = foodChoiceSelected;
+    }
+
+    public static void addRemoveDishFromFav(String source, int delGenericDishId, int checked, final String TAG) {
+        final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
+                source, delGenericDishId, checked);
+        RestApi restApi = Config.createService(RestApi.class);
+        Call<ResponseBody> call = restApi.addRemoveFavDish(DishqApplication.getAccessToken(), favDishAddRemHelper);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, "Success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "Failure");
+            }
+        });
+    }
+
+    public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private final int mSpace;
+
+        public SpacesItemDecoration(int space) {
+            this.mSpace = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.left = mSpace;
+            outRect.right = mSpace;
+            outRect.bottom = mSpace;
+            // Add top margin only for the first item to avoid double space between items
+            if (parent.getChildAdapterPosition(view) == 0)
+                outRect.top = mSpace;
+        }
     }
 
     public static boolean checkAndShowNetworkPopup(final Activity activity) {

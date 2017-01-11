@@ -83,4 +83,7 @@
     <string name="zomato">Zomato</string>
     <string name="dineout">dineout</string>
     <string name="chooser_title">Open With</string>
+    <string name="call">CALL</string>
+    <string name="dineout_menu_directions">DIRECTIONS</string>
+    <string name="delivery">delivery</string>
 </resources>

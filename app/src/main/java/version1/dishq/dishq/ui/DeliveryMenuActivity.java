@@ -1,6 +1,5 @@
 package version1.dishq.dishq.ui;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -12,9 +11,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -24,7 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.deliveryMenuAdapter.DeliveryMenuMasonryAdapter;
+import version1.dishq.dishq.adapters.menuAdapters.DeliveryMenuMasonryAdapter;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.DeliveryMenuResponse;
 import version1.dishq.dishq.server.RestApi;
@@ -67,7 +64,7 @@ public class DeliveryMenuActivity extends BaseActivity {
     protected void setTags() {
         delMenuRecyclerView = (RecyclerView) findViewById(R.id.del_menu_recyclerview);
         backButton = (ImageView) findViewById(R.id.del_menu_back_button);
-        delMenuHeader = (TextView) findViewById(R.id.toolbarTitle);
+        delMenuHeader = (TextView) findViewById(R.id.delmenu_toolbarTitle);
         delMenuHeader.setTypeface(Util.opensanssemibold);
         dineoutButton = (ImageView) findViewById(R.id.dineout_option);
         delMenuRestType = (TextView) findViewById(R.id.delmenu_rest_type_text);
@@ -119,12 +116,14 @@ public class DeliveryMenuActivity extends BaseActivity {
 
             StringBuilder sb = new StringBuilder();
 
-            for (String s : Util.deliveryRestData.getDelMenuCusineText()) {
-                if (sb.length() > 0) {
-                    sb.append(',' + " ");
-                }
-                sb.append(s);
+            if (Util.deliveryRestData.getDelMenuCusineText() != null) {
+                for (String s : Util.deliveryRestData.getDelMenuCusineText()) {
+                    if (sb.length() > 0) {
+                        sb.append(',' + " ");
+                    }
+                    sb.append(s);
 
+                }
             }
             String dishTypeText = sb.toString();
             delMenuRestType.setText(String.valueOf(dishTypeText));
@@ -148,24 +147,29 @@ public class DeliveryMenuActivity extends BaseActivity {
             delMenuDrive.setText(Util.deliveryRestData.getDelMenuDriveTime());
 
             String dishTags = "";
-            for (String s : Util.deliveryRestData.getDelMenuTags()) {
-                dishTags += s + " ";
-
+            if (Util.deliveryRestData.getDelMenuTags() != null) {
+                for (String s : Util.deliveryRestData.getDelMenuTags()) {
+                    dishTags += s + " ";
+                }
             }
             delMenuTags.setText(String.valueOf(dishTags));
 
             String dineRestAddress = "";
-            for (String s : Util.deliveryRestData.getDelMenuRestAddr())
-                dineRestAddress += s;
-            delMenuRestAdd.setText(dineRestAddress);
+            if (Util.deliveryRestData.getDelMenuRestAddr() != null) {
+                for (String s : Util.deliveryRestData.getDelMenuRestAddr())
+                    dineRestAddress += s;
+                delMenuRestAdd.setText(dineRestAddress);
+            }
         }
 
         runnr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String runnrUrl = "";
-                for (String s : Util.deliveryRestData.getDelMenuRunnrUrl()) {
-                    runnrUrl += s;
+                if(Util.deliveryRestData.getDelMenuRunnrUrl()!=null) {
+                    for (String s : Util.deliveryRestData.getDelMenuRunnrUrl()) {
+                        runnrUrl += s;
+                    }
                 }
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -179,8 +183,10 @@ public class DeliveryMenuActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String foodpandaUrl = "";
-                for (String s : Util.deliveryRestData.getDelMenuFoodPandaUrl()) {
-                    foodpandaUrl += s;
+                if(Util.deliveryRestData.getDelMenuFoodPandaUrl()!=null) {
+                    for (String s : Util.deliveryRestData.getDelMenuFoodPandaUrl()) {
+                        foodpandaUrl += s;
+                    }
                 }
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -194,8 +200,10 @@ public class DeliveryMenuActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String zomatoUrl = "";
-                for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
-                    zomatoUrl += s;
+                if(Util.deliveryRestData.getDelMenuZomatoUrl()!=null) {
+                    for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
+                        zomatoUrl += s;
+                    }
                 }
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -208,8 +216,10 @@ public class DeliveryMenuActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String swiggyUrl = "";
-                for (String s : Util.deliveryRestData.getDelMenuSwiggyUrl()) {
-                    swiggyUrl += s;
+                if (Util.deliveryRestData.getDelMenuSwiggyUrl()!=null) {
+                    for (String s : Util.deliveryRestData.getDelMenuSwiggyUrl()) {
+                        swiggyUrl += s;
+                    }
                 }
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -244,7 +254,7 @@ public class DeliveryMenuActivity extends BaseActivity {
                             setTags();
                             recyclerViewLayoutManager = new StaggeredGridLayoutManager
                                     (2, StaggeredGridLayoutManager.VERTICAL);
-                            SpacesItemDecoration decoration = new SpacesItemDecoration(25);
+                            Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(25);
                             delMenuRecyclerView.setLayoutManager(recyclerViewLayoutManager);
                             delMenuRecyclerView.addItemDecoration(decoration);
                             delMenuRecyclerView.setNestedScrollingEnabled(false);
@@ -268,21 +278,5 @@ public class DeliveryMenuActivity extends BaseActivity {
 
     }
 
-    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
-        private final int mSpace;
 
-        public SpacesItemDecoration(int space) {
-            this.mSpace = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.left = mSpace;
-            outRect.right = mSpace;
-            outRect.bottom = mSpace;
-            // Add top margin only for the first item to avoid double space between items
-            if (parent.getChildAdapterPosition(view) == 0)
-                outRect.top = mSpace;
-        }
-    }
 }

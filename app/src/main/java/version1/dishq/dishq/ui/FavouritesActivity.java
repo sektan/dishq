@@ -52,11 +52,10 @@ public class FavouritesActivity extends BaseActivity {
     }
 
     protected void setTags() {
-        favHeader = (TextView) findViewById(R.id.toolbarTitle);
+        favHeader = (TextView) findViewById(R.id.fav_toolbarTitle);
         favHeader.setText(getResources().getString(R.string.fav_header));
         favHeader.setTypeface(Util.opensanssemibold);
-        backButton = (ImageView) findViewById(R.id.back_button);
-        backButton.setImageDrawable(getResources().getDrawable(R.drawable.back_dark));
+        backButton = (ImageView) findViewById(R.id.fav_back_button);
         rlNoFav = (RelativeLayout) findViewById(R.id.rl_no_fav);
         favRecyclerView = (RecyclerView) findViewById(R.id.fav_recyclerView);
         setFunctionality();

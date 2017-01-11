@@ -24,7 +24,7 @@ public class DineoutMenuResponse {
 
         @SerializedName("menu_data")
         @Expose
-        private ArrayList<DineoutMenuData> dineoutMenuDatas;
+        public ArrayList<DineoutMenuData> dineoutMenuDatas;
 
         @SerializedName("restaurant_data")
         @Expose
@@ -51,11 +51,11 @@ public class DineoutMenuResponse {
 
         @SerializedName("photo")
         @Expose
-        private ArrayList<String> dineMenuPhoto;
+        public ArrayList<String> dineMenuPhoto;
 
         @SerializedName("price")
         @Expose
-        private int dineMenuDishPrice;
+        private String dineMenuDishPrice;
 
         @SerializedName("generic_dish_id")
         @Expose
@@ -125,11 +125,11 @@ public class DineoutMenuResponse {
             this.dineMenuPhoto = dineMenuPhoto;
         }
 
-        public int getDineMenuDishPrice() {
+        public String getDineMenuDishPrice() {
             return dineMenuDishPrice;
         }
 
-        public void setDineMenuDishPrice(int dineMenuDishPrice) {
+        public void setDineMenuDishPrice(String dineMenuDishPrice) {
             this.dineMenuDishPrice = dineMenuDishPrice;
         }
 
