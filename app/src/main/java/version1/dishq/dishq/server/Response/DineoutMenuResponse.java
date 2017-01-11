@@ -216,9 +216,17 @@ public class DineoutMenuResponse {
         @Expose
         private int dineMenuRestId;
 
+        @SerializedName("restaurant_tags")
+        @Expose
+        private ArrayList<String> dineMenuRestTags;
+
         @SerializedName("restaurant_name")
         @Expose
         private String dineMenuRestName;
+
+        @SerializedName("contact_numbers")
+        @Expose
+        private ArrayList<String> dineMenuRestContNo;
 
         @SerializedName("cuisine_text")
         @Expose
@@ -227,6 +235,22 @@ public class DineoutMenuResponse {
         @SerializedName("restaurant_address")
         @Expose
         private ArrayList<String> dineMenuRestAddr;
+
+        public ArrayList<String> getDineMenuRestTags() {
+            return dineMenuRestTags;
+        }
+
+        public void setDineMenuRestTags(ArrayList<String> dineMenuRestTags) {
+            this.dineMenuRestTags = dineMenuRestTags;
+        }
+
+        public ArrayList<String> getDineMenuRestContNo() {
+            return dineMenuRestContNo;
+        }
+
+        public void setDineMenuRestContNo(ArrayList<String> dineMenuRestContNo) {
+            this.dineMenuRestContNo = dineMenuRestContNo;
+        }
 
         public String getDineMenuRestLatLong() {
             return dineMenuRestLatLong;

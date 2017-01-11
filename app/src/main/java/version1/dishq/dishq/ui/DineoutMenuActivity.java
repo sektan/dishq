@@ -23,6 +23,7 @@ import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -171,12 +172,13 @@ public class DineoutMenuActivity extends BaseActivity {
             }
             dineMenuDrive.setText(Util.dineoutRestData.getDineMenuDriveTime());
 
-//            String dishTags = "";
-//            for (String s : Util.dineoutRestData.get) {
-//                dishTags += s + " ";
-//
-//            }
-//            delMenuTags.setText(String.valueOf(dishTags));
+            String dishTags = "";
+            if(Util.dineoutRestData.getDineMenuRestTags()!=null) {
+                for (String s : Util.dineoutRestData.getDineMenuRestTags()) {
+                    dishTags += s + " ";
+                }
+            }
+            dineMenuTags.setText(String.valueOf(dishTags));
 
             String dineRestAddress = "";
             if(Util.dineoutRestData.getDineMenuRestAddr()!=null) {
@@ -186,12 +188,31 @@ public class DineoutMenuActivity extends BaseActivity {
             }
             dineMenuRestAdd.setText(dineRestAddress);
 
+            final String finalDineRestContactNo = Util.dineoutRestData.getDineMenuRestContNo().get(0);
+            call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String uri = "tel:" + finalDineRestContactNo.trim() ;
+                    Uri number = Uri.parse(uri);
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+                    startActivity(callIntent);
+                }
+            });
+
+            StringTokenizer tokens = new StringTokenizer(Util.dineoutRestData.getDineMenuRestLatLong(), ",");
+            final String targetLat = tokens.nextToken();// this will contain latitude
+            final String targetLang = tokens.nextToken();// this will contain longitude
+
             directions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Uri location = Uri.parse("geo:37.422219,-122.08364?z=14"); // z param is zoom level
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
-                    startActivity(mapIntent);
+                    String currentLatitude = "12.92923258";
+                    String currentLongitude = "77.63082482";
+
+                    String url = "http://maps.google.com/maps?saddr="+currentLatitude+","+currentLongitude+"&daddr="+targetLat+","+targetLang+"&mode=driving";
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                    startActivity(intent);
                 }
             });
         }
