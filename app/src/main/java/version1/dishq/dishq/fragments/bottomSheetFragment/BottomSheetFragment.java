@@ -49,7 +49,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.bottom_sheet_main, container);
-
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
         if (viewPager != null && tabLayout != null) {

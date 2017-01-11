@@ -72,7 +72,6 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private static String lang = "0.0";
     final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
     LocationRequest mLocationRequest;
-    private int noOfPages = 0;
     private TextView greetingHeader, greetingContext;
     private Button greetingButton;
     private RelativeLayout rlGreeting;
@@ -98,12 +97,24 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             errorDialog.show();
             return;
         }
+        setContentView(R.layout.activity_home);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (Util.getLatitude().equals("") && Util.getLongitude().equals("")) {
             checkGPS();
         }
-        setContentView(R.layout.activity_home);
-        setTags();
-        fetchHomeDishResults();
+        if(Util.isHomeRefreshRequired()) {
+            fetchHomeDishResults();
+        }else {
+            if(progressDialog!=null  && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+                setViews();
+            }
+        }
     }
 
     protected void setTags() {
@@ -134,9 +145,12 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     public void fetchHomeDishResults() {
         String latitude = Util.getLatitude();
         String longitude = Util.getLongitude();
+        int moodId = Util.getMoodFilterId();
+        String filterClassName = Util.getFilterClassName();
+        int filterEntityId = Util.getFilterEntityId();
         RestApi restApi = Config.createService(RestApi.class);
         Call<HomeDishesResponse> call = restApi.fetchPersonalDishes(DishqApplication.getAccessToken(), DishqApplication.getUniqueID(),
-                latitude, longitude, -1, "", -1);
+                latitude, longitude, moodId, filterClassName, filterEntityId);
         call.enqueue(new Callback<HomeDishesResponse>() {
             @Override
             public void onResponse(Call<HomeDishesResponse> call, Response<HomeDishesResponse> response) {
@@ -159,8 +173,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                             for(int i = 0; i <body.dishDataInfos.size(); i++) {
                                     Util.dishDataModals = body.dishDataInfos;
                             }
-                            noOfPages = body.dishDataInfos.size();
-                            viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+                            setViews();
                         }
 
                     }else {
@@ -178,6 +191,11 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 progressDialog.dismiss();
             }
         });
+    }
+
+    private void setViews() {
+        setTags();
+        viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
     }
 
     public void checkGPS() {
@@ -448,6 +466,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Util.setHomeRefreshRequired(false);
                             Intent backButtonIntent = new Intent(HomeActivity.this, HomeActivity.class);
                             backButtonIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             finish();
@@ -507,7 +526,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         @Override
         public int getCount() {
             // Show total pages.
-            return noOfPages;
+            return Util.dishDataModals.size();
         }
 
     }

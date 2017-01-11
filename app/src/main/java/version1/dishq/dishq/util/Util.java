@@ -86,6 +86,41 @@ public class Util {
     private static int favPosition = 0;
     private static int delRestId = 0;
     private static int dineRestId = 0;
+    private static int moodFilterId = -1, filterEntityId = -1;
+    private static String filterClassName = "";
+    private static boolean homeRefreshRequired = false;
+
+    public static boolean isHomeRefreshRequired() {
+        return homeRefreshRequired;
+    }
+
+    public static void setHomeRefreshRequired(boolean homeRefreshRequired) {
+        Util.homeRefreshRequired = homeRefreshRequired;
+    }
+
+    public static String getFilterClassName() {
+        return filterClassName;
+    }
+
+    public static void setFilterClassName(String filterClassName) {
+        Util.filterClassName = filterClassName;
+    }
+
+    public static int getMoodFilterId() {
+        return moodFilterId;
+    }
+
+    public static void setMoodFilterId(int moodFilterId) {
+        Util.moodFilterId = moodFilterId;
+    }
+
+    public static int getFilterEntityId() {
+        return filterEntityId;
+    }
+
+    public static void setFilterEntityId(int filterEntityId) {
+        Util.filterEntityId = filterEntityId;
+    }
 
     public static int getDineRestId() {
         return dineRestId;

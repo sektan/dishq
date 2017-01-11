@@ -118,7 +118,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                 toggle.syncState();
                 navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
                 navUserName = (TextView) rootView.findViewById(R.id.nav_user_name);
-                if(navUserName!=null) {
+                if (navUserName != null) {
                     navUserName.setTypeface(Util.opensanslight);
                     navUserName.setText(DishqApplication.getUserName());
                 }
@@ -149,41 +149,40 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
 
                         }
                     });
-        }
 
-        frameClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
+            frameClick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (drawer.isDrawerOpen(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                    Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
+                    Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
+                    new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
                 }
-                Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
-                Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
-                new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
-            }
-        });
+            });
 
-        dineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
+            dineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (drawer.isDrawerOpen(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                    Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
+                    Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
+                    new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
+
                 }
-                Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
-                Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
-                new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
+            });
 
-            }
-        });
-
-        favButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (drawer.isDrawerOpen(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
-                }
-                String source = "homescreen";
-                if (isChecked) {
+            favButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    if (drawer.isDrawerOpen(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                    String source = "homescreen";
+                    if (isChecked) {
                         //The toggle is enabled
                         final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
                                 source, dishDataInfo.getGenericDishId(), 1);
@@ -218,11 +217,10 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                                 Log.d(TAG, "Failure");
                             }
                         });
+                    }
                 }
-            }
-        });
+            });
 
-        if (this.dishDataInfo != null) {
             dishName.setText(String.valueOf(dishDataInfo.getDishName()));
             Boolean isVeg = dishDataInfo.getVeg();
             Boolean hasEgg = dishDataInfo.getHasEgg();
@@ -256,27 +254,26 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             } else {
                 hasAlcoholTag.setVisibility(View.GONE);
             }
-        }
 
-
-        StringBuilder sb = new StringBuilder();
-        if (dishDataInfo != null) {
-            for (String s : dishDataInfo.getCuisineText()) {
-                if (sb.length() > 0) {
-                    sb.append(',' + " ");
+            StringBuilder sb = new StringBuilder();
+            if (dishDataInfo.getCuisineText() != null) {
+                for (String s : dishDataInfo.getCuisineText()) {
+                    if (sb.length() > 0) {
+                        sb.append(',' + " ");
+                    }
+                    sb.append(s);
                 }
-                sb.append(s);
             }
-        }
-        String dishTypeText = sb.toString();
-        dishType.setText(String.valueOf(dishTypeText));
-        String dishTags = "";
-        if (dishDataInfo != null) {
-            for (String s : dishDataInfo.getTags()) {
-                dishTags += s + " ";
+            String dishTypeText = sb.toString();
+            dishType.setText(String.valueOf(dishTypeText));
+            String dishTags = "";
+            if (dishDataInfo.getTags() != null) {
+                for (String s : dishDataInfo.getTags()) {
+                    dishTags += s + " ";
+                }
             }
+            foodTags.setText(String.valueOf(dishTags));
         }
-        foodTags.setText(String.valueOf(dishTags));
 
         return rootView;
     }

@@ -1,5 +1,6 @@
 package version1.dishq.dishq.fragments.dialogfragment.filters;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.Data;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.FoodMoodFilter;
@@ -29,6 +35,12 @@ import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilters.Datum;
 import version1.dishq.dishq.fragments.moodfilter.MoodFragment;
 import version1.dishq.dishq.fragments.quickfilter.QuickFiltersFragment;
+import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.Response.HomeDishesResponse;
+import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.ui.HomeActivity;
+import version1.dishq.dishq.util.DishqApplication;
+import version1.dishq.dishq.util.Util;
 
 /**
  * Created by kavin.prabhu on 28/12/16.
@@ -54,6 +66,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         return new FiltersDialogFragment();
     }
 
+    private static final String TAG = "FiltersDialogFragment";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,22 +187,30 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
             case R.id.filter_button_apply:
                 if (fragment instanceof MoodFragment) {
                     FoodMoodFilter moodFilter = ((MoodFragment) fragment).getSelectedItem();
-                    // TODO Use this mood filter in home page to get the API response
+
+                    Util.setMoodFilterId(moodFilter.getFoodMoodId());
                     Toast.makeText(getActivity(), moodFilter.getName() + ", " + moodFilter.getFoodMoodId(), Toast.LENGTH_SHORT).show();
                 } else if (fragment instanceof QuickFiltersFragment) {
                     Object selectedItem = ((QuickFiltersFragment) fragment).getSelectedItem();
                     if (selectedItem instanceof Datum) {
-                        // TODO Use this Datum value in home page to get the API response
+
+                        Util.setFilterClassName(((Datum) selectedItem).getClassName());
+                        Util.setFilterEntityId(((Datum) selectedItem).getEntityId());
                         Toast.makeText(getActivity(), ((Datum) selectedItem).getName() + ", "
                                 + ((Datum) selectedItem).getClassName() + ", "
                                 + ((Datum) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
                     } else if (selectedItem instanceof QuickFilter) {
-                        // TODO Use this QuickFilter value in home page to get the API response
+
+                        Util.setFilterClassName(((QuickFilter) selectedItem).getClassName());
+                        Util.setFilterEntityId(((QuickFilter) selectedItem).getEntityId());
                         Toast.makeText(getActivity(), ((QuickFilter) selectedItem).getName() + ", "
                                 + ((QuickFilter) selectedItem).getClassName() + ", "
                                 + ((QuickFilter) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
                     }
                 }
+                Util.setHomeRefreshRequired(true);
+                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.filter_image_close:
@@ -244,4 +265,5 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
     public void toggleApplyButton(boolean isEnabled) {
         buttonApply.setEnabled(isEnabled);
     }
+
 }

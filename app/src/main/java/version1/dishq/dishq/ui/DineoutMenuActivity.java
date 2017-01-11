@@ -124,6 +124,7 @@ public class DineoutMenuActivity extends BaseActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.setHomeRefreshRequired(false);
                 finish();
             }
         });

@@ -65,8 +65,9 @@ public class FavouritesActivity extends BaseActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FavouritesActivity.this, HomeActivity.class);
-                startActivity(intent);
+                Util.setHomeRefreshRequired(false);
+//                Intent intent = new Intent(FavouritesActivity.this, HomeActivity.class);
+//                startActivity(intent);
                 finish();
             }
         });

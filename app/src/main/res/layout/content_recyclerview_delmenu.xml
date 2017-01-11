@@ -92,7 +92,8 @@
                 android:drawableTop="@drawable/order_swiggy"
                 android:text="@string/swiggy"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_12" />
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/foodpanda_text"
@@ -103,7 +104,8 @@
                 android:drawableTop="@drawable/order_foodpanda"
                 android:text="@string/foodpanda"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_12" />
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/runnr_text"
@@ -114,7 +116,8 @@
                 android:drawableTop="@drawable/order_runnr"
                 android:text="@string/runnr"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_12" />
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/zomato_text"
@@ -125,7 +128,8 @@
                 android:drawableTop="@drawable/order_zomato"
                 android:text="@string/zomato"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_12" />
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

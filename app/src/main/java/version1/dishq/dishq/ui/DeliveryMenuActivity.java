@@ -98,6 +98,7 @@ public class DeliveryMenuActivity extends BaseActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Util.setHomeRefreshRequired(false);
                 finish();
             }
         });
@@ -162,72 +163,86 @@ public class DeliveryMenuActivity extends BaseActivity {
             }
         }
 
-        runnr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String runnrUrl = "";
-                if(Util.deliveryRestData.getDelMenuRunnrUrl()!=null) {
+        if(Util.deliveryRestData.getDelMenuRunnrUrl()!=null) {
+            runnr.setVisibility(View.VISIBLE);
+            runnr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String runnrUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuRunnrUrl()) {
                         runnrUrl += s;
                     }
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setData(Uri.parse(runnrUrl));
+                    shareIntent.setType("*/*");
+                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
                 }
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.setData(Uri.parse(runnrUrl));
-                shareIntent.setType("*/*");
-                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-            }
-        });
+            });
+        }else {
+            runnr.setVisibility(View.GONE);
+        }
 
-        foodpanda.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String foodpandaUrl = "";
-                if(Util.deliveryRestData.getDelMenuFoodPandaUrl()!=null) {
+        if(Util.deliveryRestData.getDelMenuFoodPandaUrl()!=null) {
+            foodpanda.setVisibility(View.VISIBLE);
+            foodpanda.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String foodpandaUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuFoodPandaUrl()) {
                         foodpandaUrl += s;
                     }
-                }
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.setData(Uri.parse(foodpandaUrl));
-                shareIntent.setType("*/*");
-                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-            }
-        });
 
-        zomato.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String zomatoUrl = "";
-                if(Util.deliveryRestData.getDelMenuZomatoUrl()!=null) {
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setData(Uri.parse(foodpandaUrl));
+                    shareIntent.setType("*/*");
+                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
+                }
+            });
+        }else {
+            foodpanda.setVisibility(View.GONE);
+        }
+
+        if(Util.deliveryRestData.getDelMenuZomatoUrl()!=null) {
+            zomato.setVisibility(View.VISIBLE);
+            zomato.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String zomatoUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
                         zomatoUrl += s;
                     }
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setData(Uri.parse(zomatoUrl));
+                    shareIntent.setType("*/*");
+                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
                 }
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.setData(Uri.parse(zomatoUrl));
-                shareIntent.setType("*/*");
-                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-            }
-        });
-        swiggy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String swiggyUrl = "";
-                if (Util.deliveryRestData.getDelMenuSwiggyUrl()!=null) {
+            });
+        }else {
+            zomato.setVisibility(View.GONE);
+        }
+
+        if (Util.deliveryRestData.getDelMenuSwiggyUrl()!=null) {
+            swiggy.setVisibility(View.VISIBLE);
+            swiggy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String swiggyUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuSwiggyUrl()) {
                         swiggyUrl += s;
                     }
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setData(Uri.parse(swiggyUrl));
+                    shareIntent.setType("*/*");
+                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
                 }
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.setData(Uri.parse(swiggyUrl));
-                shareIntent.setType("*/*");
-                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-            }
-        });
+            });
+        }else {
+            swiggy.setVisibility(View.GONE);
+        }
     }
 
     private void fetchDeliveryMenuInfo() {

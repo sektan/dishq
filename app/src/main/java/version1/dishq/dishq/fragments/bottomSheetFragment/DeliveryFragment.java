@@ -112,7 +112,7 @@ public class DeliveryFragment extends Fragment {
                         if (showMoreOptions == 1) {
                             showMore.setVisibility(View.GONE);
                         } else {
-
+                            showMore.setVisibility(View.VISIBLE);
                         }
                         DeliveryTabResponse.DeliveryRestaurants body = response.body().deliveryRestaurants;
                         Util.deliveryRestInfos.clear();
@@ -129,7 +129,9 @@ public class DeliveryFragment extends Fragment {
                             mLayoutManager = new LinearLayoutManager(getActivity());
                             mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+
                         }else{
+                            progressDialog.dismiss();
                             rlNoDel.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
                         }

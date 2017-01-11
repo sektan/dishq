@@ -71,23 +71,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     LocationRequest mLocationRequest;
     private String TAG = "SplashActivity";
     private boolean networkFailed;
-    //Timer set for the display time of the splashScreen
-    Thread timer = new Thread() {
-        public void run() {
-            try {
-                sleep(1500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                if (networkFailed) {
-                    Log.d(TAG, "Checking if there is an internet connection");
-                    checkInternetConnection();
-                } else {
-                    checkVersion();
-                }
-            }
-        }
-    };
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
 
@@ -102,6 +85,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
             return;
         }
 
+        Util.setHomeRefreshRequired(true);
         setContentView(R.layout.activity_splash);
 
         //For collecting the Android_ID as a unique identifier for users
@@ -122,6 +106,24 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
 
         timer.start();
     }
+
+    //Timer set for the display time of the splashScreen
+    Thread timer = new Thread() {
+        public void run() {
+            try {
+                sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                if (networkFailed) {
+                    Log.d(TAG, "Checking if there is an internet connection");
+                    checkInternetConnection();
+                } else {
+                    checkVersion();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
