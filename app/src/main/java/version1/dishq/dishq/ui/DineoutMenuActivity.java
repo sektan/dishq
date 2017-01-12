@@ -64,7 +64,6 @@ public class DineoutMenuActivity extends BaseActivity {
         fetchDineoutMenuInfo();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.dinemenu_toolbar);
-        setSupportActionBar(toolbar);
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);

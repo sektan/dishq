@@ -50,7 +50,6 @@ public class FavouritesActivity extends BaseActivity {
         setContentView(R.layout.activity_favourites);
         fetchDishFavourites();
         Toolbar toolbar = (Toolbar) findViewById(R.id.favourites_toolbar);
-        setSupportActionBar(toolbar);
         setTags();
     }
 
