@@ -6,12 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -45,6 +49,9 @@ public class DeliveryMenuActivity extends BaseActivity {
     private TextView delMenuTags, delMenuRestAdd;
     private TextView orderFrom;
     private TextView swiggy, foodpanda, runnr, zomato;
+    private RelativeLayout rlOrderNow;
+    private Button orderNow;
+    private NestedScrollView nestedScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,9 @@ public class DeliveryMenuActivity extends BaseActivity {
     }
 
     protected void setTags() {
+        nestedScrollView = (NestedScrollView) findViewById(R.id.del_nested_scroll);
+        rlOrderNow = (RelativeLayout) findViewById(R.id.rl_delmenu_ordernow);
+        orderNow = (Button) findViewById(R.id.order_now);
         delMenuRecyclerView = (RecyclerView) findViewById(R.id.del_menu_recyclerview);
         backButton = (ImageView) findViewById(R.id.del_menu_back_button);
         delMenuHeader = (TextView) findViewById(R.id.delmenu_toolbarTitle);
@@ -100,6 +110,40 @@ public class DeliveryMenuActivity extends BaseActivity {
             public void onClick(View view) {
                 Util.setHomeRefreshRequired(false);
                 finish();
+            }
+        });
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                if (scrollY > oldScrollY) {
+                    Log.i(TAG, "Scroll DOWN");
+                    rlOrderNow.setVisibility(View.GONE);
+                }
+                if (scrollY < oldScrollY) {
+                    Log.i(TAG, "Scroll UP");
+                    rlOrderNow.setVisibility(View.VISIBLE);
+                    final int position = v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight();
+                    orderNow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            nestedScrollView.scrollTo(0, position);
+                        }
+                    });
+                }
+
+                if (scrollY == 0) {
+                    Log.i(TAG, "TOP SCROLL");
+                    rlOrderNow.setVisibility(View.GONE);
+                }
+
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    Log.i(TAG, "BOTTOM SCROLL");
+
+                    rlOrderNow.setVisibility(View.GONE);
+                }
+
             }
         });
 
@@ -293,5 +337,30 @@ public class DeliveryMenuActivity extends BaseActivity {
 
     }
 
+    public abstract class OnScrollObserver implements AbsListView.OnScrollListener {
 
+        public abstract void onScrollUp();
+
+        public abstract void onScrollDown();
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        }
+
+        int last = 0;
+        boolean control = true;
+
+        @Override
+        public void onScroll(AbsListView view, int current, int visibles, int total) {
+            if (current < last && !control) {
+                onScrollUp();
+                control = true;
+            } else if (current > last && control) {
+                onScrollDown();
+                control = false;
+            }
+
+            last = current;
+        }
+    }
 }
