@@ -10,6 +10,7 @@ import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilter
 import version1.dishq.dishq.fragments.quickfilter.QuickFiltersFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.util.DishqApplication;
 
 /**
  * Created by kavin.prabhu on 01/01/17.
@@ -25,8 +26,8 @@ public class QuickFilterPresenter {
 
     public void getSearchQueryResults(String searchKey, final SearchResultsCallback callback) {
         RestApi restApi = Config.createService(RestApi.class);
-        // TODO Change the key and id
-        Call<SearchFilter> call = restApi.getSearchFilters(searchKey, "wgdM8XnsWRzgcLSXhMAdzqhFtZOUYI", 0);
+
+        Call<SearchFilter> call = restApi.getSearchFilters(searchKey, DishqApplication.getUniqueID(), DishqApplication.getUserID());
         call.enqueue(new Callback<SearchFilter>() {
             @Override
             public void onResponse(Call<SearchFilter> call, Response<SearchFilter> response) {

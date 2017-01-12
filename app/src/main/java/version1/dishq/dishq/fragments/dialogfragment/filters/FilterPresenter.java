@@ -7,6 +7,7 @@ import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.FoodFilters;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.util.DishqApplication;
 
 /**
  * Created by kavin.prabhu on 31/12/16.
@@ -22,8 +23,8 @@ public class FilterPresenter {
 
     public void getFilterResults(final FilterResultsCallback callback) {
         RestApi restApi = Config.createService(RestApi.class);
-        // TODO Change the authorization
-        Call<FoodFilters> call = restApi.getFoodFilters("Bearer 9cIl2ANA2PaYWdABtHIZMCl2rxhu06");
+
+        Call<FoodFilters> call = restApi.getFoodFilters(DishqApplication.getAccessToken());
         call.enqueue(new Callback<FoodFilters>() {
             @Override
             public void onResponse(Call<FoodFilters> call, Response<FoodFilters> response) {
