@@ -71,4 +71,5 @@
     <!--MoodFilers -->
     <string name="apply">APPLY</string>
     <string name="reset">RESET</string>
+    <string name="title_activity_menu_finder">MenuFinder</string>
 </resources>

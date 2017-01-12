@@ -17,6 +17,7 @@ import version1.dishq.dishq.server.Response.DeliveryTabResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
+import version1.dishq.dishq.server.Response.MenuFinderResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.TastePrefData;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
@@ -73,4 +74,10 @@ public interface RestApi {
 
     @GET("api/ugc/allfavourites/")
     Call<FavouriteDishesResponse> getFavouriteDishes(@Header("Authorization")String authorization, @Query("uid")String uid);
+
+    @GET("/api/restaurant/nearby/")
+    Call<MenuFinderResponse> getNearbyRestaurants(@Query("uid") String uid,
+                                                  @Query("user_id") int UserId,
+                                                  @Query("latitude") String latitude,
+                                                  @Query("longitude") String longitude);
 }
