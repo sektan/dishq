@@ -91,4 +91,8 @@
     <string name="title_activity_menu_finder">MenuFinder</string>
     <string name="nearby_restaurants">Nearby Restaurants :</string>
     <string name="search_for_restaurant">Search for Restaurant</string>
+    <string name="about_us">About</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="blog">Blog</string>
 </resources>

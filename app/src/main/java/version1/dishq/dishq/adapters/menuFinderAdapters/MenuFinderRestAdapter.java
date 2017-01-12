@@ -28,25 +28,25 @@ import version1.dishq.dishq.util.Util;
  * Package name version1.dishq.dishq.
  */
 
-public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinderNearbyRestAdapter.MenuFinderRestInfoAdapter> {
+public class MenuFinderRestAdapter extends RecyclerView.Adapter<MenuFinderRestAdapter.MenuFRestInfoAdapter> {
 
     Context context;
-    public MenuFinderNearbyRestAdapter(Context context) {
+    public MenuFinderRestAdapter(Context context) {
         this.context = context;
     }
 
     @Override
-    public MenuFinderRestInfoAdapter onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public MenuFRestInfoAdapter onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview_dineout, viewGroup, false);
-        return new MenuFinderRestInfoAdapter(itemView);
+        return new MenuFRestInfoAdapter(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MenuFinderRestInfoAdapter holder, final int position) {
-        ArrayList<String> imageUrls = Util.nearbyRestInfos.get(position).getNearByRestPhoto();
+    public void onBindViewHolder(final MenuFRestInfoAdapter holder, final int position) {
+        ArrayList<String> imageUrls = Util.menuFinderRestInfos.get(position).getMfPhotoThumbnail();
         String imageUrl = imageUrls.get(0);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)
@@ -69,22 +69,22 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         holder.rlNearbyRest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.setDineRestId(Util.nearbyRestInfos.get(position).getNearByRestId());
+                Util.setDineRestId(Util.menuFinderRestInfos.get(position).getMfRestId());
                 Intent intent = new Intent(context, DineoutMenuActivity.class);
                 context.startActivity(intent);
             }
         });
-        holder.mfRestName.setText(Util.nearbyRestInfos.get(position).getNearByRestName());
-        String nearByRestAddress = "";
-        if(Util.nearbyRestInfos.get(position).getNearByRestAddress()!=null) {
-            for (String s : Util.nearbyRestInfos.get(position).getNearByRestAddress()) {
-                nearByRestAddress += s;
-            }
-        }
-        holder.mfRestAddr.setText(nearByRestAddress);
+//        holder.mfRestName.setText(Util.menuFinderRestInfos.get(position).get);
+//        String nearByRestAddress = "";
+//        if(Util.nearbyRestInfos.get(position).getNearByRestAddress()!=null) {
+//            for (String s : Util.menuFinderRestInfos.get(position).getNearByRestAddress()) {
+//                nearByRestAddress += s;
+//            }
+//        }
+//        holder.mfRestAddr.setText(nearByRestAddress);
         StringBuilder sb = new StringBuilder();
-        if(Util.nearbyRestInfos.get(position).getNearByRestCuisineText()!=null) {
-            for (String s : Util.nearbyRestInfos.get(position).getNearByRestCuisineText()) {
+        if(Util.menuFinderRestInfos.get(position).getMfRestCuisineText()!=null) {
+            for (String s : Util.menuFinderRestInfos.get(position).getMfRestCuisineText()) {
                 if (sb.length() > 0) {
                     sb.append(',' + " ");
                 }
@@ -93,24 +93,24 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         }
         String dineCusineText = sb.toString();
         holder.mfRestCuisine.setText(dineCusineText);
-        int dinePriceLvl = Util.nearbyRestInfos.get(position).getPriceLevel();
-        if (dinePriceLvl == 1) {
-            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-        }else if(dinePriceLvl == 2) {
-            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-        }else if(dinePriceLvl == 3) {
-            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-        }else if (dinePriceLvl == 4) {
-            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            holder.mfRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-        }
+//        int dinePriceLvl = Util.menuFinderRestInfos.get(position).;
+//        if (dinePriceLvl == 1) {
+//            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//        }else if(dinePriceLvl == 2) {
+//            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//            holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//        }else if(dinePriceLvl == 3) {
+//            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//            holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//            holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//        }else if (dinePriceLvl == 4) {
+//            holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//            holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//            holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//            holder.mfRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+//        }
 
-        holder.mfDriveTime.setText(Util.nearbyRestInfos.get(position).getDriveTime());
+        //holder.mfDriveTime.setText(Util.menuFinderRestInfos.get(position).);
     }
 
 
@@ -119,14 +119,14 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         return Util.nearbyRestInfos.size();
     }
 
-    public static class MenuFinderRestInfoAdapter extends RecyclerView.ViewHolder {
+    public static class MenuFRestInfoAdapter extends RecyclerView.ViewHolder {
 
         protected TextView mfRestName, mfRestAddr, mfRestCuisine, mfRup1,
                 mfRup2, mfRup3, mfRup4, mfDriveTime;
 
         protected RelativeLayout rlNearbyRest;
 
-        public MenuFinderRestInfoAdapter(View view) {
+        public MenuFRestInfoAdapter(View view) {
             super(view);
 
             mfRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
@@ -144,4 +144,5 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         }
     }
 }
+
 

@@ -88,6 +88,17 @@
             android:name=".ui.MenuFinder"
             android:label="@string/title_activity_menu_finder"
             android:theme="@style/AppTheme.NoActionBar.BlackActionBar" />
+
+        <activity
+            android:name=".ui.AboutUsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
     </application>
 
 </manifest>

@@ -19,6 +19,7 @@ import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.MenuFinderNearbyRestResponse;
+import version1.dishq.dishq.server.Response.MenuFinderRestSuggestResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.TastePrefData;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
@@ -87,9 +88,14 @@ public interface RestApi {
                                                     @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
                                                     @Query("longitude")String longitude, @Query("source_generic_dish_id")int genericDishId);
 
-    @GET("/api/restaurant/nearby/")
+    @GET("api/restaurant/nearby/")
     Call<MenuFinderNearbyRestResponse> getNearbyRestaurants(@Query("uid") String uid,
                                                             @Query("user_id") int UserId,
                                                             @Query("latitude") String latitude,
                                                             @Query("longitude") String longitude);
+
+    @GET("api/search/restaurantsuggest/")
+    Call<MenuFinderRestSuggestResponse> getRestSuggestion(@Query("query")String query,
+                                                          @Query("uid") String uid,
+                                                          @Query("user_id") int UserId);
 }

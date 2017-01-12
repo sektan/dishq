@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.adapters.menuFinderAdapters.MenuFinderNearbyRestAdapter;
+import version1.dishq.dishq.adapters.menuFinderAdapters.MenuFinderRestAdapter;
 import version1.dishq.dishq.fragments.bottomSheetFragment.DineoutFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.MenuFinderNearbyRestResponse;
@@ -36,6 +39,7 @@ public class MenuFinder extends AppCompatActivity {
     protected LayoutManagerType mCurrentLayoutManagerType;
     protected RecyclerView.LayoutManager mLayoutManager;
     private ProgressDialog progressDialog = null;
+    private AutoCompleteTextView autoCompleteTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +55,14 @@ public class MenuFinder extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-        recyclerView = (RecyclerView) findViewById(R.id.menu_finder_recycler_view);
         showNearbyRest();
+        autoCompleteTextView= (AutoCompleteTextView)findViewById(R.id.filter_quick_search_auto_complete);
+        ArrayAdapter<MenuFinderRestAdapter> adapter = new ArrayAdapter<>
+                (this, R.layout.cardview_dineout);
+        autoCompleteTextView.setThreshold(2);
+        autoCompleteTextView.setAdapter(adapter);
+        recyclerView = (RecyclerView) findViewById(R.id.menu_finder_recycler_view);
+
     }
 
     @Override
