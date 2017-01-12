@@ -1,5 +1,7 @@
 package version1.dishq.dishq.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -58,9 +60,7 @@ public class DeliveryMenuActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_menu);
         fetchDeliveryMenuInfo();
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.delmenu_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.delmenu_toolbar);
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
@@ -135,7 +135,15 @@ public class DeliveryMenuActivity extends BaseActivity {
 
                 if (scrollY == 0) {
                     Log.i(TAG, "TOP SCROLL");
-                    rlOrderNow.setVisibility(View.GONE);
+                    rlOrderNow.setVisibility(View.VISIBLE);
+
+                    final int position = v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight();
+                    orderNow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            nestedScrollView.scrollTo(0, position);
+                        }
+                    });
                 }
 
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
@@ -337,30 +345,4 @@ public class DeliveryMenuActivity extends BaseActivity {
 
     }
 
-    public abstract class OnScrollObserver implements AbsListView.OnScrollListener {
-
-        public abstract void onScrollUp();
-
-        public abstract void onScrollDown();
-
-        @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
-        }
-
-        int last = 0;
-        boolean control = true;
-
-        @Override
-        public void onScroll(AbsListView view, int current, int visibles, int total) {
-            if (current < last && !control) {
-                onScrollUp();
-                control = true;
-            } else if (current > last && control) {
-                onScrollDown();
-                control = false;
-            }
-
-            last = current;
-        }
-    }
 }
