@@ -10,6 +10,7 @@
         android:id="@+id/favourites_toolbar"
         android:layout_width="match_parent"
         android:layout_height="56.3dp"
+        android:layout_alignParentTop="true"
         android:background="@color/white">
 
         <LinearLayout

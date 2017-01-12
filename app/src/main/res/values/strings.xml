@@ -86,4 +86,6 @@
     <string name="call">CALL</string>
     <string name="dineout_menu_directions">DIRECTIONS</string>
     <string name="delivery">delivery</string>
+    <string name="delmenu_back_button">delmenu back button</string>
+    <string name="dineout_back_button">dineout back button</string>
 </resources>

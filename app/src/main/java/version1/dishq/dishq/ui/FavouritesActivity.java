@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
@@ -48,6 +49,8 @@ public class FavouritesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
         fetchDishFavourites();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.favourites_toolbar);
+        setSupportActionBar(toolbar);
         setTags();
     }
 
@@ -66,8 +69,6 @@ public class FavouritesActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Util.setHomeRefreshRequired(false);
-//                Intent intent = new Intent(FavouritesActivity.this, HomeActivity.class);
-//                startActivity(intent);
                 finish();
             }
         });
