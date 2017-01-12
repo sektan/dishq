@@ -16,7 +16,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -60,7 +59,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.SignUpHelper;
 import version1.dishq.dishq.server.Response.SignUpResponse;
@@ -194,7 +192,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
         if (googleButton != null) {
             GOOGLE_BUTTON_SELECTED = true;
-//            googleButton.setOnClickListener(this);
+            googleButton.setOnClickListener(this);
         }
     }
 
@@ -730,13 +728,15 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.google_sign_up:
-                GOOGLE_BUTTON_SELECTED = true;
+                Intent intent = new Intent(this, MenuFinder.class);
+                startActivity(intent);
+                /*GOOGLE_BUTTON_SELECTED = true;
                 FACEBOOK_BUTTON_SELECTED = false;
                 if (ContextCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
                     signIn();
                 } else if (ContextCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_DENIED) {
                     selfPermissionAccounts();
-                }
+                }*/
                 break;
         }
     }
