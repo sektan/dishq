@@ -728,15 +728,13 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.google_sign_up:
-                Intent intent = new Intent(this, MenuFinder.class);
-                startActivity(intent);
-                /*GOOGLE_BUTTON_SELECTED = true;
+                GOOGLE_BUTTON_SELECTED = true;
                 FACEBOOK_BUTTON_SELECTED = false;
                 if (ContextCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
                     signIn();
                 } else if (ContextCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_DENIED) {
                     selfPermissionAccounts();
-                }*/
+                }
                 break;
         }
     }

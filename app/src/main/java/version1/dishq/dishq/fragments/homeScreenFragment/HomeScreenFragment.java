@@ -41,6 +41,7 @@ import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.ui.FavouritesActivity;
+import version1.dishq.dishq.ui.MenuFinder;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -293,7 +294,9 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (id == R.id.nav_menufinder) {
-
+            Intent intent = new Intent(getActivity(), MenuFinder.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_rate) {
