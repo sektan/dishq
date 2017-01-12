@@ -112,6 +112,13 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             holder.nonVegTag.setVisibility(View.VISIBLE);
         }
 
+        Boolean isFavourited = Util.deliveryMenuInfos.get(position).getAddedToFavdel();
+        if(isFavourited) {
+            holder.delMenuFav.setChecked(true);
+        }else {
+            holder.delMenuFav.setChecked(false);
+        }
+
         final int delMenuGenericDishId = Util.deliveryMenuInfos.get(position).getDelMenuGenericDishId();
         holder.delMenuFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

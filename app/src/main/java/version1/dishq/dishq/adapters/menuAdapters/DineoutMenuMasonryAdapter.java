@@ -103,6 +103,13 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
             holder.nonVegTag.setVisibility(View.VISIBLE);
         }
 
+        Boolean isFavourited = Util.dineoutMenuInfos.get(position).getAddedToFavdine();
+        if(isFavourited) {
+            holder.dineMenuFav.setChecked(true);
+        }else {
+            holder.dineMenuFav.setChecked(false);
+        }
+
         final int dineMenuGenericDishId = Util.dineoutMenuInfos.get(position).getDineMenuGenericDishId();
         holder.dineMenuFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

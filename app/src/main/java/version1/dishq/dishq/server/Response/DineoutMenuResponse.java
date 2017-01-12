@@ -77,6 +77,10 @@ public class DineoutMenuResponse {
         @Expose
         private Boolean dineMenuIsSpicy;
 
+        @SerializedName("is_added_to_favourite")
+        @Expose
+        private Boolean isAddedToFavdine;
+
         @SerializedName("cuisine_text")
         @Expose
         private ArrayList<String> dineMenuCuisineText;
@@ -84,6 +88,15 @@ public class DineoutMenuResponse {
         @SerializedName("dish_type_text")
         @Expose
         private String dineMenuDishType;
+
+
+        public Boolean getAddedToFavdine() {
+            return isAddedToFavdine;
+        }
+
+        public void setAddedToFavdine(Boolean addedToFavdine) {
+            isAddedToFavdine = addedToFavdine;
+        }
 
         public ArrayList<String> getDineMenuPhotoPopup() {
             return dineMenuPhotoPopup;

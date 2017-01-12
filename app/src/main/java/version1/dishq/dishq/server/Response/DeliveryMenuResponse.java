@@ -77,6 +77,10 @@ public class DeliveryMenuResponse {
         @Expose
         private Boolean delMenuIsSpicy;
 
+        @SerializedName("is_added_to_favourite")
+        @Expose
+        private Boolean isAddedToFavdel;
+
         @SerializedName("cuisine_text")
         @Expose
         private ArrayList<String> delMenuCuisineText;
@@ -84,6 +88,15 @@ public class DeliveryMenuResponse {
         @SerializedName("dish_type_text")
         @Expose
         private String delMenuDishType;
+
+
+        public Boolean getAddedToFavdel() {
+            return isAddedToFavdel;
+        }
+
+        public void setAddedToFavdel(Boolean addedToFavdel) {
+            isAddedToFavdel = addedToFavdel;
+        }
 
         public ArrayList<String> getDelMenuPhotoPopup() {
             return delMenuPhotoPopup;
