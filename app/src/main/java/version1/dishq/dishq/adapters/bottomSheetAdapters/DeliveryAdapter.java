@@ -46,8 +46,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
     @Override
     public void onBindViewHolder(final DeliveryRestInfoAdapter holder, int position) {
-        final DeliveryTabResponse.DeliveryRestInfo deliveryRestInfo = Util.deliveryRestInfos.get(position);
-        ArrayList<DeliveryTabResponse.DeliveryDishData> delPhotos = deliveryRestInfo.getDeliveryDishDatas();
+        ArrayList<DeliveryTabResponse.DeliveryDishData> delPhotos = Util.deliveryRestInfos.get(position).getDeliveryDishDatas();
         DeliveryTabResponse.DeliveryDishData listOfPhotos1 = delPhotos.get(0);
         DeliveryTabResponse.DeliveryDishData listOfPhotos2 = delPhotos.get(1);
         DeliveryTabResponse.DeliveryDishData listOfPhotos3 = delPhotos.get(2);
@@ -70,9 +69,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
                 .load(imageUrl3)
                 .into(holder.dishImage3);
         holder.rlDelivery.setBackgroundColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.black));
-        holder.delRestName.setText(deliveryRestInfo.getDelivRestName());
+        holder.delRestName.setText(Util.deliveryRestInfos.get(position).getDelivRestName());
 
-        int delPriceLvl = deliveryRestInfo.getDelivPriceLvl();
+        int delPriceLvl = Util.deliveryRestInfos.get(position).getDelivPriceLvl();
         if (delPriceLvl == 1) {
             holder.delRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
         }else if(delPriceLvl == 2) {
@@ -89,15 +88,14 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             holder.delRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
         }
 
-        holder.delDriveTime.setText(deliveryRestInfo.getDeliveryTime());
+        holder.delDriveTime.setText(Util.deliveryRestInfos.get(position).getDeliveryTime());
 
+        final int restId = Util.deliveryRestInfos.get(position).getDelivRestId();
         holder.rlDelCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.setDelRestId(deliveryRestInfo.getDelivRestId());
+                Util.setDelRestId(restId);
                 Intent intent = new Intent(context, DeliveryMenuActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //((Activity)context).finish();
                 context.startActivity(intent);
             }
         });

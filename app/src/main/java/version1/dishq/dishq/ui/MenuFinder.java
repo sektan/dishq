@@ -1,65 +1,48 @@
 package version1.dishq.dishq.ui;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.adapters.MenuFinderRecyclerAdapter;
+import version1.dishq.dishq.adapters.menuFinderAdapters.MenuFinderNearbyRestAdapter;
+import version1.dishq.dishq.fragments.bottomSheetFragment.DineoutFragment;
 import version1.dishq.dishq.server.Config;
-import version1.dishq.dishq.server.Response.MenuFinderResponse;
+import version1.dishq.dishq.server.Response.MenuFinderNearbyRestResponse;
 import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.util.DishqApplication;
+import version1.dishq.dishq.util.Util;
 
-public class MenuFinder extends AppCompatActivity implements
-        ActivityCompat.OnRequestPermissionsResultCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+/**
+ * Created by dishq on 09-01-2017.
+ * Package name version1.dishq.dishq.
+ */
 
+public class MenuFinder extends AppCompatActivity {
+
+    private static final String TAG = "MenuFinder";
     RecyclerView recyclerView;
-    MenuFinderRecyclerAdapter adapter;
-
-    double latitude, longitude;
-    String bestProvider;
-
-    LocationManager locationManager;
-
-    List<MenuFinderResponse.Datum> datumList;
-
-    GoogleApiClient mGoogleApiClient;
+    protected LayoutManagerType mCurrentLayoutManagerType;
+    protected RecyclerView.LayoutManager mLayoutManager;
+    private ProgressDialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(MenuFinder.this);
+        progressDialog.show();
         setContentView(R.layout.activity_menu_finder);
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.menu_finder_toolbar);
         setSupportActionBar(toolbar);
 
@@ -69,190 +52,87 @@ public class MenuFinder extends AppCompatActivity implements
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        datumList = new ArrayList<>();
-        adapter = new MenuFinderRecyclerAdapter(this, datumList);
-
         recyclerView = (RecyclerView) findViewById(R.id.menu_finder_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-//        initializeLocation();
+        showNearbyRest();
     }
-
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(bestProvider, 5 * 1000, 10, locationListener);
-        }*/
     }
 
-    /*private void initializeLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(this, "Enable location permission", Toast.LENGTH_SHORT).show();
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-            }
-        } else {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            Criteria criteria = new Criteria();
-            criteria.setPowerRequirement(Criteria.POWER_LOW);
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setSpeedRequired(true);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(false);
-            criteria.setCostAllowed(false);
-
-            bestProvider = locationManager.getBestProvider(criteria, false);
-            if (bestProvider != null) {
-                Location location = locationManager.getLastKnownLocation(bestProvider);
-                if (location != null) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                    requestNetworkCall();
-                }
-                locationManager.requestLocationUpdates(bestProvider, 2 * 1000, 10, locationListener);
-            }
-        }
-    }*/
-
-    private void requestNetworkCall() {
+    private void showNearbyRest() {
         RestApi restApi = Config.createService(RestApi.class);
-        // TODO Change the hardcoded values
-        Call<MenuFinderResponse> call = restApi.getNearbyRestaurants("9cIl2ANA2PaYWdABtHIZMCl2rxhu06",
-                0, String.valueOf(latitude), String.valueOf(longitude));
-        call.enqueue(new Callback<MenuFinderResponse>() {
+        String currentLatitude = "12.92923258";
+        String currentLongitude = "77.63082482";
+        Call<MenuFinderNearbyRestResponse> call = restApi.getNearbyRestaurants(DishqApplication.getUniqueID(),
+                DishqApplication.getUserID(), currentLatitude, currentLongitude);
+        call.enqueue(new Callback<MenuFinderNearbyRestResponse>() {
             @Override
-            public void onResponse(Call<MenuFinderResponse> call, Response<MenuFinderResponse> response) {
-                if (response.isSuccessful()) {
-                    if (response.body().getResponse().equalsIgnoreCase("success")) {
-                        updateResultsToAdapter(response.body().getData());
-                    } else {
-                        Toast.makeText(MenuFinder.this, "Failed to get data", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<MenuFinderNearbyRestResponse> call,
+                                   Response<MenuFinderNearbyRestResponse> response) {
+                Log.d(TAG, "Success");
+                try {
+                    if(response.isSuccessful()) {
+                        ArrayList<MenuFinderNearbyRestResponse.NearbyRestInfo> body = response.body().nearbyRestInfos;
+                        if(body!=null) {
+                            Log.d(TAG, "body is not null");
+                            Util.nearbyRestInfos.clear();
+                            for(int i = 0; i <body.size(); i++) {
+                                Util.nearbyRestInfos = body;
+                            }
+                            progressDialog.dismiss();
+                            MenuFinderNearbyRestAdapter adapter = new MenuFinderNearbyRestAdapter(MenuFinder.this);
+                            recyclerView.setAdapter(adapter);
+                            mLayoutManager = new LinearLayoutManager(MenuFinder.this);
+                            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }else {
+                        progressDialog.dismiss();
+                        String error = response.errorBody().string();
+                        Log.d(TAG, "Error: " + error);
                     }
-                } else {
-                    Toast.makeText(MenuFinder.this, "Failed to get data", Toast.LENGTH_SHORT).show();
+                }catch (IOException e) {
+                    progressDialog.dismiss();
+                    e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<MenuFinderResponse> call, Throwable t) {
-                Toast.makeText(MenuFinder.this, "Failed to get data", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<MenuFinderNearbyRestResponse> call, Throwable t) {
+                Log.d(TAG, "Failure");
+                progressDialog.dismiss();
             }
         });
     }
 
-    public void updateResultsToAdapter(List<MenuFinderResponse.Datum> datumList) {
-        if (datumList != null && datumList.size() > 0) {
-            this.datumList.clear();
-            this.datumList = datumList;
-            adapter.notifyDataSetChanged();
-        } else {
-            // TODO Display no data found message
+    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
+        int scrollPosition = 0;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (recyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
         }
-    }
-
-    /*LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-                if (latitude != 0.0 && longitude != 0.0) {
-                    if (locationManager != null) {
-                        if (ContextCompat.checkSelfPermission(MenuFinder.this, Manifest.permission
-                                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            locationManager.removeUpdates(locationListener);
-                        }
-
-                        requestNetworkCall();
-                    }
-                }
-
-            }
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            Toast.makeText(MenuFinder.this, "onStatusChanged : " + provider, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            Toast.makeText(MenuFinder.this, "onProviderEnabled : " + provider, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            Toast.makeText(MenuFinder.this, "onProviderDisabled : " + provider, Toast.LENGTH_SHORT).show();
-        }
-    };*/
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case 100:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    /*initializeLocation();*/
-                } else {
-                    Toast.makeText(this, "Require permission to be enabled", Toast.LENGTH_SHORT).show();
-                }
+        switch (layoutManagerType) {
+            case LINEAR_LAYOUT_MANAGER:
+                mLayoutManager = new LinearLayoutManager(MenuFinder.this);
+                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                 break;
+            default:
+                mLayoutManager = new LinearLayoutManager(MenuFinder.this);
+                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         }
+
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.scrollToPosition(scrollPosition);
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(this, "Enable location permission", Toast.LENGTH_SHORT).show();
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-            }
-        } else {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (location != null) {
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-                Toast.makeText(this, "LL " + latitude + " , " + longitude, Toast.LENGTH_SHORT).show();
-            }
-        }
+    private enum LayoutManagerType {
+        LINEAR_LAYOUT_MANAGER
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }

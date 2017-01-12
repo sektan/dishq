@@ -89,4 +89,6 @@
     <string name="delmenu_back_button">delmenu back button</string>
     <string name="dineout_back_button">dineout back button</string>
     <string name="title_activity_menu_finder">MenuFinder</string>
+    <string name="nearby_restaurants">Nearby Restaurants :</string>
+    <string name="search_for_restaurant">Search for Restaurant</string>
 </resources>

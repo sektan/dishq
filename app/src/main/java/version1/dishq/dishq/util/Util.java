@@ -41,6 +41,7 @@ import version1.dishq.dishq.server.Response.DineoutMenuResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
+import version1.dishq.dishq.server.Response.MenuFinderNearbyRestResponse;
 import version1.dishq.dishq.server.RestApi;
 
 /**
@@ -65,6 +66,7 @@ public class Util {
     public static ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> favouriteDishesInfos = new ArrayList<>();
     public static ArrayList<DeliveryMenuResponse.DeliveryMenuData> deliveryMenuInfos = new ArrayList<>();
     public static ArrayList<DineoutMenuResponse.DineoutMenuData> dineoutMenuInfos = new ArrayList<>();
+    public static ArrayList<MenuFinderNearbyRestResponse.NearbyRestInfo> nearbyRestInfos = new ArrayList<>();
     public static DeliveryMenuResponse.DeliveryRestData deliveryRestData = null;
     public static DineoutMenuResponse.DineoutRestData dineoutRestData = null;
     public static Boolean homeCuisineSelected = false;

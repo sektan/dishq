@@ -1,6 +1,5 @@
 package version1.dishq.dishq.adapters.bottomSheetAdapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,7 +18,6 @@ import com.squareup.picasso.Target;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
-import version1.dishq.dishq.ui.DeliveryMenuActivity;
 import version1.dishq.dishq.ui.DineoutMenuActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -47,8 +45,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
 
     @Override
     public void onBindViewHolder(final DineoutAdapter.DineoutRestInfoAdapter holder, int position) {
-        final DineoutTabResponse.DineoutRestInfo dineoutRestInfo = Util.dineoutRestInfos.get(position);
-        String imageUrl = dineoutRestInfo.getDineRestPhoto().get(0);
+        String imageUrl = Util.dineoutRestInfos.get(position).getDineRestPhoto().get(0);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)
                 .into(new Target() {
@@ -67,29 +64,36 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
 
                     }
                 });
+
+        final int restId = Util.dineoutRestInfos.get(position).getDineRestId();
         holder.rlDineout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.setDineRestId(dineoutRestInfo.getDineRestId());
+                Util.setDineRestId(restId);
                 Intent intent = new Intent(context, DineoutMenuActivity.class);
                 context.startActivity(intent);
             }
         });
-        holder.dineRestName.setText(dineoutRestInfo.getDineRestName());
+        holder.dineRestName.setText(Util.dineoutRestInfos.get(position).getDineRestName());
         String dineRestAddress = "";
-        for (String s : dineoutRestInfo.getDineRestAddr())
-            dineRestAddress += s;
+        if(Util.dineoutRestInfos.get(position).getDineRestAddr()!=null) {
+            for (String s : Util.dineoutRestInfos.get(position).getDineRestAddr()) {
+                dineRestAddress += s;
+            }
+        }
         holder.dineRestAddr.setText(dineRestAddress);
         StringBuilder sb = new StringBuilder();
-        for (String s : dineoutRestInfo.getDineCuisineText()) {
-            if (sb.length() > 0) {
-                sb.append(',' + " ");
+        if(Util.dineoutRestInfos.get(position).getDineCuisineText()!=null) {
+            for (String s : Util.dineoutRestInfos.get(position).getDineCuisineText()) {
+                if (sb.length() > 0) {
+                    sb.append(',' + " ");
+                }
+                sb.append(s);
             }
-            sb.append(s);
         }
         String dineCusineText = sb.toString();
         holder.dineRestCuisine.setText(dineCusineText);
-        int dinePriceLvl = dineoutRestInfo.getDineoutPriceLvl();
+        int dinePriceLvl = Util.dineoutRestInfos.get(position).getDineoutPriceLvl();
         if (dinePriceLvl == 1) {
             holder.dineRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
         }else if(dinePriceLvl == 2) {
@@ -106,7 +110,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             holder.dineRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
         }
 
-        holder.dineDriveTime.setText(dineoutRestInfo.getDineDriveTime());
+        holder.dineDriveTime.setText(Util.dineoutRestInfos.get(position).getDineDriveTime());
     }
 
 

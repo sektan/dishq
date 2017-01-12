@@ -3,28 +3,23 @@ package version1.dishq.dishq.server.Response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by kavin.prabhu on 09/01/17.
+ * Created by dishq on 12-01-2017.
+ * Package name version1.dishq.dishq.
  */
 
-public class MenuFinderResponse {
+public class MenuFinderNearbyRestResponse {
 
     @SerializedName("data")
     @Expose
-    private List<Datum> data = null;
+    public ArrayList<NearbyRestInfo> nearbyRestInfos;
+
     @SerializedName("response")
     @Expose
     private String response;
-
-    public List<Datum> getData() {
-        return data;
-    }
-
-    public void setData(List<Datum> data) {
-        this.data = data;
-    }
 
     public String getResponse() {
         return response;
@@ -34,7 +29,7 @@ public class MenuFinderResponse {
         this.response = response;
     }
 
-    public class Datum {
+    public class NearbyRestInfo {
 
         @SerializedName("restaurant_lat_lon")
         @Expose
@@ -47,19 +42,20 @@ public class MenuFinderResponse {
         private Integer priceLevel;
         @SerializedName("photo")
         @Expose
-        private List<String> photo = null;
+        private ArrayList<String> nearByRestPhoto;
         @SerializedName("restaurant_id")
         @Expose
-        private Integer restaurantId;
+        private Integer nearByRestId;
         @SerializedName("restaurant_name")
         @Expose
-        private String restaurantName;
+        private String nearByRestName;
         @SerializedName("cuisine_text")
         @Expose
-        private List<String> cuisineText = null;
+        private ArrayList<String> nearByRestCuisineText;
+
         @SerializedName("restaurant_address")
         @Expose
-        private List<String> restaurantAddress = null;
+        private ArrayList<String> nearByRestAddress;
 
         public String getRestaurantLatLon() {
             return restaurantLatLon;
@@ -85,46 +81,45 @@ public class MenuFinderResponse {
             this.priceLevel = priceLevel;
         }
 
-        public List<String> getPhoto() {
-            return photo;
+        public ArrayList<String> getNearByRestPhoto() {
+            return nearByRestPhoto;
         }
 
-        public void setPhoto(List<String> photo) {
-            this.photo = photo;
+        public void setNearByRestPhoto(ArrayList<String> nearByRestPhoto) {
+            this.nearByRestPhoto = nearByRestPhoto;
         }
 
-        public Integer getRestaurantId() {
-            return restaurantId;
+        public Integer getNearByRestId() {
+            return nearByRestId;
         }
 
-        public void setRestaurantId(Integer restaurantId) {
-            this.restaurantId = restaurantId;
+        public void setNearByRestId(Integer nearByRestId) {
+            this.nearByRestId = nearByRestId;
         }
 
-        public String getRestaurantName() {
-            return restaurantName;
+        public String getNearByRestName() {
+            return nearByRestName;
         }
 
-        public void setRestaurantName(String restaurantName) {
-            this.restaurantName = restaurantName;
+        public void setNearByRestName(String nearByRestName) {
+            this.nearByRestName = nearByRestName;
         }
 
-        public List<String> getCuisineText() {
-            return cuisineText;
+        public ArrayList<String> getNearByRestCuisineText() {
+            return nearByRestCuisineText;
         }
 
-        public void setCuisineText(List<String> cuisineText) {
-            this.cuisineText = cuisineText;
+        public void setNearByRestCuisineText(ArrayList<String> nearByRestCuisineText) {
+            this.nearByRestCuisineText = nearByRestCuisineText;
         }
 
-        public List<String> getRestaurantAddress() {
-            return restaurantAddress;
+        public ArrayList<String> getNearByRestAddress() {
+            return nearByRestAddress;
         }
 
-        public void setRestaurantAddress(List<String> restaurantAddress) {
-            this.restaurantAddress = restaurantAddress;
+        public void setNearByRestAddress(ArrayList<String> nearByRestAddress) {
+            this.nearByRestAddress = nearByRestAddress;
         }
-
     }
 
 }

@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,10 +21,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -73,7 +79,8 @@ import version1.dishq.dishq.util.Util;
  */
 
 
-public class SignInActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
+public class SignInActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks, LocationListener{
 
     protected static final int REQUEST_CHECK_SETTINGS = 1000;
     private static final String TAG = "SignUpActivity";
@@ -150,6 +157,18 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         facebookButton = (Button) findViewById(R.id.fb);
         googleButton = (Button) findViewById(R.id.google_sign_up);
+        VideoView mVideoView = (VideoView)findViewById(R.id.VideoView);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + R.raw.sign_in_video);
+        mVideoView.setMediaController(null);
+        mVideoView.setVideoURI(uri);
+        mVideoView.requestFocus();
+        mVideoView.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
+                                              @Override
+                                              public void onPrepared(MediaPlayer mp) {
+                                                  mp.setLooping(true);
+                                              }
+                                          });
+        mVideoView.start();
         TextView connectWith = (TextView) findViewById(R.id.connect_with);
         setClickables();
     }

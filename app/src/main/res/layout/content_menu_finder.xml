@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:maxLines="1"
-        android:text="Nearby Restaurants :" />
+        android:text="@string/nearby_restaurants" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/menu_finder_recycler_view"
