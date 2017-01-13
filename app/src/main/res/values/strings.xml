@@ -99,4 +99,6 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="blog">Blog</string>
+    <string name="explore_now">Explore Now!</string>
+    <string name="pop_up_photo">pop up photo</string>
 </resources>

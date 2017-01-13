@@ -3,10 +3,169 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/content_fragment_home"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_home_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rl_ham_mood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hs_rl_button_bg_top">
+
+            <Button
+                android:id="@+id/hamburger"
+                android:layout_width="32dp"
+                android:layout_height="26dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/hamburger" />
+
+            <Button
+                android:id="@+id/mood"
+                android:layout_width="30dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/homescreen_mood" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_dish_name_type_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_ham_mood"
+            android:layout_marginEnd="34dp"
+            android:layout_marginTop="24dp"
+            card_view:cardBackgroundColor="#00000000"
+            card_view:cardCornerRadius="1dp"
+            card_view:cardElevation="0dp">
+
+            <RelativeLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cardview_background">
+
+                <RelativeLayout
+                    android:id="@+id/rl_home_veg_egg_non"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="15dp">
+
+                    <include
+                        android:id="@+id/home_rl_veg_egg_non"
+                        layout="@layout/dish_type_tags"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/dish_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_toEndOf="@+id/rl_home_veg_egg_non"
+                    android:maxLines="2"
+                    android:textColor="@color/white"
+                    android:shadowColor="#60000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="4"
+                    android:textSize="@dimen/text_size_20" />
+
+                <TextView
+                    android:id="@+id/dish_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/dish_name"
+                    android:layout_marginStart="31dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="7dp"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="@color/white"
+                    android:shadowColor="#60000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="5"
+                    android:textSize="@dimen/text_size_14" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <FrameLayout
+            android:id="@+id/frame_click"
+            android:layout_width="340dp"
+            android:layout_height="260dp"
+            android:layout_below="@+id/cv_dish_name_type_info"
+            android:layout_marginStart="10dp"
+            android:background="#00000000">
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/food_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rl_fav_dine"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/food_tags_button_shape"
+            android:gravity="start|center_vertical"
+            android:maxLines="5"
+            android:paddingEnd="14dp"
+            android:paddingStart="14dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:lineSpacingExtra="2dp"
+            android:shadowColor="#50000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:textSize="@dimen/text_size_13" />
+
+        <RelativeLayout
+            android:id="@+id/rl_fav_dine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/hs_rl_button_bg_bottom">
+
+
+            <ToggleButton
+                android:id="@+id/favourites"
+                android:layout_width="34dp"
+                android:layout_height="31dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/home_toggle_button"
+                android:text="@null"
+                android:textOff="@null"
+                android:textOn="@null" />
+
+            <Button
+                android:id="@+id/dining"
+                android:layout_width="28dp"
+                android:layout_height="31dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/homescreen_eat" />
+
+        </RelativeLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

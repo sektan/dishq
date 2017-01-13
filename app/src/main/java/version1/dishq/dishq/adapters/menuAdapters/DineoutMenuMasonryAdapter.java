@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -82,6 +83,7 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
                 FragmentActivity activity = (FragmentActivity) (context);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 DineMenuDishDialogFragment dialogFragment = DineMenuDishDialogFragment.getInstance();
+                //dialogFragment.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
                 dialogFragment.show(fm, "fav_dialog_fragment");
             }
         });

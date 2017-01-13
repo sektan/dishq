@@ -1,7 +1,9 @@
 package version1.dishq.dishq.fragments.menuDialogFragments;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,6 +38,7 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
     private Button dineMenuFoodTags;
     private RelativeLayout rlDineMenuView;
     private FrameLayout dineMenuFrame;
+    protected ImageView photoPopUp;
 
     public DineMenuDishDialogFragment() {
 
@@ -52,7 +55,10 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
 
     @Override
     public void onResume() {
-        getDialog().getWindow().setLayout(dpToPx(380), dpToPx(480));
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        getDialog().getWindow().setLayout(width, dpToPx(480));
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         super.onResume();
     }
 
@@ -66,17 +72,28 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.dialog_fragment_dish, container, false);
 
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(rootView, savedInstanceState);
+
         rlDineMenuView = (RelativeLayout) rootView.findViewById(R.id.rl_fav_dish);
         dineMenuFrame = (FrameLayout) rootView.findViewById(R.id.fav_frame);
+        photoPopUp = (ImageView) rootView.findViewById(R.id.popup_photo);
+        photoPopUp.setScaleType(ImageView.ScaleType.CENTER_CROP);
         dineMenuDishName = (TextView) rootView.findViewById(R.id.fav_dish_name);
-        dineMenuDishName.setTypeface(Util.opensanslight);
+        dineMenuDishName.setTypeface(Util.opensansregular);
         dineMenuDishType = (TextView) rootView.findViewById(R.id.fav_dish_type);
+        dineMenuDishType.setTypeface(Util.opensansregular);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
         eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
         nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);
         isSpicyTag = (ImageView) rootView.findViewById(R.id.spicy_tag);
         hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
         dineMenuFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
+        dineMenuDishType.setTypeface(Util.opensansregular);
 
         dineMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,22 +106,7 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
         String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
                 .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        rlDineMenuView.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .into(photoPopUp);
 
         dineMenuDishName.setText(Util.dineoutMenuInfos.get(Util.getFavPosition()).getDineMenuDishName());
 
@@ -131,8 +133,6 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
             }
         }
         dineMenuFoodTags.setText(String.valueOf(dishTags));
-
-        return rootView;
     }
 
 }
