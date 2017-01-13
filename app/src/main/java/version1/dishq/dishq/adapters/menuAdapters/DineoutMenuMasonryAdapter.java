@@ -151,7 +151,9 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
             isSpicyTag = (ImageView) view.findViewById(R.id.spicy_tag);
             hasAlcoholTag = (ImageView) view.findViewById(R.id.alcohol_tag);
             dineMenuDishName = (TextView) view.findViewById(R.id.menu_dish_name);
+            dineMenuDishName.setTypeface(Util.opensansregular);
             dineMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
+            dineMenuDishCost.setTypeface(Util.opensansregular);
             dineMenuFav = (ToggleButton) view.findViewById(R.id.menu_favourites);
             dineMenuFrame = (FrameLayout) view.findViewById(R.id.menu_frame);
         }

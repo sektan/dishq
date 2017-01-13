@@ -43,9 +43,15 @@ public class TastePrefFragment3 extends Fragment {
     //For linking to xml ids of views
     protected void setTags(View view) {
         favCuisine = (Button) view.findViewById(R.id.your_home_cuisine);
-        favCuisine.setTypeface(Util.opensanslight);
+        if(favCuisine!=null) {
+            favCuisine.setTypeface(Util.opensanslight);
+        }
+
         pickThree = (TextView) view.findViewById(R.id.pick_three);
-        pickThree.setTypeface(Util.opensanslight);
+        if(pickThree!=null){
+            pickThree.setTypeface(Util.opensanslight);
+        }
+
         FlowLayout favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {

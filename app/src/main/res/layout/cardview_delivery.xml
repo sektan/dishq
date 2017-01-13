@@ -4,8 +4,9 @@
     android:id="@+id/del_card_view"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:layout_marginTop="10dp"
-    card_view:cardCornerRadius="4dp">
+    android:layout_marginTop="12dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="0dp">
 
     <RelativeLayout
         android:id="@+id/rl_del"
@@ -20,19 +21,19 @@
             <ImageView
                 android:id="@+id/del_dish_image1"
                 android:layout_width="114dp"
-                android:layout_height="152dp"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/delivery_image_1" />
 
             <ImageView
                 android:id="@+id/del_dish_image2"
                 android:layout_width="114dp"
-                android:layout_height="152dp"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/delivery_image_2" />
 
             <ImageView
                 android:id="@+id/del_dish_image3"
                 android:layout_width="114dp"
-                android:layout_height="152dp"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/delivery_image_3" />
 
         </LinearLayout>
@@ -43,17 +44,22 @@
             android:layout_height="wrap_content"
             android:background="@drawable/cardview_background">
 
-        <TextView
-            android:id="@+id/del_rest_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8.7dp"
-            android:maxLines="2"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_20" />
+            <TextView
+                android:id="@+id/del_rest_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="3dp"
+                android:maxLines="2"
+                android:shadowColor="@color/black"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="5"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_20" />
         </RelativeLayout>
+
 
         <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -63,11 +69,13 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="6dp"
             card_view:cardBackgroundColor="#50000000"
-            card_view:cardCornerRadius="4dp">
+            card_view:cardCornerRadius="3dp"
+            card_view:cardElevation="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp">
 
                 <TextView
                     android:id="@+id/del_rest_cuisine"
@@ -76,6 +84,10 @@
                     android:layout_marginEnd="13dp"
                     android:layout_marginStart="11dp"
                     android:textColor="@color/white"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="5"
                     android:textSize="@dimen/text_size_12" />
 
                 <LinearLayout
@@ -85,6 +97,7 @@
                     android:layout_below="@+id/del_rest_cuisine"
                     android:layout_marginEnd="13dp"
                     android:layout_marginStart="11dp"
+                    android:layout_marginTop="3dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -93,6 +106,10 @@
                         android:layout_height="wrap_content"
                         android:text="@string/rupee"
                         android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:textSize="@dimen/text_size_12" />
 
                     <TextView
@@ -101,6 +118,10 @@
                         android:layout_height="wrap_content"
                         android:text="@string/rupee"
                         android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:textSize="@dimen/text_size_12" />
 
                     <TextView
@@ -109,6 +130,10 @@
                         android:layout_height="wrap_content"
                         android:text="@string/rupee"
                         android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:textSize="@dimen/text_size_12" />
 
                     <TextView
@@ -125,6 +150,10 @@
                         android:layout_marginStart="3dp"
                         android:text="@string/vertical_line"
                         android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:textSize="@dimen/text_size_12" />
 
                     <TextView
@@ -133,6 +162,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
                         android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
 

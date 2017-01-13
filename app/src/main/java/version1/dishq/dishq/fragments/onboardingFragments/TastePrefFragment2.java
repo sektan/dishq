@@ -78,7 +78,9 @@ public class TastePrefFragment2 extends Fragment {
             child.setText(model.getHomeCuisName());
             child.setTypeface(Util.opensansregular);
             child.setTag(model);
-            child.setOnClickListener(clickListener);
+            if(!Util.homeCuisineSelected) {
+                child.setOnClickListener(clickListener);
+            }
             child.setChecked(false);
             if(child.isChecked()){
                 model.setHomeCuisCurrentSelect(true);

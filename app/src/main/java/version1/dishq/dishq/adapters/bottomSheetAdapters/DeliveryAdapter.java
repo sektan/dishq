@@ -68,8 +68,19 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl3)
                 .into(holder.dishImage3);
-        holder.rlDelivery.setBackgroundColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.black));
         holder.delRestName.setText(Util.deliveryRestInfos.get(position).getDelivRestName());
+
+        StringBuilder sb = new StringBuilder();
+        if(Util.deliveryRestInfos.get(position).getDelivCuisineText()!=null) {
+            for (String s : Util.deliveryRestInfos.get(position).getDelivCuisineText()) {
+                if (sb.length() > 0) {
+                    sb.append(',' + " ");
+                }
+                sb.append(s);
+            }
+        }
+        String dineCusineText = sb.toString();
+        holder.delRestCuisine.setText(dineCusineText);
 
         int delPriceLvl = Util.deliveryRestInfos.get(position).getDelivPriceLvl();
         if (delPriceLvl == 1) {
@@ -118,15 +129,21 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             super(view);
 
             dishImage1 = (ImageView) view.findViewById(R.id.del_dish_image1);
+            dishImage1.setScaleType(ImageView.ScaleType.CENTER_CROP);
             dishImage2 = (ImageView) view.findViewById(R.id.del_dish_image2);
+            dishImage2.setScaleType(ImageView.ScaleType.CENTER_CROP);
             dishImage3 = (ImageView) view.findViewById(R.id.del_dish_image3);
+            dishImage3.setScaleType(ImageView.ScaleType.CENTER_CROP);
             delRestName = (TextView) view.findViewById(R.id.del_rest_name);
+            delRestName.setTypeface(Util.opensanssemibold);
             delRestCuisine = (TextView) view.findViewById(R.id.del_rest_cuisine);
+            delRestCuisine.setTypeface(Util.opensansregular);
             delRup1 = (TextView) view.findViewById(R.id.del_rup_1);
             delRup2 = (TextView) view.findViewById(R.id.del_rup_2);
             delRup3 = (TextView) view.findViewById(R.id.del_rup_3);
             delRup4 = (TextView) view.findViewById(R.id.del_rup_4);
             delDriveTime = (TextView) view.findViewById(R.id.del_drive_time);
+            delDriveTime.setTypeface(Util.opensanssemibold);
             rlDelivery = (RelativeLayout) view.findViewById(R.id.cv_rl_del);
             rlDelCardview = (RelativeLayout) view.findViewById(R.id.rl_del);
         }

@@ -5,7 +5,6 @@
     android:background="@drawable/onboarding_screen2"
     android:orientation="vertical">
 
-
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/mainmenu"
         android:layout_width="fill_parent"
@@ -26,7 +25,7 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_26" />
+            android:textSize="@dimen/text_size_28" />
 
         <TextView
             android:id="@+id/pick_one"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/your_home_cuisine"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="@string/pick_one"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_16" />
@@ -45,9 +44,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/pick_one"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp"
+            android:layout_marginTop="25dp"
             android:gravity="start|top" />
 
 </RelativeLayout>

@@ -156,7 +156,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     protected void setTags() {
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         facebookButton = (Button) findViewById(R.id.fb);
+        facebookButton.setTypeface(Util.opensanssemibold);
         googleButton = (Button) findViewById(R.id.google_sign_up);
+        googleButton.setTypeface(Util.opensanssemibold);
         VideoView mVideoView = (VideoView)findViewById(R.id.VideoView);
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + R.raw.sign_in_video);
         mVideoView.setMediaController(null);
@@ -170,6 +172,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                           });
         mVideoView.start();
         TextView connectWith = (TextView) findViewById(R.id.connect_with);
+        connectWith.setTypeface(Util.opensansregular);
         setClickables();
     }
 

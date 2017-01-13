@@ -62,7 +62,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 card_view:cardBackgroundColor="#50000000"
-                card_view:cardCornerRadius="4dp">
+                card_view:cardCornerRadius="3dp"
+                card_view:cardElevation="0dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

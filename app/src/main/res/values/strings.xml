@@ -29,7 +29,7 @@
     <string name="your_fav_cuisine">Your fav cuisine&#63;</string>
     <string name="pick_one">&#40;Pick 1&#41;</string>
     <string name="pick_three">&#40;Pick 3&#41;</string>
-    <string name="allergy">Food you avoid or are \n allergic to&#63;</string>
+    <string name="allergy">Food you avoid or are\nallergic to&#63;</string>
     <string name="optional">&#40;Optional&#41;</string>
     <string name="done">Done</string>
 
@@ -74,7 +74,7 @@
 
     <!--Menu Activity -->
     <string name="cost_of_dish">\u20B9%s</string>
-    <string name="personalized_n_menu_n_for_you">Personalized \n menu \n for you</string>
+    <string name="personalized_menu_text">Personalized\nmenu for you</string>
     <string name="order_now">ORDER NOW</string>
     <string name="order_from">ORDER FROM</string>
     <string name="swiggy">Swiggy</string>
@@ -88,9 +88,13 @@
     <string name="delivery">delivery</string>
     <string name="delmenu_back_button">delmenu back button</string>
     <string name="dineout_back_button">dineout back button</string>
+
+    <!-- MenuFinderActivity -->
     <string name="title_activity_menu_finder">MenuFinder</string>
     <string name="nearby_restaurants">Nearby Restaurants :</string>
     <string name="search_for_restaurant">Search for Restaurant</string>
+
+    <!-- AboutUsActivity -->
     <string name="about_us">About</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_use">Terms of Use</string>

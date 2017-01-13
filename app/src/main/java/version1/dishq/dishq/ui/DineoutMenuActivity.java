@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -50,11 +51,12 @@ public class DineoutMenuActivity extends BaseActivity {
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private ImageView backButton, deliveryButton;
     private TextView dineMenuHeader;
-    private TextView dineMenuRestType, dineMenuRp1, dineMenuRp2, dineMenuRp3,
-            dineMenuRp4, dineMenuDrive;
+    private TextView dineMenuRestTypeText, dineMenuRp1, dineMenuRp2, dineMenuRp3,
+            dineMenuRp4, dineMenuDrive, dineMenuRestType;
     private TextView dineMenuTags, dineMenuRestAdd;
     private Button call, directions;
-    private RelativeLayout rlDineoutToolbar;
+    private AppBarLayout rlDineoutToolbar;
+    private TextView tvPersonalizedMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,28 +73,31 @@ public class DineoutMenuActivity extends BaseActivity {
 
     protected void setTags() {
         dineMenuRecyclerView = (RecyclerView) findViewById(R.id.dine_menu_recyclerview);
+        tvPersonalizedMenu = (TextView) findViewById(R.id.personalized_menu_text);
+        tvPersonalizedMenu.setTypeface(Util.opensanslight);
         backButton = (ImageView) findViewById(R.id.dine_menu_back_button);
         dineMenuHeader = (TextView) findViewById(R.id.dinemenu_toolbarTitle);
         dineMenuHeader.setTypeface(Util.opensanssemibold);
         deliveryButton = (ImageView) findViewById(R.id.delivery_option);
-        dineMenuRestType = (TextView) findViewById(R.id.dinemenu_rest_type_text);
+        dineMenuRestTypeText = (TextView) findViewById(R.id.dinemenu_rest_type_text);
+        dineMenuRestTypeText.setTypeface(Util.opensansregular);
+        dineMenuRestType = (TextView) findViewById(R.id.dinemenu_rest_type);
         dineMenuRestType.setTypeface(Util.opensansregular);
         dineMenuRp1 = (TextView) findViewById(R.id.dinemenu_rup_1);
-        dineMenuRp1.setTypeface(Util.opensanssemibold);
         dineMenuRp2 = (TextView) findViewById(R.id.dinemenu_rup_2);
         dineMenuRp3 = (TextView) findViewById(R.id.dinemenu_rup_3);
         dineMenuRp4 = (TextView) findViewById(R.id.dinemenu_rup_4);
         dineMenuDrive = (TextView) findViewById(R.id.dinemenu_drive_time);
         dineMenuDrive.setTypeface(Util.opensansregular);
         dineMenuTags = (TextView) findViewById(R.id.dinemenu_tags);
-        dineMenuTags.setTypeface(Util.opensanssemibold);
+        dineMenuTags.setTypeface(Util.opensansregular);
         dineMenuRestAdd = (TextView) findViewById(R.id.dinemenu_rest_addr);
         dineMenuRestAdd.setTypeface(Util.opensansregular);
         call = (Button) findViewById(R.id.dinemenu_call);
         call.setTypeface(Util.opensanssemibold);
         directions = (Button) findViewById(R.id.dinemenu_directions);
         directions.setTypeface(Util.opensanssemibold);
-        rlDineoutToolbar = (RelativeLayout) findViewById(R.id.rl_dinemenu_toolbar);
+        rlDineoutToolbar = (AppBarLayout) findViewById(R.id.dinemenu_appbar);
         setFunctionality();
     }
 
@@ -139,18 +144,16 @@ public class DineoutMenuActivity extends BaseActivity {
             });
 
             StringBuilder sb = new StringBuilder();
-
             if(Util.dineoutRestData.getDineMenuCusineText()!=null) {
                 for (String s : Util.dineoutRestData.getDineMenuCusineText()) {
                     if (sb.length() > 0) {
                         sb.append(',' + " ");
                     }
                     sb.append(s);
-
                 }
             }
             String dishTypeText = sb.toString();
-            dineMenuRestType.setText(String.valueOf(dishTypeText));
+            dineMenuRestTypeText.setText(String.valueOf(dishTypeText));
 
             int dinePriceLvl = Util.dineoutRestData.getDineMenuPriceLvl();
             if (dinePriceLvl == 1) {
@@ -177,6 +180,19 @@ public class DineoutMenuActivity extends BaseActivity {
                 }
             }
             dineMenuTags.setText(String.valueOf(dishTags));
+
+            StringBuilder stringBuilder = new StringBuilder();
+            if(Util.dineoutRestData.getDineMenuRestTypeText()!=null) {
+                for (String st : Util.dineoutRestData.getDineMenuRestTypeText()) {
+                    if (stringBuilder.length() > 0) {
+                        stringBuilder.append(',' + " ");
+                    }
+                    stringBuilder.append(st);
+
+                }
+            }
+            String restTypeText = stringBuilder.toString();
+            dineMenuRestType.setText(String.valueOf(restTypeText));
 
             String dineRestAddress = "";
             if(Util.dineoutRestData.getDineMenuRestAddr()!=null) {
@@ -239,8 +255,8 @@ public class DineoutMenuActivity extends BaseActivity {
                             }
                             setTags();
                             recyclerViewLayoutManager = new StaggeredGridLayoutManager
-                                    (2, StaggeredGridLayoutManager.VERTICAL);
-                            Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(25);
+                                    (2, 1);
+                            Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(20);
                             dineMenuRecyclerView.setLayoutManager(recyclerViewLayoutManager);
                             dineMenuRecyclerView.addItemDecoration(decoration);
                             dineMenuRecyclerView.setNestedScrollingEnabled(false);

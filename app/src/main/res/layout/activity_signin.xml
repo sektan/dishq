@@ -16,6 +16,12 @@
             android:id="@+id/VideoView" />
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/frame_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#54000000"/>
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_login_button"
         android:layout_width="0dp"
@@ -29,8 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="14dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="0dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -38,18 +44,22 @@
             android:id="@+id/connect_with"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="470dp"
-            android:alpha="0.87"
+            android:layout_marginStart="22dp"
             android:gravity="start|center_horizontal"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="5"
             android:text="@string/connect_with"
-            android:textSize="@dimen/text_size_20" />
+            android:textSize="@dimen/text_size_22" />
 
         <Button
             android:id="@+id/google_sign_up"
-            android:layout_width="136dp"
-            android:layout_height="35dp"
+            android:layout_width="176dp"
+            android:layout_height="45dp"
             android:layout_below="@+id/connect_with"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="13dp"
             android:background="@drawable/signin_button_shape"
             android:text="@string/google"
             android:textAlignment="center"
@@ -59,10 +69,10 @@
 
         <Button
             android:id="@+id/fb"
-            android:layout_width="136dp"
-            android:layout_height="35dp"
+            android:layout_width="176dp"
+            android:layout_height="45dp"
             android:layout_below="@+id/google_sign_up"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/signin_button_shape"
             android:text="@string/facebook"
             android:textAlignment="center"

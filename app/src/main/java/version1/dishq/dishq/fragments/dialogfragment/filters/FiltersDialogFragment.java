@@ -211,6 +211,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                 Util.setHomeRefreshRequired(true);
                 Intent intent = new Intent(getActivity(), HomeActivity.class);
                 startActivity(intent);
+                dismiss();
                 break;
 
             case R.id.filter_image_close:

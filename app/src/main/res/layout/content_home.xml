@@ -51,7 +51,8 @@
                 android:id="@+id/rl_home_veg_egg_non"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="15dp">
 
                 <include
                     android:id="@+id/home_rl_veg_egg_non"

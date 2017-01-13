@@ -21,11 +21,7 @@
             android:textColor="@color/white"
             android:layout_marginStart="14dp"
             android:layout_marginTop="20dp"
-            android:shadowColor="@color/black"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="5"
-            android:textSize="@dimen/text_size_26" />
+            android:textSize="@dimen/text_size_28" />
 
         <TextView
             android:id="@+id/tell_about_prefs"
@@ -50,7 +46,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:text="@string/are_you"
-            android:textSize="@dimen/text_size_26" />
+            android:textSize="@dimen/text_size_28" />
 
         <RelativeLayout
             android:id="@+id/veg_dish"
