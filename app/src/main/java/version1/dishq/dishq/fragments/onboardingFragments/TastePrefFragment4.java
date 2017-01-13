@@ -1,4 +1,4 @@
-package version1.dishq.dishq.fragments.tastePrefFragments;
+package version1.dishq.dishq.fragments.onboardingFragments;
 
 import android.content.Intent;
 import android.os.Bundle;

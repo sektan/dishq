@@ -230,21 +230,19 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             });
 
             dishName.setText(String.valueOf(dishDataInfo.getDishName()));
-            Boolean isVeg = dishDataInfo.getVeg();
-            Boolean hasEgg = dishDataInfo.getHasEgg();
+
             Boolean isSpicy = dishDataInfo.getSpicy();
             Boolean hasAlcohol = dishDataInfo.getHasAlcohol();
-            if (isVeg) {
-                if (hasEgg) {
-                    eggTag.setVisibility(View.VISIBLE);
-                    vegTag.setVisibility(View.GONE);
-                    nonVegTag.setVisibility(View.GONE);
-                } else {
+            int homeDishNature = dishDataInfo.getHomeDishNature();
+            if (homeDishNature == 1) {
+                eggTag.setVisibility(View.GONE);
+                vegTag.setVisibility(View.VISIBLE);
+                nonVegTag.setVisibility(View.GONE);
 
-                    eggTag.setVisibility(View.GONE);
-                    vegTag.setVisibility(View.VISIBLE);
-                    nonVegTag.setVisibility(View.GONE);
-                }
+            } else if (homeDishNature == 2) {
+                eggTag.setVisibility(View.VISIBLE);
+                vegTag.setVisibility(View.GONE);
+                nonVegTag.setVisibility(View.GONE);
             } else {
                 eggTag.setVisibility(View.GONE);
                 vegTag.setVisibility(View.GONE);
@@ -277,7 +275,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             String dishTags = "";
             if (dishDataInfo.getTags() != null) {
                 for (String s : dishDataInfo.getTags()) {
-                    dishTags += s + " ";
+                    dishTags += s + " " + " ";
                 }
             }
             foodTags.setText(String.valueOf(dishTags));
@@ -287,8 +285,8 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     }
 
     protected void setFont() {
-        dishName.setTypeface(Util.opensanslight);
-        dishType.setTypeface(Util.opensanslight);
+        dishName.setTypeface(Util.opensansregular);
+        dishType.setTypeface(Util.opensansregular);
         foodTags.setTypeface(Util.opensanslight);
     }
 

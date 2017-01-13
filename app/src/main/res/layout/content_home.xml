@@ -12,8 +12,8 @@
 
         <Button
             android:id="@+id/hamburger"
-            android:layout_width="28dp"
-            android:layout_height="29dp"
+            android:layout_width="32dp"
+            android:layout_height="26dp"
             android:layout_alignParentStart="true"
             android:layout_marginStart="14dp"
             android:layout_marginTop="14dp"
@@ -21,8 +21,8 @@
 
         <Button
             android:id="@+id/mood"
-            android:layout_width="28dp"
-            android:layout_height="29dp"
+            android:layout_width="30dp"
+            android:layout_height="32dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="14dp"
             android:layout_marginTop="14dp"
@@ -47,19 +47,30 @@
             android:layout_height="wrap_content"
             android:background="@drawable/cardview_background">
 
-            <include
-                android:id="@+id/home_rl_veg_egg_non"
-                layout="@layout/dish_type_tags"/>
+            <RelativeLayout
+                android:id="@+id/rl_home_veg_egg_non"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <include
+                    android:id="@+id/home_rl_veg_egg_non"
+                    layout="@layout/dish_type_tags"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/dish_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="18dp"
-                android:layout_marginTop="7dp"
-                android:layout_toEndOf="@+id/home_rl_veg_egg_non"
+                android:layout_marginTop="6dp"
+                android:layout_toEndOf="@+id/rl_home_veg_egg_non"
                 android:maxLines="2"
                 android:textColor="@color/white"
+                android:shadowColor="#60000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="4"
                 android:textSize="@dimen/text_size_20" />
 
             <TextView
@@ -67,9 +78,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/dish_name"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginStart="31dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="7dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:textColor="@color/white"
+                android:shadowColor="#60000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="5"
                 android:textSize="@dimen/text_size_14" />
 
         </RelativeLayout>
@@ -92,14 +110,21 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/rl_fav_dine"
         android:layout_marginEnd="40dp"
-        android:background="#40000000"
+        android:background="@drawable/food_tags_button_shape"
         android:gravity="start|center_vertical"
         android:maxLines="5"
         android:paddingEnd="14dp"
         android:paddingStart="14dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_12" />
+        android:lineSpacingExtra="2dp"
+        android:shadowColor="#50000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:textSize="@dimen/text_size_13" />
 
     <RelativeLayout
         android:id="@+id/rl_fav_dine"
@@ -111,8 +136,8 @@
 
         <ToggleButton
             android:id="@+id/favourites"
-            android:layout_width="28dp"
-            android:layout_height="29dp"
+            android:layout_width="34dp"
+            android:layout_height="31dp"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="14dp"
             android:layout_marginStart="14dp"
@@ -125,7 +150,7 @@
         <Button
             android:id="@+id/dining"
             android:layout_width="28dp"
-            android:layout_height="29dp"
+            android:layout_height="31dp"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="14dp"
             android:layout_marginEnd="14dp"

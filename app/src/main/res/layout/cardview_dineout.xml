@@ -3,9 +3,10 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dineout_card_view"
     android:layout_width="match_parent"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="12dp"
     android:layout_height="150dp"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="0dp">
 
     <RelativeLayout
         android:id="@+id/cv_rl_dineout"
@@ -23,8 +24,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="3dp"
                 android:maxLines="2"
+                android:shadowColor="@color/black"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="5"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_20" />
 
@@ -35,7 +40,11 @@
                 android:layout_below="@+id/dineout_rest_name"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="0dp"
+                android:shadowColor="@color/black"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="5"
                 android:maxLines="2"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_12" />
@@ -57,7 +66,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp">
 
                     <TextView
                         android:id="@+id/dineout_rest_cuisine"
@@ -66,6 +76,10 @@
                         android:textColor="@color/white"
                         android:layout_marginEnd="13dp"
                         android:layout_marginStart="11dp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:textSize="@dimen/text_size_12" />
 
                     <LinearLayout
@@ -75,6 +89,7 @@
                         android:layout_below="@id/dineout_rest_cuisine"
                         android:layout_marginEnd="13dp"
                         android:layout_marginStart="11dp"
+                        android:layout_marginTop="3dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -83,6 +98,10 @@
                             android:layout_height="wrap_content"
                             android:text="@string/rupee"
                             android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
                             android:textSize="@dimen/text_size_12" />
 
                         <TextView
@@ -91,6 +110,10 @@
                             android:layout_height="wrap_content"
                             android:text="@string/rupee"
                             android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
                             android:textSize="@dimen/text_size_12" />
 
                         <TextView
@@ -99,6 +122,10 @@
                             android:layout_height="wrap_content"
                             android:text="@string/rupee"
                             android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
                             android:textSize="@dimen/text_size_12" />
 
                         <TextView
@@ -107,6 +134,10 @@
                             android:layout_height="wrap_content"
                             android:text="@string/rupee"
                             android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
                             android:textSize="@dimen/text_size_12" />
 
                         <TextView
@@ -115,6 +146,10 @@
                             android:layout_marginStart="3dp"
                             android:text="@string/vertical_line"
                             android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
                             android:textSize="@dimen/text_size_12" />
 
                         <TextView
@@ -123,6 +158,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
                             android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
                             android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
 

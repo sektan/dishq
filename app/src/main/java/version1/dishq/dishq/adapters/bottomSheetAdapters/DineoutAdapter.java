@@ -134,6 +134,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             dineRestAddr = (TextView) view.findViewById(R.id.dineout_rest_addr);
             dineRestAddr.setTypeface(Util.opensansregular);
             dineRestCuisine = (TextView) view.findViewById(R.id.dineout_rest_cuisine);
+            dineRestCuisine.setTypeface(Util.opensansregular);
             dineRup1 = (TextView) view.findViewById(R.id.dineout_rup_1);
             dineRup2 = (TextView) view.findViewById(R.id.dineout_rup_2);
             dineRup3 = (TextView) view.findViewById(R.id.dineout_rup_3);

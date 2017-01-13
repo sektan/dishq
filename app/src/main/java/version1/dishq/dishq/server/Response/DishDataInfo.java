@@ -14,15 +14,17 @@ import java.util.ArrayList;
 
 public class DishDataInfo {
 
-    public static final String GENERIC_DISH_ID = "genericDishId";
-    public static final String DISH_NAME_KEY = "dishNameKey";
+    public static final String  GENERIC_DISH_ID = "genericDishId";
+    public static final String  DISH_NAME_KEY = "dishNameKey";
     public static final String  DISH_HAS_ALCOHOL = "dishHasAlcohol";
     public static final String  DISH_IS_VEG = "dishIsVeg";
     public static final String  DISH_TAGS = "dishTags";
     public static final String  DISH_PHOTO = "dishPhoto";
+    public static final String  DISH_SMALL_PIC = "dishSmallPic";
     public static final String  DISH_ADDED_TO_FAV = "dishAddedToFav";
     public static final String  DISH_HAS_EGG = "dishHasEgg";
     public static final String  DISH_RECIPE_URL = "dishRecipeUrl";
+    public static final String  DISH_NATURE = "dishNature";
     public static final String  DISH_IS_SPICY = "dishIsSpicy";
     public static final String  DISH_CUISINE_TEXT = "dishCuisineText";
     public static final String  DISH_TYPE_TEXT = "dishTypeText";
@@ -43,6 +45,10 @@ public class DishDataInfo {
     @Expose
     private ArrayList<String> dishPhoto;
 
+    @SerializedName("photo_small")
+    @Expose
+    private ArrayList<String> dishSmallPic;
+
     @SerializedName("generic_dish_id")
     @Expose
     private int genericDishId;
@@ -58,6 +64,10 @@ public class DishDataInfo {
     @SerializedName("recipe_url")
     @Expose
     private String recipeUrl;
+
+    @SerializedName("dish_nature")
+    @Expose
+    private int homeDishNature;
 
     @SerializedName("dish_name")
     @Expose
@@ -107,6 +117,14 @@ public class DishDataInfo {
         this.dishPhoto = dishPhoto;
     }
 
+    public ArrayList<String> getDishSmallPic() {
+        return dishSmallPic;
+    }
+
+    public void setDishSmallPic(ArrayList<String> dishSmallPic) {
+        this.dishSmallPic = dishSmallPic;
+    }
+
     public int getGenericDishId() {
         return genericDishId;
     }
@@ -137,6 +155,14 @@ public class DishDataInfo {
 
     public void setRecipeUrl(String recipeUrl) {
         this.recipeUrl = recipeUrl;
+    }
+
+    public int getHomeDishNature() {
+        return homeDishNature;
+    }
+
+    public void setHomeDishNature(int homeDishNature) {
+        this.homeDishNature = homeDishNature;
     }
 
     public String getDishName() {
@@ -182,8 +208,10 @@ public class DishDataInfo {
         bundle.putBoolean(DISH_ADDED_TO_FAV, this.getAddedToFav());
         bundle.putString(DISH_TYPE_TEXT, this.getDishTypeText());
         bundle.putString(DISH_RECIPE_URL, this.getRecipeUrl());
+        bundle.putInt(DISH_NATURE, this.getHomeDishNature());
         bundle.putStringArrayList(DISH_TAGS, this.getTags());
         bundle.putStringArrayList(DISH_PHOTO, this.getDishPhoto());
+        bundle.putStringArrayList(DISH_SMALL_PIC, this.getDishSmallPic());
         bundle.putStringArrayList(DISH_CUISINE_TEXT, this.getCuisineText());
         return bundle;
     }
@@ -195,6 +223,7 @@ public class DishDataInfo {
         dishDataInfo.setDishName(bundle.getString(DISH_NAME_KEY));
         dishDataInfo.setDishTypeText(bundle.getString(DISH_TYPE_TEXT));
         dishDataInfo.setRecipeUrl(bundle.getString(DISH_RECIPE_URL));
+        dishDataInfo.setHomeDishNature(bundle.getInt(DISH_NATURE));
         dishDataInfo.setHasAlcohol(bundle.getBoolean(DISH_HAS_ALCOHOL));
         dishDataInfo.setVeg(bundle.getBoolean(DISH_IS_VEG));
         dishDataInfo.setHasEgg(bundle.getBoolean(DISH_HAS_EGG));
@@ -202,6 +231,7 @@ public class DishDataInfo {
         dishDataInfo.setAddedToFav(bundle.getBoolean(DISH_ADDED_TO_FAV));
         dishDataInfo.setTags(bundle.getStringArrayList(DISH_TAGS));
         dishDataInfo.setDishPhoto(bundle.getStringArrayList(DISH_PHOTO));
+        dishDataInfo.setDishSmallPic(bundle.getStringArrayList(DISH_SMALL_PIC));
         dishDataInfo.setCuisineText(bundle.getStringArrayList(DISH_CUISINE_TEXT));
         return dishDataInfo;
     }

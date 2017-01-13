@@ -75,12 +75,6 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private TextView greetingHeader, greetingContext;
     private Button greetingButton;
     private RelativeLayout rlGreeting;
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            rlGreeting.setVisibility(View.GONE);
-        }
-    };
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
     private ProgressDialog progressDialog;
@@ -142,6 +136,13 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         }
     }
 
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            rlGreeting.setVisibility(View.GONE);
+        }
+    };
+
     public void fetchHomeDishResults() {
         String latitude = Util.getLatitude();
         String longitude = Util.getLongitude();
@@ -172,6 +173,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                             Util.dishDataModals.clear();
                             for(int i = 0; i <body.dishDataInfos.size(); i++) {
                                     Util.dishDataModals = body.dishDataInfos;
+                                    Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
                             }
                             setViews();
                         }

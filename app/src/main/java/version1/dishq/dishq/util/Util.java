@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
@@ -69,6 +71,7 @@ public class Util {
     public static ArrayList<DineoutMenuResponse.DineoutMenuData> dineoutMenuInfos = new ArrayList<>();
     public static ArrayList<MenuFinderNearbyRestResponse.NearbyRestInfo> nearbyRestInfos = new ArrayList<>();
     public static ArrayList<MenuFinderRestSuggestResponse.MenuFinderRestInfo> menuFinderRestInfos = new ArrayList<>();
+    public static ArrayList<String> dishSmallPic = new ArrayList<>();
     public static DeliveryMenuResponse.DeliveryRestData deliveryRestData = null;
     public static DineoutMenuResponse.DineoutRestData dineoutRestData = null;
     public static Boolean homeCuisineSelected = false;

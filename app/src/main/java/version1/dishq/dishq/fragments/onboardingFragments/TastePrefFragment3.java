@@ -1,4 +1,4 @@
-package version1.dishq.dishq.fragments.tastePrefFragments;
+package version1.dishq.dishq.fragments.onboardingFragments;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,13 +43,9 @@ public class TastePrefFragment3 extends Fragment {
     //For linking to xml ids of views
     protected void setTags(View view) {
         favCuisine = (Button) view.findViewById(R.id.your_home_cuisine);
-        if (favCuisine != null) {
-            favCuisine.setTypeface(Util.opensanslight);
-        }
+        favCuisine.setTypeface(Util.opensanslight);
         pickThree = (TextView) view.findViewById(R.id.pick_three);
-        if (pickThree != null) {
-            pickThree.setTypeface(Util.opensanslight);
-        }
+        pickThree.setTypeface(Util.opensanslight);
         FlowLayout favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {

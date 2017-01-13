@@ -37,6 +37,10 @@ public class HomeDishesResponse {
         @Expose
         private Boolean showGreeting;
 
+        @SerializedName("feedback_question")
+        @Expose
+        private String homeFeedbackQues;
+
         public String getDefaultTab() {
             return defaultTab;
         }
@@ -51,6 +55,14 @@ public class HomeDishesResponse {
 
         public void setShowGreeting(Boolean showGreeting) {
             this.showGreeting = showGreeting;
+        }
+
+        public String getHomeFeedbackQues() {
+            return homeFeedbackQues;
+        }
+
+        public void setHomeFeedbackQues(String homeFeedbackQues) {
+            this.homeFeedbackQues = homeFeedbackQues;
         }
     }
 

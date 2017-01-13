@@ -13,7 +13,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.fragments.tastePrefFragments.TastePrefFragment1;
+import version1.dishq.dishq.fragments.onboardingFragments.TastePrefFragment1;
 import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;

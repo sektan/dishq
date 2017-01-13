@@ -19,8 +19,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,8 +91,57 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     public void Logout() {
+        String facebookOrGoogle = DishqApplication.getFacebookOrGoogle();
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("log out", "nav");
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
+        if (facebookOrGoogle.equals("facebook")) {
+            facebookSignOut();
+        } else {
+            googleSignOut();
+        }
+    }
+
+    public void facebookSignOut() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         LoginManager.getInstance().logOut();
+        userLogOut();
+    }
+
+    public void googleSignOut() {
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+            mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                @Override
+                public void onConnected(@Nullable Bundle bundle) {
+
+                    FirebaseAuth.getInstance().signOut();
+                    if (mGoogleApiClient.isConnected()) {
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(@NonNull Status status) {
+                                if (status.isSuccess()) {
+                                    Log.d("HomePage", "User Logged out");
+                                    userLogOut();
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onConnectionSuspended(int i) {
+                    Log.d("HomePage", "Google API Client Connection Suspended");
+                }
+            });
+        }
+    }
+
+    public void userLogOut() {
         DishqApplication.getPrefs().edit().putString(Constants.ACCESS_TOKEN, "").apply();
         DishqApplication.getPrefs().edit().putString(Constants.REFRESH_TOKEN, "").apply();
         DishqApplication.getPrefs().edit().putString(Constants.TOKEN_TYPE, "").apply();
@@ -97,10 +149,12 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
         DishqApplication.getPrefs().edit().clear().apply();
         getApplicationContext().getSharedPreferences("dish_app_prefs", MODE_PRIVATE).edit().clear().apply();
         Intent intent = new Intent(this, SplashActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        this.startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
+        startActivity(intent);
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
