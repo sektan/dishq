@@ -44,7 +44,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
     }
 
     @Override
-    public void onBindViewHolder(final DineoutAdapter.DineoutRestInfoAdapter holder, int position) {
+    public void onBindViewHolder(final DineoutRestInfoAdapter holder, int position) {
         String imageUrl = Util.dineoutRestInfos.get(position).getDineRestPhoto().get(0);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)

@@ -42,6 +42,8 @@
     <string name="delivery_image_3">delivery image 3</string>
     <string name="home_screen_image">home screen image</string>
     <string name="no_delivery_msg">No delivery places found</string>
+    <string name="sorry_no_results_found">Sorry, no results found</string>
+    <string name="no_dineout_places_found">No dineout places found</string>
 
     <!-- HomeActivity -->
     <string name="action_settings">Settings</string>
@@ -54,6 +56,9 @@
     <string name="rate">RATE</string>
     <string name="share">SHARE</string>
     <string name="about">ABOUT</string>
+    <string name="oops">OOPS!</string>
+    <string name="no_results">No results were found for the given filters</string>
+    <string name="please_try_selecting_different_filter_or_moods">Please try selecting different filter or moods</string>
 
     <!-- Toolbar -->
     <string name="toolbar_back_button">toolbar back button</string>
@@ -101,5 +106,5 @@
     <string name="blog">Blog</string>
     <string name="explore_now">Explore Now!</string>
     <string name="pop_up_photo">pop up photo</string>
-    <string name="sorry_no_results_found">Sorry, no results found</string>
+
 </resources>

@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -36,8 +38,12 @@ public class DineoutFragment extends Fragment {
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView mRecyclerView;
     private Button showMore;
+    private RelativeLayout rlNoDine;
+    private TextView noDineText;
     private ProgressDialog progressDialog;
     private Boolean hasMoreResults = false;
+    Boolean showMoreClicked = false;
+    private DineoutAdapter dineoutAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,11 +59,16 @@ public class DineoutFragment extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
         showMore = (Button) v.findViewById(R.id.dineout_show);
         showMore.setTypeface(Util.opensanssemibold);
+        rlNoDine = (RelativeLayout) v.findViewById(R.id.rl_no_dine);
+        noDineText = (TextView) v.findViewById(R.id.no_dine_text);
+        noDineText.setTypeface(Util.opensansregular);
         if (hasMoreResults) {
             showMore.setVisibility(View.VISIBLE);
             showMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    showMoreClicked = true;
+                    dineoutAdapter.notifyDataSetChanged();
                     fetchDineoutRest(1);
                 }
             });
@@ -101,33 +112,51 @@ public class DineoutFragment extends Fragment {
                 Log.d(TAG, "Success");
                 try {
                     if(response.isSuccessful()) {
-                        if (showMoreOptions == 1) {
-                            showMore.setVisibility(View.GONE);
-                        } else {
-
-                        }
                         DineoutTabResponse.DineoutRestaurants body = response.body().dineoutRestaurants;
                         if(body!=null) {
-                            Log.d(TAG, "body is not null");
-                            hasMoreResults = body.isHasMoreResults();
-                            Util.dineoutRestInfos.clear();
-                            for(int i = 0; i <body.dineoutRestInfo.size(); i++) {
-                                Util.dineoutRestInfos = body.dineoutRestInfo;
+                            if (body.dineoutRestInfo.size() != 0) {
+                                Log.d(TAG, "body is not null");
+                                hasMoreResults = body.isHasMoreResults();
+                                Util.dineoutRestInfos.clear();
+                                for (int i = 0; i < body.dineoutRestInfo.size(); i++) {
+                                    Util.dineoutRestInfos = body.dineoutRestInfo;
+                                }
+                                if (showMoreOptions == 1) {
+                                    if (!showMoreClicked) {
+                                        showMore.setVisibility(View.VISIBLE);
+                                    } else {
+                                        showMore.setVisibility(View.GONE);
+                                    }
+                                } else {
+                                    showMore.setVisibility(View.GONE);
+                                }
+                                progressDialog.dismiss();
+                                dineoutAdapter = new DineoutAdapter(getActivity());
+                                mRecyclerView.setAdapter(dineoutAdapter);
+                                mLayoutManager = new LinearLayoutManager(getActivity());
+                                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                                setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+                            }else {
+                                progressDialog.dismiss();
+                                rlNoDine.setVisibility(View.VISIBLE);
+                                mRecyclerView.setVisibility(View.GONE);
                             }
+                        }else {
                             progressDialog.dismiss();
-                            DineoutAdapter dineoutAdapter = new DineoutAdapter(getActivity());
-                            mRecyclerView.setAdapter(dineoutAdapter);
-                            mLayoutManager = new LinearLayoutManager(getActivity());
-                            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-                            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+                            rlNoDine.setVisibility(View.VISIBLE);
+                            mRecyclerView.setVisibility(View.GONE);
                         }
                     }else {
                         progressDialog.dismiss();
+                        rlNoDine.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
                     progressDialog.dismiss();
+                    rlNoDine.setVisibility(View.VISIBLE);
+                    mRecyclerView.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
@@ -136,6 +165,8 @@ public class DineoutFragment extends Fragment {
             public void onFailure(Call<DineoutTabResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
                 progressDialog.dismiss();
+                rlNoDine.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
             }
         });
     }

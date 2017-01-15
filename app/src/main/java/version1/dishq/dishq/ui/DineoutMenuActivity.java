@@ -64,8 +64,6 @@ public class DineoutMenuActivity extends BaseActivity {
         setContentView(R.layout.activity_dineout_menu);
         fetchDineoutMenuInfo();
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.dinemenu_toolbar);
-
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
         collapsingToolbar.setTitle("My Toolbar Title");

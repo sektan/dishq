@@ -43,6 +43,8 @@ public class DeliveryFragment extends Fragment {
     private RelativeLayout rlNoDel;
     private TextView noDelText;
     private Boolean hasMoreResults = false;
+    private DeliveryAdapter deliveryAdapter;
+    Boolean showMoreClicked = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,13 +63,15 @@ public class DeliveryFragment extends Fragment {
         showMore.setTypeface(Util.opensanssemibold);
         rlNoDel = (RelativeLayout) v.findViewById(R.id.rl_no_del);
         noDelText = (TextView) v.findViewById(R.id.no_del_text);
-        noDelText.setTypeface(Util.opensanslight);
+        noDelText.setTypeface(Util.opensansregular);
 
         if (hasMoreResults) {
             showMore.setVisibility(View.VISIBLE);
             showMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    showMoreClicked = true;
+                    deliveryAdapter.notifyDataSetChanged();
                     fetchDeliveryRest(1);
                 }
             });
@@ -110,25 +114,35 @@ public class DeliveryFragment extends Fragment {
                 try {
                     if(response.isSuccessful()) {
                         if (showMoreOptions == 1) {
-                            showMore.setVisibility(View.GONE);
+                            if(!showMoreClicked) {
+                                showMore.setVisibility(View.VISIBLE);
+                            }else{
+                                showMore.setVisibility(View.GONE);
+                            }
                         } else {
-                            showMore.setVisibility(View.VISIBLE);
+                            showMore.setVisibility(View.GONE);
                         }
                         DeliveryTabResponse.DeliveryRestaurants body = response.body().deliveryRestaurants;
                         Util.deliveryRestInfos.clear();
                         if(body!=null) {
-                            Log.d(TAG, "the body is not empty");
-                            rlNoDel.setVisibility(View.GONE);
-                            mRecyclerView.setVisibility(View.VISIBLE);
-                            for(int i = 0; i <body.deliveryRestInfo.size(); i++) {
-                                Util.deliveryRestInfos = body.deliveryRestInfo;
+                            if(body.deliveryRestInfo.size()!=0) {
+                                Log.d(TAG, "the body is not empty");
+                                rlNoDel.setVisibility(View.GONE);
+                                mRecyclerView.setVisibility(View.VISIBLE);
+                                for (int i = 0; i < body.deliveryRestInfo.size(); i++) {
+                                    Util.deliveryRestInfos = body.deliveryRestInfo;
+                                }
+                                progressDialog.dismiss();
+                                deliveryAdapter = new DeliveryAdapter(getActivity());
+                                mRecyclerView.setAdapter(deliveryAdapter);
+                                mLayoutManager = new LinearLayoutManager(getActivity());
+                                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                                setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+                            }else {
+                                progressDialog.dismiss();
+                                rlNoDel.setVisibility(View.VISIBLE);
+                                mRecyclerView.setVisibility(View.GONE);
                             }
-                            progressDialog.dismiss();
-                            DeliveryAdapter deliveryAdapter = new DeliveryAdapter(getActivity());
-                            mRecyclerView.setAdapter(deliveryAdapter);
-                            mLayoutManager = new LinearLayoutManager(getActivity());
-                            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-                            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
                         }else{
                             progressDialog.dismiss();
@@ -138,11 +152,15 @@ public class DeliveryFragment extends Fragment {
                     }else {
                         progressDialog.dismiss();
                         String error = response.errorBody().string();
+                        rlNoDel.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
                     progressDialog.dismiss();
                     e.printStackTrace();
+                    rlNoDel.setVisibility(View.VISIBLE);
+                    mRecyclerView.setVisibility(View.GONE);
                 }
             }
 
@@ -150,6 +168,8 @@ public class DeliveryFragment extends Fragment {
             public void onFailure(Call<DeliveryTabResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
                 progressDialog.dismiss();
+                rlNoDel.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
             }
         });
     }

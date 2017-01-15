@@ -3,6 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rl_no_dine"
+        android:layout_marginTop="200dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/no_dine_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/text_size_20"
+            android:textColor="@color/black"
+            android:text="@string/no_dineout_places_found"/>
+
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/dineout_rest_cardlist"
         android:layout_width="match_parent"

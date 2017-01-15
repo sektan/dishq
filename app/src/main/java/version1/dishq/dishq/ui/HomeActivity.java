@@ -8,20 +8,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -48,6 +55,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
@@ -61,7 +69,7 @@ import version1.dishq.dishq.util.Util;
  */
 
 public class HomeActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, NavigationView.OnNavigationItemSelectedListener {
 
     protected static final int REQUEST_CHECK_SETTINGS = 1000;
     private static final String TAG = "HomeActivity";
@@ -72,12 +80,16 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private static String lang = "0.0";
     final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
     LocationRequest mLocationRequest;
-    private TextView greetingHeader, greetingContext;
+    private TextView greetingHeader, greetingContext, navUserName;
     private Button greetingButton;
     private RelativeLayout rlGreeting;
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
     private ProgressDialog progressDialog;
+    private RelativeLayout rlNoResults, rlHamMood;
+    private Button hamButton, moodButton;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,17 +125,73 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
     protected void setTags() {
         viewPager = (ViewPager) findViewById(R.id.homeViewPager);
+        viewPager.setVisibility(View.VISIBLE);
         rlGreeting = (RelativeLayout) findViewById(R.id.rl_greeting);
+        rlNoResults = (RelativeLayout) findViewById(R.id.rl_home_no_results);
+        rlNoResults.setVisibility(View.GONE);
+        rlHamMood = (RelativeLayout) findViewById(R.id.home_rl_ham_mood);
+        rlHamMood.setVisibility(View.GONE);
         greetingHeader = (TextView) findViewById(R.id.greeting_heading);
         greetingContext = (TextView) findViewById(R.id.greeting_context);
         greetingButton = (Button) findViewById(R.id.greeting_button);
         setFonts();
     }
 
+    protected void setNoResultTags() {
+        viewPager = (ViewPager) findViewById(R.id.homeViewPager);
+        viewPager.setVisibility(View.GONE);
+        rlGreeting = (RelativeLayout) findViewById(R.id.rl_greeting);
+        rlGreeting.setVisibility(View.GONE);
+        rlNoResults = (RelativeLayout) findViewById(R.id.rl_home_no_results);
+        rlNoResults.setVisibility(View.VISIBLE);
+        rlHamMood = (RelativeLayout) findViewById(R.id.home_rl_ham_mood);
+        rlHamMood.setVisibility(View.VISIBLE);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        hamButton = (Button) findViewById(R.id.home_hamburger);
+        moodButton = (Button) findViewById(R.id.home_mood);
+        TextView oops = (TextView) findViewById(R.id.home_oops);
+        oops.setTypeface(Util.opensanssemibold);
+        TextView noResults = (TextView) findViewById(R.id.home_no_results_text);
+        noResults.setTypeface(Util.opensansregular);
+        TextView filterText = (TextView) findViewById(R.id.home_diff_filter);
+        filterText.setTypeface(Util.opensansregular);
+        showTopRlHamMood();
+    }
+
     protected void setFonts() {
         greetingHeader.setTypeface(Util.opensanslight);
         greetingContext.setTypeface(Util.opensanslight);
         greetingButton.setTypeface(Util.opensanssemibold);
+    }
+
+    public void showTopRlHamMood() {
+
+        hamButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(HomeActivity.this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                drawer.setDrawerListener(toggle);
+                toggle.syncState();
+                navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navUserName = (TextView) findViewById(R.id.nav_user_name);
+                if (navUserName != null) {
+                    navUserName.setTypeface(Util.opensanslight);
+                    navUserName.setText(DishqApplication.getUserName());
+                }
+                navigationView.setNavigationItemSelectedListener(HomeActivity.this);
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        moodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+                dialogFragment.show(fragmentManager, "filters_dialog_fragment");
+            }
+        });
     }
 
     public void greetingsShownView(HomeDishesResponse.HomeData body) {
@@ -162,29 +230,48 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                         HomeDishesResponse.HomeData body = response.body().homeData;
                         if(body!=null) {
                             Log.d(TAG, "Body is not null");
-                            Util.setDefaultTab(body.getDefaultTab());
+                            if (body.dishDataInfos.size() != 0) {
+
+                                Util.setDefaultTab(body.getDefaultTab());
                             Util.dishDataModals.clear();
-                            for(int i = 0; i <body.dishDataInfos.size(); i++) {
+                            for (int i = 0; i < body.dishDataInfos.size(); i++) {
                                 Util.dishDataModals = body.dishDataInfos;
                                 Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
                             }
                             Boolean showGreeting = body.getShowGreeting();
-                            if(showGreeting) {
+                            if (showGreeting) {
                                 progressDialog.dismiss();
                                 greetingsShownView(body);
-                            }else {
+                            } else {
                                 setViews();
                             }
-                            if(progressDialog!=null  && progressDialog.isShowing()) {
+                            if (progressDialog != null && progressDialog.isShowing()) {
                                 progressDialog.dismiss();
                             }
+                        }else {
+                                if (progressDialog != null && progressDialog.isShowing()) {
+                                    progressDialog.dismiss();
+                                }
+                                setNoResultTags();
+                            }
+                        }else {
+                            if (progressDialog != null && progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                            setNoResultTags();
                         }
 
                     }else {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                     }
                 }catch (IOException e) {
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                     e.printStackTrace();
                 }
             }
@@ -509,6 +596,77 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     protected void onStop() {
         super.onStop();
         stopLocationUpdates();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_fav) {
+            Intent intent = new Intent(HomeActivity.this, FavouritesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (id == R.id.nav_menufinder) {
+            Intent intent = new Intent(HomeActivity.this, MenuFinder.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else if (id == R.id.nav_rate) {
+            TextView title = new TextView(HomeActivity.this);
+            title.setText("Like the dishq app?");
+            title.setGravity(Gravity.LEFT);
+            title.setTextSize(22);
+            title.setBackgroundColor(Color.WHITE);
+            title.setTextColor(Color.parseColor("#000000"));
+            title.setTypeface(Util.opensanslight);
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("Like the dishq app?");
+            builder.setMessage("Tell us what you think").setCancelable(true)
+                    .setPositiveButton("Love it", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + HomeActivity.this.getPackageName())));
+                        }
+                    });
+            builder.setNegativeButton("Not Happy", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    Sendemail("App Feedback", "food@dishq.in");
+                }
+            });
+            android.app.AlertDialog alert = builder.create();
+            alert.show();
+            TextView textView = (TextView) alert.findViewById(android.R.id.message);
+            textView.setTextSize(20);
+            textView.setTextColor(Color.parseColor("#90000000"));
+            textView.setTypeface(Util.opensanssemibold);
+
+        } else if (id == R.id.nav_share) {
+            Intent i = new Intent(android.content.Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(android.content.Intent.EXTRA_SUBJECT, "Check this out");
+            i.putExtra(android.content.Intent.EXTRA_TEXT, "Love this foodie app, dishq, it gives personalised recommendations!  http://bit.ly/2bLhPig");
+            startActivity(Intent.createChooser(i, "Share via"));
+        } else if (id == R.id.nav_about) {
+            Intent intent = new Intent(HomeActivity.this, AboutUsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void Sendemail(String Subject, String to) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:" + to));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, Subject);
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(HomeActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
