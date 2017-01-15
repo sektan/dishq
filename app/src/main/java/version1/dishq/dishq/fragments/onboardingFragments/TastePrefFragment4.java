@@ -11,7 +11,10 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wefika.flowlayout.FlowLayout;
+
+import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -24,6 +27,7 @@ import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.ui.HomeActivity;
+import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -64,11 +68,10 @@ public class TastePrefFragment4 extends Fragment {
         allergyContainer.removeAllViews();
         for (AllergyModal model : Util.allergyModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, allergyContainer, false);
-            child.setText(model.getAllergyName());
-            child.setTypeface(Util.opensansregular);
-            child.setTag(model);
-
-            allergyContainer.addView(child);
+                child.setText(model.getAllergyName());
+                child.setTypeface(Util.opensansregular);
+                child.setTag(model);
+                allergyContainer.addView(child);
             child.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -79,10 +82,19 @@ public class TastePrefFragment4 extends Fragment {
                     if (view.isChecked()) {
                         Log.d("Name of selected item", model.getAllergyName());
                         model.setAllergyCurrentlySelect(true);
-                        Util.favCuisineCount++;
-                        Util.dontEatSelects.add(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
+                        DishqApplication.dontEatSelects = new ArrayList<DontEatSelect>();
+                        DishqApplication.dontEatSelects.add(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
+                        Gson gson = new Gson();
+                        String json = gson.toJson(DishqApplication.dontEatSelects);
+                        DishqApplication.getPrefs().edit().putString(Constants.ALLERGY_SELECTS, json).apply();
+
                     }else {
                         model.setAllergyCurrentlySelect(false);
+                        DishqApplication.dontEatSelects = new ArrayList<DontEatSelect>();
+                        DishqApplication.dontEatSelects.remove(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
+                        Gson gson = new Gson();
+                        String json = gson.toJson(DishqApplication.dontEatSelects);
+                        DishqApplication.getPrefs().edit().putString(Constants.ALLERGY_SELECTS, json).apply();
                     }
                 }
             });
@@ -107,18 +119,19 @@ public class TastePrefFragment4 extends Fragment {
     public void sendUserPrefData() {
         RestApi restApi = Config.createService(RestApi.class);
         String authorization = DishqApplication.getAccessToken();
-        final UserPrefRequest userPrefRequest = new UserPrefRequest(Util.getFoodChoiceSelected(), Util.homeCuisineSelects,
-                Util.favCuisineSelects, Util.dontEatSelects);
+        final UserPrefRequest userPrefRequest = new UserPrefRequest(DishqApplication.getFoodChoiceSelected(), DishqApplication.getHomeCuisineSelects(),
+                DishqApplication.getFavCuisineSelects(), DishqApplication.getDontEatSelects());
         Call<ResponseBody> request = restApi.sendUserPref(authorization, userPrefRequest);
         request.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.d(TAG, "Success");
+                DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, true).apply();
+                DishqApplication.setOnBoardingDone(true);
                 Intent startHomeActivity = new Intent(getActivity(), HomeActivity.class);
                 startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().finish();
                 startActivity(startHomeActivity);
-
             }
 
             @Override

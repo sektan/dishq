@@ -38,9 +38,21 @@ public class MenuFinderRestSuggestResponse {
         @Expose
         private Boolean mfOpenNow;
 
+        @SerializedName("price_level")
+        @Expose
+        private int mfPriceLvl;
+
+        @SerializedName("drive_time")
+        @Expose
+        private String mfDriveTime;
+
         @SerializedName("restaurant_name")
         @Expose
         private String mfRestName;
+
+        @SerializedName("restaurant_address")
+        @Expose
+        private ArrayList<String> mfRestAddr;
 
         @SerializedName("photo_thumbnail_menu_finder_url")
         @Expose
@@ -104,6 +116,31 @@ public class MenuFinderRestSuggestResponse {
 
         public void setMfRestCuisineText(ArrayList<String> mfRestCuisineText) {
             this.mfRestCuisineText = mfRestCuisineText;
+        }
+
+
+        public ArrayList<String> getMfRestAddr() {
+            return mfRestAddr;
+        }
+
+        public void setMfRestAddr(ArrayList<String> mfRestAddr) {
+            this.mfRestAddr = mfRestAddr;
+        }
+
+        public int getMfPriceLvl() {
+            return mfPriceLvl;
+        }
+
+        public void setMfPriceLvl(int mfPriceLvl) {
+            this.mfPriceLvl = mfPriceLvl;
+        }
+
+        public String getMfDriveTime() {
+            return mfDriveTime;
+        }
+
+        public void setMfDriveTime(String mfDriveTime) {
+            this.mfDriveTime = mfDriveTime;
         }
     }
 }

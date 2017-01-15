@@ -20,8 +20,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
@@ -32,9 +30,6 @@ import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
-import version1.dishq.dishq.modals.lists.DontEatSelect;
-import version1.dishq.dishq.modals.lists.FavCuisineSelect;
-import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DeliveryMenuResponse;
@@ -60,9 +55,6 @@ public class Util {
     public static ArrayList<FoodChoicesModal> foodChoicesModals = new ArrayList<>();
     public static ArrayList<FavCuisinesModal> favCuisinesModals = new ArrayList<>();
     public static ArrayList<HomeCuisinesModal> homeCuisinesModals = new ArrayList<>();
-    public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
-    public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
-    public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
     public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<DishDataInfo>();
     public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos = new ArrayList<>();
     public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
@@ -74,8 +66,6 @@ public class Util {
     public static ArrayList<String> dishSmallPic = new ArrayList<>();
     public static DeliveryMenuResponse.DeliveryRestData deliveryRestData = null;
     public static DineoutMenuResponse.DineoutRestData dineoutRestData = null;
-    public static Boolean homeCuisineSelected = false;
-    public static int favCuisineCount = 0;
     public static Typeface opensanslight = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
             "opensanslight.ttf"),
             opensansregular = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
@@ -83,7 +73,6 @@ public class Util {
             opensanssemibold = Typeface.createFromAsset(DishqApplication.getContext().getAssets(),
                     "opensanssemibold.ttf");
     static String ACCESS_TOKEN = "";
-    private static int foodChoiceSelected;
     private static int favCuisineTotal = 0;
     private static String latitude = "";
     private static String longitude = "";
@@ -202,14 +191,6 @@ public class Util {
 
     public static void setFavCuisinetotal(int favCuisineTotal) {
         Util.favCuisineTotal = favCuisineTotal;
-    }
-
-    public static int getFoodChoiceSelected() {
-        return Util.foodChoiceSelected;
-    }
-
-    public static void setFoodChoiceSelected(int foodChoiceSelected) {
-        Util.foodChoiceSelected = foodChoiceSelected;
     }
 
     public static void addRemoveDishFromFav(String source, int delGenericDishId, int checked, final String TAG) {

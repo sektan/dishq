@@ -82,9 +82,6 @@ public class OnBoardingActivity extends BaseActivity {
                     if (response.isSuccessful()) {
                         TastePrefData.FoodPreferencesInfo body = response.body().foodPreferencesinfo;
                         if (body != null) {
-                            Boolean onBoardingCompleted = true;
-                            DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, onBoardingCompleted).apply();
-                            DishqApplication.setOnBoardingDone(onBoardingCompleted);
                             Log.d(TAG, "");
                             Util.allergyModals.clear();
                             Util.foodChoicesModals.clear();

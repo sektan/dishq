@@ -1,4 +1,4 @@
-package version1.dishq.dishq.customViews;
+package version1.dishq.dishq.custom;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;

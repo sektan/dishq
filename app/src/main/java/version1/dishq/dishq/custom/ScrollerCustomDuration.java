@@ -1,4 +1,4 @@
-package version1.dishq.dishq.customViews;
+package version1.dishq.dishq.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

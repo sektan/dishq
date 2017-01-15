@@ -17,7 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.customViews.OnSwipeListener;
+import version1.dishq.dishq.custom.OnSwipeListener;
+import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -36,6 +37,9 @@ public class TastePrefFragment1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (DishqApplication.getFragmentSeen() >=1) {
+            showNext();
+        }
         View v = inflater.inflate(R.layout.fragment_taste_pref_first, container, false);
         setTags(v);
         final OnboardingSwipeListener myOnSwipeListener = new OnboardingSwipeListener();
@@ -82,14 +86,17 @@ public class TastePrefFragment1 extends Fragment {
                 vegSelection.setVisibility(View.VISIBLE);
                 eggSelection.setVisibility(View.GONE);
                 nonVegSelection.setVisibility(View.GONE);
-                Util.setFoodChoiceSelected(1);
+                DishqApplication.getPrefs().edit().putInt(Constants.FOOD_CHOICE_SELECTED, 1).apply();
+                DishqApplication.setFoodChoiceSelected(1);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        showNext();
+                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
+                            DishqApplication.setFragmentSeen(1);
+                            showNext();
                     }
-                }, 1000);
+                }, 400);
             }
         });
         eggDish.setOnClickListener(new View.OnClickListener() {
@@ -102,14 +109,17 @@ public class TastePrefFragment1 extends Fragment {
                     vegSelection.setVisibility(View.GONE);
                     eggSelection.setVisibility(View.VISIBLE);
                     nonVegSelection.setVisibility(View.GONE);
-                    Util.setFoodChoiceSelected(2);
+                    DishqApplication.getPrefs().edit().putInt(Constants.FOOD_CHOICE_SELECTED, 2).apply();
+                    DishqApplication.setFoodChoiceSelected(2);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            showNext();
+                                DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
+                                DishqApplication.setFragmentSeen(1);
+                                showNext();
                         }
-                    }, 1000);
+                    }, 400);
                 }
             }
         });
@@ -123,14 +133,17 @@ public class TastePrefFragment1 extends Fragment {
                     vegSelection.setVisibility(View.GONE);
                     eggSelection.setVisibility(View.GONE);
                     nonVegSelection.setVisibility(View.VISIBLE);
-                    Util.setFoodChoiceSelected(3);
+                    DishqApplication.getPrefs().edit().putInt(Constants.FOOD_CHOICE_SELECTED, 1).apply();
+                    DishqApplication.setFoodChoiceSelected(3);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            showNext();
+                                DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
+                                DishqApplication.setFragmentSeen(1);
+                                showNext();
                         }
-                    }, 1000);
+                    }, 400);
                 }
             }
         });
@@ -147,7 +160,7 @@ public class TastePrefFragment1 extends Fragment {
     }
 
     void showNext() {
-        if (Util.getFoodChoiceSelected() != 0) {
+        if(DishqApplication.getFoodChoiceSelected()!=0) {
             Fragment fragment = new TastePrefFragment2();
             FragmentManager fm = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();

@@ -80,7 +80,7 @@ import version1.dishq.dishq.util.Util;
 
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, LocationListener{
+        GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     protected static final int REQUEST_CHECK_SETTINGS = 1000;
     private static final String TAG = "SignUpActivity";
@@ -154,23 +154,24 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     protected void setTags() {
+        VideoView mVideoView = (VideoView) findViewById(R.id.VideoView);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + R.raw.sign_in_video);
+        mVideoView.setMediaController(null);
+        mVideoView.setVideoURI(uri);
+        mVideoView.requestFocus();
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+        mVideoView.start();
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         facebookButton = (Button) findViewById(R.id.fb);
         facebookButton.setTypeface(Util.opensanssemibold);
         googleButton = (Button) findViewById(R.id.google_sign_up);
         googleButton.setTypeface(Util.opensanssemibold);
-        VideoView mVideoView = (VideoView)findViewById(R.id.VideoView);
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + R.raw.sign_in_video);
-        mVideoView.setMediaController(null);
-        mVideoView.setVideoURI(uri);
-        mVideoView.requestFocus();
-        mVideoView.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
-                                              @Override
-                                              public void onPrepared(MediaPlayer mp) {
-                                                  mp.setLooping(true);
-                                              }
-                                          });
-        mVideoView.start();
+
         TextView connectWith = (TextView) findViewById(R.id.connect_with);
         connectWith.setTypeface(Util.opensansregular);
         setClickables();
@@ -432,17 +433,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public void checkWhichActivity(Boolean isNewUser) {
+    public void checkWhichActivity() {
         if (!DishqApplication.getOnBoardingDone()) {
-            // if (isNewUser) {
             Intent i = new Intent(SignInActivity.this, OnBoardingActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(i);
-            // }
         } else {
             //Check for gps
-
             checkGPS();
         }
     }
@@ -515,7 +513,17 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             //Storing User Name
                             DishqApplication.getPrefs().edit().putString(Constants.USER_NAME, body.userDataInfo.getFirstName()).apply();
                             DishqApplication.setUserName(body.userDataInfo.getFirstName());
-                            checkWhichActivity(body.getIsNewUser());
+                            Boolean isNewUser = body.getIsNewUser();
+                            DishqApplication.getPrefs().edit().putBoolean(Constants.IS_NEW_USER, true).apply();
+                            DishqApplication.setIsNewUser(isNewUser);
+                            if (isNewUser) {
+                                DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, false).apply();
+                                DishqApplication.setOnBoardingDone(false);
+                            } else {
+                                DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, true).apply();
+                                DishqApplication.setOnBoardingDone(true);
+                            }
+                            checkWhichActivity();
                         }
                     } else {
                         String error = response.errorBody().string();
@@ -697,17 +705,18 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void selfPermission() {
+
         if (ActivityCompat.shouldShowRequestPermissionRationale(SignInActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
             Log.e("accept", "accept");
             Toast.makeText(this, "Enable Location Permission to access this feature", Toast.LENGTH_SHORT).show(); // Something like this
-
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             Uri uri = Uri.fromParts("package", this.getPackageName(), null);
             intent.setData(uri);
             startActivity(intent);
-            getTheLocale();
+
+
         } else {
             //request the permission
             Log.e("accept", "not accept");
@@ -715,6 +724,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_GPS_ACCESS);
         }
+
+        getTheLocale();
     }
 
     protected void stopLocationUpdates() {

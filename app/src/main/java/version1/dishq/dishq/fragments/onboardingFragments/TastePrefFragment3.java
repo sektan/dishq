@@ -13,11 +13,16 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wefika.flowlayout.FlowLayout;
+
+import java.util.ArrayList;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
+import version1.dishq.dishq.util.Constants;
+import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -30,10 +35,12 @@ public class TastePrefFragment3 extends Fragment {
     Button favCuisine;
     TextView pickThree;
     CheckedTextView child;
-    int checkcount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (DishqApplication.getFragmentSeen() >=3) {
+            showNext();
+        }
         View v = inflater.inflate(R.layout.fragment_taste_pref_third, container, false);
         setTags(v);
 
@@ -56,9 +63,11 @@ public class TastePrefFragment3 extends Fragment {
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, favCuisineContainer, false);
-            child.setText(model.getFavCuisName());
-            child.setTypeface(Util.opensansregular);
-            child.setTag(model);
+//            if(!DishqApplication.getHomeCuisineSelected().equals(model.getFavCuisName())) {
+                child.setText(model.getFavCuisName());
+                child.setTypeface(Util.opensansregular);
+                child.setTag(model);
+           // }
             if (model.getFavCuisCurrentSelect()) {
                 child.setChecked(true);
             }
@@ -73,50 +82,61 @@ public class TastePrefFragment3 extends Fragment {
                     if (view.isChecked()) {
                         Log.d("Name of selected item", model.getFavCuisName());
                         model.setFavCuisCurrentSelect(true);
-                        Util.favCuisineCount++;
-                        Util.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
-                        checkcount++;
-                        if (checkcount == 3) {
-                            Util.setFavCuisinetotal(checkcount);
+                        DishqApplication.favCuisineCount++;
+                        DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
+                        DishqApplication.getPrefs().edit().putInt(Constants.FAV_CUISINE_COUNT, DishqApplication.getFavCuisineCount()).apply();
+                        DishqApplication.favCuisineSelects = new ArrayList<FavCuisineSelect>();
+                        DishqApplication.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
+                        Gson gson = new Gson();
+                        String json = gson.toJson(DishqApplication.getFavCuisineSelects());
+                        DishqApplication.getPrefs().edit().putString(Constants.HOME_CUISINE_SELECTS, json).apply();
+
+                        if (DishqApplication.favCuisineCount == 3) {
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 3).apply();
+                                    DishqApplication.setFragmentSeen(3);
                                     showNext();
                                 }
-                            }, 1000);
+                            }, 400);
                         }
                     } else {
+                        DishqApplication.favCuisineCount--;
+                        DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
+                        DishqApplication.favCuisineSelects = new ArrayList<FavCuisineSelect>();
+                        DishqApplication.favCuisineSelects.remove(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
                         model.setFavCuisCurrentSelect(false);
                     }
 
                 }
             });
-            if (checkcount == 3) {
+            if (DishqApplication.favCuisineCount == 3) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 3).apply();
+                        DishqApplication.setFragmentSeen(3);
                         showNext();
                     }
-                }, 1000);
+                }, 400);
             }
         }
     }
 
     void showNext() {
-        Log.d("showNext is selected", "count of fav dishes:" + Util.favCuisineCount);
+        Log.d("showNext is selected", "count of fav dishes:" + DishqApplication.getFavCuisineCount());
         Log.d("Next page", "next page is shown");
-        if (checkcount == 3) {
+        if (DishqApplication.favCuisineCount == 3) {
             Fragment fragment = new TastePrefFragment4();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            //ft.hide(getActivity().getSupportFragmentManager().findFragmentById(R.id.onboarding_screen3));
-            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
-            ft.replace(R.id.onboarding_screen4, fragment);
-            ft.addToBackStack(null);
-            ft.commit();
-        }
-
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
+        ft.replace(R.id.onboarding_screen4, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
     }
 }

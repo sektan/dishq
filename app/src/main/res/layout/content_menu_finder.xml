@@ -11,17 +11,69 @@
     tools:context="version1.dishq.dishq.ui.MenuFinder"
     tools:showIn="@layout/activity_menu_finder">
 
-    <TextView
-        android:id="@+id/text_nearby_restaurants"
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:maxLines="1"
-        android:text="@string/nearby_restaurants" />
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/progress"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/menu_finder_recycler_view"
+    <ListView
+        android:id="@+id/suggest_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="16dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/noresult"
+        android:layout_width="350dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/menufinder_no_results_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="@string/sorry_no_results_found"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_nearby_rest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!--
+        <TextView
+            android:id="@+id/text_nearby_restaurants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nearby_restaurants" />
+            -->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/menu_finder_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp" />
+
+    </RelativeLayout>
 
 </LinearLayout>

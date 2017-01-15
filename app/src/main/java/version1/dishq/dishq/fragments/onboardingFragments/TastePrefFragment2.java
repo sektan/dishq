@@ -13,12 +13,17 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wefika.flowlayout.FlowLayout;
 
+import java.util.ArrayList;
+
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.customViews.OnSwipeListener;
+import version1.dishq.dishq.custom.OnSwipeListener;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
+import version1.dishq.dishq.util.Constants;
+import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -34,6 +39,9 @@ public class TastePrefFragment2 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (DishqApplication.getFragmentSeen() >=2) {
+            showNext();
+        }
         View v = inflater.inflate(R.layout.fragment_taste_pref_second, container, false);
         setTags(v);
 
@@ -57,20 +65,34 @@ public class TastePrefFragment2 extends Fragment {
                 if (view.isChecked()) {
                     Log.d("Name of selected item", model.getHomeCuisName());
                     model.setHomeCuisCurrentSelect(true);
-                    Util.homeCuisineSelected = true;
-                    Util.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
+                    DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, true).apply();
+                    DishqApplication.setHomeCuisineSelected(true);
+                    DishqApplication.homeCuisineSelects = new ArrayList<>();
+                    DishqApplication.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
+                    Gson gson = new Gson();
+                    String json = gson.toJson(DishqApplication.homeCuisineSelects);
+                    DishqApplication.getPrefs().edit().putString(Constants.HOME_CUISINE_SELECTS, json).apply();
                 }else{
                     model.setHomeCuisCurrentSelect(false);
-                    Util.homeCuisineSelected = false;
+                    DishqApplication.homeCuisineSelects = new ArrayList<>();
+                    DishqApplication.homeCuisineSelects.remove(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
+                    Gson gson = new Gson();
+                    String json = gson.toJson(DishqApplication.homeCuisineSelects);
+                    DishqApplication.getPrefs().edit().putString(Constants.HOME_CUISINE_SELECTS, json).apply();
+                    DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, false).apply();
+                    DishqApplication.setHomeCuisineSelected(false);
                 }
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        showNext();
+                        if (DishqApplication.getHomeCuisineSelected()) {
+                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 2).apply();
+                            DishqApplication.setFragmentSeen(2);
+                            showNext();
+                        }
                     }
-                }, 1000);
-
+                }, 400);
             }
         };
         for (HomeCuisinesModal model : Util.homeCuisinesModals) {
@@ -78,7 +100,7 @@ public class TastePrefFragment2 extends Fragment {
             child.setText(model.getHomeCuisName());
             child.setTypeface(Util.opensansregular);
             child.setTag(model);
-            if(!Util.homeCuisineSelected) {
+            if(!DishqApplication.getHomeCuisineSelected()) {
                 child.setOnClickListener(clickListener);
             }
             child.setChecked(false);
@@ -89,14 +111,16 @@ public class TastePrefFragment2 extends Fragment {
                 model.setHomeCuisCurrentSelect(false);
             }
             homeCuisineContainer.addView(child);
-            if (Util.homeCuisineSelected) {
+            if (DishqApplication.getHomeCuisineSelected()) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        showNext();
+                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 2).apply();
+                            DishqApplication.setFragmentSeen(2);
+                            showNext();
                     }
-                }, 1000);
+                }, 400);
             }
         }
     }
@@ -109,7 +133,7 @@ public class TastePrefFragment2 extends Fragment {
 
     //Calling the next Fragment
     void showNext() {
-        if (Util.homeCuisineSelected) {
+        if (DishqApplication.getHomeCuisineSelected()) {
             Fragment fragment = new TastePrefFragment3();
             FragmentManager fm = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();

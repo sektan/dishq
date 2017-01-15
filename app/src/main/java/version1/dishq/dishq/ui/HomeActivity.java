@@ -127,6 +127,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     }
 
     public void greetingsShownView(HomeDishesResponse.HomeData body) {
+        setViews();
         rlGreeting.setVisibility(View.VISIBLE);
         if(body!=null) {
             greetingHeader.setText(body.greetingsInfo.getGreetingMessage());
@@ -161,21 +162,22 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                         HomeDishesResponse.HomeData body = response.body().homeData;
                         if(body!=null) {
                             Log.d(TAG, "Body is not null");
+                            Util.setDefaultTab(body.getDefaultTab());
+                            Util.dishDataModals.clear();
+                            for(int i = 0; i <body.dishDataInfos.size(); i++) {
+                                Util.dishDataModals = body.dishDataInfos;
+                                Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
+                            }
                             Boolean showGreeting = body.getShowGreeting();
                             if(showGreeting) {
                                 progressDialog.dismiss();
                                 greetingsShownView(body);
+                            }else {
+                                setViews();
                             }
                             if(progressDialog!=null  && progressDialog.isShowing()) {
                                 progressDialog.dismiss();
                             }
-                            Util.setDefaultTab(body.getDefaultTab());
-                            Util.dishDataModals.clear();
-                            for(int i = 0; i <body.dishDataInfos.size(); i++) {
-                                    Util.dishDataModals = body.dishDataInfos;
-                                    Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
-                            }
-                            setViews();
                         }
 
                     }else {

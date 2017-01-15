@@ -9,6 +9,11 @@ import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,6 +21,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import version1.dishq.dishq.modals.lists.DontEatSelect;
+import version1.dishq.dishq.modals.lists.FavCuisineSelect;
+import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.RestApi;
 
@@ -35,11 +43,17 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static String facebookOrGoogle;
     private static Boolean IS_NEW_USER;
     private static Boolean ON_BOARDING_DONE;
-    public boolean wasInBackground = true;
+    private static int fragmentSeen;
+    public boolean wasInBackground;
     private static String userName;
-
+    private static int foodChoiceSelected;
+    public static Boolean homeCuisineSelected;
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
+    public static int favCuisineCount = 0;
+    public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
+    public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
+    public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -51,14 +65,33 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
         userName = getPrefs().getString(Constants.USER_NAME, null);
         facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
+        homeCuisineSelected = getPrefs().getBoolean(Constants.HOME_CUISINE_SELECTED, false);
         IS_NEW_USER = getPrefs().getBoolean(Constants.IS_NEW_USER, false);
+        fragmentSeen = getPrefs().getInt(Constants.IS_FRAGMENT_SEEN, 0);
         userID = getPrefs().getInt(Constants.USER_ID, 0);
+        Gson gsonHome = new Gson();
+        String jsonHome = getPrefs().getString(Constants.HOME_CUISINE_SELECTS, null);
+        Type typeHome = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
+        homeCuisineSelects = gsonHome.fromJson(jsonHome, typeHome);
+
+        Gson gsonFav = new Gson();
+        String jsonFav = getPrefs().getString(Constants.FAV_CUISINE_SELECTS, null);
+        Type typeFav = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
+        favCuisineSelects = gsonFav.fromJson(jsonFav, typeFav);
+
+        Gson gsonAllergy = new Gson();
+        String jsonAllergy = getPrefs().getString(Constants.ALLERGY_SELECTS, null);
+        Type typeAllergy = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
+        dontEatSelects = gsonAllergy.fromJson(jsonAllergy, typeAllergy);
+
+        foodChoiceSelected = getPrefs().getInt(Constants.FOOD_CHOICE_SELECTED, 0);
         ON_BOARDING_DONE = getPrefs().getBoolean(Constants.ON_BOARDING_DONE, false);
+        favCuisineCount = getPrefs().getInt(Constants.FAV_CUISINE_COUNT, 0);
         registerActivityLifecycleCallbacks(activityCallbacks);
     }
 
-    public static SharedPreferences getPrefs(){
-        if(prefs == null){
+    public static SharedPreferences getPrefs() {
+        if (prefs == null) {
             prefs = application.getSharedPreferences(Constants.DISHQ_APP_PREFS, MODE_PRIVATE);
         }
         return prefs;
@@ -70,7 +103,41 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
     }
 
-    public static String getAccessToken(){
+    public static int getFavCuisineCount() {
+        return DishqApplication.favCuisineCount;
+    }
+
+    public static void setFavCuisineCount(int favCuisineCount) {
+        DishqApplication.favCuisineCount = favCuisineCount;
+    }
+
+    public static ArrayList<DontEatSelect> getDontEatSelects() {
+        return dontEatSelects;
+    }
+
+    public static void setDontEatSelects(ArrayList<DontEatSelect> dontEatSelects) {
+        DishqApplication.dontEatSelects = dontEatSelects;
+    }
+
+    public static ArrayList<HomeCuisineSelect> getHomeCuisineSelects() {
+        return DishqApplication.homeCuisineSelects;
+    }
+
+
+    public static ArrayList<FavCuisineSelect> getFavCuisineSelects() {
+        return DishqApplication.favCuisineSelects;
+    }
+
+    public static void setFavCuisineSelects(ArrayList<FavCuisineSelect> favCuisineSelects) {
+        DishqApplication.favCuisineSelects = favCuisineSelects;
+    }
+
+
+    public static void setHomeCuisineSelects(ArrayList<HomeCuisineSelect> homeCuisineSelects) {
+        DishqApplication.homeCuisineSelects = homeCuisineSelects;
+    }
+
+    public static String getAccessToken() {
         return Util.ACCESS_TOKEN;
     }
 
@@ -99,7 +166,13 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         DishqApplication.ON_BOARDING_DONE = onBoardingDone;
     }
 
+    public static Boolean getHomeCuisineSelected() {
+        return DishqApplication.homeCuisineSelected;
+    }
 
+    public static void setHomeCuisineSelected(Boolean homeCuisineSelected) {
+        DishqApplication.homeCuisineSelected = homeCuisineSelected;
+    }
 
     public static Boolean getIsNewUser() {
         return DishqApplication.IS_NEW_USER;
@@ -107,6 +180,23 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 
     public static void setIsNewUser(Boolean IS_NEW_USER) {
         DishqApplication.IS_NEW_USER = IS_NEW_USER;
+    }
+
+    public static int getFoodChoiceSelected() {
+        return DishqApplication.foodChoiceSelected;
+    }
+
+    public static void setFoodChoiceSelected(int foodChoiceSelected) {
+        DishqApplication.foodChoiceSelected = foodChoiceSelected;
+    }
+
+
+    public static int getFragmentSeen() {
+        return DishqApplication.fragmentSeen;
+    }
+
+    public static void setFragmentSeen(int fragmentSeen) {
+        DishqApplication.fragmentSeen = fragmentSeen;
     }
 
     public static void setUniqueId(String uniqueId) {
@@ -124,6 +214,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     public static void setUserID(int userID) {
         DishqApplication.userID = userID;
     }
+
     Application.ActivityLifecycleCallbacks activityCallbacks = new ActivityLifecycleCallbacks() {
         @Override
         public void onActivityCreated(Activity activity, Bundle bundle) {
