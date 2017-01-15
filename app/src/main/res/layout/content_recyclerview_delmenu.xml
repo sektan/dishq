@@ -50,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_cv_del_menu_content"
         android:maxLines="3"
+        android:layout_marginStart="12.7dp"
         android:text="@string/personalized_menu_text"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_20" />

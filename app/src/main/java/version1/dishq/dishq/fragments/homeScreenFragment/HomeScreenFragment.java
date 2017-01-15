@@ -183,6 +183,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                 }
             });
 
+            Boolean isFavourited = dishDataInfo.getAddedToFav();
+            if(isFavourited) {
+                favButton.setChecked(true);
+            }else {
+                favButton.setChecked(false);
+            }
+
             favButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
