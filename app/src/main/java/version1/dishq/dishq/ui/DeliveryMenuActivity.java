@@ -60,8 +60,9 @@ public class DeliveryMenuActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_menu);
         fetchDeliveryMenuInfo();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.delmenu_toolbar);
-
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri data = intent.getData();
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
         collapsingToolbar.setTitle("My Toolbar Tittle");

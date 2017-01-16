@@ -140,14 +140,14 @@ public class MenuFinder extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                     str = s.toString();
                     if (s.length() > 1) {
                         txtAutoComplete.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.menufinder_search, 0, R.drawable.menufinder_cross, 0);
                         if (!Util.checkAndShowNetworkPopup(MenuFinder.this)) {
                             progressBar.setVisibility(View.VISIBLE);
                             fetchRestaurant(str);
-                            //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         }
                     } else {
                         txtAutoComplete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.menufinder_search, 0, 0, 0);
@@ -156,7 +156,7 @@ public class MenuFinder extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                   // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                   getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 }
             });
 
@@ -235,12 +235,14 @@ public class MenuFinder extends AppCompatActivity {
                         if(body!=null) {
                             if(body.size()!=0) {
                                 Log.d(TAG, "body is not null");
+                                norestaurant.setVisibility(View.GONE);
                                 Util.menuFinderRestInfos.clear();
                                 recyclerView.setVisibility(View.GONE);
                                 for (int i = 0; i < body.size(); i++) {
                                     Util.menuFinderRestInfos = body;
                                 }
                                 myAdapter = new MyAdapter(MenuFinder.this);
+                                listView.setVisibility(View.VISIBLE);
                                 listView.setAdapter(myAdapter);
 
                             }else {
@@ -317,7 +319,6 @@ public class MenuFinder extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             return Util.menuFinderRestInfos.size();
         }
 
@@ -334,9 +335,8 @@ public class MenuFinder extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = null;
-            if (view == null) {
-                view = layoutInflater.inflate(R.layout.cardview_dineout, parent, false);
-            }
+
+            view = layoutInflater.inflate(R.layout.cardview_dineout, parent, false);
             mfRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
             mfRestName.setTypeface(Util.opensanssemibold);
             mfRestAddr = (TextView) view.findViewById(R.id.dineout_rest_addr);
