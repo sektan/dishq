@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -227,6 +228,7 @@ public class DeliveryMenuActivity extends BaseActivity {
                     }
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     shareIntent.setData(Uri.parse(runnrUrl));
                     shareIntent.setType("*/*");
                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
@@ -248,6 +250,7 @@ public class DeliveryMenuActivity extends BaseActivity {
 
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     shareIntent.setData(Uri.parse(foodpandaUrl));
                     shareIntent.setType("*/*");
                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
@@ -266,11 +269,22 @@ public class DeliveryMenuActivity extends BaseActivity {
                     for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
                         zomatoUrl += s;
                     }
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.setData(Uri.parse(zomatoUrl));
-                    shareIntent.setType("*/*");
-                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
+
+                    Intent intent = null;
+                    try {
+                        intent = Intent.parseUri(zomatoUrl, Intent.URI_INTENT_SCHEME);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setComponent(null);
+//                    Intent shareIntent = new Intent();
+//                    shareIntent.setAction(Intent.ACTION_SEND);
+//                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    shareIntent.setData(Uri.parse(zomatoUrl));
+//                    shareIntent.setType("*/*");
+                    startActivity(Intent.createChooser(intent, getResources().getText(R.string.chooser_title)));
                 }
             });
         }else {
@@ -288,6 +302,7 @@ public class DeliveryMenuActivity extends BaseActivity {
                     }
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     shareIntent.setData(Uri.parse(swiggyUrl));
                     shareIntent.setType("*/*");
                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));

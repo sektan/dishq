@@ -1,10 +1,17 @@
 package version1.dishq.dishq.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -13,7 +20,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.CustomViewPager;
 import version1.dishq.dishq.fragments.onboardingFragments.TastePrefFragment1;
+import version1.dishq.dishq.fragments.onboardingFragments.TastePrefFragment2;
+import version1.dishq.dishq.fragments.onboardingFragments.TastePrefFragment3;
+import version1.dishq.dishq.fragments.onboardingFragments.TastePrefFragment4;
 import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;
@@ -21,7 +32,6 @@ import version1.dishq.dishq.modals.HomeCuisinesModal;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.TastePrefData;
 import version1.dishq.dishq.server.RestApi;
-import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -33,13 +43,16 @@ import version1.dishq.dishq.util.Util;
 public class OnBoardingActivity extends BaseActivity {
 
     private String TAG = "OnBoardingActivity";
-
+    public static CustomViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+        pager = (CustomViewPager) findViewById(R.id.customViewPager);
+        pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
         fetchTastePref();
+
     }
 
     @Override
@@ -52,15 +65,6 @@ public class OnBoardingActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         hideSoftKeyboard();
-    }
-
-    public void addFragments() {
-        FragmentManager fm = getSupportFragmentManager();
-        //add
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.onboarding_screen1, new TastePrefFragment1());
-        ft.addToBackStack(null);
-        ft.commit();
     }
 
     public void hideSoftKeyboard() {
@@ -111,7 +115,10 @@ public class OnBoardingActivity extends BaseActivity {
                                         body.homeCuisineInfos.get(l).getHomeCuisName()));
                                 Log.d(TAG, "Data has been filled: " + Util.homeCuisinesModals.size());
                             }
-                            addFragments();
+//                            PageListener pageListener = new PageListener();
+//                            pager.addOnPageChangeListener(pageListener);
+                            MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+                            pager.setAdapter(adapter);
                         }
                     } else {
                         String error = response.errorBody().string();
@@ -127,6 +134,64 @@ public class OnBoardingActivity extends BaseActivity {
                 Log.d(TAG, "Failure");
             }
         });
+    }
+
+    public class PageListener extends ViewPager.SimpleOnPageChangeListener {
+
+        public void onPageSelected(final int position) {
+            Log.d("page", position + "");
+            if (position == 0) {
+                if (DishqApplication.getFoodChoiceSelected() != 0) {
+                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.RIGHT);
+                    OnBoardingActivity.pager.setCurrentItem(1);
+                }
+            } else if (position == 1) {
+                if (DishqApplication.getHomeCuisineSelected()) {
+                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.RIGHT);
+                    OnBoardingActivity.pager.setCurrentItem(2);
+                }
+            } else if (position == 2) {
+                if (DishqApplication.getFavCuisineCount() == 3) {
+                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.RIGHT);
+                    OnBoardingActivity.pager.setCurrentItem(3);
+                }
+            } else if (position == 3) {
+                pager.setPagingEnabled(CustomViewPager.SwipeDirection.LEFT);
+                OnBoardingActivity.pager.setCurrentItem(3);
+            }
+        }
+    }
+
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            Fragment frag = null;
+            switch (pos) {
+                case 0:
+                    frag = new TastePrefFragment1();
+                    break;
+                case 1:
+                    frag = new TastePrefFragment2();
+                    break;
+                case 2:
+                    frag = new TastePrefFragment3();
+                    break;
+                case 3:
+                    frag = new TastePrefFragment4();
+                    break;
+            }
+            return frag;
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
     }
 
 }

@@ -68,7 +68,6 @@ public class MenuFinder extends AppCompatActivity {
     ListView listView;
     protected LayoutManagerType mCurrentLayoutManagerType;
     protected RecyclerView.LayoutManager mLayoutManager;
-    private ProgressDialog progressDialog = null;
     private EditText txtAutoComplete;
     private ProgressBar progressBar;
     private String str="";

@@ -5,9 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.custom.OnSwipeListener;
+import version1.dishq.dishq.custom.CustomViewPager;
+import version1.dishq.dishq.custom.OnSwipeTouchListener;
+import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -37,22 +37,22 @@ public class TastePrefFragment1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (DishqApplication.getFragmentSeen() >=1) {
-            showNext();
-        }
+//        if (DishqApplication.getFoodChoiceSelected()!=0) {
+//            showNext();
+//        }
         View v = inflater.inflate(R.layout.fragment_taste_pref_first, container, false);
-        setTags(v);
-        final OnboardingSwipeListener myOnSwipeListener = new OnboardingSwipeListener();
-        v.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (myOnSwipeListener.onSwipe(OnSwipeListener.Direction.up)) {
-                    return true;
+        v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeRight() {
+                //do nothing
+            }
+
+            public void onSwipeLeft() {
+                if(DishqApplication.getFoodChoiceSelected()!=0) {
+                    OnBoardingActivity.pager.setCurrentItem(1);
                 }
-                Log.d("Gesture return", "false");
-                return false;
             }
         });
+        setTags(v);
         return v;
     }
 
@@ -92,9 +92,9 @@ public class TastePrefFragment1 extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
-                            DishqApplication.setFragmentSeen(1);
-                            showNext();
+                        DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
+                        DishqApplication.setFragmentSeen(1);
+                        showNext();
                     }
                 }, 400);
             }
@@ -115,9 +115,9 @@ public class TastePrefFragment1 extends Fragment {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                                DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
-                                DishqApplication.setFragmentSeen(1);
-                                showNext();
+                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
+                            DishqApplication.setFragmentSeen(1);
+                            showNext();
                         }
                     }, 400);
                 }
@@ -139,9 +139,9 @@ public class TastePrefFragment1 extends Fragment {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                                DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
-                                DishqApplication.setFragmentSeen(1);
-                                showNext();
+                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
+                            DishqApplication.setFragmentSeen(1);
+                            showNext();
                         }
                     }, 400);
                 }
@@ -160,21 +160,11 @@ public class TastePrefFragment1 extends Fragment {
     }
 
     void showNext() {
-        if(DishqApplication.getFoodChoiceSelected()!=0) {
-            Fragment fragment = new TastePrefFragment2();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
-            ft.replace(R.id.onboarding_screen2, fragment);
-            ft.addToBackStack(null);
-            ft.commit();
+        // if(DishqApplication.getFoodChoiceSelected()!=0) {
+        if (OnBoardingActivity.pager.getCurrentItem() == 0) {
+            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
+            OnBoardingActivity.pager.setCurrentItem(1);
         }
     }
-
-    private class OnboardingSwipeListener extends OnSwipeListener {
-        @Override
-        public boolean onSwipe(Direction direction) {
-            return true;
-        }
-    }
+    // }
 }

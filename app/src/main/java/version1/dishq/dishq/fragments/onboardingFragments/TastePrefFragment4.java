@@ -21,12 +21,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.CustomViewPager;
+import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.UserPrefRequest;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.ui.HomeActivity;
+import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -48,6 +51,13 @@ public class TastePrefFragment4 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_taste_pref_fourth, container, false);
         setTags(v);
+        v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeRight() {
+                DishqApplication.setFavCuisineCount(0);
+                OnBoardingActivity.pager.setCurrentItem(2);
+            }
+
+        });
 
         return v;
     }
@@ -61,6 +71,7 @@ public class TastePrefFragment4 extends Fragment {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
                 sendUserPrefData();
             }
         });

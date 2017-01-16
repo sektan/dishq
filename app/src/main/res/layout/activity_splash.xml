@@ -9,22 +9,9 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/dummyText"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:src="@drawable/splashscreen"
         tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/dummyText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:textColor="#e11800"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:visibility="gone" />
 
 </RelativeLayout>

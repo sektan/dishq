@@ -7,7 +7,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilters.Datum;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilters.SearchFilter;
-import version1.dishq.dishq.fragments.quickfilter.QuickFiltersFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.DishqApplication;

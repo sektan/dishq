@@ -23,4 +23,5 @@ public class Constants {
     public static final String FAV_CUISINE_SELECTS = "fav_cuisine_selects";
     public static final String ALLERGY_SELECTS = "allergy_selects";
     public static final String FAV_CUISINE_COUNT = "fav_cuisine_count";
+    public static final String USER_RESTARTED_APP = "user_restarted_app";
 }

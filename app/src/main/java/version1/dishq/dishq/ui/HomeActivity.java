@@ -31,6 +31,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,7 +86,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private RelativeLayout rlGreeting;
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
     private RelativeLayout rlNoResults, rlHamMood;
     private Button hamButton, moodButton;
     private DrawerLayout drawer;
@@ -94,8 +95,6 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressDialog = new ProgressDialog(HomeActivity.this);
-        progressDialog.show();
         final int playServicesStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (playServicesStatus != ConnectionResult.SUCCESS) {
             //If google play services in not available show an error dialog and return
@@ -104,7 +103,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             return;
         }
         setContentView(R.layout.activity_home);
-
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -113,13 +113,10 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         if (Util.getLatitude().equals("") && Util.getLongitude().equals("")) {
             checkGPS();
         }
-        if(Util.isHomeRefreshRequired()) {
+        if (Util.isHomeRefreshRequired()) {
             fetchHomeDishResults();
-        }else {
-            if(progressDialog!=null  && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                setViews();
-            }
+        } else {
+            setViews();
         }
     }
 
@@ -197,7 +194,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     public void greetingsShownView(HomeDishesResponse.HomeData body) {
         setViews();
         rlGreeting.setVisibility(View.VISIBLE);
-        if(body!=null) {
+        if (body != null) {
             greetingHeader.setText(body.greetingsInfo.getGreetingMessage());
             greetingContext.setText(body.greetingsInfo.getContextMessage());
             greetingButton.setOnClickListener(onClickListener);
@@ -226,51 +223,51 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             public void onResponse(Call<HomeDishesResponse> call, Response<HomeDishesResponse> response) {
                 Log.d(TAG, "Success");
                 try {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         HomeDishesResponse.HomeData body = response.body().homeData;
-                        if(body!=null) {
+                        if (body != null) {
                             Log.d(TAG, "Body is not null");
                             if (body.dishDataInfos.size() != 0) {
 
                                 Util.setDefaultTab(body.getDefaultTab());
-                            Util.dishDataModals.clear();
-                            for (int i = 0; i < body.dishDataInfos.size(); i++) {
-                                Util.dishDataModals = body.dishDataInfos;
-                                Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
-                            }
-                            Boolean showGreeting = body.getShowGreeting();
-                            if (showGreeting) {
-                                progressDialog.dismiss();
-                                greetingsShownView(body);
+                                Util.dishDataModals.clear();
+                                for (int i = 0; i < body.dishDataInfos.size(); i++) {
+                                    Util.dishDataModals = body.dishDataInfos;
+                                    Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
+                                }
+                                Boolean showGreeting = body.getShowGreeting();
+                                if (showGreeting) {
+                                    progressBar.setVisibility(View.GONE);
+                                    greetingsShownView(body);
+                                } else {
+                                    setViews();
+                                }
+                                if (progressBar != null) {
+                                   progressBar.setVisibility(View.GONE);
+                                }
                             } else {
-                                setViews();
-                            }
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
-                        }else {
-                                if (progressDialog != null && progressDialog.isShowing()) {
-                                    progressDialog.dismiss();
+                                if (progressBar != null) {
+                                    progressBar.setVisibility(View.GONE);
                                 }
                                 setNoResultTags();
                             }
-                        }else {
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
+                        } else {
+                            if (progressBar != null) {
+                                progressBar.setVisibility(View.GONE);
                             }
                             setNoResultTags();
                         }
 
-                    }else {
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            progressDialog.dismiss();
+                    } else {
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
                         }
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                     }
-                }catch (IOException e) {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
+                } catch (IOException e) {
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
                     }
                     e.printStackTrace();
                 }
@@ -279,7 +276,9 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             @Override
             public void onFailure(Call<HomeDishesResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
-                progressDialog.dismiss();
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -291,7 +290,9 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
     public void checkGPS() {
         createLocationRequest();
-        progressDialog.dismiss();
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // first check
             getTheLocale();

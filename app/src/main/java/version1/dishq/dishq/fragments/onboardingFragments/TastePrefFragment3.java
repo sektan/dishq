@@ -19,8 +19,11 @@ import com.wefika.flowlayout.FlowLayout;
 import java.util.ArrayList;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.CustomViewPager;
+import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
+import version1.dishq.dishq.ui.OnBoardingActivity;
 import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -38,11 +41,24 @@ public class TastePrefFragment3 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (DishqApplication.getFragmentSeen() >=3) {
-            showNext();
-        }
+//        if (DishqApplication.getFragmentSeen() >=3) {
+//            showNext();
+//        }
         View v = inflater.inflate(R.layout.fragment_taste_pref_third, container, false);
         setTags(v);
+
+        v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeRight() {
+                DishqApplication.setHomeCuisineSelected(false);
+                OnBoardingActivity.pager.setCurrentItem(1);
+            }
+
+            public void onSwipeLeft() {
+                if (DishqApplication.favCuisineCount == 3) {
+                    OnBoardingActivity.pager.setCurrentItem(3);
+                }
+            }
+        });
 
         return v;
     }
@@ -112,31 +128,17 @@ public class TastePrefFragment3 extends Fragment {
 
                 }
             });
-            if (DishqApplication.favCuisineCount == 3) {
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 3).apply();
-                        DishqApplication.setFragmentSeen(3);
-                        showNext();
-                    }
-                }, 400);
-            }
         }
     }
 
     void showNext() {
         Log.d("showNext is selected", "count of fav dishes:" + DishqApplication.getFavCuisineCount());
         Log.d("Next page", "next page is shown");
-        if (DishqApplication.favCuisineCount == 3) {
-            Fragment fragment = new TastePrefFragment4();
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_from_top, R.anim.enter_from_top, R.anim.exit_from_bottom);
-        ft.replace(R.id.onboarding_screen4, fragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
-    }
+   //     if (DishqApplication.favCuisineCount == 3) {
+        if (OnBoardingActivity.pager.getCurrentItem() == 2) {
+            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
+            OnBoardingActivity.pager.setCurrentItem(3);
+        }
+        }
+ //   }
 }

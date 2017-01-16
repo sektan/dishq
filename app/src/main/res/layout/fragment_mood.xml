@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_marginEnd="16dp"
     android:layout_marginStart="16dp"
-    tools:context="version1.dishq.dishq.fragments.moodfilter.MoodFragment">
+    tools:context="version1.dishq.dishq.fragments.dialogfragment.filters.MoodFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/filter_mood_recycler_view"

@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,24 +21,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.Data;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.FoodMoodFilter;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.QuickFilter;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilters.Datum;
-import version1.dishq.dishq.fragments.moodfilter.MoodFragment;
-import version1.dishq.dishq.fragments.quickfilter.QuickFiltersFragment;
-import version1.dishq.dishq.server.Config;
-import version1.dishq.dishq.server.Response.HomeDishesResponse;
-import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.ui.HomeActivity;
-import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**

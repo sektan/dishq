@@ -13,19 +13,25 @@ import android.location.Location;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -96,7 +102,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     LocationRequest mLocationRequest;
     String ace = "";
     LoginButton loginButton;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
     private CallbackManager callbackManager;
     private Location mLastLocation;
     private String facebookAccessToken = "";
@@ -119,6 +125,11 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
 
         setContentView(R.layout.activity_signin);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         setTags();
     }
 
@@ -154,7 +165,12 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     protected void setTags() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int h = displaymetrics.heightPixels;
+        int w = displaymetrics.widthPixels;
         VideoView mVideoView = (VideoView) findViewById(R.id.VideoView);
+        mVideoView.setLayoutParams(new RelativeLayout.LayoutParams(w,h));
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + R.raw.sign_in_video);
         mVideoView.setMediaController(null);
         mVideoView.setVideoURI(uri);
@@ -171,6 +187,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         facebookButton.setTypeface(Util.opensanssemibold);
         googleButton = (Button) findViewById(R.id.google_sign_up);
         googleButton.setTypeface(Util.opensanssemibold);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         TextView connectWith = (TextView) findViewById(R.id.connect_with);
         connectWith.setTypeface(Util.opensansregular);
@@ -203,8 +220,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         AccessToken accessToken = AccessToken.getCurrentAccessToken();
                         if (accessToken != null && accessToken.getToken() != null) {
                             FACEBOOK_BUTTON_SELECTED = true;
-                            progressDialog = new ProgressDialog(SignInActivity.this);
-                            progressDialog.show();
+                            progressBar.setVisibility(View.VISIBLE);
                             fetchAccessToken(accessToken.getToken());
                         }
                     } else {
@@ -229,8 +245,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 DishqApplication.setFacebookOrGoogle(facebookOrGoogle);
                 DishqApplication.getPrefs().edit().putString(Constants.FACEBOOK_OR_GOOGLE, facebookOrGoogle).apply();
                 facebookAccessToken = loginResult.getAccessToken().getToken();
-                progressDialog = new ProgressDialog(SignInActivity.this);
-                progressDialog.show();
+                progressBar.setVisibility(View.VISIBLE);
                 fetchAccessToken(facebookAccessToken);
                 Log.d(TAG, "Facebook Access Token: " + facebookAccessToken);
             }
@@ -418,8 +433,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     facebookOrGoogle = "google";
                     DishqApplication.getPrefs().edit().putString(Constants.FACEBOOK_OR_GOOGLE, facebookOrGoogle).apply();
                     DishqApplication.setFacebookOrGoogle(facebookOrGoogle);
-                    progressDialog = new ProgressDialog(SignInActivity.this);
-                    progressDialog.show();
+                    progressBar.setVisibility(View.VISIBLE);
                     fetchAccessToken(ace);
                 }
             };
@@ -489,7 +503,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         call.enqueue(new Callback<SignUpResponse>() {
             @Override
             public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "success");
                 try {
                     if (response.isSuccessful()) {
@@ -537,7 +551,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onFailure(Call<SignUpResponse> call, Throwable t) {
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "failure");
             }
         });

@@ -5,27 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/onboarding_screen1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <FrameLayout
-        android:id="@+id/onboarding_screen2"
-        android:layout_width="match_parent"
+    <version1.dishq.dishq.custom.CustomViewPager
+        android:id="@+id/customViewPager"
         android:layout_height="match_parent"
-        android:visibility="visible" />
-
-    <FrameLayout
-        android:id="@+id/onboarding_screen3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
-
-    <FrameLayout
-        android:id="@+id/onboarding_screen4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:layout_width="match_parent" />
 
 </RelativeLayout>

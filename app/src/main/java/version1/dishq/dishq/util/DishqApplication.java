@@ -43,6 +43,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static String facebookOrGoogle;
     private static Boolean IS_NEW_USER;
     private static Boolean ON_BOARDING_DONE;
+    private Boolean USER_RESTARTED_APP;
     private static int fragmentSeen;
     public boolean wasInBackground;
     private static String userName;
@@ -84,6 +85,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         Type typeAllergy = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
         dontEatSelects = gsonAllergy.fromJson(jsonAllergy, typeAllergy);
 
+        USER_RESTARTED_APP = getPrefs().getBoolean(Constants.USER_RESTARTED_APP, false);
         foodChoiceSelected = getPrefs().getInt(Constants.FOOD_CHOICE_SELECTED, 0);
         ON_BOARDING_DONE = getPrefs().getBoolean(Constants.ON_BOARDING_DONE, false);
         favCuisineCount = getPrefs().getInt(Constants.FAV_CUISINE_COUNT, 0);
@@ -95,6 +97,15 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
             prefs = application.getSharedPreferences(Constants.DISHQ_APP_PREFS, MODE_PRIVATE);
         }
         return prefs;
+    }
+
+
+    public Boolean getUSER_RESTARTED_APP() {
+        return USER_RESTARTED_APP;
+    }
+
+    public void setUSER_RESTARTED_APP(Boolean USER_RESTARTED_APP) {
+        this.USER_RESTARTED_APP = USER_RESTARTED_APP;
     }
 
     public static void setAccessToken(String accessToken, String tokenType) {
