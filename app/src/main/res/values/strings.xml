@@ -3,6 +3,8 @@
     <string name="facebook_app_id">1738469866425993</string>
     <string name="app_name">dishq</string>
 
+    <string name="mixpanel_token">972575a59683072771e5130cbe977d05</string>
+
     <!-- signIn -->
     <string name="connect_with">Connect with</string>
     <string name="backend_facebook">facebook</string>

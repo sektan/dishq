@@ -17,6 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.util.Util;
 
@@ -30,6 +35,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     private BottomSheetAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private MixpanelAPI mixpanel = null;
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallBack = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
@@ -48,6 +54,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
+
         View rootView = inflater.inflate(R.layout.bottom_sheet_main, container);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
@@ -173,12 +182,33 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             Fragment frag = null;
             switch (position) {
                 case 0:
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Dineout restaurants", "bottomsheet");
+                        mixpanel.track("Dineout restaurants", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     frag = new DineoutFragment();
                     break;
                 case 1:
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Delivery restaurants", "bottomsheet");
+                        mixpanel.track("Delivery restaurants", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     frag = new DeliveryFragment();
                     break;
                 case 2:
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Recipe", "bottomsheet");
+                        mixpanel.track("Recipe", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     frag = new RecipeFragment();
                     break;
             }
@@ -194,5 +224,11 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         public CharSequence getPageTitle(int position) {
             return null;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 }

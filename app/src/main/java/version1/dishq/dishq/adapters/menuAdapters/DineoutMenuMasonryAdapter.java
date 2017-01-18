@@ -19,8 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -39,6 +43,7 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
 
     private static final String TAG = "DineMenuMasonryAdapter";
     private Context context;
+    private MixpanelAPI mixpanel = null;
 
     public DineoutMenuMasonryAdapter(Context context) {
         this.context = context;
@@ -49,6 +54,9 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
         View view = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview_menu, viewGroup, false);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(context, context.getResources().getString(R.string.mixpanel_token));
+
         return new DineMenuInfoAdapter(view);
     }
 
@@ -79,6 +87,13 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
         holder.dineMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dish popout in dineout menu", "dineoutmenu");
+                    mixpanel.track("Dish popout in dineout menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 Util.setFavPosition(dineMenuPos);
                 FragmentActivity activity = (FragmentActivity) (context);
                 FragmentManager fm = activity.getSupportFragmentManager();
@@ -116,6 +131,13 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
         holder.dineMenuFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dish fav in dineout menu", "dineoutmenu");
+                    mixpanel.track("Dish fav in dineout menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 String source = "deliverymenu";
                 if(isChecked) {
                     Util.addRemoveDishFromFav(source, dineMenuGenericDishId, 1, TAG);

@@ -13,8 +13,12 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
@@ -30,6 +34,7 @@ import version1.dishq.dishq.util.Util;
 public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutRestInfoAdapter> {
 
     Context context;
+    private MixpanelAPI mixpanel = null;
     public DineoutAdapter(Context context) {
         this.context = context;
     }
@@ -40,6 +45,9 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview_dineout, viewGroup, false);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(context, context.getResources().getString(R.string.mixpanel_token));
+
         return new DineoutRestInfoAdapter(itemView);
     }
 
@@ -69,6 +77,13 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         holder.rlDineout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dineout restaurant menu", "bottomsheet");
+                    mixpanel.track("Dineout restaurant menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 Util.setDineRestId(restId);
                 Intent intent = new Intent(context, DineoutMenuActivity.class);
                 context.startActivity(intent);

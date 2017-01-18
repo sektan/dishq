@@ -30,6 +30,9 @@ import version1.dishq.dishq.modals.AllergyModal;
 import version1.dishq.dishq.modals.FavCuisinesModal;
 import version1.dishq.dishq.modals.FoodChoicesModal;
 import version1.dishq.dishq.modals.HomeCuisinesModal;
+import version1.dishq.dishq.modals.lists.DontEatSelect;
+import version1.dishq.dishq.modals.lists.FavCuisineSelect;
+import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DeliveryMenuResponse;
@@ -63,6 +66,9 @@ public class Util {
     public static ArrayList<DineoutMenuResponse.DineoutMenuData> dineoutMenuInfos = new ArrayList<>();
     public static ArrayList<MenuFinderNearbyRestResponse.NearbyRestInfo> nearbyRestInfos = new ArrayList<>();
     public static ArrayList<MenuFinderRestSuggestResponse.MenuFinderRestInfo> menuFinderRestInfos = new ArrayList<>();
+    public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
+    public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
+    public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
     public static ArrayList<String> dishSmallPic = new ArrayList<>();
     public static DeliveryMenuResponse.DeliveryRestData deliveryRestData = null;
     public static DineoutMenuResponse.DineoutRestData dineoutRestData = null;
@@ -85,6 +91,15 @@ public class Util {
     private static int moodFilterId = -1, filterEntityId = -1;
     private static String filterClassName = "";
     private static boolean homeRefreshRequired = false;
+    private static String homeCuisineName;
+
+    public static String getHomeCuisineName() {
+        return homeCuisineName;
+    }
+
+    public static void setHomeCuisineName(String homeCuisineName) {
+        Util.homeCuisineName = homeCuisineName;
+    }
 
     public static boolean isHomeRefreshRequired() {
         return homeRefreshRequired;

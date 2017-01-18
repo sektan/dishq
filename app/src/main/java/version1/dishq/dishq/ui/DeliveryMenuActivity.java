@@ -3,6 +3,7 @@ package version1.dishq.dishq.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +18,14 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -55,15 +62,20 @@ public class DeliveryMenuActivity extends BaseActivity {
     private RelativeLayout rlOrderNow;
     private Button orderNow;
     private NestedScrollView nestedScrollView;
+    private MixpanelAPI mixpanel = null;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_menu);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
+
         fetchDeliveryMenuInfo();
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        Uri data = intent.getData();
+
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
         collapsingToolbar.setTitle("My Toolbar Tittle");
@@ -71,6 +83,7 @@ public class DeliveryMenuActivity extends BaseActivity {
     }
 
     protected void setTags() {
+
         nestedScrollView = (NestedScrollView) findViewById(R.id.del_nested_scroll);
         rlOrderNow = (RelativeLayout) findViewById(R.id.rl_delmenu_ordernow);
         orderNow = (Button) findViewById(R.id.order_now);
@@ -130,6 +143,13 @@ public class DeliveryMenuActivity extends BaseActivity {
                     orderNow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Order now button in delivery menu", "deliverymenu");
+                                mixpanel.track("Order now button in delivery menu", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
                             nestedScrollView.scrollTo(0, position);
                         }
                     });
@@ -143,6 +163,13 @@ public class DeliveryMenuActivity extends BaseActivity {
                     orderNow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Order now button in delivery menu", "deliverymenu");
+                                mixpanel.track("Order now button in delivery menu", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
                             nestedScrollView.scrollTo(0, position);
                         }
                     });
@@ -162,6 +189,13 @@ public class DeliveryMenuActivity extends BaseActivity {
             dineoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Dineout menu flipbutton", "deliverymenu");
+                        mixpanel.track("Dineout menu flipbutton", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     Intent intent = new Intent(DeliveryMenuActivity.this, DineoutMenuActivity.class);
                     overridePendingTransition(R.anim.from_middle, R.anim.to_middle);
                     startActivity(intent);
@@ -222,6 +256,13 @@ public class DeliveryMenuActivity extends BaseActivity {
             runnr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Runnr order", "deliverymenu");
+                        mixpanel.track("Runnr order", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     String runnrUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuRunnrUrl()) {
                         runnrUrl += s;
@@ -243,6 +284,13 @@ public class DeliveryMenuActivity extends BaseActivity {
             foodpanda.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Foodpanda order", "deliverymenu");
+                        mixpanel.track("Foodpanda order", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     String foodpandaUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuFoodPandaUrl()) {
                         foodpandaUrl += s;
@@ -265,26 +313,37 @@ public class DeliveryMenuActivity extends BaseActivity {
             zomato.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Zomato order", "deliverymenu");
+                        mixpanel.track("Zomato order", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     String zomatoUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
                         zomatoUrl += s;
                     }
 
-                    Intent intent = null;
-                    try {
-                        intent = Intent.parseUri(zomatoUrl, Intent.URI_INTENT_SCHEME);
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                    PackageManager pm = getPackageManager();
+                    Intent appStartIntent = pm.getLaunchIntentForPackage("com.application.zomato");
+                    if (null != appStartIntent)
+                    {
+                        appStartIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        appStartIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(Intent.createChooser(appStartIntent, getResources().getText(R.string.chooser_title)));
                     }
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setComponent(null);
-//                    Intent shareIntent = new Intent();
-//                    shareIntent.setAction(Intent.ACTION_SEND);
-//                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    shareIntent.setData(Uri.parse(zomatoUrl));
-//                    shareIntent.setType("*/*");
-                    startActivity(Intent.createChooser(intent, getResources().getText(R.string.chooser_title)));
+
+//                    Intent intent = null;
+//                    try {
+//                        intent = Intent.parseUri(zomatoUrl, Intent.URI_INTENT_SCHEME);
+//                    } catch (URISyntaxException e) {
+//                        e.printStackTrace();
+//                    }
+//                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.setComponent(null);
+                    //startActivity(Intent.createChooser(intent, getResources().getText(R.string.chooser_title)));
                 }
             });
         }else {
@@ -296,6 +355,13 @@ public class DeliveryMenuActivity extends BaseActivity {
             swiggy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Swiggy order", "deliverymenu");
+                        mixpanel.track("Swiggy order", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     String swiggyUrl = "";
                     for (String s : Util.deliveryRestData.getDelMenuSwiggyUrl()) {
                         swiggyUrl += s;
@@ -342,23 +408,34 @@ public class DeliveryMenuActivity extends BaseActivity {
                             delMenuRecyclerView.addItemDecoration(decoration);
                             delMenuRecyclerView.setNestedScrollingEnabled(false);
                             DeliveryMenuMasonryAdapter masonryAdapter = new DeliveryMenuMasonryAdapter(DeliveryMenuActivity.this);
+                            progressBar.setVisibility(View.GONE);
                             delMenuRecyclerView.setAdapter(masonryAdapter);
                         }
+                        progressBar.setVisibility(View.GONE);
                     } else {
+                        progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                     }
                 } catch (IOException e) {
+                    progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(Call<DeliveryMenuResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "Failure");
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 
 }

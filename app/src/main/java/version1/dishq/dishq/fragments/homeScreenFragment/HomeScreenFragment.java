@@ -31,8 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -73,6 +77,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     private FrameLayout frameClick;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private MixpanelAPI mixpanel = null;
 
     public HomeScreenFragment() {
     }
@@ -80,6 +85,9 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             dishDataInfo = new DishDataInfo();
@@ -112,6 +120,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         moodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Mood filters on home screen", "homescreen");
+                    mixpanel.track("Mood filters on home screen", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
                 dialogFragment.show(fragmentManager, "filters_dialog_fragment");
@@ -121,6 +136,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         hamburgerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Burger Menu", "homescreen");
+                    mixpanel.track("Burger Menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
                 drawer.setDrawerListener(toggle);
                 toggle.syncState();
@@ -138,9 +160,8 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         setFont();
 
         if (dishDataInfo != null) {
-            String imageUrl = dishDataInfo.getDishPhoto().get(0);
             Picasso.with(DishqApplication.getContext())
-                    .load(imageUrl)
+                    .load(dishDataInfo.getDishPhoto().get(0))
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -161,6 +182,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             frameClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Dineoptions nonbutton home screen", "homescreen");
+                        mixpanel.track("Dineoptions nonbutton home screen", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     if (drawer.isDrawerOpen(GravityCompat.START)) {
                         drawer.closeDrawer(GravityCompat.START);
                     }
@@ -173,6 +201,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             dineButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Dineoptions button home screen", "homescreen");
+                        mixpanel.track("Dineoptions button home screen", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     if (drawer.isDrawerOpen(GravityCompat.START)) {
                         drawer.closeDrawer(GravityCompat.START);
                     }
@@ -184,6 +219,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             });
 
             Boolean isFavourited = dishDataInfo.getAddedToFav();
+
             if(isFavourited) {
                 favButton.setChecked(true);
             }else {
@@ -199,6 +235,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     String source = "homescreen";
                     int genericDishId = dishDataInfo.getGenericDishId();
                     if(isChecked) {
+                        try {
+                            final JSONObject properties = new JSONObject();
+                            properties.put("Favourites button home screen", "homescreen");
+                            mixpanel.track("Favourites button home screen", properties);
+                        } catch (final JSONException e) {
+                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                        }
                         Util.addRemoveDishFromFav(source, genericDishId, 1, TAG);
                     }else {
                         Util.addRemoveDishFromFav(source, genericDishId, 0, TAG);
@@ -272,14 +315,35 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         int id = item.getItemId();
 
         if (id == R.id.nav_fav) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Favourites list nav bar", "navbar");
+                mixpanel.track("Favourites list nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent intent = new Intent(getActivity(), FavouritesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (id == R.id.nav_menufinder) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Menu Finder in nav bar", "navbar");
+                mixpanel.track("Menu Finder in nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent intent = new Intent(getActivity(), MenuFinder.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (id == R.id.nav_settings) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Settings in nav bar", "navbar");
+                mixpanel.track("Settings in nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent intent = new Intent(getActivity(), SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -312,6 +376,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             textView.setTypeface(Util.opensanssemibold);
 
         } else if (id == R.id.nav_share) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Share in nav bar", "navbar");
+                mixpanel.track("Share in nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent i = new Intent(android.content.Intent.ACTION_SEND);
             i.setType("text/plain");
             i.putExtra(android.content.Intent.EXTRA_SUBJECT, "Check this out");
@@ -338,5 +409,9 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         }
     }
 
-
+    @Override
+    public void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
+    }
 }

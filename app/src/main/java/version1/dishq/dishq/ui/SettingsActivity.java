@@ -24,6 +24,7 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,10 +44,13 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
     String email = "";
     TextView toolbarTitle, user_email;
     GoogleApiClient mGoogleApiClient;
-    JSONObject prop = new JSONObject();
+    private MixpanelAPI mixpanel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
+
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_settings);
@@ -54,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
             user_email = (TextView) findViewById(R.id.user_email);
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             user_email.setTypeface(Util.opensanslight);
+            user_email.setText(DishqApplication.getUserName());
             toolbarTitle = (TextView) findViewById(R.id.toolbarTitle);
             toolbarTitle.setTypeface(Util.opensanslight);
             toolbarTitle.setText("Settings");
@@ -82,6 +87,13 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Logout in settings", "settings");
+                                mixpanel.track("Logout in settings", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
                             Logout();
                         }
                     });
@@ -162,11 +174,6 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
             case android.R.id.home:
                 //Write your logic here
                 this.finish();
-                try {
-                    prop.put("Screen", "settings");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -186,5 +193,11 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 }

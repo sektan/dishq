@@ -36,6 +36,14 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import com.crashlytics.android.Crashlytics;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import io.fabric.sdk.android.Fabric;
+
 import java.io.IOException;
 
 import retrofit2.Call;
@@ -73,10 +81,14 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     private boolean networkFailed;
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
+    private MixpanelAPI mixpanel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
         final int playServicesStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (playServicesStatus != ConnectionResult.SUCCESS) {
             //If google play services in not available show an error dialog and return
@@ -128,7 +140,13 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     @Override
     protected void onResume() {
         super.onResume();
-
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("Splash Screen", "splashscreen");
+            mixpanel.track("Splash Screen", properties);
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
     }
 
     //Method to check if the internet is connected or not
@@ -573,6 +591,12 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     protected void onStop() {
         super.onStop();
         stopLocationUpdates();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 
 }

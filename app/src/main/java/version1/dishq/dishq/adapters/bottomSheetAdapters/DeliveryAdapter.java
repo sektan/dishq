@@ -13,7 +13,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -31,6 +35,7 @@ import version1.dishq.dishq.util.Util;
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryRestInfoAdapter>{
 
     private Context context;
+    private MixpanelAPI mixpanel = null;
 
     public DeliveryAdapter(Context context) {
         this.context = context;
@@ -41,6 +46,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview_delivery, viewGroup, false);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(context, context.getResources().getString(R.string.mixpanel_token));
+
         return new DeliveryRestInfoAdapter(itemView);
     }
 
@@ -61,12 +69,18 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         Log.d("ImageUrls", "Third image url: " + imageUrl3);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl1)
+                .fit()
+                .centerCrop()
                 .into(holder.dishImage1);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl2)
+                .fit()
+                .centerCrop()
                 .into(holder.dishImage2);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl3)
+                .fit()
+                .centerCrop()
                 .into(holder.dishImage3);
         holder.delRestName.setText(Util.deliveryRestInfos.get(position).getDelivRestName());
 
@@ -105,6 +119,13 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         holder.rlDelCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Delivery restaurants menu", "bottomsheet");
+                    mixpanel.track("Delivery restaurants menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 Util.setDelRestId(restId);
                 Intent intent = new Intent(context, DeliveryMenuActivity.class);
                 context.startActivity(intent);

@@ -1,6 +1,7 @@
 package version1.dishq.dishq.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -48,6 +49,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -76,6 +81,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private static final String TAG = "HomeActivity";
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
+    @SuppressLint("StaticFieldLeak")
     public static ViewPager viewPager;
     private static String lat = "0.0";
     private static String lang = "0.0";
@@ -91,10 +97,13 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private Button hamButton, moodButton;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private MixpanelAPI mixpanel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
         final int playServicesStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (playServicesStatus != ConnectionResult.SUCCESS) {
             //If google play services in not available show an error dialog and return
@@ -131,6 +140,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         greetingHeader = (TextView) findViewById(R.id.greeting_heading);
         greetingContext = (TextView) findViewById(R.id.greeting_context);
         greetingButton = (Button) findViewById(R.id.greeting_button);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         setFonts();
     }
 
@@ -167,6 +178,13 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         hamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Burger Menu", "homescreen");
+                    mixpanel.track("Burger Menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(HomeActivity.this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
                 drawer.setDrawerListener(toggle);
                 toggle.syncState();
@@ -184,6 +202,13 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         moodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Mood filters on home screen", "homescreen");
+                    mixpanel.track("Mood filters on home screen", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
                 dialogFragment.show(fragmentManager, "filters_dialog_fragment");
@@ -604,14 +629,35 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         int id = item.getItemId();
 
         if (id == R.id.nav_fav) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Favourites list nav bar", "navbar");
+                mixpanel.track("Favourites list nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent intent = new Intent(HomeActivity.this, FavouritesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (id == R.id.nav_menufinder) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Menu Finder in nav bar", "navbar");
+                mixpanel.track("Menu Finder in nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent intent = new Intent(HomeActivity.this, MenuFinder.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (id == R.id.nav_settings) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Settings in nav bar", "navbar");
+                mixpanel.track("Settings in nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -644,6 +690,13 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             textView.setTypeface(Util.opensanssemibold);
 
         } else if (id == R.id.nav_share) {
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Share in nav bar", "navbar");
+                mixpanel.track("Share in nav bar", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
             Intent i = new Intent(android.content.Intent.ACTION_SEND);
             i.setType("text/plain");
             i.putExtra(android.content.Intent.EXTRA_SUBJECT, "Check this out");
@@ -692,5 +745,11 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             return Util.dishDataModals.size();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 }

@@ -4,14 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -136,32 +130,6 @@ public class OnBoardingActivity extends BaseActivity {
         });
     }
 
-    public class PageListener extends ViewPager.SimpleOnPageChangeListener {
-
-        public void onPageSelected(final int position) {
-            Log.d("page", position + "");
-            if (position == 0) {
-                if (DishqApplication.getFoodChoiceSelected() != 0) {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.RIGHT);
-                    OnBoardingActivity.pager.setCurrentItem(1);
-                }
-            } else if (position == 1) {
-                if (DishqApplication.getHomeCuisineSelected()) {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.RIGHT);
-                    OnBoardingActivity.pager.setCurrentItem(2);
-                }
-            } else if (position == 2) {
-                if (DishqApplication.getFavCuisineCount() == 3) {
-                    pager.setPagingEnabled(CustomViewPager.SwipeDirection.RIGHT);
-                    OnBoardingActivity.pager.setCurrentItem(3);
-                }
-            } else if (position == 3) {
-                pager.setPagingEnabled(CustomViewPager.SwipeDirection.LEFT);
-                OnBoardingActivity.pager.setCurrentItem(3);
-            }
-        }
-    }
-
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
         MyPagerAdapter(FragmentManager fm) {
@@ -171,6 +139,7 @@ public class OnBoardingActivity extends BaseActivity {
         @Override
         public Fragment getItem(int pos) {
             Fragment frag = null;
+
             switch (pos) {
                 case 0:
                     frag = new TastePrefFragment1();

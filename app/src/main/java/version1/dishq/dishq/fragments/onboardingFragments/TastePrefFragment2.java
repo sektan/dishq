@@ -3,8 +3,6 @@ package version1.dishq.dishq.fragments.onboardingFragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,11 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.wefika.flowlayout.FlowLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,12 +40,12 @@ public class TastePrefFragment2 extends Fragment {
     Button homeCuisine;
     TextView pickOne;
     CheckedTextView child;
+    private MixpanelAPI mixpanel = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (DishqApplication.getFragmentSeen() >=2) {
-//            showNext();
-//        }
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
         View v = inflater.inflate(R.layout.fragment_taste_pref_second, container, false);
         setTags(v);
         v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
@@ -58,6 +60,13 @@ public class TastePrefFragment2 extends Fragment {
                 }
             }
         });
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("Onboarding Screen 2", "onboarding");
+            mixpanel.track("Onboarding Screen 2", properties);
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
         return v;
     }
 
@@ -80,18 +89,12 @@ public class TastePrefFragment2 extends Fragment {
                     model.setHomeCuisCurrentSelect(true);
                     DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, true).apply();
                     DishqApplication.setHomeCuisineSelected(true);
-                    DishqApplication.homeCuisineSelects = new ArrayList<>();
-                    DishqApplication.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
-                    Gson gson = new Gson();
-                    String json = gson.toJson(DishqApplication.homeCuisineSelects);
-                    DishqApplication.getPrefs().edit().putString(Constants.HOME_CUISINE_SELECTS, json).apply();
-                }else{
+                    //Util.homeCuisineSelects = new ArrayList<>();
+                    Util.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
+                } else {
                     model.setHomeCuisCurrentSelect(false);
-                    DishqApplication.homeCuisineSelects = new ArrayList<>();
-                    DishqApplication.homeCuisineSelects.remove(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
-                    Gson gson = new Gson();
-                    String json = gson.toJson(DishqApplication.homeCuisineSelects);
-                    DishqApplication.getPrefs().edit().putString(Constants.HOME_CUISINE_SELECTS, json).apply();
+                    //DishqApplication.homeCuisineSelects = new ArrayList<>();
+                    Util.homeCuisineSelects.remove(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
                     DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, false).apply();
                     DishqApplication.setHomeCuisineSelected(false);
                 }
@@ -113,17 +116,27 @@ public class TastePrefFragment2 extends Fragment {
             child.setText(model.getHomeCuisName());
             child.setTypeface(Util.opensansregular);
             child.setTag(model);
-            if(!DishqApplication.getHomeCuisineSelected()) {
+            if (!DishqApplication.getHomeCuisineSelected()) {
                 child.setOnClickListener(clickListener);
             }
             child.setChecked(false);
-            if(child.isChecked()){
+            if (child.isChecked()) {
                 model.setHomeCuisCurrentSelect(true);
-            }
-            else{
+            } else {
                 model.setHomeCuisCurrentSelect(false);
             }
             homeCuisineContainer.addView(child);
+            if (DishqApplication.getHomeCuisineSelected()) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 2).apply();
+                        DishqApplication.setFragmentSeen(2);
+                        showNext();
+                    }
+                }, 400);
+            }
         }
     }
 
@@ -135,11 +148,16 @@ public class TastePrefFragment2 extends Fragment {
 
     //Calling the next Fragment
     void showNext() {
-     //   if (DishqApplication.getHomeCuisineSelected()) {
+        //   if (DishqApplication.getHomeCuisineSelected()) {
         if (OnBoardingActivity.pager.getCurrentItem() == 1) {
             OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
             OnBoardingActivity.pager.setCurrentItem(2);
         }
-        }
-  //  }
+    }
+
+    @Override
+    public void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
+    }
 }

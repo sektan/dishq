@@ -52,9 +52,6 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
     public static int favCuisineCount = 0;
-    public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
-    public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
-    public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -70,25 +67,25 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         IS_NEW_USER = getPrefs().getBoolean(Constants.IS_NEW_USER, false);
         fragmentSeen = getPrefs().getInt(Constants.IS_FRAGMENT_SEEN, 0);
         userID = getPrefs().getInt(Constants.USER_ID, 0);
-        Gson gsonHome = new Gson();
-        String jsonHome = getPrefs().getString(Constants.HOME_CUISINE_SELECTS, null);
-        Type typeHome = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
-        homeCuisineSelects = gsonHome.fromJson(jsonHome, typeHome);
-
-        Gson gsonFav = new Gson();
-        String jsonFav = getPrefs().getString(Constants.FAV_CUISINE_SELECTS, null);
-        Type typeFav = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
-        favCuisineSelects = gsonFav.fromJson(jsonFav, typeFav);
-
-        Gson gsonAllergy = new Gson();
-        String jsonAllergy = getPrefs().getString(Constants.ALLERGY_SELECTS, null);
-        Type typeAllergy = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
-        dontEatSelects = gsonAllergy.fromJson(jsonAllergy, typeAllergy);
+//        Gson gsonHome = new Gson();
+//        String jsonHome = getPrefs().getString(Constants.HOME_CUISINE_SELECTS, null);
+//        Type typeHome = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
+//        homeCuisineSelects = gsonHome.fromJson(jsonHome, typeHome);
+//
+//        Gson gsonFav = new Gson();
+//        String jsonFav = getPrefs().getString(Constants.FAV_CUISINE_SELECTS, null);
+//        Type typeFav = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
+//        favCuisineSelects = gsonFav.fromJson(jsonFav, typeFav);
+//
+//        Gson gsonAllergy = new Gson();
+//        String jsonAllergy = getPrefs().getString(Constants.ALLERGY_SELECTS, null);
+//        Type typeAllergy = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
+//        dontEatSelects = gsonAllergy.fromJson(jsonAllergy, typeAllergy);
 
         USER_RESTARTED_APP = getPrefs().getBoolean(Constants.USER_RESTARTED_APP, false);
         foodChoiceSelected = getPrefs().getInt(Constants.FOOD_CHOICE_SELECTED, 0);
         ON_BOARDING_DONE = getPrefs().getBoolean(Constants.ON_BOARDING_DONE, false);
-        favCuisineCount = getPrefs().getInt(Constants.FAV_CUISINE_COUNT, 0);
+        //favCuisineCount = getPrefs().getInt(Constants.FAV_CUISINE_COUNT, 0);
         registerActivityLifecycleCallbacks(activityCallbacks);
     }
 
@@ -122,31 +119,31 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         DishqApplication.favCuisineCount = favCuisineCount;
     }
 
-    public static ArrayList<DontEatSelect> getDontEatSelects() {
-        return dontEatSelects;
-    }
-
-    public static void setDontEatSelects(ArrayList<DontEatSelect> dontEatSelects) {
-        DishqApplication.dontEatSelects = dontEatSelects;
-    }
-
-    public static ArrayList<HomeCuisineSelect> getHomeCuisineSelects() {
-        return DishqApplication.homeCuisineSelects;
-    }
-
-
-    public static ArrayList<FavCuisineSelect> getFavCuisineSelects() {
-        return DishqApplication.favCuisineSelects;
-    }
-
-    public static void setFavCuisineSelects(ArrayList<FavCuisineSelect> favCuisineSelects) {
-        DishqApplication.favCuisineSelects = favCuisineSelects;
-    }
-
-
-    public static void setHomeCuisineSelects(ArrayList<HomeCuisineSelect> homeCuisineSelects) {
-        DishqApplication.homeCuisineSelects = homeCuisineSelects;
-    }
+//    public static ArrayList<DontEatSelect> getDontEatSelects() {
+//        return dontEatSelects;
+//    }
+//
+//    public static void setDontEatSelects(ArrayList<DontEatSelect> dontEatSelects) {
+//        DishqApplication.dontEatSelects = dontEatSelects;
+//    }
+//
+//    public static ArrayList<HomeCuisineSelect> getHomeCuisineSelects() {
+//        return DishqApplication.homeCuisineSelects;
+//    }
+//
+//
+//    public static ArrayList<FavCuisineSelect> getFavCuisineSelects() {
+//        return DishqApplication.favCuisineSelects;
+//    }
+//
+//    public static void setFavCuisineSelects(ArrayList<FavCuisineSelect> favCuisineSelects) {
+//        DishqApplication.favCuisineSelects = favCuisineSelects;
+//    }
+//
+//
+//    public static void setHomeCuisineSelects(ArrayList<HomeCuisineSelect> homeCuisineSelects) {
+//        DishqApplication.homeCuisineSelects = homeCuisineSelects;
+//    }
 
     public static String getAccessToken() {
         return Util.ACCESS_TOKEN;

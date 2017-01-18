@@ -103,8 +103,8 @@
 
         <FrameLayout
             android:id="@+id/frame_click"
-            android:layout_width="340dp"
-            android:layout_height="260dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/cv_dish_name_type_info"
             android:layout_marginStart="10dp"
             android:background="#00000000">

@@ -19,8 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -47,6 +51,7 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
 
     private static final String TAG = "DelMenuMasonryAdapter";
     private Context context;
+    private MixpanelAPI mixpanel = null;
 
     public DeliveryMenuMasonryAdapter(Context context) {
         this.context = context;
@@ -57,6 +62,9 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
         View view = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview_menu, viewGroup, false);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(context, context.getResources().getString(R.string.mixpanel_token));
+
         return new DelMenuInfoAdapter(view);
     }
 
@@ -87,6 +95,13 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
         holder.delMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dish popout in delivery menu", "deliverymenu");
+                    mixpanel.track("Dish popout in delivery menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 Util.setFavPosition(delMenuPos);
                 FragmentActivity activity = (FragmentActivity) (context);
                 FragmentManager fm = activity.getSupportFragmentManager();
@@ -123,6 +138,13 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
         holder.delMenuFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dish fav in delivery menu", "deliverymenu");
+                    mixpanel.track("Dish fav in delivery menu", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 String source = "deliverymenu";
                 if(isChecked) {
                     addRemoveDishFromFav(source, delMenuGenericDishId, 1);

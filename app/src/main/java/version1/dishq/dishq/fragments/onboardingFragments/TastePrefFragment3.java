@@ -14,7 +14,11 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.wefika.flowlayout.FlowLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,12 +42,13 @@ public class TastePrefFragment3 extends Fragment {
     Button favCuisine;
     TextView pickThree;
     CheckedTextView child;
+    private MixpanelAPI mixpanel = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (DishqApplication.getFragmentSeen() >=3) {
-//            showNext();
-//        }
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
+
         View v = inflater.inflate(R.layout.fragment_taste_pref_third, container, false);
         setTags(v);
 
@@ -59,19 +64,25 @@ public class TastePrefFragment3 extends Fragment {
                 }
             }
         });
-
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("Onboarding Screen 3", "onboarding");
+            mixpanel.track("Onboarding Screen 3", properties);
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
         return v;
     }
 
     //For linking to xml ids of views
     protected void setTags(View view) {
         favCuisine = (Button) view.findViewById(R.id.your_home_cuisine);
-        if(favCuisine!=null) {
+        if (favCuisine != null) {
             favCuisine.setTypeface(Util.opensanslight);
         }
 
         pickThree = (TextView) view.findViewById(R.id.pick_three);
-        if(pickThree!=null){
+        if (pickThree != null) {
             pickThree.setTypeface(Util.opensanslight);
         }
 
@@ -79,11 +90,10 @@ public class TastePrefFragment3 extends Fragment {
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, favCuisineContainer, false);
-//            if(!DishqApplication.getHomeCuisineSelected().equals(model.getFavCuisName())) {
-                child.setText(model.getFavCuisName());
-                child.setTypeface(Util.opensansregular);
-                child.setTag(model);
-           // }
+            child.setText(model.getFavCuisName());
+            child.setTypeface(Util.opensansregular);
+            child.setTag(model);
+
             if (model.getFavCuisCurrentSelect()) {
                 child.setChecked(true);
             }
@@ -96,16 +106,11 @@ public class TastePrefFragment3 extends Fragment {
                     view.setChecked(!view.isChecked());
                     FavCuisinesModal model = (FavCuisinesModal) view.getTag();
                     if (view.isChecked()) {
-                        Log.d("Name of selected item", model.getFavCuisName());
+                        Log.d("TasteFragment3", model.getFavCuisName());
                         model.setFavCuisCurrentSelect(true);
                         DishqApplication.favCuisineCount++;
                         DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
-                        DishqApplication.getPrefs().edit().putInt(Constants.FAV_CUISINE_COUNT, DishqApplication.getFavCuisineCount()).apply();
-                        DishqApplication.favCuisineSelects = new ArrayList<FavCuisineSelect>();
-                        DishqApplication.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
-                        Gson gson = new Gson();
-                        String json = gson.toJson(DishqApplication.getFavCuisineSelects());
-                        DishqApplication.getPrefs().edit().putString(Constants.HOME_CUISINE_SELECTS, json).apply();
+                        Util.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
 
                         if (DishqApplication.favCuisineCount == 3) {
                             final Handler handler = new Handler();
@@ -121,11 +126,10 @@ public class TastePrefFragment3 extends Fragment {
                     } else {
                         DishqApplication.favCuisineCount--;
                         DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
-                        DishqApplication.favCuisineSelects = new ArrayList<FavCuisineSelect>();
-                        DishqApplication.favCuisineSelects.remove(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
+                        //DishqApplication.favCuisineSelects = new ArrayList<>();
+                        Util.favCuisineSelects.remove(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
                         model.setFavCuisCurrentSelect(false);
                     }
-
                 }
             });
         }
@@ -134,11 +138,14 @@ public class TastePrefFragment3 extends Fragment {
     void showNext() {
         Log.d("showNext is selected", "count of fav dishes:" + DishqApplication.getFavCuisineCount());
         Log.d("Next page", "next page is shown");
-   //     if (DishqApplication.favCuisineCount == 3) {
         if (OnBoardingActivity.pager.getCurrentItem() == 2) {
-            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
             OnBoardingActivity.pager.setCurrentItem(3);
         }
-        }
- //   }
+    }
+
+    @Override
+    public void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
+    }
 }

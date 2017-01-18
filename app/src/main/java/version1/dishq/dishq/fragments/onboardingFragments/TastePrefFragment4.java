@@ -12,7 +12,11 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.wefika.flowlayout.FlowLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -46,9 +50,13 @@ public class TastePrefFragment4 extends Fragment {
     Button allergyCuisine, doneButton;
     TextView optional;
     private FlowLayout allergyContainer;
+    private MixpanelAPI mixpanel = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
+
         View v = inflater.inflate(R.layout.fragment_taste_pref_fourth, container, false);
         setTags(v);
         v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
@@ -58,6 +66,14 @@ public class TastePrefFragment4 extends Fragment {
             }
 
         });
+
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("Onboarding Screen 4", "onboarding");
+            mixpanel.track("Onboarding Screen 4", properties);
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
 
         return v;
     }
@@ -71,6 +87,13 @@ public class TastePrefFragment4 extends Fragment {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Done button", "onboarding");
+                    mixpanel.track("Done button", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
                 sendUserPrefData();
             }
@@ -93,19 +116,11 @@ public class TastePrefFragment4 extends Fragment {
                     if (view.isChecked()) {
                         Log.d("Name of selected item", model.getAllergyName());
                         model.setAllergyCurrentlySelect(true);
-                        DishqApplication.dontEatSelects = new ArrayList<DontEatSelect>();
-                        DishqApplication.dontEatSelects.add(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
-                        Gson gson = new Gson();
-                        String json = gson.toJson(DishqApplication.dontEatSelects);
-                        DishqApplication.getPrefs().edit().putString(Constants.ALLERGY_SELECTS, json).apply();
+                        Util.dontEatSelects.add(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
 
-                    }else {
+                    }else if(!view.isChecked()){
                         model.setAllergyCurrentlySelect(false);
-                        DishqApplication.dontEatSelects = new ArrayList<DontEatSelect>();
-                        DishqApplication.dontEatSelects.remove(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
-                        Gson gson = new Gson();
-                        String json = gson.toJson(DishqApplication.dontEatSelects);
-                        DishqApplication.getPrefs().edit().putString(Constants.ALLERGY_SELECTS, json).apply();
+                        Util.dontEatSelects.remove(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
                     }
                 }
             });
@@ -130,8 +145,8 @@ public class TastePrefFragment4 extends Fragment {
     public void sendUserPrefData() {
         RestApi restApi = Config.createService(RestApi.class);
         String authorization = DishqApplication.getAccessToken();
-        final UserPrefRequest userPrefRequest = new UserPrefRequest(DishqApplication.getFoodChoiceSelected(), DishqApplication.getHomeCuisineSelects(),
-                DishqApplication.getFavCuisineSelects(), DishqApplication.getDontEatSelects());
+        final UserPrefRequest userPrefRequest = new UserPrefRequest(DishqApplication.getFoodChoiceSelected(), Util.homeCuisineSelects,
+                Util.favCuisineSelects, Util.dontEatSelects);
         Call<ResponseBody> request = restApi.sendUserPref(authorization, userPrefRequest);
         request.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -139,7 +154,7 @@ public class TastePrefFragment4 extends Fragment {
                 Log.d(TAG, "Success");
                 DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, true).apply();
                 DishqApplication.setOnBoardingDone(true);
-                Intent startHomeActivity = new Intent(getActivity(), HomeActivity.class);
+                Intent startHomeActivity = new Intent(DishqApplication.getContext(), HomeActivity.class);
                 startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().finish();
                 startActivity(startHomeActivity);
@@ -152,4 +167,9 @@ public class TastePrefFragment4 extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
+    }
 }

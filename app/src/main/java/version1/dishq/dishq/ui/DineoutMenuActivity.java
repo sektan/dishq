@@ -16,11 +16,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -57,11 +62,18 @@ public class DineoutMenuActivity extends BaseActivity {
     private Button call, directions;
     private AppBarLayout rlDineoutToolbar;
     private TextView tvPersonalizedMenu;
+    private MixpanelAPI mixpanel = null;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dineout_menu);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
+
         fetchDineoutMenuInfo();
 
         CollapsingToolbarLayout collapsingToolbar =
@@ -134,6 +146,13 @@ public class DineoutMenuActivity extends BaseActivity {
             deliveryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Delivery menu flipbutton", "dineoutmenu");
+                        mixpanel.track("Delivery menu flipbutton", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     Intent intent = new Intent(DineoutMenuActivity.this, DeliveryMenuActivity.class);
                     overridePendingTransition(R.anim.from_middle, R.anim.to_middle);
                     startActivity(intent);
@@ -204,6 +223,13 @@ public class DineoutMenuActivity extends BaseActivity {
             call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Call restaurant", "dineoutmenu");
+                        mixpanel.track("Call restaurant", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     String uri = "tel:" + finalDineRestContactNo.trim() ;
                     Uri number = Uri.parse(uri);
                     Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
@@ -218,6 +244,13 @@ public class DineoutMenuActivity extends BaseActivity {
             directions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Directions to restaurant", "dineoutmenu");
+                        mixpanel.track("Directions to restaurant", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
                     String currentLatitude = "12.92923258";
                     String currentLongitude = "77.63082482";
 
@@ -259,21 +292,32 @@ public class DineoutMenuActivity extends BaseActivity {
                             dineMenuRecyclerView.addItemDecoration(decoration);
                             dineMenuRecyclerView.setNestedScrollingEnabled(false);
                             DineoutMenuMasonryAdapter masonryAdapter = new DineoutMenuMasonryAdapter(DineoutMenuActivity.this);
+                            progressBar.setVisibility(View.GONE);
                             dineMenuRecyclerView.setAdapter(masonryAdapter);
                         }
+                        progressBar.setVisibility(View.GONE);
                     }else {
+                        progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "response error: " +error);
                     }
                 }catch (IOException e){
+                    progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(Call<DineoutMenuResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "Failure");
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 }

@@ -63,6 +63,10 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.plus.Plus;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -109,9 +113,13 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private Boolean GOOGLE_BUTTON_SELECTED, FACEBOOK_BUTTON_SELECTED;
     private Button facebookButton, googleButton;
 
+    private MixpanelAPI mixpanel = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
         //Facebook SDK is initialized
         facebookSDKInitialize();
         //Build google client
@@ -505,6 +513,23 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
                 progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "success");
+                if(FACEBOOK_BUTTON_SELECTED) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("facebook login", "signup");
+                        mixpanel.track("facebook login", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
+                }else if(GOOGLE_BUTTON_SELECTED) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("google login ", "signup");
+                        mixpanel.track("google login", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
+                }
                 try {
                     if (response.isSuccessful()) {
                         SignUpResponse.NewUserDataInfo body = response.body().newUserDataInfo;
@@ -784,6 +809,12 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 
 }

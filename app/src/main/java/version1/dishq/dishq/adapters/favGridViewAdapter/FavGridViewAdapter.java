@@ -19,8 +19,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -50,6 +54,7 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
 
     private static final String TAG = "FavGridViewAdapter";
     private Context context;
+    private MixpanelAPI mixpanel = null;
 
     public FavGridViewAdapter(Context context) {
         this.context = context;
@@ -60,6 +65,9 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.cardview_favourites, viewGroup, false);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(context, context.getResources().getString(R.string.mixpanel_token));
+
         return new FavGridViewInfoAdapter(itemView);
     }
 
@@ -90,6 +98,13 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
         holder.favFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dish popup in favourites list", "favourites");
+                    mixpanel.track("Dish popup in favourites list", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 Util.setFavPosition(favPos);
                 FragmentActivity activity = (FragmentActivity) (context);
                 FragmentManager fm = activity.getSupportFragmentManager();
@@ -120,6 +135,14 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
             public void onClick(View view) {
                 String source = "favActivity";
 
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dislike", "favourites");
+                    mixpanel.track("Dislike", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
+
                 removeDishFromFav(source, favGenericDishId);
                 Util.favouriteDishesInfos.remove(favPos);
                 notifyItemRemoved(favPos);
@@ -133,6 +156,13 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
         holder.favEatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Dineoptions button in favourites", "favourites");
+                    mixpanel.track("Dineoptions button in favourites", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
+                }
                 Util.setGenericDishIdTab(favGenericDishId);
                 Util.setRecipeUrl(favRecipeUrl);
 
@@ -191,4 +221,5 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
             }
         });
     }
+
 }

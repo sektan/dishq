@@ -14,6 +14,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.custom.CustomViewPager;
 import version1.dishq.dishq.custom.OnSwipeTouchListener;
@@ -34,12 +39,12 @@ public class TastePrefFragment1 extends Fragment {
     private RelativeLayout vegDish, eggDish, nonVegDish;
     private ImageView vegTick, eggTick, nonVegTick;
     private FrameLayout vegSelection, eggSelection, nonVegSelection;
+    private MixpanelAPI mixpanel = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (DishqApplication.getFoodChoiceSelected()!=0) {
-//            showNext();
-//        }
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
         View v = inflater.inflate(R.layout.fragment_taste_pref_first, container, false);
         v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeRight() {
@@ -52,6 +57,13 @@ public class TastePrefFragment1 extends Fragment {
                 }
             }
         });
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("Onboarding Screen 1", "onboarding");
+            mixpanel.track("Onboarding Screen 1", properties);
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
         setTags(v);
         return v;
     }
@@ -162,9 +174,15 @@ public class TastePrefFragment1 extends Fragment {
     void showNext() {
         // if(DishqApplication.getFoodChoiceSelected()!=0) {
         if (OnBoardingActivity.pager.getCurrentItem() == 0) {
-            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
+            //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
             OnBoardingActivity.pager.setCurrentItem(1);
         }
     }
-    // }
+
+    @Override
+    public void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
+    }
+
 }

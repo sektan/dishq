@@ -20,6 +20,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +53,7 @@ public class QuickFiltersFragment extends Fragment implements
     AutoCompleteTextView searchAutoCompleteText;
     ProgressBar progressBar;
     RecyclerView recyclerView;
+    private MixpanelAPI mixpanel = null;
 
     public QuickFiltersFragment() {
         // Required empty public constructor
@@ -60,6 +66,8 @@ public class QuickFiltersFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //MixPanel Instantiation
+        mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
         presenter = new QuickFilterPresenter(this);
     }
 
@@ -131,6 +139,13 @@ public class QuickFiltersFragment extends Fragment implements
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("Mood filter search", "moodfilters");
+            mixpanel.track("Mood filter search", properties);
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
         if (getParentFragment() != null) {
             if (getParentFragment() instanceof FiltersDialogFragment) {
                 ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false);
@@ -207,5 +222,11 @@ public class QuickFiltersFragment extends Fragment implements
         setRecyclerAdapter();
         searchAutoCompleteText.clearListSelection();
         searchAutoCompleteText.setText(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 }
