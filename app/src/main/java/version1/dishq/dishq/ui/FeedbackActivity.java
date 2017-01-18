@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,10 +27,16 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.adapters.HorizontalAdapter;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
+import version1.dishq.dishq.server.Config;
+import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -40,6 +47,7 @@ import version1.dishq.dishq.util.Util;
 
 public class FeedbackActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private static final String TAG = "FeedbackActivity";
     private Button hamButton, moodButton;
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -49,6 +57,7 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     private RecyclerView recyclerView;
     HorizontalAdapter horizontalAdapter;
     private TextView feedbackQuestion;
+    private Button feedbackYes, feedbackNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,15 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     protected void setTags() {
         recyclerView = (RecyclerView) findViewById(R.id.feedback_recyclerview);
         feedbackQuestion = (TextView) findViewById(R.id.feedback_question_text);
+        feedbackQuestion.setTypeface(Util.opensanslight);
+        feedbackYes = (Button) findViewById(R.id.feedback_yes);
+        feedbackYes.setTypeface(Util.opensanslight);
+        feedbackNo = (Button) findViewById(R.id.feedback_no);
+        feedbackNo.setTypeface(Util.opensanslight);
+        TextView thatIt = (TextView) findViewById(R.id.that_it);
+        thatIt.setTypeface(Util.opensanssemibold);
+        TextView textBrowsed = (TextView) findViewById(R.id.text_browse_done);
+        textBrowsed.setTypeface(Util.opensanslight);
         drawer = (DrawerLayout) findViewById(R.id.feedback_drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         hamButton = (Button) findViewById(R.id.feedback_hamburger);
@@ -70,6 +88,20 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         fbBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         feedbackQuestion.setText(Util.getFeedbackQuestion());
+
+        feedbackYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendFeedback(1);
+            }
+        });
+
+        feedbackNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendFeedback(0);
+            }
+        });
 
         hamButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,5 +257,22 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     protected void onDestroy() {
         mixpanel.flush();
         super.onDestroy();
+    }
+
+    protected void sendFeedback(int feedback) {
+        RestApi restApi = Config.createService(RestApi.class);
+        Call<ResponseBody> call = restApi.sendFeedback(DishqApplication.getAccessToken(),
+                DishqApplication.getUniqueID(), feedback);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.d(TAG, "Success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "Failure");
+            }
+        });
     }
 }

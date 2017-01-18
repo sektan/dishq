@@ -82,6 +82,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     private NavigationView navigationView;
     private MixpanelAPI mixpanel = null;
     ImageView homeBgImage;
+    private Button moodFilterText;
 
     public HomeScreenFragment() {
     }
@@ -108,6 +109,8 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         homeBgImage = (ImageView) rootView.findViewById(R.id.home_screen_bg_image);
         homeBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         hamburgerButton = (Button) rootView.findViewById(R.id.hamburger);
+        moodFilterText = (Button) rootView.findViewById(R.id.mood_filter);
+        moodFilterText.setTypeface(Util.opensansregular);
         moodButton = (Button) rootView.findViewById(R.id.mood);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
         eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
@@ -122,6 +125,27 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         frameClick = (FrameLayout) rootView.findViewById(R.id.frame_click);
         drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        Boolean isNotEmpty = false;
+        String moodText;
+        if(Util.getMoodName() !=null) {
+            isNotEmpty = true;
+            moodFilterText.setVisibility(View.VISIBLE);
+        }else if(Util.getFilterName()!=null) {
+            isNotEmpty = true;
+            moodFilterText.setVisibility(View.VISIBLE);
+        }
+
+        if(isNotEmpty) {
+            if(Util.getFilterName() == null) {
+                moodText = Util.getMoodName();
+            }else if(Util.getMoodName() == null) {
+                moodText = Util.getFilterName();
+            }else {
+                moodText = Util.getMoodName() + " , " + Util.getFilterName();
+            }
+            moodFilterText.setText(moodText);
+        }
 
         moodButton.setOnClickListener(new View.OnClickListener() {
             @Override

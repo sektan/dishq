@@ -166,8 +166,10 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
             case R.id.filter_button_reset:
                 if (fragment instanceof MoodFragment) {
                     ((MoodFragment) fragment).clearSelection();
+                    Util.setMoodName("");
                 } else if (fragment instanceof QuickFiltersFragment) {
                     ((QuickFiltersFragment) fragment).clearSelection();
+                    Util.setFilterName("");
                 }
                 // Set the apply button disabled
                 toggleApplyButton(false);
@@ -178,23 +180,25 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                     FoodMoodFilter moodFilter = ((MoodFragment) fragment).getSelectedItem();
 
                     Util.setMoodFilterId(moodFilter.getFoodMoodId());
-                    Toast.makeText(getActivity(), moodFilter.getName() + ", " + moodFilter.getFoodMoodId(), Toast.LENGTH_SHORT).show();
+                    Util.setMoodName(moodFilter.getName());
+                   // Toast.makeText(getActivity(), moodFilter.getName() + ", " + moodFilter.getFoodMoodId(), Toast.LENGTH_SHORT).show();
                 } else if (fragment instanceof QuickFiltersFragment) {
                     Object selectedItem = ((QuickFiltersFragment) fragment).getSelectedItem();
                     if (selectedItem instanceof Datum) {
-
+                        Util.setFilterName(((Datum) selectedItem).getName());
                         Util.setFilterClassName(((Datum) selectedItem).getClassName());
                         Util.setFilterEntityId(((Datum) selectedItem).getEntityId());
-                        Toast.makeText(getActivity(), ((Datum) selectedItem).getName() + ", "
-                                + ((Datum) selectedItem).getClassName() + ", "
-                                + ((Datum) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), ((Datum) selectedItem).getName() + ", "
+//                                + ((Datum) selectedItem).getClassName() + ", "
+//                                + ((Datum) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
                     } else if (selectedItem instanceof QuickFilter) {
 
+                        Util.setFilterName(((QuickFilter) selectedItem).getName());
                         Util.setFilterClassName(((QuickFilter) selectedItem).getClassName());
                         Util.setFilterEntityId(((QuickFilter) selectedItem).getEntityId());
-                        Toast.makeText(getActivity(), ((QuickFilter) selectedItem).getName() + ", "
-                                + ((QuickFilter) selectedItem).getClassName() + ", "
-                                + ((QuickFilter) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), ((QuickFilter) selectedItem).getName() + ", "
+//                                + ((QuickFilter) selectedItem).getClassName() + ", "
+//                                + ((QuickFilter) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 Util.setHomeRefreshRequired(true);

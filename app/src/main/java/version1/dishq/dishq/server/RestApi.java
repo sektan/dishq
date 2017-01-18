@@ -32,61 +32,93 @@ import version1.dishq.dishq.server.Response.DeliveryMenuResponse;
 
 public interface RestApi {
 
+    //Api call for checking the version of the app
     @GET("api/getandroidappdetails/")
-    Call<VersionCheckResponse> checkVersion(@Query("version_number")int versionCode, @Query("version_name")String versionName, @Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
+    Call<VersionCheckResponse> checkVersion(@Query("version_number") int versionCode,
+                                            @Query("version_name") String versionName,
+                                            @Query("uid") String UniqueIdentifier,
+                                            @Query("user_id") int UserId);
 
     @GET("api/appclose/")
-    Call<ResponseBody> appClose(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
+    Call<ResponseBody> appClose(@Query("uid") String UniqueIdentifier,
+                                @Query("user_id") int UserId);
 
     @GET("api/apptobackground/")
-    Call<ResponseBody> appToBackground(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
+    Call<ResponseBody> appToBackground(@Query("uid") String UniqueIdentifier,
+                                       @Query("user_id") int UserId);
 
     @POST("api/auth/signin/")
-    Call<SignUpResponse> createNewUser(@Header("Authorization")String authorization, @Body SignUpHelper signUpHelper);
+    Call<SignUpResponse> createNewUser(@Header("Authorization") String authorization,
+                                       @Body SignUpHelper signUpHelper);
 
     @GET("api/tastepref/fetchformdata/")
-    Call<TastePrefData> fetchTastePref(@Query("uid")String UniqueIdentifier, @Query("user_id")int UserId);
+    Call<TastePrefData> fetchTastePref(@Query("uid") String UniqueIdentifier,
+                                       @Query("user_id") int UserId);
 
     @POST("api/tastepref/saveorupdate/")
-    Call<ResponseBody> sendUserPref(@Header("Authorization")String authorization, @Body UserPrefRequest userPrefRequest);
+    Call<ResponseBody> sendUserPref(@Header("Authorization") String authorization,
+                                    @Body UserPrefRequest userPrefRequest);
 
     @GET("api/search/dish/")
-    Call<HomeDishesResponse> fetchPersonalDishes(@Header("Authorization")String authorization, @Query("uid")String uid,
-                                                 @Query("latitude")String latitude, @Query("longitude")String longitude,
-                                                 @Query("food_mood_id")int foodMoodId, @Query("class_name")String quickFilterName,
-                                                 @Query("entity_id")int quickFilterEntityId);
+    Call<HomeDishesResponse> fetchPersonalDishes(@Header("Authorization") String authorization,
+                                                 @Query("uid") String uid,
+                                                 @Query("latitude") String latitude,
+                                                 @Query("longitude") String longitude,
+                                                 @Query("food_mood_id") int foodMoodId,
+                                                 @Query("class_name") String quickFilterName,
+                                                 @Query("entity_id") int quickFilterEntityId);
 
     @POST("api/ugc/dishfavourite/")
-    Call<ResponseBody> addRemoveFavDish(@Header("Authorization")String authorization, @Body FavDishAddRemHelper favDishAddRemHelper);
+    Call<ResponseBody> addRemoveFavDish(@Header("Authorization") String authorization,
+                                        @Body FavDishAddRemHelper favDishAddRemHelper);
 
     @GET("api/search/filters/")
     Call<FoodFilters> getFoodFilters(@Header("Authorization") String authorization);
 
     @GET("api/search/suggest/foodmood/")
-    Call<SearchFilter> getSearchFilters(@Query("query") String searchKey, @Query("uid") String UniqueIdentifier, @Query("user_id") int UserId);
+    Call<SearchFilter> getSearchFilters(@Query("query") String searchKey,
+                                        @Query("uid") String UniqueIdentifier,
+                                        @Query("user_id") int UserId);
 
     @GET("api/restaurant/dish/{generic_dish_id}/dineout/")
-    Call<DineoutTabResponse> addDineRestOptions(@Header("Authorization")String authorization, @Path("generic_dish_id")int genericDishId,
-                                            @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
-                                            @Query("longitude")String longitude, @Query("showmore")int showMore);
+    Call<DineoutTabResponse> addDineRestOptions(@Header("Authorization") String authorization,
+                                                @Path("generic_dish_id") int genericDishId,
+                                                @Query("uid") String uid,
+                                                @Query("source") String Source,
+                                                @Query("latitude") String latitude,
+                                                @Query("longitude") String longitude,
+                                                @Query("showmore") int showMore);
 
     @GET("api/restaurant/dish/{generic_dish_id}/delivery/")
-    Call<DeliveryTabResponse> addDelivRestOptions(@Header("Authorization")String authorization, @Path("generic_dish_id")int genericDishId,
-                                                  @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
-                                                  @Query("longitude")String longitude, @Query("showmore")int showMore);
+    Call<DeliveryTabResponse> addDelivRestOptions(@Header("Authorization") String authorization,
+                                                  @Path("generic_dish_id") int genericDishId,
+                                                  @Query("uid") String uid,
+                                                  @Query("source") String Source,
+                                                  @Query("latitude") String latitude,
+                                                  @Query("longitude") String longitude,
+                                                  @Query("showmore") int showMore);
 
     @GET("api/ugc/allfavourites/")
-    Call<FavouriteDishesResponse> getFavouriteDishes(@Header("Authorization")String authorization, @Query("uid")String uid);
+    Call<FavouriteDishesResponse> getFavouriteDishes(@Header("Authorization") String authorization,
+                                                     @Query("uid") String uid);
 
     @GET("api/restaurant/{restaurant_id}/menu/dineout/")
-    Call<DineoutMenuResponse> getDineoutMenuOptions(@Header("Authorization")String authorization, @Path("restaurant_id")int restId,
-                                                 @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
-                                                 @Query("longitude")String longitude, @Query("source_generic_dish_id")int genericDishId);
+    Call<DineoutMenuResponse> getDineoutMenuOptions(@Header("Authorization") String authorization,
+                                                    @Path("restaurant_id") int restId,
+                                                    @Query("uid") String uid,
+                                                    @Query("source") String Source,
+                                                    @Query("latitude") String latitude,
+                                                    @Query("longitude") String longitude,
+                                                    @Query("source_generic_dish_id") int genericDishId);
 
     @GET("api/restaurant/{restaurant_id}/menu/delivery/")
-    Call<DeliveryMenuResponse> getDeliveryMenuOptions(@Header("Authorization")String authorization, @Path("restaurant_id")int restId,
-                                                    @Query("uid")String uid, @Query("source")String Source, @Query("latitude")String latitude,
-                                                    @Query("longitude")String longitude, @Query("source_generic_dish_id")int genericDishId);
+    Call<DeliveryMenuResponse> getDeliveryMenuOptions(@Header("Authorization") String authorization,
+                                                      @Path("restaurant_id") int restId,
+                                                      @Query("uid") String uid,
+                                                      @Query("source") String Source,
+                                                      @Query("latitude") String latitude,
+                                                      @Query("longitude") String longitude,
+                                                      @Query("source_generic_dish_id") int genericDishId);
 
     @GET("api/restaurant/nearby/")
     Call<MenuFinderNearbyRestResponse> getNearbyRestaurants(@Query("uid") String uid,
@@ -95,7 +127,13 @@ public interface RestApi {
                                                             @Query("longitude") String longitude);
 
     @GET("api/search/restaurantsuggest/")
-    Call<MenuFinderRestSuggestResponse> getRestSuggestion(@Query("query")String query,
+    Call<MenuFinderRestSuggestResponse> getRestSuggestion(@Query("query") String query,
                                                           @Query("uid") String uid,
                                                           @Query("user_id") int UserId);
+
+    //Api call for sending the feedback response to the server
+    @GET("api/ugc/feedback/")
+    Call<ResponseBody> sendFeedback(@Header("Authorization") String authorization,
+                                    @Query("uid") String uid,
+                                    @Query("feedback") int feedback);
 }

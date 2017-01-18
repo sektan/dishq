@@ -99,6 +99,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private MixpanelAPI mixpanel = null;
+    private Button moodFilterText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +157,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         rlNoResults.setVisibility(View.VISIBLE);
         rlHamMood = (RelativeLayout) findViewById(R.id.home_rl_ham_mood);
         rlHamMood.setVisibility(View.VISIBLE);
+        moodFilterText = (Button) findViewById(R.id.mood_filter);
+        moodFilterText.setTypeface(Util.opensansregular);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         hamButton = (Button) findViewById(R.id.home_hamburger);
@@ -200,6 +203,27 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 drawer.openDrawer(GravityCompat.START);
             }
         });
+
+        Boolean isNotEmpty = false;
+        String moodText;
+        if(Util.getMoodName() !=null) {
+            isNotEmpty = true;
+            moodFilterText.setVisibility(View.VISIBLE);
+        }else if(Util.getFilterName()!=null) {
+            isNotEmpty = true;
+            moodFilterText.setVisibility(View.VISIBLE);
+        }
+
+        if(isNotEmpty) {
+            if(Util.getFilterName() == null) {
+                moodText = Util.getMoodName();
+            }else if(Util.getMoodName() == null) {
+                moodText = Util.getFilterName();
+            }else {
+                moodText = Util.getMoodName() + " , " + Util.getFilterName();
+            }
+            moodFilterText.setText(moodText);
+        }
 
         moodButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -93,6 +93,24 @@ public class Util {
     private static boolean homeRefreshRequired = false;
     private static String homeCuisineName;
     private static String feedbackQuestion = "";
+    private static String MoodName;
+    private static String FilterName;
+
+    public static String getMoodName() {
+        return MoodName;
+    }
+
+    public static void setMoodName(String moodName) {
+        MoodName = moodName;
+    }
+
+    public static String getFilterName() {
+        return FilterName;
+    }
+
+    public static void setFilterName(String filterName) {
+        FilterName = filterName;
+    }
 
     public static String getFeedbackQuestion() {
         return feedbackQuestion;

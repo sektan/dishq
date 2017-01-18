@@ -39,6 +39,20 @@
                 android:background="@drawable/hamburger" />
 
             <Button
+                android:id="@+id/mood_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="24.7dp"
+                android:background="#80000000"
+                android:textSize="@dimen/text_size_12"
+                android:textColor="@color/black"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:layout_marginTop="14dp"
+                android:layout_toStartOf="@+id/home_mood"
+                android:layout_marginEnd="3.7dp"
+                android:visibility="gone"/>
+
+            <Button
                 android:id="@+id/home_mood"
                 android:layout_width="30dp"
                 android:layout_height="32dp"
