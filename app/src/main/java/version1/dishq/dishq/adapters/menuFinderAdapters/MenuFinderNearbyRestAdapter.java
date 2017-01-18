@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,22 +51,7 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         String imageUrl = imageUrls.get(0);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        holder.rlNearbyRest.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .into(holder.cardBgImage);
         holder.rlNearbyRest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,6 +112,8 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
 
         protected RelativeLayout rlNearbyRest;
 
+        private ImageView cardBgImage;
+
         public MenuFinderRestInfoAdapter(View view) {
             super(view);
 
@@ -141,6 +129,8 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
             mfDriveTime = (TextView) view.findViewById(R.id.dineout_drive_time);
             mfDriveTime.setTypeface(Util.opensanssemibold);
             rlNearbyRest = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
+            cardBgImage = (ImageView) view.findViewById(R.id.card_bg_image);
+            cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
     }
 }

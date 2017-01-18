@@ -61,6 +61,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
 import version1.dishq.dishq.server.Config;
@@ -123,6 +124,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             checkGPS();
         }
         if (Util.isHomeRefreshRequired()) {
+            Util.setHomeRefreshRequired(false);
             fetchHomeDishResults();
         } else {
             setViews();
@@ -255,8 +257,10 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                             if (body.dishDataInfos.size() != 0) {
 
                                 Util.setDefaultTab(body.getDefaultTab());
+                                Util.setFeedbackQuestion(body.getHomeFeedbackQues());
                                 Util.dishDataModals.clear();
                                 for (int i = 0; i < body.dishDataInfos.size(); i++) {
+
                                     Util.dishDataModals = body.dishDataInfos;
                                     Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
                                 }
@@ -311,6 +315,30 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private void setViews() {
         setTags();
         viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == viewPager.getAdapter().getCount()-1) {
+                    //viewPager.setOnTouchListener(new OnSwipeTouchListener(HomeActivity.this) {
+                     //   public void onSwipeLeft() {
+                            //start next Activity
+                            Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
+                            startActivity(intent);
+                     //   }
+                  //  });
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     public void checkGPS() {

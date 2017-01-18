@@ -74,22 +74,7 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
         String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
                 .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        holder.rlCard.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .into(holder.cardBgImage);
 
         final int delMenuPos = position;
         holder.delMenuFrame.setOnClickListener(new View.OnClickListener() {
@@ -171,11 +156,14 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
         private TextView delMenuDishName, delMenuDishCost;
         private ToggleButton delMenuFav;
         private FrameLayout delMenuFrame;
+        private ImageView cardBgImage;
 
         public DelMenuInfoAdapter(View view) {
             super(view);
 
             rlCard = (RelativeLayout) view.findViewById(R.id.cv_rl_menu);
+            cardBgImage = (ImageView) view.findViewById(R.id.cardmenu_bg_image);
+            cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
             vegTag = (ImageView) view.findViewById(R.id.veg_tag);
             eggTag = (ImageView) view.findViewById(R.id.egg_tag);
             nonVegTag = (ImageView) view.findViewById(R.id.non_veg_tag);

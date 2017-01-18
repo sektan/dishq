@@ -28,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -311,6 +312,8 @@ public class MenuFinder extends AppCompatActivity {
 
         protected RelativeLayout rlNearbyRest;
 
+        ImageView cardBgImage;
+
         MyAdapter(Context context) {
             this.context = context;
             layoutInflater = LayoutInflater.from(context);
@@ -334,41 +337,32 @@ public class MenuFinder extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = null;
-
-            view = layoutInflater.inflate(R.layout.cardview_dineout, parent, false);
-            mfRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
-            mfRestName.setTypeface(Util.opensanssemibold);
-            mfRestAddr = (TextView) view.findViewById(R.id.dineout_rest_addr);
-            mfRestAddr.setTypeface(Util.opensansregular);
-            mfRestCuisine = (TextView) view.findViewById(R.id.dineout_rest_cuisine);
-            mfRup1 = (TextView) view.findViewById(R.id.dineout_rup_1);
-            mfRup2 = (TextView) view.findViewById(R.id.dineout_rup_2);
-            mfRup3 = (TextView) view.findViewById(R.id.dineout_rup_3);
-            mfRup4 = (TextView) view.findViewById(R.id.dineout_rup_4);
-            mfDriveTime = (TextView) view.findViewById(R.id.dineout_drive_time);
-            mfDriveTime.setTypeface(Util.opensanssemibold);
-            rlNearbyRest = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
+            if(view == null) {
+                view = layoutInflater.inflate(R.layout.cardview_dineout, parent, false);
+                mfRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
+                mfRestName.setTypeface(Util.opensanssemibold);
+                mfRestAddr = (TextView) view.findViewById(R.id.dineout_rest_addr);
+                mfRestAddr.setTypeface(Util.opensansregular);
+                mfRestCuisine = (TextView) view.findViewById(R.id.dineout_rest_cuisine);
+                mfRup1 = (TextView) view.findViewById(R.id.dineout_rup_1);
+                mfRup2 = (TextView) view.findViewById(R.id.dineout_rup_2);
+                mfRup3 = (TextView) view.findViewById(R.id.dineout_rup_3);
+                mfRup4 = (TextView) view.findViewById(R.id.dineout_rup_4);
+                mfDriveTime = (TextView) view.findViewById(R.id.dineout_drive_time);
+                mfDriveTime.setTypeface(Util.opensanssemibold);
+                rlNearbyRest = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
+                cardBgImage = (ImageView) view.findViewById(R.id.card_bg_image);
+                cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
 
             ArrayList<String> imageUrls = Util.menuFinderRestInfos.get(position).getMfPhotoThumbnail();
             String imageUrl = imageUrls.get(0);
             Picasso.with(DishqApplication.getContext())
                     .load(imageUrl)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            rlNearbyRest.setBackground(new BitmapDrawable(bitmap));
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
+                    .fit()
+                    .centerCrop()
+                    .noPlaceholder()
+                    .into(cardBgImage);
             final int posn = position;
             rlNearbyRest.setOnClickListener(new View.OnClickListener() {
                 @Override

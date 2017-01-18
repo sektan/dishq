@@ -77,22 +77,9 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
         String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
                 .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        holder.rlFavCarview.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .fit()
+                .centerCrop()
+                .into(holder.cardBgImage);
 
         final int favPos = position;
         holder.favFrame.setOnClickListener(new View.OnClickListener() {
@@ -185,11 +172,14 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
         private Button favButton, favEatButton;
         private RelativeLayout rlFavCarview;
         private FrameLayout favFrame;
+        private ImageView cardBgImage;
 
         FavGridViewInfoAdapter(View view) {
             super(view);
 
             rlFavCarview = (RelativeLayout) view.findViewById(R.id.cv_rl_favs);
+            cardBgImage = (ImageView) view.findViewById(R.id.card_favbg_image);
+            cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
             favFrame = (FrameLayout) view.findViewById(R.id.fav_frame);
             favDishName = (TextView) view.findViewById(R.id.fav_dish_name);
             favDishName.setTypeface(Util.opensanslight);

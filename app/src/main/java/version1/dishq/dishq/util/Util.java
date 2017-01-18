@@ -92,6 +92,15 @@ public class Util {
     private static String filterClassName = "";
     private static boolean homeRefreshRequired = false;
     private static String homeCuisineName;
+    private static String feedbackQuestion = "";
+
+    public static String getFeedbackQuestion() {
+        return feedbackQuestion;
+    }
+
+    public static void setFeedbackQuestion(String feedbackQuestion) {
+        Util.feedbackQuestion = feedbackQuestion;
+    }
 
     public static String getHomeCuisineName() {
         return homeCuisineName;

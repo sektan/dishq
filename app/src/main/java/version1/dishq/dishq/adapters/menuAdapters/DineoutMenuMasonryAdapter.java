@@ -63,25 +63,9 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
     @Override
     public void onBindViewHolder(final DineMenuInfoAdapter holder, int position) {
         ArrayList<String> imageUrls = Util.dineoutMenuInfos.get(position).dineMenuPhoto;
-        String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
-                .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        holder.rlCard.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .load(imageUrls.get(0))
+                .into(holder.cardBgImage);
 
         final int dineMenuPos = position;
         holder.dineMenuFrame.setOnClickListener(new View.OnClickListener() {
@@ -164,11 +148,13 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
         private TextView dineMenuDishName, dineMenuDishCost;
         private ToggleButton dineMenuFav;
         private FrameLayout dineMenuFrame;
+        private ImageView cardBgImage;
 
         public DineMenuInfoAdapter(View view) {
             super(view);
 
             rlCard = (RelativeLayout) view.findViewById(R.id.cv_rl_menu);
+
             vegTag = (ImageView) view.findViewById(R.id.veg_tag);
             eggTag = (ImageView) view.findViewById(R.id.egg_tag);
             nonVegTag = (ImageView) view.findViewById(R.id.non_veg_tag);
@@ -180,6 +166,8 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
             dineMenuDishCost.setTypeface(Util.opensansregular);
             dineMenuFav = (ToggleButton) view.findViewById(R.id.menu_favourites);
             dineMenuFrame = (FrameLayout) view.findViewById(R.id.menu_frame);
+            cardBgImage = (ImageView) view.findViewById(R.id.cardmenu_bg_image);
+            cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
     }
 

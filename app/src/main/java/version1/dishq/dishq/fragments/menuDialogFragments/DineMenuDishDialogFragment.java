@@ -106,6 +106,8 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
         String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
                 .load(imageUrl)
+                .fit()
+                .centerCrop()
                 .into(photoPopUp);
 
         dineMenuDishName.setText(Util.dineoutMenuInfos.get(Util.getFavPosition()).getDineMenuDishName());

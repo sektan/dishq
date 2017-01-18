@@ -196,6 +196,7 @@ public class DeliveryMenuActivity extends BaseActivity {
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
+                    Util.setDineRestId(Util.deliveryRestData.getDelMenuRestId());
                     Intent intent = new Intent(DeliveryMenuActivity.this, DineoutMenuActivity.class);
                     overridePendingTransition(R.anim.from_middle, R.anim.to_middle);
                     startActivity(intent);
@@ -325,14 +326,21 @@ public class DeliveryMenuActivity extends BaseActivity {
                         zomatoUrl += s;
                     }
 
-                    PackageManager pm = getPackageManager();
-                    Intent appStartIntent = pm.getLaunchIntentForPackage("com.application.zomato");
-                    if (null != appStartIntent)
-                    {
-                        appStartIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        appStartIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(Intent.createChooser(appStartIntent, getResources().getText(R.string.chooser_title)));
-                    }
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_VIEW);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   // shareIntent.addCategory(Intent.CATEGORY_APP_BROWSER);
+                    shareIntent.setData(Uri.parse(zomatoUrl));
+                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
+
+//                    PackageManager pm = getPackageManager();
+//                    Intent appStartIntent = pm.getLaunchIntentForPackage("com.application.zomato");
+//                    if (null != appStartIntent)
+//                    {
+//                        appStartIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+//                        appStartIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(Intent.createChooser(appStartIntent, getResources().getText(R.string.chooser_title)));
+//                    }
 
 //                    Intent intent = null;
 //                    try {
@@ -369,8 +377,8 @@ public class DeliveryMenuActivity extends BaseActivity {
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    shareIntent.addCategory(Intent.CATEGORY_BROWSABLE);
                     shareIntent.setData(Uri.parse(swiggyUrl));
-                    shareIntent.setType("*/*");
                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
                 }
             });

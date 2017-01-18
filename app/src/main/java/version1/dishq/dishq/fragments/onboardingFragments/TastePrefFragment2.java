@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -89,7 +90,6 @@ public class TastePrefFragment2 extends Fragment {
                     model.setHomeCuisCurrentSelect(true);
                     DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, true).apply();
                     DishqApplication.setHomeCuisineSelected(true);
-                    //Util.homeCuisineSelects = new ArrayList<>();
                     Util.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
                 } else {
                     model.setHomeCuisCurrentSelect(false);
@@ -116,9 +116,7 @@ public class TastePrefFragment2 extends Fragment {
             child.setText(model.getHomeCuisName());
             child.setTypeface(Util.opensansregular);
             child.setTag(model);
-            if (!DishqApplication.getHomeCuisineSelected()) {
-                child.setOnClickListener(clickListener);
-            }
+            child.setOnClickListener(clickListener);
             child.setChecked(false);
             if (child.isChecked()) {
                 model.setHomeCuisCurrentSelect(true);
@@ -148,9 +146,7 @@ public class TastePrefFragment2 extends Fragment {
 
     //Calling the next Fragment
     void showNext() {
-        //   if (DishqApplication.getHomeCuisineSelected()) {
         if (OnBoardingActivity.pager.getCurrentItem() == 1) {
-            OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
             OnBoardingActivity.pager.setCurrentItem(2);
         }
     }

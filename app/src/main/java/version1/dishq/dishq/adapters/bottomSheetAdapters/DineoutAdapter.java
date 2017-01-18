@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -56,22 +57,9 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         String imageUrl = Util.dineoutRestInfos.get(position).getDineRestPhoto().get(0);
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        holder.rlDineout.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .fit()
+                .centerCrop()
+                .into(holder.dineoutCardBgImage);
 
         final int restId = Util.dineoutRestInfos.get(position).getDineRestId();
         holder.rlDineout.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +129,8 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
 
         protected RelativeLayout rlDineout;
 
+        ImageView dineoutCardBgImage;
+
         public DineoutRestInfoAdapter(View view) {
             super(view);
 
@@ -157,6 +147,8 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             dineDriveTime = (TextView) view.findViewById(R.id.dineout_drive_time);
             dineDriveTime.setTypeface(Util.opensanssemibold);
             rlDineout = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
+            dineoutCardBgImage = (ImageView) view.findViewById(R.id.card_bg_image);
+            dineoutCardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
     }
 }

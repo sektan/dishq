@@ -1,7 +1,9 @@
 package version1.dishq.dishq.fragments.favPageFragment;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
     private Button favFoodTags;
     private RelativeLayout rlFavview;
     private FrameLayout favFrame;
+    protected ImageView photoPopUp;
 
     public FavDishDialogFragment() {
 
@@ -47,7 +50,9 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
 
     @Override
     public void onResume() {
-        getDialog().getWindow().setLayout(dpToPx(380), dpToPx(480));
+        int width = getResources().getDisplayMetrics().widthPixels;
+        getDialog().getWindow().setLayout(width, dpToPx(480));
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         super.onResume();
     }
 

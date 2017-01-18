@@ -43,6 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.bottomSheetFragment.BottomSheetFragment;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.server.Config;
@@ -55,6 +56,8 @@ import version1.dishq.dishq.ui.MenuFinder;
 import version1.dishq.dishq.ui.SettingsActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
+
+import static version1.dishq.dishq.ui.HomeActivity.viewPager;
 
 /**
  * Created by dishq on 27-12-2016.
@@ -78,6 +81,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private MixpanelAPI mixpanel = null;
+    ImageView homeBgImage;
 
     public HomeScreenFragment() {
     }
@@ -101,6 +105,8 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         rlHomeScreen = (RelativeLayout) rootView.findViewById(R.id.rl_home_screen);
+        homeBgImage = (ImageView) rootView.findViewById(R.id.home_screen_bg_image);
+        homeBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         hamburgerButton = (Button) rootView.findViewById(R.id.hamburger);
         moodButton = (Button) rootView.findViewById(R.id.mood);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
@@ -162,23 +168,9 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         if (dishDataInfo != null) {
             Picasso.with(DishqApplication.getContext())
                     .load(dishDataInfo.getDishPhoto().get(0))
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            rlHomeScreen.setBackground(new BitmapDrawable(bitmap));
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
-
+                    .fit()
+                    .centerCrop()
+                    .into(homeBgImage);
             frameClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -220,9 +212,9 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
 
             Boolean isFavourited = dishDataInfo.getAddedToFav();
 
-            if(isFavourited) {
+            if (isFavourited) {
                 favButton.setChecked(true);
-            }else {
+            } else {
                 favButton.setChecked(false);
             }
 
@@ -234,7 +226,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     }
                     String source = "homescreen";
                     int genericDishId = dishDataInfo.getGenericDishId();
-                    if(isChecked) {
+                    if (isChecked) {
                         try {
                             final JSONObject properties = new JSONObject();
                             properties.put("Favourites button home screen", "homescreen");
@@ -243,7 +235,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                             throw new RuntimeException("Could not encode hour of the day in JSON");
                         }
                         Util.addRemoveDishFromFav(source, genericDishId, 1, TAG);
-                    }else {
+                    } else {
                         Util.addRemoveDishFromFav(source, genericDishId, 0, TAG);
                     }
                 }
@@ -300,7 +292,6 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             }
             foodTags.setText(String.valueOf(dishTags));
         }
-
         return rootView;
     }
 

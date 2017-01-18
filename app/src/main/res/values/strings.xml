@@ -108,5 +108,14 @@
     <string name="blog">Blog</string>
     <string name="explore_now">Explore Now!</string>
     <string name="pop_up_photo">pop up photo</string>
+    <string name="home_bg_image">home screen bg image</string>
+    <string name="card_bg_image">card bg image</string>
+    <string name="card_favbg_image">card favbg image</string>
+    <string name="dine_appbar_image">appbar_bg_image</string>
+    <string name="that_s_it">That\'s it!</string>
+    <string name="text_browsed">You browsed through all 10 recommended dishes</string>
+    <string name="feedback_yes">YES</string>
+    <string name="feedback_no">NO</string>
+    <string name="feedback_images">feedback_images</string>
 
 </resources>

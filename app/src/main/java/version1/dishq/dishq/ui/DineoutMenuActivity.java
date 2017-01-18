@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
@@ -64,6 +65,7 @@ public class DineoutMenuActivity extends BaseActivity {
     private TextView tvPersonalizedMenu;
     private MixpanelAPI mixpanel = null;
     private ProgressBar progressBar;
+    private ImageView appbarImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,8 @@ public class DineoutMenuActivity extends BaseActivity {
         directions = (Button) findViewById(R.id.dinemenu_directions);
         directions.setTypeface(Util.opensanssemibold);
         rlDineoutToolbar = (AppBarLayout) findViewById(R.id.dinemenu_appbar);
+        appbarImage = (ImageView) findViewById(R.id.dineout_appbar_bg_image);
+        appbarImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         setFunctionality();
     }
 
@@ -116,22 +120,9 @@ public class DineoutMenuActivity extends BaseActivity {
         String imageUrl = Util.dineoutRestData.getDineRestPhoto().get(0);
         Picasso.with(getContext())
                 .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        rlDineoutToolbar.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .fit()
+                .centerCrop()
+                .into(appbarImage);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +144,7 @@ public class DineoutMenuActivity extends BaseActivity {
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
+                    Util.setDelRestId(Util.dineoutRestData.getDineMenuRestId());
                     Intent intent = new Intent(DineoutMenuActivity.this, DeliveryMenuActivity.class);
                     overridePendingTransition(R.anim.from_middle, R.anim.to_middle);
                     startActivity(intent);
