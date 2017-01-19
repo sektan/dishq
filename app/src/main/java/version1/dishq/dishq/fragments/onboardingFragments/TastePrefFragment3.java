@@ -42,6 +42,7 @@ public class TastePrefFragment3 extends Fragment {
     Button favCuisine;
     TextView pickThree;
     CheckedTextView child;
+    View view;
     private MixpanelAPI mixpanel = null;
 
     @Override
@@ -50,11 +51,10 @@ public class TastePrefFragment3 extends Fragment {
         mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
 
         View v = inflater.inflate(R.layout.fragment_taste_pref_third, container, false);
-        setTags(v);
+        view= v;
 
         v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeRight() {
-                DishqApplication.setHomeCuisineSelected(false);
                 OnBoardingActivity.pager.setCurrentItem(1);
             }
 
@@ -74,6 +74,11 @@ public class TastePrefFragment3 extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTags(view);
+    }
     //For linking to xml ids of views
     protected void setTags(View view) {
         favCuisine = (Button) view.findViewById(R.id.your_home_cuisine);
@@ -89,6 +94,10 @@ public class TastePrefFragment3 extends Fragment {
         FlowLayout favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {
+            String name = Util.getHomeCuisineName();
+            if (Util.getHomeCuisineName().equals(model.getFavCuisName())) {
+                continue;
+            }
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, favCuisineContainer, false);
             child.setText(model.getFavCuisName());
             child.setTypeface(Util.opensansregular);
@@ -98,41 +107,50 @@ public class TastePrefFragment3 extends Fragment {
                 child.setChecked(true);
             }
             favCuisineContainer.addView(child);
-            child.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    CheckedTextView view = (CheckedTextView) v;
-                    view.setChecked(!view.isChecked());
-                    FavCuisinesModal model = (FavCuisinesModal) view.getTag();
-                    if (view.isChecked()) {
-                        Log.d("TasteFragment3", model.getFavCuisName());
-                        model.setFavCuisCurrentSelect(true);
-                        DishqApplication.favCuisineCount++;
-                        DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
-                        Util.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
+                child.setOnClickListener(new View.OnClickListener() {
 
-                        if (DishqApplication.favCuisineCount == 3) {
-                            final Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 3).apply();
-                                    DishqApplication.setFragmentSeen(3);
-                                    showNext();
+                    @Override
+                    public void onClick(View v) {
+
+                        CheckedTextView view = (CheckedTextView) v;
+                        if (DishqApplication.favCuisineCount <= 3) {
+                            if(DishqApplication.favCuisineCount == 3 && !view.isChecked()) return;
+
+                            view.setChecked(!view.isChecked());
+                            FavCuisinesModal model = (FavCuisinesModal) view.getTag();
+                            if (view.isChecked()) {
+                                Log.d("TasteFragment3", model.getFavCuisName());
+
+                                model.setFavCuisCurrentSelect(true);
+                                DishqApplication.favCuisineCount++;
+                                DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
+                                Util.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
+
+                                if (DishqApplication.favCuisineCount == 3) {
+                                    final Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 3).apply();
+                                            DishqApplication.setFragmentSeen(3);
+                                            showNext();
+                                        }
+                                    }, 400);
                                 }
-                            }, 400);
+
+                            } else {
+                                DishqApplication.favCuisineCount--;
+                                DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
+                                //DishqApplication.favCuisineSelects = new ArrayList<>();
+                                Util.favCuisineSelects.remove(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
+                                model.setFavCuisCurrentSelect(false);
+                            }
                         }
-                    } else {
-                        DishqApplication.favCuisineCount--;
-                        DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
-                        //DishqApplication.favCuisineSelects = new ArrayList<>();
-                        Util.favCuisineSelects.remove(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
-                        model.setFavCuisCurrentSelect(false);
                     }
-                }
-            });
+                });
         }
+
     }
 
     void showNext() {

@@ -47,8 +47,8 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static int fragmentSeen;
     public boolean wasInBackground;
     private static String userName;
-    private static int foodChoiceSelected;
-    public static Boolean homeCuisineSelected;
+    private static int foodChoiceSelected =0;
+    public static Boolean homeCuisineSelected = false;
     private Timer mActivityTransitionTimer;
     private TimerTask mActivityTransitionTimerTask;
     public static int favCuisineCount = 0;
@@ -63,7 +63,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
         userName = getPrefs().getString(Constants.USER_NAME, null);
         facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
-        homeCuisineSelected = getPrefs().getBoolean(Constants.HOME_CUISINE_SELECTED, false);
+        //homeCuisineSelected = getPrefs().getBoolean(Constants.HOME_CUISINE_SELECTED, false);
         IS_NEW_USER = getPrefs().getBoolean(Constants.IS_NEW_USER, false);
         fragmentSeen = getPrefs().getInt(Constants.IS_FRAGMENT_SEEN, 0);
         userID = getPrefs().getInt(Constants.USER_ID, 0);
@@ -83,7 +83,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 //        dontEatSelects = gsonAllergy.fromJson(jsonAllergy, typeAllergy);
 
         USER_RESTARTED_APP = getPrefs().getBoolean(Constants.USER_RESTARTED_APP, false);
-        foodChoiceSelected = getPrefs().getInt(Constants.FOOD_CHOICE_SELECTED, 0);
+        //foodChoiceSelected = getPrefs().getInt(Constants.FOOD_CHOICE_SELECTED, 0);
         ON_BOARDING_DONE = getPrefs().getBoolean(Constants.ON_BOARDING_DONE, false);
         //favCuisineCount = getPrefs().getInt(Constants.FAV_CUISINE_COUNT, 0);
         registerActivityLifecycleCallbacks(activityCallbacks);

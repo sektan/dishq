@@ -88,24 +88,29 @@ public class TastePrefFragment1 extends Fragment {
         eggSelection = (FrameLayout) view.findViewById(R.id.egg_selection);
         nonVegSelection = (FrameLayout) view.findViewById(R.id.non_veg_selection);
 
+        if(DishqApplication.getFoodChoiceSelected() >0) {
+            switch (DishqApplication.getFoodChoiceSelected()) {
+                case 1:
+                    vegSelected();
+                    break;
+                case 2:
+                    eggSelected();
+                    break;
+                case 3:
+                    nonVegSelected();
+            }
+        }
+
         //Setting the onClickListeners
         vegDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vegTick.setVisibility(View.VISIBLE);
-                nonVegTick.setVisibility(View.GONE);
-                eggTick.setVisibility(View.GONE);
-                vegSelection.setVisibility(View.VISIBLE);
-                eggSelection.setVisibility(View.GONE);
-                nonVegSelection.setVisibility(View.GONE);
-                DishqApplication.getPrefs().edit().putInt(Constants.FOOD_CHOICE_SELECTED, 1).apply();
+                vegSelected();
                 DishqApplication.setFoodChoiceSelected(1);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
-                        DishqApplication.setFragmentSeen(1);
                         showNext();
                     }
                 }, 400);
@@ -115,20 +120,12 @@ public class TastePrefFragment1 extends Fragment {
             @Override
             public void onClick(View view) {
                 if (Util.foodChoicesModals != null) {
-                    eggTick.setVisibility(View.VISIBLE);
-                    vegTick.setVisibility(View.GONE);
-                    nonVegTick.setVisibility(View.GONE);
-                    vegSelection.setVisibility(View.GONE);
-                    eggSelection.setVisibility(View.VISIBLE);
-                    nonVegSelection.setVisibility(View.GONE);
-                    DishqApplication.getPrefs().edit().putInt(Constants.FOOD_CHOICE_SELECTED, 2).apply();
+                    eggSelected();
                     DishqApplication.setFoodChoiceSelected(2);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
-                            DishqApplication.setFragmentSeen(1);
                             showNext();
                         }
                     }, 400);
@@ -139,26 +136,45 @@ public class TastePrefFragment1 extends Fragment {
             @Override
             public void onClick(View view) {
                 if (Util.foodChoicesModals != null) {
-                    nonVegTick.setVisibility(View.VISIBLE);
-                    vegTick.setVisibility(View.GONE);
-                    eggTick.setVisibility(View.GONE);
-                    vegSelection.setVisibility(View.GONE);
-                    eggSelection.setVisibility(View.GONE);
-                    nonVegSelection.setVisibility(View.VISIBLE);
-                    DishqApplication.getPrefs().edit().putInt(Constants.FOOD_CHOICE_SELECTED, 1).apply();
+                    nonVegSelected();
                     DishqApplication.setFoodChoiceSelected(3);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 1).apply();
-                            DishqApplication.setFragmentSeen(1);
                             showNext();
                         }
                     }, 400);
                 }
             }
         });
+    }
+
+    public void vegSelected() {
+        vegTick.setVisibility(View.VISIBLE);
+        nonVegTick.setVisibility(View.GONE);
+        eggTick.setVisibility(View.GONE);
+        vegSelection.setVisibility(View.VISIBLE);
+        eggSelection.setVisibility(View.GONE);
+        nonVegSelection.setVisibility(View.GONE);
+    }
+
+    public void eggSelected() {
+        eggTick.setVisibility(View.VISIBLE);
+        vegTick.setVisibility(View.GONE);
+        nonVegTick.setVisibility(View.GONE);
+        vegSelection.setVisibility(View.GONE);
+        eggSelection.setVisibility(View.VISIBLE);
+        nonVegSelection.setVisibility(View.GONE);
+    }
+
+    public void nonVegSelected() {
+        nonVegTick.setVisibility(View.VISIBLE);
+        vegTick.setVisibility(View.GONE);
+        eggTick.setVisibility(View.GONE);
+        vegSelection.setVisibility(View.GONE);
+        eggSelection.setVisibility(View.GONE);
+        nonVegSelection.setVisibility(View.VISIBLE);
     }
 
     //For setting the font of the text visible to the user
@@ -172,9 +188,7 @@ public class TastePrefFragment1 extends Fragment {
     }
 
     void showNext() {
-        // if(DishqApplication.getFoodChoiceSelected()!=0) {
         if (OnBoardingActivity.pager.getCurrentItem() == 0) {
-            //OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.BOTH);
             OnBoardingActivity.pager.setCurrentItem(1);
         }
     }

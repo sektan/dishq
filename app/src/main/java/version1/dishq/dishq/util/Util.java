@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,10 +92,19 @@ public class Util {
     private static int moodFilterId = -1, filterEntityId = -1;
     private static String filterClassName = "";
     private static boolean homeRefreshRequired = false;
-    private static String homeCuisineName;
+    private static String homeCuisineName = "";
     private static String feedbackQuestion = "";
     private static String MoodName;
     private static String FilterName;
+    private static int currentPage = 200;
+
+    public static int getCurrentPage() {
+        return currentPage;
+    }
+
+    public static void setCurrentPage(int currentPage) {
+        Util.currentPage = currentPage;
+    }
 
     public static String getMoodName() {
         return MoodName;

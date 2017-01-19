@@ -104,6 +104,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
         final int playServicesStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
@@ -122,6 +123,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     protected void onResume() {
         super.onResume();
         if (Util.getLatitude().equals("") && Util.getLongitude().equals("")) {
+            Util.setHomeRefreshRequired(false);
             checkGPS();
         }
         if (Util.isHomeRefreshRequired()) {
@@ -129,6 +131,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             fetchHomeDishResults();
         } else {
             setViews();
+
         }
     }
 
@@ -283,6 +286,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                 Util.setDefaultTab(body.getDefaultTab());
                                 Util.setFeedbackQuestion(body.getHomeFeedbackQues());
                                 Util.dishDataModals.clear();
+                                Util.dishSmallPic.clear();
                                 for (int i = 0; i < body.dishDataInfos.size(); i++) {
 
                                     Util.dishDataModals = body.dishDataInfos;
@@ -339,6 +343,9 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private void setViews() {
         setTags();
         viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        if(Util.getCurrentPage()!=200) {
+            viewPager.setCurrentItem(Util.getCurrentPage());
+        }
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -346,6 +353,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                     //viewPager.setOnTouchListener(new OnSwipeTouchListener(HomeActivity.this) {
                      //   public void onSwipeLeft() {
                             //start next Activity
+                            Util.setCurrentPage(viewPager.getCurrentItem());
                             Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
                             startActivity(intent);
                      //   }
@@ -546,6 +554,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 Util.setLongitude(lang);
                 Util.setLatitude(lat);
                 Log.d("LOCATION", "LOCATION" + mLastLocation.getLatitude());
+                fetchHomeDishResults();
 
             } else {
                 startLocationUpdates();

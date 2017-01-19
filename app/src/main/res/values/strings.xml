@@ -11,7 +11,7 @@
     <string name="conv_token">convert_token</string>
     <string name="backend_google">google-oauth2</string>
     <string name="server_client_id">
-        1065480470289-fa2sfel9s88t4svp6nee7l1cklol8nda.apps.googleusercontent.com
+       1065480470289-kljstaji734o68q9m39f0mm4mpt4t2j1.apps.googleusercontent.com
     </string>
     <string name="client_id">FDv2hh91hLDZioTfI5zGV98DwmqLdix7aJJYfYGB</string>
     <string name="client_secret">
@@ -117,5 +117,6 @@
     <string name="feedback_yes">YES</string>
     <string name="feedback_no">NO</string>
     <string name="feedback_images">feedback_images</string>
+    <string name="feedback_thanks">Thanks for your feedback!</string>
 
 </resources>

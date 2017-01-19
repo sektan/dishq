@@ -210,6 +210,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     }
                     Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
                     Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
+                    Util.setCurrentPage(viewPager.getCurrentItem());
                     new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
                 }
             });
@@ -229,6 +230,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     }
                     Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
                     Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
+                    Util.setCurrentPage(viewPager.getCurrentItem());
                     new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
 
                 }
@@ -337,6 +339,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             } catch (final JSONException e) {
                 throw new RuntimeException("Could not encode hour of the day in JSON");
             }
+            Util.setCurrentPage(viewPager.getCurrentItem());
             Intent intent = new Intent(getActivity(), FavouritesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -348,6 +351,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             } catch (final JSONException e) {
                 throw new RuntimeException("Could not encode hour of the day in JSON");
             }
+            Util.setCurrentPage(viewPager.getCurrentItem());
             Intent intent = new Intent(getActivity(), MenuFinder.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -359,6 +363,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             } catch (final JSONException e) {
                 throw new RuntimeException("Could not encode hour of the day in JSON");
             }
+            Util.setCurrentPage(viewPager.getCurrentItem());
             Intent intent = new Intent(getActivity(), SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -404,6 +409,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             i.putExtra(android.content.Intent.EXTRA_TEXT, "Love this foodie app, dishq, it gives personalised recommendations!  http://bit.ly/2bLhPig");
             startActivity(Intent.createChooser(i, "Share via"));
         } else if (id == R.id.nav_about) {
+            Util.setCurrentPage(viewPager.getCurrentItem());
             Intent intent = new Intent(getActivity(), AboutUsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

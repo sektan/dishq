@@ -83,19 +83,22 @@ public class TastePrefFragment2 extends Fragment {
             @Override
             public void onClick(View v) {
                 CheckedTextView view = (CheckedTextView) v;
+
+                if(DishqApplication.getHomeCuisineSelected() && !view.isChecked()) return;
                 view.setChecked(!view.isChecked());
                 HomeCuisinesModal model = (HomeCuisinesModal) view.getTag();
                 if (view.isChecked()) {
                     Log.d("Name of selected item", model.getHomeCuisName());
+                    Util.setHomeCuisineName(model.getHomeCuisName());
                     model.setHomeCuisCurrentSelect(true);
-                    DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, true).apply();
+                    //DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, true).apply();
                     DishqApplication.setHomeCuisineSelected(true);
                     Util.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
                 } else {
                     model.setHomeCuisCurrentSelect(false);
-                    //DishqApplication.homeCuisineSelects = new ArrayList<>();
+                    Util.setHomeCuisineName("");
                     Util.homeCuisineSelects.remove(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
-                    DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, false).apply();
+                    //DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, false).apply();
                     DishqApplication.setHomeCuisineSelected(false);
                 }
                 final Handler handler = new Handler();
@@ -103,8 +106,6 @@ public class TastePrefFragment2 extends Fragment {
                     @Override
                     public void run() {
                         if (DishqApplication.getHomeCuisineSelected()) {
-                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 2).apply();
-                            DishqApplication.setFragmentSeen(2);
                             showNext();
                         }
                     }
@@ -113,11 +114,15 @@ public class TastePrefFragment2 extends Fragment {
         };
         for (HomeCuisinesModal model : Util.homeCuisinesModals) {
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, homeCuisineContainer, false);
+            if(!Util.getHomeCuisineName().equals("")) {
+                if (Util.getHomeCuisineName().equals(model.getHomeCuisName())) {
+                    child.setChecked(true);
+                }
+            }
             child.setText(model.getHomeCuisName());
             child.setTypeface(Util.opensansregular);
             child.setTag(model);
             child.setOnClickListener(clickListener);
-            child.setChecked(false);
             if (child.isChecked()) {
                 model.setHomeCuisCurrentSelect(true);
             } else {
@@ -129,8 +134,6 @@ public class TastePrefFragment2 extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 2).apply();
-                        DishqApplication.setFragmentSeen(2);
                         showNext();
                     }
                 }, 400);

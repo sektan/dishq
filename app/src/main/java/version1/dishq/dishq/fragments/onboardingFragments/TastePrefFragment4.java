@@ -61,7 +61,6 @@ public class TastePrefFragment4 extends Fragment {
         setTags(v);
         v.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeRight() {
-                DishqApplication.setFavCuisineCount(0);
                 OnBoardingActivity.pager.setCurrentItem(2);
             }
 
@@ -101,11 +100,14 @@ public class TastePrefFragment4 extends Fragment {
         allergyContainer = (FlowLayout) view.findViewById(R.id.allergy_container);
         allergyContainer.removeAllViews();
         for (AllergyModal model : Util.allergyModals) {
+            if (DishqApplication.getFoodChoiceSelected() < model.getAllergyFoodChoice()) {
+                continue;
+            }
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, allergyContainer, false);
-                child.setText(model.getAllergyName());
-                child.setTypeface(Util.opensansregular);
-                child.setTag(model);
-                allergyContainer.addView(child);
+            child.setText(model.getAllergyName());
+            child.setTypeface(Util.opensansregular);
+            child.setTag(model);
+            allergyContainer.addView(child);
             child.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -118,7 +120,7 @@ public class TastePrefFragment4 extends Fragment {
                         model.setAllergyCurrentlySelect(true);
                         Util.dontEatSelects.add(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
 
-                    }else if(!view.isChecked()){
+                    } else if (!view.isChecked()) {
                         model.setAllergyCurrentlySelect(false);
                         Util.dontEatSelects.remove(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
                     }
