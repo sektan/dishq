@@ -118,11 +118,14 @@ public class TastePrefFragment4 extends Fragment {
                     if (view.isChecked()) {
                         Log.d("Name of selected item", model.getAllergyName());
                         model.setAllergyCurrentlySelect(true);
-                        Util.dontEatSelects.add(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
+                        DontEatSelect dontEatSelect = new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId());
+                        Util.dontEatSelects.add(dontEatSelect);
+                        Util.getDontEatMaps().put(model.getAllergyName(), dontEatSelect);
 
                     } else if (!view.isChecked()) {
                         model.setAllergyCurrentlySelect(false);
-                        Util.dontEatSelects.remove(new DontEatSelect(model.getAllergyClassName(), model.getAllergyEntityId()));
+                        Util.dontEatSelects.remove(Util.getDontEatMaps().get(model.getAllergyName()));
+                        Util.getDontEatMaps().remove(model.getAllergyName());
                     }
                 }
             });

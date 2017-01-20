@@ -91,14 +91,12 @@ public class TastePrefFragment2 extends Fragment {
                     Log.d("Name of selected item", model.getHomeCuisName());
                     Util.setHomeCuisineName(model.getHomeCuisName());
                     model.setHomeCuisCurrentSelect(true);
-                    //DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, true).apply();
                     DishqApplication.setHomeCuisineSelected(true);
                     Util.homeCuisineSelects.add(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
                 } else {
                     model.setHomeCuisCurrentSelect(false);
                     Util.setHomeCuisineName("");
-                    Util.homeCuisineSelects.remove(new HomeCuisineSelect(model.getHomeCuisClassName(), model.getHomeCuisEntityId()));
-                    //DishqApplication.getPrefs().edit().putBoolean(Constants.HOME_CUISINE_SELECTED, false).apply();
+                    Util.homeCuisineSelects.clear();
                     DishqApplication.setHomeCuisineSelected(false);
                 }
                 final Handler handler = new Handler();

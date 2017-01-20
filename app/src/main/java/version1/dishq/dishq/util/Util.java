@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -59,7 +60,7 @@ public class Util {
     public static ArrayList<FoodChoicesModal> foodChoicesModals = new ArrayList<>();
     public static ArrayList<FavCuisinesModal> favCuisinesModals = new ArrayList<>();
     public static ArrayList<HomeCuisinesModal> homeCuisinesModals = new ArrayList<>();
-    public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<DishDataInfo>();
+    public static ArrayList<DishDataInfo> dishDataModals = new ArrayList<>();
     public static ArrayList<DineoutTabResponse.DineoutRestInfo> dineoutRestInfos = new ArrayList<>();
     public static ArrayList<DeliveryTabResponse.DeliveryRestInfo> deliveryRestInfos = new ArrayList<>();
     public static ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> favouriteDishesInfos = new ArrayList<>();
@@ -69,7 +70,9 @@ public class Util {
     public static ArrayList<MenuFinderRestSuggestResponse.MenuFinderRestInfo> menuFinderRestInfos = new ArrayList<>();
     public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
     public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
+    private static HashMap<String,FavCuisineSelect> favCuisineMap = new HashMap<>();
     public static ArrayList<DontEatSelect> dontEatSelects = new ArrayList<>();
+    private static HashMap<String,DontEatSelect> dontEatMaps = new HashMap<>();
     public static ArrayList<String> dishSmallPic = new ArrayList<>();
     public static DeliveryMenuResponse.DeliveryRestData deliveryRestData = null;
     public static DineoutMenuResponse.DineoutRestData dineoutRestData = null;
@@ -97,6 +100,22 @@ public class Util {
     private static String MoodName;
     private static String FilterName;
     private static int currentPage = 200;
+
+    public static HashMap<String, DontEatSelect> getDontEatMaps() {
+        return dontEatMaps;
+    }
+
+    public static void setDontEatMaps(HashMap<String, DontEatSelect> dontEatMaps) {
+        Util.dontEatMaps = dontEatMaps;
+    }
+
+    public static HashMap<String, FavCuisineSelect> getFavCuisineMap() {
+        return favCuisineMap;
+    }
+
+    public static void setFavCuisineMap(HashMap<String, FavCuisineSelect> favCuisineMap) {
+        Util.favCuisineMap = favCuisineMap;
+    }
 
     public static int getCurrentPage() {
         return currentPage;

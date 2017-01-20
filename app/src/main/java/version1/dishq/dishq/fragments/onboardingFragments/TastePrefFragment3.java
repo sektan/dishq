@@ -125,7 +125,11 @@ public class TastePrefFragment3 extends Fragment {
                                 model.setFavCuisCurrentSelect(true);
                                 DishqApplication.favCuisineCount++;
                                 DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
-                                Util.favCuisineSelects.add(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
+
+
+                                FavCuisineSelect favCuisine = new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId());
+                                Util.favCuisineSelects.add(favCuisine);
+                                Util.getFavCuisineMap().put(model.getFavCuisName(), favCuisine);
 
                                 if (DishqApplication.favCuisineCount == 3) {
                                     final Handler handler = new Handler();
@@ -142,8 +146,8 @@ public class TastePrefFragment3 extends Fragment {
                             } else {
                                 DishqApplication.favCuisineCount--;
                                 DishqApplication.setFavCuisineCount(DishqApplication.getFavCuisineCount());
-                                //DishqApplication.favCuisineSelects = new ArrayList<>();
-                                Util.favCuisineSelects.remove(new FavCuisineSelect(model.getFavCuisClassName(), model.getFavCuisEntityId()));
+                                Util.favCuisineSelects.remove( Util.getFavCuisineMap().get(model.getFavCuisName()));
+                                Util.getFavCuisineMap().remove(model.getFavCuisName());
                                 model.setFavCuisCurrentSelect(false);
                             }
                         }
