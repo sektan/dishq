@@ -103,6 +103,16 @@ public class Util {
     private static int moodPosition = -1;
     private static int quickFilterPosition = -1;
 
+    private static int homeLastPage = -1;
+
+    public static int getHomeLastPage() {
+        return homeLastPage;
+    }
+
+    public static void setHomeLastPage(int homeLastPage) {
+        Util.homeLastPage = homeLastPage;
+    }
+
     public static int getMoodPosition() {
         return moodPosition;
     }

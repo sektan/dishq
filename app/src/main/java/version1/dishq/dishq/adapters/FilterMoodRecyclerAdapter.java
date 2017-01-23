@@ -18,7 +18,6 @@ import version1.dishq.dishq.util.Util;
 
 /**
  * Created by kavin.prabhu on 30/12/16.
- *
  */
 
 public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRecyclerAdapter.MoodViewHolder> {
@@ -34,6 +33,15 @@ public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRe
         this.context = context;
         this.filterList = filterList;
         this.itemCallback = itemCallback;
+
+        if(Util.getMoodPosition() > -1){
+            this.selectedPos = Util.getMoodPosition();
+            this.isItemAlreadySelected = true;
+        }
+    }
+
+    public void clearSelection(){
+        this.selectedPos = -1; this.lastSelectedPos = -1;
     }
 
     @Override
@@ -47,24 +55,25 @@ public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRe
 
         holder.textFilterResults.setText(filterList.get(position).getName());
 
-        if (Util.getMoodPosition() == position) {
-            Util.setMoodName(filterList.get(position).getName());
+        if (selectedPos == position) {
             holder.textFilterResults.setBackgroundResource(R.drawable.filter_mood_item_state_selected);
             holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.black));
         } else if (lastSelectedPos != -1) {
             lastSelectedPos = -1;
-            Util.setMoodName("");
             holder.textFilterResults.setBackgroundResource(R.drawable.filter_mood_item_state_unselected);
             holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.white));
         } else {
-//            if (Util.getMoodName().equals(filterList.get(position).getName())) {
-//                holder.textFilterResults.setBackgroundResource(R.drawable.filter_mood_item_state_selected);
-//                holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.black));
-//            }else {
-                holder.textFilterResults.setBackgroundResource(R.drawable.filter_mood_item_state_unselected);
-                holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.white));
-           // }
+            holder.textFilterResults.setBackgroundResource(R.drawable.filter_mood_item_state_unselected);
+            holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.white));
         }
+    }
+
+    public int getSelectedPos() {
+        return this.selectedPos;
+    }
+
+    public void setSelectedPos(int selectedPos) {
+        this.selectedPos = selectedPos;
     }
 
     @Override
@@ -89,7 +98,6 @@ public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRe
                     // If the clicked item is already selected then remove the selection
                     if (selectedPos == getAdapterPosition()) {
                         selectedPos = lastSelectedPos = -1;
-                        Util.setMoodPosition(selectedPos);
                         isItemAlreadySelected = false;
                         notifyItemChanged(getAdapterPosition());
 
@@ -100,17 +108,14 @@ public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRe
                         // If the any item is already selected then swap the positions and notify both
                         if (isItemAlreadySelected) {
                             lastSelectedPos = selectedPos;
-//                            selectedPos = -1;
                             notifyItemChanged(lastSelectedPos);
 
                             selectedPos = getAdapterPosition();
-                            Util.setMoodPosition(selectedPos);
                             notifyItemChanged(selectedPos);
                         } else {
                             // If its a first selection then select that item
                             isItemAlreadySelected = true;
                             selectedPos = getAdapterPosition();
-                            Util.setMoodPosition(selectedPos);
                             notifyItemChanged(getAdapterPosition());
                         }
 

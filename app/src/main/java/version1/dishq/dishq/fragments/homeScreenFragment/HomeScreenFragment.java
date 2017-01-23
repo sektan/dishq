@@ -108,7 +108,12 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
+        int number = viewPager.getAdapter().getCount();
+        Log.d(TAG, "The page number is : " + number);
+        int CurrentPage = viewPager.getCurrentItem();
+        Log.d(TAG, "the current page is :" + CurrentPage);
+        final int count = Util.dishDataModals.size();
+        Log.d(TAG, "The total count is : " + count);
         goingToNextCard = (FrameLayout) rootView.findViewById(R.id.home_frame_new_card);
         rlHomeScreen = (RelativeLayout) rootView.findViewById(R.id.rl_home_screen);
         homeBgImage = (ImageView) rootView.findViewById(R.id.home_screen_bg_image);

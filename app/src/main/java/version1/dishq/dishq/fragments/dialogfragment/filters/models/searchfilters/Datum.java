@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by kavin.prabhu on 02/01/17.
+ *
  */
 
 public class Datum {

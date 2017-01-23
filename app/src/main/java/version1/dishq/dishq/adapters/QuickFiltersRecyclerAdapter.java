@@ -13,9 +13,11 @@ import java.util.List;
 import version1.dishq.dishq.OnClickCallbacks;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.QuickFilter;
+import version1.dishq.dishq.util.Util;
 
 /**
  * Created by kavin.prabhu on 30/12/16.
+ *
  */
 
 public class QuickFiltersRecyclerAdapter extends RecyclerView.Adapter<QuickFiltersRecyclerAdapter.QuickFilterViewHolder> {
@@ -23,6 +25,7 @@ public class QuickFiltersRecyclerAdapter extends RecyclerView.Adapter<QuickFilte
     private final Context context;
     private final List<QuickFilter> filterList;
     private boolean isItemAlreadySelected = false;
+
     private int selectedPos = -1, lastSelectedPos = -1;
     private OnClickCallbacks.OnClickQuickFilterItemCallback itemCallback;
 
@@ -31,6 +34,15 @@ public class QuickFiltersRecyclerAdapter extends RecyclerView.Adapter<QuickFilte
         this.context = context;
         this.filterList = filterList;
         this.itemCallback = itemCallback;
+
+        if(Util.getQuickFilterPosition() > - 1) {
+            this.selectedPos = Util.getQuickFilterPosition();
+            this.isItemAlreadySelected = true;
+        }
+    }
+
+    public void clearSelection(){
+        this.selectedPos = -1; this.lastSelectedPos = -1;
     }
 
     @Override
@@ -54,6 +66,14 @@ public class QuickFiltersRecyclerAdapter extends RecyclerView.Adapter<QuickFilte
             holder.textFilterResults.setBackgroundResource(R.drawable.filter_quick_item_state_unselected);
             holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.white));
         }
+    }
+
+    public int getSelectedPos() {
+        return selectedPos;
+    }
+
+    public void setSelectedPos(int selectedPos) {
+        this.selectedPos = selectedPos;
     }
 
     @Override

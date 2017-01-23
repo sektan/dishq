@@ -33,7 +33,6 @@ import version1.dishq.dishq.util.Util;
 
 /**
  * Created by kavin.prabhu on 28/12/16.
- *
  */
 
 public class FiltersDialogFragment extends DialogFragment implements View.OnClickListener {
@@ -48,6 +47,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
     ImageView imageClose;
     MoodFragment moodFragment;
     QuickFiltersFragment quickFiltersFragment;
+    public Boolean hasToggleBeenApplied = false;
 
     public FiltersDialogFragment() {
     }
@@ -57,6 +57,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
     }
 
     private static final String TAG = "FiltersDialogFragment";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,41 +166,36 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.filter_container);
         switch (v.getId()) {
             case R.id.filter_button_reset:
-                if (fragment instanceof MoodFragment) {
-                    ((MoodFragment) fragment).clearSelection();
-                    Util.setMoodPosition(-1);
-                } else if (fragment instanceof QuickFiltersFragment) {
-                    ((QuickFiltersFragment) fragment).clearSelection();
-                    Util.setFilterName("");
+                boolean isMoodFragment = fragment instanceof MoodFragment;
+                moodFragment.clearSelection(isMoodFragment);
+
+                boolean isQuickFiltersFragment = fragment instanceof QuickFiltersFragment;
+                if(quickFiltersFragment!=null) {
+                    quickFiltersFragment.clearSelection(isQuickFiltersFragment);
                 }
-                // Set the apply button disabled
-                toggleApplyButton(false);
+
+                // Set the apply button to be clickable
+                toggleApplyButton(true, true);
                 break;
 
             case R.id.filter_button_apply:
-                if (fragment instanceof MoodFragment) {
-                    FoodMoodFilter moodFilter = ((MoodFragment) fragment).getSelectedItem();
+                //Mood Filters
+                List<FoodMoodFilter> moodFilter = moodFragment.getFoodMoodFilterList();
+                Util.setMoodPosition(moodFragment.getRecyclerAdapter().getSelectedPos());
+                if (moodFragment.getRecyclerAdapter().getSelectedPos() >= 0) {
+                    Util.setMoodFilterId(moodFilter.get(Util.getMoodPosition()).getFoodMoodId());
+                    Util.setMoodName(moodFilter.get(Util.getMoodPosition()).getName());
+                }
 
-                    Util.setMoodFilterId(moodFilter.getFoodMoodId());
-                   // Toast.makeText(getActivity(), moodFilter.getName() + ", " + moodFilter.getFoodMoodId(), Toast.LENGTH_SHORT).show();
-                } else if (fragment instanceof QuickFiltersFragment) {
-                    Object selectedItem = ((QuickFiltersFragment) fragment).getSelectedItem();
-                    if (selectedItem instanceof Datum) {
-                        Util.setFilterName(((Datum) selectedItem).getName());
-                        Util.setFilterClassName(((Datum) selectedItem).getClassName());
-                        Util.setFilterEntityId(((Datum) selectedItem).getEntityId());
-//                        Toast.makeText(getActivity(), ((Datum) selectedItem).getName() + ", "
-//                                + ((Datum) selectedItem).getClassName() + ", "
-//                                + ((Datum) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
-                    } else if (selectedItem instanceof QuickFilter) {
-
-                        Util.setFilterName(((QuickFilter) selectedItem).getName());
-                        Util.setFilterClassName(((QuickFilter) selectedItem).getClassName());
-                        Util.setFilterEntityId(((QuickFilter) selectedItem).getEntityId());
-//                        Toast.makeText(getActivity(), ((QuickFilter) selectedItem).getName() + ", "
-//                                + ((QuickFilter) selectedItem).getClassName() + ", "
-//                                + ((QuickFilter) selectedItem).getEntityId(), Toast.LENGTH_SHORT).show();
-                    }
+                //Quick Filters
+                Object selectedItem = quickFiltersFragment.getSelectedItem();
+                if(quickFiltersFragment.getRecyclerAdapter()!=null) {
+                    Util.setQuickFilterPosition(quickFiltersFragment.getRecyclerAdapter().getSelectedPos());
+                }
+                if (selectedItem != null) {
+                    Util.setFilterName(quickFiltersFragment.getSelectedFilterName());
+                    Util.setFilterClassName(quickFiltersFragment.getSelectedFilterClassName());
+                    Util.setFilterEntityId(quickFiltersFragment.getSelectedFilterEntityId());
                 }
                 Util.setHomeRefreshRequired(true);
                 Intent intent = new Intent(getActivity(), HomeActivity.class);
@@ -256,7 +252,11 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         buttonReset.setEnabled(true);
     }
 
-    public void toggleApplyButton(boolean isEnabled) {
+    public void toggleApplyButton(boolean isEnabled, boolean shouldOverRideToogleStatus) {
+        if(shouldOverRideToogleStatus) {
+            hasToggleBeenApplied = isEnabled;
+        }
+
         buttonApply.setEnabled(isEnabled);
     }
 

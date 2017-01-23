@@ -41,7 +41,7 @@ public class QuickFiltersFragment extends Fragment implements
         OnClickCallbacks.OnClickQuickFilterItemCallback, TextWatcher,
         QuickFilterPresenter.SearchResultsCallback, AdapterView.OnItemClickListener {
 
-    QuickFiltersRecyclerAdapter recyclerAdapter;
+    QuickFiltersRecyclerAdapter recyclerAdapter = null;
     List<QuickFilter> quickFilterList;
     List<Datum> datumList = new ArrayList<>();
     QuickFilterPresenter presenter;
@@ -103,8 +103,9 @@ public class QuickFiltersFragment extends Fragment implements
         if (getParentFragment() != null && getParentFragment() instanceof FiltersDialogFragment) {
             quickFilterList = ((FiltersDialogFragment) getParentFragment()).quickFilterList;
             if (quickFilterList != null && quickFilterList.size() > 0) {
-                recyclerAdapter = new QuickFiltersRecyclerAdapter(getActivity(), quickFilterList, this);
-
+                if (recyclerAdapter == null) {
+                    recyclerAdapter = new QuickFiltersRecyclerAdapter(getActivity(), quickFilterList, this);
+                }
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerView.setAdapter(recyclerAdapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
@@ -123,10 +124,9 @@ public class QuickFiltersFragment extends Fragment implements
             // Toggle the apply button depends on the selection
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
-                    if (isAnyItemSelected)
-                        ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true);
-                    else
-                        ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false);
+                    if (isAnyItemSelected) {
+                        ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
+                    }
                 }
             }
         }
@@ -148,7 +148,7 @@ public class QuickFiltersFragment extends Fragment implements
         }
         if (getParentFragment() != null) {
             if (getParentFragment() instanceof FiltersDialogFragment) {
-                ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false);
+                ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, false);
             }
         }
     }
@@ -163,6 +163,7 @@ public class QuickFiltersFragment extends Fragment implements
             presenter.getSearchQueryResults(searchString, this);
 
             setRecyclerAdapter();
+            datum = null;
             recyclerView.setVisibility(View.INVISIBLE);
         } else {
             if (progressBar != null && progressBar.isShown())
@@ -171,6 +172,15 @@ public class QuickFiltersFragment extends Fragment implements
             recyclerView.setVisibility(View.VISIBLE);
         }
     }
+
+    public QuickFiltersRecyclerAdapter getRecyclerAdapter() {
+        return recyclerAdapter;
+    }
+
+    public void setRecyclerAdapter(QuickFiltersRecyclerAdapter recyclerAdapter) {
+        this.recyclerAdapter = recyclerAdapter;
+    }
+
 
     @Override
     public void onSuccess(List<Datum> data) {
@@ -205,10 +215,11 @@ public class QuickFiltersFragment extends Fragment implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (datumList != null && datumList.size() > 0) {
             this.datum = datumList.get(position);
+            this.recyclerAdapter.clearSelection();
             // Toggle the apply button depends on the selection
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
-                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true);
+                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
                 }
             }
         }
@@ -218,10 +229,48 @@ public class QuickFiltersFragment extends Fragment implements
         return datum != null ? datum : quickFilter;
     }
 
-    public void clearSelection() {
-        setRecyclerAdapter();
-        searchAutoCompleteText.clearListSelection();
-        searchAutoCompleteText.setText(null);
+    public String getSelectedFilterName() {
+        Object selectedItem = this.getSelectedItem();
+
+        if (selectedItem instanceof Datum) {
+            return ((Datum) selectedItem).getName();
+        } else if (selectedItem instanceof QuickFilter) {
+            return ((QuickFilter) selectedItem).getName();
+        }
+        return null;
+    }
+
+    public String getSelectedFilterClassName() {
+        Object selectedItem = this.getSelectedItem();
+
+        if (selectedItem instanceof Datum) {
+            return ((Datum) selectedItem).getClassName();
+        } else if (selectedItem instanceof QuickFilter) {
+            return ((QuickFilter) selectedItem).getClassName();
+        }
+        return null;
+    }
+
+    public int getSelectedFilterEntityId() {
+        Object selectedItem = this.getSelectedItem();
+
+        if (selectedItem instanceof Datum) {
+            return ((Datum) selectedItem).getEntityId();
+        } else if (selectedItem instanceof QuickFilter) {
+            return ((QuickFilter) selectedItem).getEntityId();
+        }
+        return -1;
+    }
+
+    public void clearSelection(boolean isBeingShown) {
+        if (this.recyclerAdapter != null) {
+            this.recyclerAdapter.clearSelection();
+        }
+        if (isBeingShown) {
+            setRecyclerAdapter();
+            searchAutoCompleteText.clearListSelection();
+            searchAutoCompleteText.setText(null);
+        }
     }
 
     @Override

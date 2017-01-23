@@ -12,10 +12,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -356,27 +358,10 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         Log.d(TAG, "the current page is :" + CurrentPage);
         final int count = Util.dishDataModals.size() - 2;
         Log.d(TAG, "The current count is : " + count);
-        if(viewPager.getCurrentItem() == count) {
-            goingToNextCard.setOnTouchListener(new OnSwipeTouchListener(DishqApplication.getContext()) {
-                public void onSwipeLeft() {
-                    Log.d(TAG, "Going into the swipeLeft");
 
-                    Util.setCurrentPage(viewPager.getCurrentItem());
-                    Log.d(TAG, "Setting the current Page");
-                    Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (position == viewPager.getAdapter().getCount() - 1) {
-                    Util.setCurrentPage(viewPager.getCurrentItem());
-                    Log.d(TAG, "Setting the current Page");
-                    Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
-                    startActivity(intent);
-                }
             }
 
             @Override
@@ -386,7 +371,16 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                if (state == 1) {
+                    if ((Util.getHomeLastPage() < viewPager.getCurrentItem()) && (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1)) {
+                        Log.d(TAG, "Going into the swipeLeft");
+                        Util.setCurrentPage(viewPager.getCurrentItem());
+                        Log.d(TAG, "Setting the current Page");
+                        Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
+                        startActivity(intent);
+                    }
+                    Util.setHomeLastPage(viewPager.getCurrentItem());
+                }
             }
         });
     }

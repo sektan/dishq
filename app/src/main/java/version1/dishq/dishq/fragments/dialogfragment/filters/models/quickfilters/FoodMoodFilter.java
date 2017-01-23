@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by kavin.prabhu on 31/12/16.
+ *
  */
 
 public class FoodMoodFilter {

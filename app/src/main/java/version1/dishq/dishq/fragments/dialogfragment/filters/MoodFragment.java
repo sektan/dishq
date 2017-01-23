@@ -24,11 +24,9 @@ import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters
 public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMoodFilterItemCallback {
 
     RecyclerView recyclerView;
-    FilterMoodRecyclerAdapter recyclerAdapter;
+    FilterMoodRecyclerAdapter recyclerAdapter = null;
     List<FoodMoodFilter> foodMoodFilterList;
     TextView textView;
-    FoodMoodFilter foodMoodFilter = null;
-
 
     public MoodFragment() {
         // Required empty public constructor
@@ -47,6 +45,13 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
         return view;
     }
 
+    public FilterMoodRecyclerAdapter getRecyclerAdapter() {
+        return recyclerAdapter;
+    }
+
+    public void setRecyclerAdapter(FilterMoodRecyclerAdapter recyclerAdapter) {
+        this.recyclerAdapter = recyclerAdapter;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -64,8 +69,9 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
         if (getParentFragment() != null && getParentFragment() instanceof FiltersDialogFragment) {
             foodMoodFilterList = ((FiltersDialogFragment) getParentFragment()).foodMoodFilterList;
             if (foodMoodFilterList != null && foodMoodFilterList.size() > 0) {
-                recyclerAdapter = new FilterMoodRecyclerAdapter(getActivity(), foodMoodFilterList, this);
-
+                if (recyclerAdapter == null) {
+                    recyclerAdapter = new FilterMoodRecyclerAdapter(getActivity(), foodMoodFilterList, this);
+                }
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerView.setAdapter(recyclerAdapter);
                 recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
@@ -81,26 +87,32 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
     public void onItemClicked(int position, boolean isAnyItemSelected) {
         if (foodMoodFilterList != null && foodMoodFilterList.size() > 0) {
 
-            this.foodMoodFilter = foodMoodFilterList.get(position);
-
             // Toggle the apply button depends on the selection
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
-                    if (isAnyItemSelected)
-                        ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true);
-                    else
-                        ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false);
+                    if (isAnyItemSelected) {
+                        ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
+                    }
                 }
             }
         }
     }
 
-    public FoodMoodFilter getSelectedItem() {
-        return this.foodMoodFilter;
+    public List<FoodMoodFilter> getFoodMoodFilterList() {
+        return foodMoodFilterList;
     }
 
-    public void clearSelection() {
-        setRecyclerAdapter();
-        this.foodMoodFilter = null;
+    public void setFoodMoodFilterList(List<FoodMoodFilter> foodMoodFilterList) {
+        this.foodMoodFilterList = foodMoodFilterList;
+    }
+
+    public void clearSelection(boolean isBeingShown) {
+        if (this.recyclerAdapter != null) {
+            this.recyclerAdapter.clearSelection();
+        }
+
+        if (isBeingShown) {
+            setRecyclerAdapter();
+        }
     }
 }

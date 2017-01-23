@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,19 +107,19 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         fbBgImage = (ImageView) findViewById(R.id.feedback_bg_image);
         fbBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        if(Util.isHomeRefreshRequired()) {
+        //if(Util.isHomeRefreshRequired()) {
             rlFeedbackQuest.setVisibility(View.VISIBLE);
 
-        }else {
-            rlFeedbackQuest.setVisibility(View.GONE);
-        }
+//        }else {
+//            rlFeedbackQuest.setVisibility(View.GONE);
+//        }
 
         feedbackQuestion.setText(Util.getFeedbackQuestion());
 
         feedbackFrame.setOnTouchListener(new OnSwipeTouchListener(FeedbackActivity.this) {
             public void onSwipeRight() {
                 Util.setHomeRefreshRequired(false);
-                int currentPage = viewPager.getCurrentItem()-1;
+                int currentPage = viewPager.getCurrentItem();
                 Util.setCurrentPage(currentPage);
                 Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
                 finish();
@@ -335,5 +336,16 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     @Override
     public void onLocationChanged(Location location) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Util.setHomeRefreshRequired(false);
+        int currentPage = viewPager.getCurrentItem();
+        Util.setCurrentPage(currentPage);
+        Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
+        finish();
+        startActivity(intent);
     }
 }
