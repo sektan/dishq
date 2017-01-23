@@ -132,10 +132,10 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         }
         if (Util.isHomeRefreshRequired()) {
             Util.setHomeRefreshRequired(false);
+            Util.setHomeLastPage(-1);
             fetchHomeDishResults();
         } else {
             setViews();
-
         }
     }
 
@@ -362,23 +362,28 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d(TAG, "onPageScrolled is called : "+ position);
             }
 
             @Override
             public void onPageSelected(int position) {
-
+                Log.d(TAG, "onPageSelected is called :" + position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                if (state == 1) {
-                    if ((Util.getHomeLastPage() < viewPager.getCurrentItem()) && (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1)) {
+                Log.d(TAG, "onPageScrollStateChanged is called" + viewPager.getCurrentItem() + " state : " + state);
+                if (state == 0) {
+                    int currentPage = viewPager.getCurrentItem();
+                    if ((currentPage == Util.getHomeLastPage())&& (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1)) {
                         Log.d(TAG, "Going into the swipeLeft");
                         Util.setCurrentPage(viewPager.getCurrentItem());
                         Log.d(TAG, "Setting the current Page");
                         Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
                         startActivity(intent);
                     }
+                }
+                if(state == 1) {
                     Util.setHomeLastPage(viewPager.getCurrentItem());
                 }
             }
