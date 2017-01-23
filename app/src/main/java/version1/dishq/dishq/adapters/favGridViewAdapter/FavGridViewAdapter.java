@@ -40,6 +40,7 @@ import version1.dishq.dishq.fragments.favPageFragment.FavDishDialogFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.ui.FavouritesActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -74,9 +75,8 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
     @Override
     public void onBindViewHolder(final FavGridViewInfoAdapter holder, int position) {
         ArrayList<String> imageUrls = Util.favouriteDishesInfos.get(position).favDishPhoto;
-        String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
-                .load(imageUrl)
+                .load(imageUrls.get(0))
                 .fit()
                 .centerCrop()
                 .into(holder.cardBgImage);
@@ -116,6 +116,18 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
             holder.nonVegTag.setVisibility(View.VISIBLE);
         }
 
+        if (Util.favouriteDishesInfos.get(position).getFavIsSpicy()) {
+            holder.isSpicyTag.setVisibility(View.VISIBLE);
+        } else {
+            holder.isSpicyTag.setVisibility(View.GONE);
+        }
+
+        if (Util.favouriteDishesInfos.get(position).getFavHasAlcohol()) {
+            holder.hasAlcoholTag.setVisibility(View.VISIBLE);
+        } else {
+            holder.hasAlcoholTag.setVisibility(View.GONE);
+        }
+
         final int favGenericDishId = Util.favouriteDishesInfos.get(position).getFavDishGenericDishId();
         holder.favButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +146,6 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
                 Util.favouriteDishesInfos.remove(favPos);
                 notifyItemRemoved(favPos);
                 notifyItemRangeChanged(favPos, getItemCount());
-
             }
         });
 

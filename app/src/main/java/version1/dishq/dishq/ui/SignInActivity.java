@@ -38,7 +38,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -69,11 +71,10 @@ import version1.dishq.dishq.util.Util;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = "SignUpActivity";
+    private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private static GoogleApiClient googleApiClient;
     final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
-    String ace = "";
     private static String facebookOrGoogle = "";
     LoginButton loginButton;
     private ProgressBar progressBar;
@@ -95,9 +96,11 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         String serverClientId = DishqApplication.getContext().getString(R.string.server_client_id);
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestServerAuthCode(serverClientId)
+                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                .requestServerAuthCode(serverClientId, false)
                 .requestIdToken(serverClientId)
                 .build();
+        Log.d(TAG, "Google sign in has been set up");
 
         // [START build_client]
         // Build a GoogleApiClient with access to the Google Sign-In API and the
@@ -105,12 +108,11 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-                .addOnConnectionFailedListener(this).
-                        addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-                .addApi(Plus.API)
+                .addOnConnectionFailedListener(this)
                 .build();
         // [END build_client]
 
+        Log.d(TAG, "Google client has been created");
         setContentView(R.layout.activity_signin);
     }
 
@@ -242,6 +244,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             if (requestCode == RC_SIGN_IN) {
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                 try {
+                    Log.d(TAG, "handleSignInResult is going to be called");
                     handleSignInResult(result);
                 } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
@@ -257,78 +260,36 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             case R.id.google_sign_up:
                 GOOGLE_BUTTON_SELECTED = true;
                 FACEBOOK_BUTTON_SELECTED = false;
-                if (ContextCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Sign in for google is called");
                     signIn();
-                } else if (ContextCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_DENIED) {
-                    selfPermission();
-                }
                 break;
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     // [START handleSignInResult]
     private void handleSignInResult(GoogleSignInResult result) throws IOException, GoogleAuthException {
-        Log.e("handle", "1");
+        Log.e(TAG, "Handle: " + "1");
         if (result.isSuccess()) {
-
+            Log.d(TAG, "result is a success" + result.toString());
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             assert acct != null;
-            final String access = acct.getServerAuthCode();
-            final String SCOPES = "https://www.googleapis.com/auth/userinfo.profile";
-
-            AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-                @Override
-                protected String doInBackground(Void... params) {
-                    try {
-                        if (ActivityCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-                            //
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            return ace;
-                        }
-                        ace = GoogleAuthUtil.getToken(getApplicationContext(),
-                                Plus.AccountApi.getAccountName(googleApiClient),
-                                "oauth2:" + SCOPES);
-                        Log.d(TAG, "the accessToken is: " + ace);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Log.i(TAG, "Access " + access);
-                    return ace;
-                }
-
-                @Override
-                protected void onPostExecute(String token) {
-                    Log.i(TAG, "Access token retrieved:" + ace);
-                    facebookOrGoogle = "google";
-                    DishqApplication.getPrefs().edit().putString(Constants.FACEBOOK_OR_GOOGLE, facebookOrGoogle).apply();
-                    DishqApplication.setFacebookOrGoogle(facebookOrGoogle);
-                    progressBar.setVisibility(View.VISIBLE);
-                    fetchAccessToken(ace);
-                }
-
-            };
-            task.execute();
+            String authCode = acct.getServerAuthCode();
+            Log.d(TAG, "the authCode is:" + authCode);
+            String idToken = acct.getIdToken();
+            Log.d(TAG, "the idToken is:" + idToken);
+            fetchAccessToken(idToken);
 
             Log.e(TAG, acct.getDisplayName() + acct.getIdToken() + acct.getEmail());
-
 
         } else {
             Log.e(TAG, result + "");
         }
     }
-
 
     public void checkWhichActivity() {
         if (!DishqApplication.getOnBoardingDone()) {
@@ -345,28 +306,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void signIn() {
+        Log.d(TAG, "Sign in is called here");
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
-    void selfPermission() {
-        if (ContextCompat.checkSelfPermission(SignInActivity.this,
-                Manifest.permission.GET_ACCOUNTS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(SignInActivity.this,
-                    Manifest.permission.GET_ACCOUNTS)) {
-                Log.e("accept", "accept");
-            } else {
-                // we can request the permission.
-                Log.e("accept", "not accept");
-                ActivityCompat.requestPermissions(SignInActivity.this,
-                        new String[]{Manifest.permission.GET_ACCOUNTS},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-            }
-        }
-    }
-
 
     private void fetchAccessToken(final String accessToken) {
         Log.d(TAG, "fetchAccessToken called");
@@ -480,7 +423,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
             // other 'case' lines to check for other
             // permissions this app might request

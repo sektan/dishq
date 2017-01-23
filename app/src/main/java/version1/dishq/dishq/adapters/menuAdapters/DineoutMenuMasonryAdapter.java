@@ -82,7 +82,6 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
                 FragmentActivity activity = (FragmentActivity) (context);
                 FragmentManager fm = activity.getSupportFragmentManager();
                 DineMenuDishDialogFragment dialogFragment = DineMenuDishDialogFragment.getInstance();
-                //dialogFragment.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
                 dialogFragment.show(fm, "fav_dialog_fragment");
             }
         });
@@ -109,6 +108,18 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
             holder.dineMenuFav.setChecked(true);
         }else {
             holder.dineMenuFav.setChecked(false);
+        }
+
+        if (Util.dineoutMenuInfos.get(position).getDineMenuIsSpicy()) {
+            holder.isSpicyTag.setVisibility(View.VISIBLE);
+        } else {
+            holder.isSpicyTag.setVisibility(View.GONE);
+        }
+
+        if (Util.dineoutMenuInfos.get(position).getDineMenuHasAlcohol()) {
+            holder.hasAlcoholTag.setVisibility(View.VISIBLE);
+        } else {
+            holder.hasAlcoholTag.setVisibility(View.GONE);
         }
 
         final int dineMenuGenericDishId = Util.dineoutMenuInfos.get(position).getDineMenuGenericDishId();
@@ -150,7 +161,7 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
         private FrameLayout dineMenuFrame;
         private ImageView cardBgImage;
 
-        public DineMenuInfoAdapter(View view) {
+        DineMenuInfoAdapter(View view) {
             super(view);
 
             rlCard = (RelativeLayout) view.findViewById(R.id.cv_rl_menu);

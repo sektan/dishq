@@ -36,6 +36,7 @@ public class DelMenuDishDialogFragment extends DialogFragment implements View.On
     private Button delMenuFoodTags;
     private RelativeLayout rlDelMenuView;
     private FrameLayout delMenuFrame;
+    protected ImageView photoPopUp;
 
     public DelMenuDishDialogFragment() {
 
@@ -77,6 +78,8 @@ public class DelMenuDishDialogFragment extends DialogFragment implements View.On
         isSpicyTag = (ImageView) rootView.findViewById(R.id.spicy_tag);
         hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
         delMenuFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
+        photoPopUp = (ImageView) rootView.findViewById(R.id.popup_photo);
+        photoPopUp.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         delMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,25 +89,11 @@ public class DelMenuDishDialogFragment extends DialogFragment implements View.On
         });
 
         ArrayList<String> imageUrls = Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuPhotoPopup();
-        String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
-                .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        rlDelMenuView.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .load(imageUrls.get(0))
+                .fit()
+                .centerCrop()
+                .into(photoPopUp);
 
         delMenuDishName.setText(Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuDishName());
 
@@ -122,6 +111,18 @@ public class DelMenuDishDialogFragment extends DialogFragment implements View.On
             eggTag.setVisibility(View.GONE);
             vegTag.setVisibility(View.GONE);
             nonVegTag.setVisibility(View.VISIBLE);
+        }
+
+        if (Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuIsSpicy()) {
+            isSpicyTag.setVisibility(View.VISIBLE);
+        } else {
+            isSpicyTag.setVisibility(View.GONE);
+        }
+
+        if (Util.deliveryMenuInfos.get(Util.getFavPosition()).getDelMenuHasAlcohol()) {
+            hasAlcoholTag.setVisibility(View.VISIBLE);
+        } else {
+            hasAlcoholTag.setVisibility(View.GONE);
         }
 
         String dishTags = "";

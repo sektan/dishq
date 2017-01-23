@@ -112,6 +112,18 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             holder.nonVegTag.setVisibility(View.VISIBLE);
         }
 
+        if (Util.deliveryMenuInfos.get(position).getDelMenuIsSpicy()) {
+            holder.isSpicyTag.setVisibility(View.VISIBLE);
+        } else {
+            holder.isSpicyTag.setVisibility(View.GONE);
+        }
+
+        if (Util.deliveryMenuInfos.get(position).getDelMenuHasAlcohol()) {
+            holder.hasAlcoholTag.setVisibility(View.VISIBLE);
+        } else {
+            holder.hasAlcoholTag.setVisibility(View.GONE);
+        }
+
         Boolean isFavourited = Util.deliveryMenuInfos.get(position).getAddedToFavdel();
         if(isFavourited) {
             holder.delMenuFav.setChecked(true);
@@ -158,7 +170,7 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
         private FrameLayout delMenuFrame;
         private ImageView cardBgImage;
 
-        public DelMenuInfoAdapter(View view) {
+        DelMenuInfoAdapter(View view) {
             super(view);
 
             rlCard = (RelativeLayout) view.findViewById(R.id.cv_rl_menu);

@@ -32,6 +32,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -100,6 +101,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private NavigationView navigationView;
     private MixpanelAPI mixpanel = null;
     private Button moodFilterText;
+    private FrameLayout goingToNextCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +150,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         greetingButton = (Button) findViewById(R.id.greeting_button);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        goingToNextCard = (FrameLayout) findViewById(R.id.home_frame_new_card);
+
         setFonts();
     }
 
@@ -209,20 +213,20 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
         Boolean isNotEmpty = false;
         String moodText;
-        if(Util.getMoodName() !=null) {
+        if (Util.getMoodName() != null) {
             isNotEmpty = true;
             moodFilterText.setVisibility(View.VISIBLE);
-        }else if(Util.getFilterName()!=null) {
+        } else if (Util.getFilterName() != null) {
             isNotEmpty = true;
             moodFilterText.setVisibility(View.VISIBLE);
         }
 
-        if(isNotEmpty) {
-            if(Util.getFilterName() == null) {
+        if (isNotEmpty) {
+            if (Util.getFilterName() == null) {
                 moodText = Util.getMoodName();
-            }else if(Util.getMoodName() == null) {
+            } else if (Util.getMoodName() == null) {
                 moodText = Util.getFilterName();
-            }else {
+            } else {
                 moodText = Util.getMoodName() + " , " + Util.getFilterName();
             }
             moodFilterText.setText(moodText);
@@ -300,7 +304,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                     setViews();
                                 }
                                 if (progressBar != null) {
-                                   progressBar.setVisibility(View.GONE);
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             } else {
                                 if (progressBar != null) {
@@ -343,21 +347,35 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private void setViews() {
         setTags();
         viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
-        if(Util.getCurrentPage()!=200) {
+        if (Util.getCurrentPage() != 200) {
             viewPager.setCurrentItem(Util.getCurrentPage());
+        }
+        int number = viewPager.getAdapter().getCount();
+        Log.d(TAG, "The page number is : " + number);
+        int CurrentPage = viewPager.getCurrentItem();
+        Log.d(TAG, "the current page is :" + CurrentPage);
+        final int count = Util.dishDataModals.size() - 2;
+        Log.d(TAG, "The current count is : " + count);
+        if(viewPager.getCurrentItem() == count) {
+            goingToNextCard.setOnTouchListener(new OnSwipeTouchListener(DishqApplication.getContext()) {
+                public void onSwipeLeft() {
+                    Log.d(TAG, "Going into the swipeLeft");
+
+                    Util.setCurrentPage(viewPager.getCurrentItem());
+                    Log.d(TAG, "Setting the current Page");
+                    Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (position == viewPager.getAdapter().getCount()-1) {
-                    //viewPager.setOnTouchListener(new OnSwipeTouchListener(HomeActivity.this) {
-                     //   public void onSwipeLeft() {
-                            //start next Activity
-                            Util.setCurrentPage(viewPager.getCurrentItem());
-                            Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
-                            startActivity(intent);
-                     //   }
-                  //  });
+                if (position == viewPager.getAdapter().getCount() - 1) {
+                    Util.setCurrentPage(viewPager.getCurrentItem());
+                    Log.d(TAG, "Setting the current Page");
+                    Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
+                    startActivity(intent);
                 }
             }
 
@@ -725,7 +743,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         } else if (id == R.id.nav_rate) {
             TextView title = new TextView(HomeActivity.this);
             title.setText("Like the dishq app?");
-            title.setGravity(Gravity.LEFT);
+            title.setGravity(Gravity.START);
             title.setTextSize(22);
             title.setBackgroundColor(Color.WHITE);
             title.setTextColor(Color.parseColor("#000000"));
@@ -786,7 +804,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

@@ -52,6 +52,8 @@ import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.ui.AboutUsActivity;
 import version1.dishq.dishq.ui.FavouritesActivity;
+import version1.dishq.dishq.ui.FeedbackActivity;
+import version1.dishq.dishq.ui.HomeActivity;
 import version1.dishq.dishq.ui.MenuFinder;
 import version1.dishq.dishq.ui.SettingsActivity;
 import version1.dishq.dishq.util.DishqApplication;
@@ -83,6 +85,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     private MixpanelAPI mixpanel = null;
     ImageView homeBgImage;
     private Button moodFilterText;
+    private FrameLayout goingToNextCard;
 
     public HomeScreenFragment() {
     }
@@ -105,6 +108,8 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        goingToNextCard = (FrameLayout) rootView.findViewById(R.id.home_frame_new_card);
         rlHomeScreen = (RelativeLayout) rootView.findViewById(R.id.rl_home_screen);
         homeBgImage = (ImageView) rootView.findViewById(R.id.home_screen_bg_image);
         homeBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -128,7 +133,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
 
         Boolean isNotEmpty = false;
         String moodText;
-        if(Util.getMoodName() !=null) {
+        if(!Util.getMoodName().equals("")) {
             isNotEmpty = true;
             moodFilterText.setVisibility(View.VISIBLE);
         }else if(Util.getFilterName()!=null) {
@@ -139,7 +144,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         if(isNotEmpty) {
             if(Util.getFilterName() == null) {
                 moodText = Util.getMoodName();
-            }else if(Util.getMoodName() == null) {
+            }else if(Util.getMoodName().equals("")) {
                 moodText = Util.getFilterName();
             }else {
                 moodText = Util.getMoodName() + " , " + Util.getFilterName();
@@ -195,6 +200,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     .fit()
                     .centerCrop()
                     .into(homeBgImage);
+
             frameClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -370,7 +376,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         } else if (id == R.id.nav_rate) {
             TextView title = new TextView(getActivity());
             title.setText("Like the dishq app?");
-            title.setGravity(Gravity.LEFT);
+            title.setGravity(Gravity.START);
             title.setTextSize(22);
             title.setBackgroundColor(Color.WHITE);
             title.setTextColor(Color.parseColor("#000000"));

@@ -23,7 +23,7 @@ public class FavouriteDishesResponse {
     public class FavouriteDishesInfo {
         @SerializedName("tags")
         @Expose
-        public ArrayList<String> favDishTags;
+        ArrayList<String> favDishTags;
 
         @SerializedName("photo")
         @Expose
@@ -31,11 +31,11 @@ public class FavouriteDishesResponse {
 
         @SerializedName("dish_type")
         @Expose
-        public FavDishType favDishType;
+        FavDishType favDishType;
 
         @SerializedName("course")
         @Expose
-        public FavDishCourse favDishCourse;
+        FavDishCourse favDishCourse;
 
         @SerializedName("recipe_url")
         @Expose
@@ -45,17 +45,53 @@ public class FavouriteDishesResponse {
         @Expose
         private int favDishNature;
 
+        @SerializedName("is_spicy")
+        @Expose
+        private Boolean favIsSpicy;
+
+        @SerializedName("has_alcohol")
+        @Expose
+        private Boolean favHasAlcohol;
+
         @SerializedName("generic_dish_id")
         @Expose
         private int favDishGenericDishId;
 
+        @SerializedName("photo_popup")
+        @Expose
+        private ArrayList<String> favPopupPhoto;
+
         @SerializedName("cuisine")
         @Expose
-        public ArrayList<FavDishCuisine> favDishCuisines;
+        ArrayList<FavDishCuisine> favDishCuisines;
 
         @SerializedName("name")
         @Expose
         private String favDishName;
+
+        public Boolean getFavIsSpicy() {
+            return favIsSpicy;
+        }
+
+        public void setFavIsSpicy(Boolean favIsSpicy) {
+            this.favIsSpicy = favIsSpicy;
+        }
+
+        public Boolean getFavHasAlcohol() {
+            return favHasAlcohol;
+        }
+
+        public void setFavHasAlcohol(Boolean favHasAlcohol) {
+            this.favHasAlcohol = favHasAlcohol;
+        }
+
+        public ArrayList<String> getFavPopupPhoto() {
+            return favPopupPhoto;
+        }
+
+        public void setFavPopupPhoto(ArrayList<String> favPopupPhoto) {
+            this.favPopupPhoto = favPopupPhoto;
+        }
 
         public ArrayList<String> getFavDishTags() {
             return favDishTags;

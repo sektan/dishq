@@ -1,19 +1,14 @@
 package version1.dishq.dishq.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,13 +38,15 @@ public class FavouritesActivity extends BaseActivity {
     private RelativeLayout rlNoFav;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private RecyclerView favRecyclerView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
         fetchDishFavourites();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.favourites_toolbar);
         setTags();
     }
 
@@ -83,11 +80,12 @@ public class FavouritesActivity extends BaseActivity {
                 Log.d(TAG, "Success");
                 try {
                     if (response.isSuccessful()) {
+                        progressBar.setVisibility(View.GONE);
                         Log.d(TAG, "response is successful");
                         ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> body = response.body().favouriteDishesInfos;
                         if (body != null) {
                             Log.d(TAG, "body is not null");
-                            if(body.isEmpty()) {
+                            if(body.size() == 0) {
                                 rlNoFav.setVisibility(View.VISIBLE);
                                 favRecyclerView.setVisibility(View.GONE);
                             } else{
@@ -101,22 +99,36 @@ public class FavouritesActivity extends BaseActivity {
                                 favRecyclerView.setLayoutManager(recyclerViewLayoutManager);
                                 FavGridViewAdapter favGridViewAdapter = new FavGridViewAdapter(FavouritesActivity.this);
                                 favRecyclerView.setAdapter(favGridViewAdapter);
+                                if(Util.favouriteDishesInfos.size() == 0) {
+                                    rlNoFav.setVisibility(View.VISIBLE);
+                                    favRecyclerView.setVisibility(View.GONE);
+                                }
                             }
+                        }else {
+                            rlNoFav.setVisibility(View.VISIBLE);
+                            favRecyclerView.setVisibility(View.GONE);
                         }
                     } else {
+                        progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                         rlNoFav.setVisibility(View.VISIBLE);
                         favRecyclerView.setVisibility(View.GONE);
                     }
                 } catch (IOException e) {
+                    progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
+                    rlNoFav.setVisibility(View.VISIBLE);
+                    favRecyclerView.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<FavouriteDishesResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
+                progressBar.setVisibility(View.GONE);
+                rlNoFav.setVisibility(View.VISIBLE);
+                favRecyclerView.setVisibility(View.GONE);
             }
         });
     }

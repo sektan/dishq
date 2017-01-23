@@ -120,6 +120,8 @@ public class DeliveryMenuActivity extends BaseActivity {
     }
 
     protected void setFunctionality() {
+        rlOrderNow.setVisibility(View.VISIBLE);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

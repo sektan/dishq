@@ -106,12 +106,19 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         fbBgImage = (ImageView) findViewById(R.id.feedback_bg_image);
         fbBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
+        if(Util.isHomeRefreshRequired()) {
+            rlFeedbackQuest.setVisibility(View.VISIBLE);
+
+        }else {
+            rlFeedbackQuest.setVisibility(View.GONE);
+        }
+
         feedbackQuestion.setText(Util.getFeedbackQuestion());
 
         feedbackFrame.setOnTouchListener(new OnSwipeTouchListener(FeedbackActivity.this) {
             public void onSwipeRight() {
                 Util.setHomeRefreshRequired(false);
-                int currentPage = viewPager.getCurrentItem() -1;
+                int currentPage = viewPager.getCurrentItem()-1;
                 Util.setCurrentPage(currentPage);
                 Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
                 finish();
@@ -227,7 +234,7 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         } else if (id == R.id.nav_rate) {
             TextView title = new TextView(FeedbackActivity.this);
             title.setText("Like the dishq app?");
-            title.setGravity(Gravity.LEFT);
+            title.setGravity(Gravity.START);
             title.setTextSize(22);
             title.setBackgroundColor(Color.WHITE);
             title.setTextColor(Color.parseColor("#000000"));

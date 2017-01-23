@@ -97,9 +97,27 @@ public class Util {
     private static boolean homeRefreshRequired = false;
     private static String homeCuisineName = "";
     private static String feedbackQuestion = "";
-    private static String MoodName;
+    private static String MoodName = "";
     private static String FilterName;
     private static int currentPage = 200;
+    private static int moodPosition = -1;
+    private static int quickFilterPosition = -1;
+
+    public static int getMoodPosition() {
+        return moodPosition;
+    }
+
+    public static void setMoodPosition(int moodPosition) {
+        Util.moodPosition = moodPosition;
+    }
+
+    public static int getQuickFilterPosition() {
+        return quickFilterPosition;
+    }
+
+    public static void setQuickFilterPosition(int quickFilterPosition) {
+        Util.quickFilterPosition = quickFilterPosition;
+    }
 
     public static HashMap<String, DontEatSelect> getDontEatMaps() {
         return dontEatMaps;

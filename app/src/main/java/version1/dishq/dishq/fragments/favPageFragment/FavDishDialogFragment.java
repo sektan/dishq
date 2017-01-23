@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,7 +32,7 @@ import version1.dishq.dishq.util.Util;
  * Package name version1.dishq.dishq.
  */
 
-public class FavDishDialogFragment extends DialogFragment implements View.OnClickListener{
+public class FavDishDialogFragment extends DialogFragment implements View.OnClickListener {
 
     TextView favDishName, favDishType;
     private ImageView vegTag, eggTag, nonVegTag, isSpicyTag, hasAlcoholTag;
@@ -77,6 +78,8 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
         isSpicyTag = (ImageView) rootView.findViewById(R.id.spicy_tag);
         hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
         favFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
+        photoPopUp = (ImageView) rootView.findViewById(R.id.popup_photo);
+        photoPopUp.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         favFrame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,26 +88,12 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
             }
         });
 
-        ArrayList<String> imageUrls = Util.favouriteDishesInfos.get(Util.getFavPosition()).favDishPhoto;
-        String imageUrl = imageUrls.get(0);
+        ArrayList<String> imageUrls = Util.favouriteDishesInfos.get(Util.getFavPosition()).getFavPopupPhoto();
         Picasso.with(getContext())
-                .load(imageUrl)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        rlFavview.setBackground(new BitmapDrawable(bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+                .load(imageUrls.get(0))
+                .fit()
+                .centerCrop()
+                .into(photoPopUp);
 
         favDishName.setText(Util.favouriteDishesInfos.get(Util.getFavPosition()).getFavDishName());
 
@@ -123,6 +112,19 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
             vegTag.setVisibility(View.GONE);
             nonVegTag.setVisibility(View.VISIBLE);
         }
+
+        if (Util.favouriteDishesInfos.get(Util.getFavPosition()).getFavIsSpicy()) {
+            isSpicyTag.setVisibility(View.VISIBLE);
+        } else {
+            isSpicyTag.setVisibility(View.GONE);
+        }
+
+        if (Util.favouriteDishesInfos.get(Util.getFavPosition()).getFavHasAlcohol()) {
+            hasAlcoholTag.setVisibility(View.VISIBLE);
+        } else {
+            hasAlcoholTag.setVisibility(View.GONE);
+        }
+
 
         String dishTags = "";
         if (Util.favouriteDishesInfos != null) {

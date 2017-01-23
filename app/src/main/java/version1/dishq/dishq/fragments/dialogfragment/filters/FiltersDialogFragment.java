@@ -33,6 +33,7 @@ import version1.dishq.dishq.util.Util;
 
 /**
  * Created by kavin.prabhu on 28/12/16.
+ *
  */
 
 public class FiltersDialogFragment extends DialogFragment implements View.OnClickListener {
@@ -166,7 +167,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
             case R.id.filter_button_reset:
                 if (fragment instanceof MoodFragment) {
                     ((MoodFragment) fragment).clearSelection();
-                    Util.setMoodName("");
+                    Util.setMoodPosition(-1);
                 } else if (fragment instanceof QuickFiltersFragment) {
                     ((QuickFiltersFragment) fragment).clearSelection();
                     Util.setFilterName("");
@@ -180,7 +181,6 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                     FoodMoodFilter moodFilter = ((MoodFragment) fragment).getSelectedItem();
 
                     Util.setMoodFilterId(moodFilter.getFoodMoodId());
-                    Util.setMoodName(moodFilter.getName());
                    // Toast.makeText(getActivity(), moodFilter.getName() + ", " + moodFilter.getFoodMoodId(), Toast.LENGTH_SHORT).show();
                 } else if (fragment instanceof QuickFiltersFragment) {
                     Object selectedItem = ((QuickFiltersFragment) fragment).getSelectedItem();

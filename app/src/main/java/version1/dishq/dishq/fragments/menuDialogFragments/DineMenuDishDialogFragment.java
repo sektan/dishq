@@ -70,9 +70,8 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.dialog_fragment_dish, container, false);
 
-        return rootView;
+        return inflater.inflate(R.layout.dialog_fragment_dish, container, false);
     }
 
     @Override
@@ -103,9 +102,8 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
         });
 
         ArrayList<String> imageUrls = Util.dineoutMenuInfos.get(Util.getFavPosition()).getDineMenuPhotoPopup();
-        String imageUrl = imageUrls.get(0);
         Picasso.with(getContext())
-                .load(imageUrl)
+                .load(imageUrls.get(0))
                 .fit()
                 .centerCrop()
                 .into(photoPopUp);
@@ -127,6 +125,19 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
             vegTag.setVisibility(View.GONE);
             nonVegTag.setVisibility(View.VISIBLE);
         }
+
+        if (Util.dineoutMenuInfos.get(Util.getFavPosition()).getDineMenuIsSpicy()) {
+            isSpicyTag.setVisibility(View.VISIBLE);
+        } else {
+            isSpicyTag.setVisibility(View.GONE);
+        }
+
+        if (Util.dineoutMenuInfos.get(Util.getFavPosition()).getDineMenuHasAlcohol()) {
+            hasAlcoholTag.setVisibility(View.VISIBLE);
+        } else {
+            hasAlcoholTag.setVisibility(View.GONE);
+        }
+
 
         String dishTags = "";
         if (Util.dineoutMenuInfos != null) {
