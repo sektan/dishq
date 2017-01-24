@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by dishq on 28-10-2016.
+ * Package name version1.dishq.dishq.
  */
 
 public class Config {

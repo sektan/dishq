@@ -277,8 +277,7 @@ public class DineoutMenuActivity extends BaseActivity {
                                 Util.dineoutMenuInfos = body.dineoutMenuDatas;
                             }
                             setTags();
-                            recyclerViewLayoutManager = new StaggeredGridLayoutManager
-                                    (2, 1);
+                            recyclerViewLayoutManager = new StaggeredGridLayoutManager(2, 1);
                             Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(13);
                             dineMenuRecyclerView.setLayoutManager(recyclerViewLayoutManager);
                             dineMenuRecyclerView.addItemDecoration(decoration);

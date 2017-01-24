@@ -198,6 +198,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                     Util.setFilterEntityId(quickFiltersFragment.getSelectedFilterEntityId());
                 }
                 Util.setHomeRefreshRequired(true);
+                Util.setCurrentPage(0);
                 Intent intent = new Intent(getActivity(), HomeActivity.class);
                 startActivity(intent);
                 dismiss();
