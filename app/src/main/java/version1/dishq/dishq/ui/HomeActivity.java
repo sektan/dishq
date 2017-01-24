@@ -343,6 +343,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
+                setNoResultTags();
             }
         });
     }

@@ -104,6 +104,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                     tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
                     tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                     tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+
                 } else if (Util.getDefaultTab().equals("delivery")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(1);
                     if (tab != null) {
@@ -131,12 +132,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-                                FragmentManager fm = getChildFragmentManager();
-                                FragmentTransaction ft = fm.beginTransaction();
-                                Fragment fragment = new DineoutFragment();
-                                ft.add(fragment, "myFragmentTag");
-                                ft.commit();
-
                             } else if (position == 1) {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
@@ -145,13 +140,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
-                                FragmentManager fm = getChildFragmentManager();
-                                //Fragment fragment = fm.findFragmentByTag("myFragmentTag");
-                                FragmentTransaction ft = fm.beginTransaction();
-                                Fragment fragment = new RecipeFragment();
-                                ft.add(fragment, "myFragmentTag");
-                                ft.commit();
-
                             }
                         }
                     }
@@ -164,11 +152,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-                                FragmentManager fm = getChildFragmentManager();
-                                FragmentTransaction ft = fm.beginTransaction();
-                                Fragment fragment = new DineoutFragment();
-                                ft.add(fragment, "myFragmentTag");
-                                ft.commit();
                             } else if (position == 1) {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
@@ -177,12 +160,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
-                                FragmentManager fm = getChildFragmentManager();
-                                //Fragment fragment = fm.findFragmentByTag("myFragmentTag");
-                                FragmentTransaction ft = fm.beginTransaction();
-                                Fragment fragment = new RecipeFragment();
-                                ft.add(fragment, "myFragmentTag");
-                                ft.commit();
                             }
                         }
                     }

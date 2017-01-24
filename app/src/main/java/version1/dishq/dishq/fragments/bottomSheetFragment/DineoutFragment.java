@@ -51,8 +51,6 @@ public class DineoutFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.show();
-        fetchDineoutRest(0);
     }
 
 
@@ -60,6 +58,8 @@ public class DineoutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
+        progressDialog.show();
+        fetchDineoutRest(0);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
         showMore = (Button) v.findViewById(R.id.dineout_show);
         showMore.setTypeface(Util.opensanssemibold);
@@ -136,6 +136,7 @@ public class DineoutFragment extends Fragment {
                                 }
                                 progressDialog.dismiss();
                                 dineoutAdapter = new DineoutAdapter(getActivity());
+                                mRecyclerView.setVisibility(View.VISIBLE);
                                 mRecyclerView.setAdapter(dineoutAdapter);
                                 mLayoutManager = new LinearLayoutManager(getActivity());
                                 mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;

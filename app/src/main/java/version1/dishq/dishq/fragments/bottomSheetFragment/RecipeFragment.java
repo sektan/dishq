@@ -1,6 +1,5 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -74,7 +74,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private static GoogleApiClient googleApiClient;
-    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
     private static String facebookOrGoogle = "";
     LoginButton loginButton;
     private ProgressBar progressBar;
@@ -402,60 +401,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 Log.d(TAG, "failure");
             }
         });
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    signIn();
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    Log.e("yaay", "yaay");
-                } else {
-                    showAlert("", "That permission is needed to use Google Signup. Tap retry or use Facebook to Signup.");
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
-
-    public void showAlert(String title, String message) {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SignInActivity.this);
-        builder.setTitle(title);
-        builder.setMessage(message).setCancelable(false)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (ContextCompat.checkSelfPermission(SignInActivity.this, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_DENIED) {
-                            ActivityCompat.requestPermissions(SignInActivity.this,
-                                    new String[]{Manifest.permission.GET_ACCOUNTS},
-                                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                        }
-                    }
-                });
-
-
-        android.app.AlertDialog alert = builder.create();
-        alert.show();
-        TextView message1 = (TextView) alert.findViewById(android.R.id.message);
-        assert message != null;
-        message1.setLineSpacing(0, 1.5f);
-
     }
 
     @Override
