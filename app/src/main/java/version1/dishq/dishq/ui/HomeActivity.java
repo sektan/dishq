@@ -270,6 +270,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     };
 
     public void fetchHomeDishResults() {
+        Util.setShowFeedbackQues(true);
         String latitude = Util.getLatitude();
         String longitude = Util.getLongitude();
         int moodId = Util.getMoodFilterId();

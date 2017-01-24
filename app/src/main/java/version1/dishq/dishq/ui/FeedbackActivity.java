@@ -107,12 +107,11 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         fbBgImage = (ImageView) findViewById(R.id.feedback_bg_image);
         fbBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        //if(Util.isHomeRefreshRequired()) {
+        if(Util.isShowFeedbackQues()) {
             rlFeedbackQuest.setVisibility(View.VISIBLE);
-
-//        }else {
-//            rlFeedbackQuest.setVisibility(View.GONE);
-//        }
+        }else {
+            rlFeedbackQuest.setVisibility(View.GONE);
+        }
 
         feedbackQuestion.setText(Util.getFeedbackQuestion());
 
@@ -302,6 +301,7 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     }
 
     protected void sendFeedback(int feedback) {
+        Util.setShowFeedbackQues(false);
         RestApi restApi = Config.createService(RestApi.class);
         Call<ResponseBody> call = restApi.sendFeedback(DishqApplication.getAccessToken(),
                 DishqApplication.getUniqueID(), feedback);

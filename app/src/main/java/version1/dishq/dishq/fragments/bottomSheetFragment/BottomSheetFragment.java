@@ -11,6 +11,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -32,7 +34,6 @@ import version1.dishq.dishq.util.Util;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
 
-    private BottomSheetAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private MixpanelAPI mixpanel = null;
@@ -40,7 +41,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallBack = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            if(newState == BottomSheetBehavior.STATE_HIDDEN) {
+            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                 dismiss();
             }
         }
@@ -81,18 +82,20 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         CoordinatorLayout.LayoutParams layoutParams =
                 (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
         CoordinatorLayout.Behavior behavior = layoutParams.getBehavior();
-        if(behavior != null && behavior instanceof BottomSheetBehavior) {
+        if (behavior != null && behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetCallBack);
         }
     }
 
     private void initViewPager() {
-        adapter = new BottomSheetAdapter(getChildFragmentManager());
+        FragmentManager manager = getChildFragmentManager();
+        BottomSheetAdapter adapter = new BottomSheetAdapter(manager);
         viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
-                tabLayout.setupWithViewPager(viewPager);
                 if (Util.getDefaultTab().equals("dineout")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(0);
                     if (tab != null) {
@@ -128,6 +131,12 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                                FragmentManager fm = getChildFragmentManager();
+                                FragmentTransaction ft = fm.beginTransaction();
+                                Fragment fragment = new DineoutFragment();
+                                ft.add(fragment, "myFragmentTag");
+                                ft.commit();
+
                             } else if (position == 1) {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
@@ -136,6 +145,13 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+                                FragmentManager fm = getChildFragmentManager();
+                                //Fragment fragment = fm.findFragmentByTag("myFragmentTag");
+                                FragmentTransaction ft = fm.beginTransaction();
+                                Fragment fragment = new RecipeFragment();
+                                ft.add(fragment, "myFragmentTag");
+                                ft.commit();
+
                             }
                         }
                     }
@@ -148,6 +164,11 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                                FragmentManager fm = getChildFragmentManager();
+                                FragmentTransaction ft = fm.beginTransaction();
+                                Fragment fragment = new DineoutFragment();
+                                ft.add(fragment, "myFragmentTag");
+                                ft.commit();
                             } else if (position == 1) {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
@@ -156,6 +177,12 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                                 tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
                                 tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
                                 tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+                                FragmentManager fm = getChildFragmentManager();
+                                //Fragment fragment = fm.findFragmentByTag("myFragmentTag");
+                                FragmentTransaction ft = fm.beginTransaction();
+                                Fragment fragment = new RecipeFragment();
+                                ft.add(fragment, "myFragmentTag");
+                                ft.commit();
                             }
                         }
                     }

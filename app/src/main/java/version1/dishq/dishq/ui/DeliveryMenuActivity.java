@@ -2,6 +2,7 @@ package version1.dishq.dishq.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
@@ -255,135 +256,143 @@ public class DeliveryMenuActivity extends BaseActivity {
         }
 
         if(Util.deliveryRestData.getDelMenuRunnrUrl()!=null) {
-            runnr.setVisibility(View.VISIBLE);
-            runnr.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        final JSONObject properties = new JSONObject();
-                        properties.put("Runnr order", "deliverymenu");
-                        mixpanel.track("Runnr order", properties);
-                    } catch (final JSONException e) {
-                        throw new RuntimeException("Could not encode hour of the day in JSON");
+            String runnrUrlText = "";
+            for (String s : Util.deliveryRestData.getDelMenuRunnrUrl()) {
+                runnrUrlText += s;
+            }
+            final String runnrUrl = runnrUrlText;
+            if(runnrUrl.equals("")) {
+                runnr.setVisibility(View.GONE);
+            }else {
+                runnr.setVisibility(View.VISIBLE);
+                runnr.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            final JSONObject properties = new JSONObject();
+                            properties.put("Runnr order", "deliverymenu");
+                            mixpanel.track("Runnr order", properties);
+                        } catch (final JSONException e) {
+                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                        }
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        shareIntent.setData(Uri.parse(runnrUrl));
+                        shareIntent.setType("*/*");
+                        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
                     }
-                    String runnrUrl = "";
-                    for (String s : Util.deliveryRestData.getDelMenuRunnrUrl()) {
-                        runnrUrl += s;
-                    }
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    shareIntent.setData(Uri.parse(runnrUrl));
-                    shareIntent.setType("*/*");
-                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-                }
-            });
+                });
+            }
         }else {
             runnr.setVisibility(View.GONE);
         }
 
         if(Util.deliveryRestData.getDelMenuFoodPandaUrl()!=null) {
-            foodpanda.setVisibility(View.VISIBLE);
-            foodpanda.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        final JSONObject properties = new JSONObject();
-                        properties.put("Foodpanda order", "deliverymenu");
-                        mixpanel.track("Foodpanda order", properties);
-                    } catch (final JSONException e) {
-                        throw new RuntimeException("Could not encode hour of the day in JSON");
-                    }
-                    String foodpandaUrl = "";
-                    for (String s : Util.deliveryRestData.getDelMenuFoodPandaUrl()) {
-                        foodpandaUrl += s;
-                    }
+            String foodpandaUrlText = "";
+            for (String s : Util.deliveryRestData.getDelMenuFoodPandaUrl()) {
+                foodpandaUrlText += s;
+            }
+            final String foodpandaUrl = foodpandaUrlText;
+            if(foodpandaUrl.equals("")) {
+                foodpanda.setVisibility(View.GONE);
+            }else {
+                foodpanda.setVisibility(View.VISIBLE);
+                foodpanda.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            final JSONObject properties = new JSONObject();
+                            properties.put("Foodpanda order", "deliverymenu");
+                            mixpanel.track("Foodpanda order", properties);
+                        } catch (final JSONException e) {
+                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                        }
 
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    shareIntent.setData(Uri.parse(foodpandaUrl));
-                    shareIntent.setType("*/*");
-                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-                }
-            });
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        shareIntent.setData(Uri.parse(foodpandaUrl));
+                        shareIntent.setType("*/*");
+                        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
+                    }
+                });
+            }
         }else {
             foodpanda.setVisibility(View.GONE);
         }
 
         if(Util.deliveryRestData.getDelMenuZomatoUrl()!=null) {
-            zomato.setVisibility(View.VISIBLE);
-            zomato.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        final JSONObject properties = new JSONObject();
-                        properties.put("Zomato order", "deliverymenu");
-                        mixpanel.track("Zomato order", properties);
-                    } catch (final JSONException e) {
-                        throw new RuntimeException("Could not encode hour of the day in JSON");
+            String zomatoUrlText = "";
+            for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
+                zomatoUrlText += s;
+            }
+            final String zomatoUrl = zomatoUrlText;
+            Log.d(TAG, "The url is : " + zomatoUrl);
+            if(zomatoUrl.equals("")) {
+                zomato.setVisibility(View.GONE);
+            }else {
+                zomato.setVisibility(View.VISIBLE);
+
+                zomato.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            final JSONObject properties = new JSONObject();
+                            properties.put("Zomato order", "deliverymenu");
+                            mixpanel.track("Zomato order", properties);
+                        } catch (final JSONException e) {
+                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                        }
+
+//                    Intent shareIntent = new Intent();
+//                    shareIntent.setAction(Intent.ACTION_VIEW);
+//                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    shareIntent.setData(Uri.parse(zomatoUrl));
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.setComponent(ComponentName.unflattenFromString(zomatoUrl));
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        startActivity(intent);
+//                    startActivity(shareIntent);
                     }
-                    String zomatoUrl = "";
-                    for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
-                        zomatoUrl += s;
-                    }
-
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_VIEW);
-                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                   // shareIntent.addCategory(Intent.CATEGORY_APP_BROWSER);
-                    shareIntent.setData(Uri.parse(zomatoUrl));
-                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-
-//                    PackageManager pm = getPackageManager();
-//                    Intent appStartIntent = pm.getLaunchIntentForPackage("com.application.zomato");
-//                    if (null != appStartIntent)
-//                    {
-//                        appStartIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-//                        appStartIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        startActivity(Intent.createChooser(appStartIntent, getResources().getText(R.string.chooser_title)));
-//                    }
-
-//                    Intent intent = null;
-//                    try {
-//                        intent = Intent.parseUri(zomatoUrl, Intent.URI_INTENT_SCHEME);
-//                    } catch (URISyntaxException e) {
-//                        e.printStackTrace();
-//                    }
-//                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    intent.setComponent(null);
-                    //startActivity(Intent.createChooser(intent, getResources().getText(R.string.chooser_title)));
-                }
-            });
+                });
+            }
         }else {
             zomato.setVisibility(View.GONE);
         }
 
         if (Util.deliveryRestData.getDelMenuSwiggyUrl()!=null) {
-            swiggy.setVisibility(View.VISIBLE);
-            swiggy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        final JSONObject properties = new JSONObject();
-                        properties.put("Swiggy order", "deliverymenu");
-                        mixpanel.track("Swiggy order", properties);
-                    } catch (final JSONException e) {
-                        throw new RuntimeException("Could not encode hour of the day in JSON");
+            String swiggyUrltext = "";
+            for (String s : Util.deliveryRestData.getDelMenuSwiggyUrl()) {
+                swiggyUrltext += s;
+            }
+            final String swiggyUrl = swiggyUrltext;
+            Log.d(TAG, "the url is : " + swiggyUrl);
+            if(swiggyUrl.equals("")) {
+                swiggy.setVisibility(View.GONE);
+            }else {
+                swiggy.setVisibility(View.VISIBLE);
+                swiggy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            final JSONObject properties = new JSONObject();
+                            properties.put("Swiggy order", "deliverymenu");
+                            mixpanel.track("Swiggy order", properties);
+                        } catch (final JSONException e) {
+                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                        }
+
+
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        shareIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        shareIntent.setData(Uri.parse(swiggyUrl));
+                        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
                     }
-                    String swiggyUrl = "";
-                    for (String s : Util.deliveryRestData.getDelMenuSwiggyUrl()) {
-                        swiggyUrl += s;
-                    }
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    shareIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    shareIntent.setData(Uri.parse(swiggyUrl));
-                    startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
-                }
-            });
+                });
+            }
         }else {
             swiggy.setVisibility(View.GONE);
         }

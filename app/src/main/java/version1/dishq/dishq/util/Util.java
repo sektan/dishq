@@ -102,8 +102,16 @@ public class Util {
     private static int currentPage = 200;
     private static int moodPosition = -1;
     private static int quickFilterPosition = -1;
-
+    private static boolean showFeedbackQues = false;
     private static int homeLastPage = -1;
+
+    public static boolean isShowFeedbackQues() {
+        return showFeedbackQues;
+    }
+
+    public static void setShowFeedbackQues(boolean showFeedbackQues) {
+        Util.showFeedbackQues = showFeedbackQues;
+    }
 
     public static int getHomeLastPage() {
         return homeLastPage;

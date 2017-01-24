@@ -80,10 +80,12 @@
                     android:scheme="https"
                     android:host="www.swiggy.com"
                     android:pathPrefix="/bangalore" />
+                <!--
                 <data
                     android:scheme="https"
                     android:host="www.zomato.com"
                     android:pathPattern="/*" />
+                    -->
                 <data
                     android:scheme="https"
                     android:host="runnr.in"

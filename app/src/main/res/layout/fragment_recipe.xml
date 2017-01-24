@@ -6,6 +6,24 @@
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rl_no_recipe"
+        android:layout_marginTop="200dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/no_recipe_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/text_size_20"
+            android:textColor="@color/black"
+            android:text="@string/no_recipes_available"/>
+
+    </RelativeLayout>
+
     <ProgressBar
         android:id="@+id/recipe_bsf_progress"
         android:layout_width="wrap_content"

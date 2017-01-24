@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.util.Util;
@@ -39,14 +41,23 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recipe, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recipe_bsf_recyclerview);
+        RelativeLayout rlNoRecipe = (RelativeLayout) v.findViewById(R.id.rl_no_recipe);
+        TextView noRecipeText = (TextView) v.findViewById(R.id.no_recipe_text);
+        noRecipeText.setTypeface(Util.opensansregular);
         progressBar = (ProgressBar) v.findViewById(R.id.recipe_bsf_progress);
         progressBar.setVisibility(View.VISIBLE);
-        recipeAdapter = new RecipeAdapter(getActivity());
-        recyclerView.setAdapter(recipeAdapter);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-
+        if(Util.getRecipeUrl().equals("")) {
+            rlNoRecipe.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else {
+            rlNoRecipe.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            recipeAdapter = new RecipeAdapter(getActivity());
+            recyclerView.setAdapter(recipeAdapter);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+        }
         return v;
     }
 
@@ -98,7 +109,6 @@ public class RecipeFragment extends Fragment {
             holder.wvRecipe.getSettings().setLoadsImagesAutomatically(true);
             holder.wvRecipe.getSettings().setJavaScriptEnabled(true);
             holder.wvRecipe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-            progressBar.setVisibility(View.GONE);
             holder.wvRecipe.loadUrl(Util.getRecipeUrl());
 
         }
@@ -106,6 +116,7 @@ public class RecipeFragment extends Fragment {
         private class webBrowser extends WebViewClient {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
                 view.loadUrl(url);
                 return true;
             }

@@ -118,5 +118,6 @@
     <string name="feedback_no">NO</string>
     <string name="feedback_images">feedback_images</string>
     <string name="feedback_thanks">Thanks for your feedback!</string>
+    <string name="no_recipes_available">No recipes available</string>
 
 </resources>
