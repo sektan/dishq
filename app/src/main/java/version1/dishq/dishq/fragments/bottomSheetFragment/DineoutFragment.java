@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,7 +43,7 @@ public class DineoutFragment extends Fragment {
     private Button showMore;
     private RelativeLayout rlNoDine;
     private TextView noDineText;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
     private Boolean hasMoreResults = false;
     Boolean showMoreClicked = false;
     private DineoutAdapter dineoutAdapter;
@@ -50,7 +51,6 @@ public class DineoutFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressDialog = new ProgressDialog(getActivity());
     }
 
 
@@ -58,7 +58,8 @@ public class DineoutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
-        progressDialog.show();
+        progressBar = (ProgressBar) v.findViewById(R.id.dine_bsf_progress);
+        progressBar.setVisibility(View.VISIBLE);
         fetchDineoutRest(0);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
         showMore = (Button) v.findViewById(R.id.dineout_show);
@@ -134,7 +135,7 @@ public class DineoutFragment extends Fragment {
                                 } else {
                                     showMore.setVisibility(View.GONE);
                                 }
-                                progressDialog.dismiss();
+                                progressBar.setVisibility(View.GONE);
                                 dineoutAdapter = new DineoutAdapter(getActivity());
                                 mRecyclerView.setVisibility(View.VISIBLE);
                                 mRecyclerView.setAdapter(dineoutAdapter);
@@ -142,24 +143,24 @@ public class DineoutFragment extends Fragment {
                                 mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                                 setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                             }else {
-                                progressDialog.dismiss();
+                                progressBar.setVisibility(View.GONE);
                                 rlNoDine.setVisibility(View.VISIBLE);
                                 mRecyclerView.setVisibility(View.GONE);
                             }
                         }else {
-                            progressDialog.dismiss();
+                            progressBar.setVisibility(View.GONE);
                             rlNoDine.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
                         }
                     }else {
-                        progressDialog.dismiss();
+                        progressBar.setVisibility(View.GONE);
                         rlNoDine.setVisibility(View.VISIBLE);
                         mRecyclerView.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
-                    progressDialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     rlNoDine.setVisibility(View.VISIBLE);
                     mRecyclerView.setVisibility(View.GONE);
                     e.printStackTrace();
@@ -169,7 +170,7 @@ public class DineoutFragment extends Fragment {
             @Override
             public void onFailure(Call<DineoutTabResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
                 rlNoDine.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.GONE);
             }

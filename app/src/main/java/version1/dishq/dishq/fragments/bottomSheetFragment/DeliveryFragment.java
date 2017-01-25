@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class DeliveryFragment extends Fragment {
     protected LayoutManagerType mCurrentLayoutManagerType;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView mRecyclerView;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
     private Button showMore;
     private RelativeLayout rlNoDel;
     private TextView noDelText;
@@ -49,15 +50,14 @@ public class DeliveryFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.show();
-        fetchDeliveryRest(0);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_delivery, container, false);
+        progressBar = (ProgressBar) v.findViewById(R.id.del_bsf_progress);
+        progressBar.setVisibility(View.VISIBLE);
+        fetchDeliveryRest(0);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.delivery_rest_cardlist);
         showMore = (Button) v.findViewById(R.id.delivery_show);
         showMore.setTypeface(Util.opensanssemibold);
@@ -132,32 +132,32 @@ public class DeliveryFragment extends Fragment {
                                 for (int i = 0; i < body.deliveryRestInfo.size(); i++) {
                                     Util.deliveryRestInfos = body.deliveryRestInfo;
                                 }
-                                progressDialog.dismiss();
+                                progressBar.setVisibility(View.GONE);
                                 deliveryAdapter = new DeliveryAdapter(getActivity());
                                 mRecyclerView.setAdapter(deliveryAdapter);
                                 mLayoutManager = new LinearLayoutManager(getActivity());
                                 mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                                 setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                             }else {
-                                progressDialog.dismiss();
+                                progressBar.setVisibility(View.GONE);
                                 rlNoDel.setVisibility(View.VISIBLE);
                                 mRecyclerView.setVisibility(View.GONE);
                             }
 
                         }else{
-                            progressDialog.dismiss();
+                            progressBar.setVisibility(View.GONE);
                             rlNoDel.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
                         }
                     }else {
-                        progressDialog.dismiss();
+                        progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         rlNoDel.setVisibility(View.VISIBLE);
                         mRecyclerView.setVisibility(View.GONE);
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
-                    progressDialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                     rlNoDel.setVisibility(View.VISIBLE);
                     mRecyclerView.setVisibility(View.GONE);
@@ -167,7 +167,7 @@ public class DeliveryFragment extends Fragment {
             @Override
             public void onFailure(Call<DeliveryTabResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
                 rlNoDel.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.GONE);
             }

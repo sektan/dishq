@@ -46,6 +46,7 @@ public class RecipeFragment extends Fragment {
         progressBar = (ProgressBar) v.findViewById(R.id.recipe_bsf_progress);
         progressBar.setVisibility(View.VISIBLE);
         if(Util.getRecipeUrl().equals("")) {
+            progressBar.setVisibility(View.GONE);
             rlNoRecipe.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }else {
@@ -55,6 +56,7 @@ public class RecipeFragment extends Fragment {
             recyclerView.setAdapter(recipeAdapter);
             mLayoutManager = new LinearLayoutManager(getActivity());
             mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+            progressBar.setVisibility(View.GONE);
             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
         }
         return v;
@@ -115,7 +117,6 @@ public class RecipeFragment extends Fragment {
         private class webBrowser extends WebViewClient {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                progressBar.setVisibility(View.GONE);
                 view.loadUrl(url);
                 return true;
             }

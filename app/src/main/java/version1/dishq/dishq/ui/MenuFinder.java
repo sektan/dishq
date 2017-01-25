@@ -227,7 +227,6 @@ public class MenuFinder extends AppCompatActivity {
         call.enqueue(new Callback<MenuFinderRestSuggestResponse>() {
             @Override
             public void onResponse(Call<MenuFinderRestSuggestResponse> call, Response<MenuFinderRestSuggestResponse> response) {
-                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "Success");
                 try {
                     if(response.isSuccessful()) {
@@ -242,20 +241,24 @@ public class MenuFinder extends AppCompatActivity {
                                     Util.menuFinderRestInfos = body;
                                 }
                                 myAdapter = new MyAdapter(MenuFinder.this);
+                                progressBar.setVisibility(View.GONE);
                                 listView.setVisibility(View.VISIBLE);
                                 listView.setAdapter(myAdapter);
 
                             }else {
+                                progressBar.setVisibility(View.GONE);
                                 Util.menuFinderRestInfos.clear();
                                 norestaurant.setVisibility(View.VISIBLE);
                                 listView.setVisibility(View.GONE);
                             }
                         }
                     }else {
+                        progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
+                    progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
