@@ -56,7 +56,6 @@ import version1.dishq.dishq.server.Response.VersionCheckResponse;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
-import version1.dishq.dishq.util.OnClearFromRecentService;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -87,7 +86,6 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
         Fabric.with(this, new Crashlytics());
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));

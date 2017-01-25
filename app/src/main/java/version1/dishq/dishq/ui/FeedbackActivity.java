@@ -80,6 +80,13 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         super.onCreate(savedInstanceState);
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
+        try {
+            final JSONObject properties = new JSONObject();
+            properties.put("Feedback card", "homescreen");
+            mixpanel.track("Feedback card", properties);
+        } catch (final JSONException e) {
+            throw new RuntimeException("Could not encode hour of the day in JSON");
+        }
         setContentView(R.layout.activity_feedback);
         setTags();
     }
