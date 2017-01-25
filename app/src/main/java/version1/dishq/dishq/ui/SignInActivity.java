@@ -1,17 +1,11 @@
 package version1.dishq.dishq.ui;
 
-import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +13,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.facebook.AccessToken;
@@ -31,23 +24,28 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileReader;
 import java.io.IOException;
 
 import retrofit2.Call;
@@ -81,6 +79,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private String facebookAccessToken = "";
     private Boolean GOOGLE_BUTTON_SELECTED, FACEBOOK_BUTTON_SELECTED;
     private Button facebookButton, googleButton;
+    private String accessToken = "";
 
     private MixpanelAPI mixpanel = null;
 
@@ -260,7 +259,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 GOOGLE_BUTTON_SELECTED = true;
                 FACEBOOK_BUTTON_SELECTED = false;
                 Log.d(TAG, "Sign in for google is called");
-                    signIn();
+                signIn();
                 break;
         }
     }
@@ -275,15 +274,48 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         if (result.isSuccess()) {
             Log.d(TAG, "result is a success" + result.toString());
             // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
+            final GoogleSignInAccount acct = result.getSignInAccount();
             assert acct != null;
-            String authCode = acct.getServerAuthCode();
+            final String authCode = acct.getServerAuthCode();
             Log.d(TAG, "the authCode is:" + authCode);
             String idToken = acct.getIdToken();
             Log.d(TAG, "the idToken is:" + idToken);
-            fetchAccessToken(idToken);
 
-            Log.e(TAG, acct.getDisplayName() + acct.getIdToken() + acct.getEmail());
+            AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... voids) {
+                    try {
+                        GoogleTokenResponse tokenResponse =
+                                new GoogleAuthorizationCodeTokenRequest(
+                                        new NetHttpTransport(),
+                                        JacksonFactory.getDefaultInstance(),
+                                        "https://www.googleapis.com/oauth2/v4/token",
+                                        "1065480470289-kljstaji734o68q9m39f0mm4mpt4t2j1.apps.googleusercontent.com",
+                                        "tPGq94hKDyxW0Tgbufd8ZE2K",
+                                        authCode, "")
+                                        .execute();
+
+                        accessToken = tokenResponse.getAccessToken();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    return accessToken;
+                }
+
+                @Override
+                protected void onPostExecute(String token) {
+                    Log.i(TAG, "Access token retrieved:" + accessToken);
+                    DishqApplication.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fetchAccessToken(accessToken);
+                        }
+                    });
+                }
+
+            };
+            task.execute();
 
         } else {
             Log.e(TAG, result + "");
@@ -334,7 +366,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
                 progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "success");
-                if(FACEBOOK_BUTTON_SELECTED) {
+                if (FACEBOOK_BUTTON_SELECTED) {
                     try {
                         final JSONObject properties = new JSONObject();
                         properties.put("facebook login", "signup");
@@ -342,7 +374,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
-                }else if(GOOGLE_BUTTON_SELECTED) {
+                } else if (GOOGLE_BUTTON_SELECTED) {
                     try {
                         final JSONObject properties = new JSONObject();
                         properties.put("google login ", "signup");
@@ -387,7 +419,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         }
                     } else {
                         String error = response.errorBody().string();
-                        Log.d(TAG, "The error: " +error);
+                        Log.d(TAG, "The error: " + error);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

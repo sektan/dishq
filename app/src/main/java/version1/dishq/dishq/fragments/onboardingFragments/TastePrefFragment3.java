@@ -136,8 +136,6 @@ public class TastePrefFragment3 extends Fragment {
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            DishqApplication.getPrefs().edit().putInt(Constants.IS_FRAGMENT_SEEN, 3).apply();
-                                            DishqApplication.setFragmentSeen(3);
                                             showNext();
                                         }
                                     }, 400);

@@ -55,10 +55,12 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
 
     private static final String TAG = "FavGridViewAdapter";
     private Context context;
+    private RelativeLayout rlNoViews;
     private MixpanelAPI mixpanel = null;
 
-    public FavGridViewAdapter(Context context) {
+    public FavGridViewAdapter(Context context, RelativeLayout rlNoViews) {
         this.context = context;
+        this.rlNoViews = rlNoViews;
     }
 
     @Override
@@ -173,6 +175,7 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
 
     @Override
     public int getItemCount() {
+        rlNoViews.setVisibility(Util.favouriteDishesInfos.size() > 0 ? View.GONE : View.VISIBLE);
         return Util.favouriteDishesInfos.size();
     }
 

@@ -1,6 +1,5 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +12,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import java.io.IOException;
 

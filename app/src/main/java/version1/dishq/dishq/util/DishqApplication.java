@@ -6,6 +6,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
@@ -16,11 +19,16 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import version1.dishq.dishq.modals.lists.DontEatSelect;
 import version1.dishq.dishq.modals.lists.FavCuisineSelect;
 import version1.dishq.dishq.modals.lists.HomeCuisineSelect;
@@ -43,10 +51,9 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static String facebookOrGoogle;
     private static Boolean IS_NEW_USER;
     private static Boolean ON_BOARDING_DONE;
-    private Boolean USER_RESTARTED_APP;
-    private static int fragmentSeen;
     public boolean wasInBackground;
     private static String userName;
+    private Handler mHandler;
     private static int foodChoiceSelected =0;
     public static Boolean homeCuisineSelected = false;
     private Timer mActivityTransitionTimer;
@@ -57,35 +64,16 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     public void onCreate() {
         super.onCreate();
         application = this;
+        mHandler = new Handler(Looper.getMainLooper());
         uniqueId = getPrefs().getString(Constants.UNIQUE_IDENTIFIER, null);
         accessToken = getPrefs().getString(Constants.ACCESS_TOKEN, null);
         tokenType = getPrefs().getString(Constants.TOKEN_TYPE, null);
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
         userName = getPrefs().getString(Constants.USER_NAME, null);
         facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
-        //homeCuisineSelected = getPrefs().getBoolean(Constants.HOME_CUISINE_SELECTED, false);
         IS_NEW_USER = getPrefs().getBoolean(Constants.IS_NEW_USER, false);
-        fragmentSeen = getPrefs().getInt(Constants.IS_FRAGMENT_SEEN, 0);
         userID = getPrefs().getInt(Constants.USER_ID, 0);
-//        Gson gsonHome = new Gson();
-//        String jsonHome = getPrefs().getString(Constants.HOME_CUISINE_SELECTS, null);
-//        Type typeHome = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
-//        homeCuisineSelects = gsonHome.fromJson(jsonHome, typeHome);
-//
-//        Gson gsonFav = new Gson();
-//        String jsonFav = getPrefs().getString(Constants.FAV_CUISINE_SELECTS, null);
-//        Type typeFav = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
-//        favCuisineSelects = gsonFav.fromJson(jsonFav, typeFav);
-//
-//        Gson gsonAllergy = new Gson();
-//        String jsonAllergy = getPrefs().getString(Constants.ALLERGY_SELECTS, null);
-//        Type typeAllergy = new TypeToken<ArrayList<HomeCuisineSelect>>() {}.getType();
-//        dontEatSelects = gsonAllergy.fromJson(jsonAllergy, typeAllergy);
-
-        USER_RESTARTED_APP = getPrefs().getBoolean(Constants.USER_RESTARTED_APP, false);
-        //foodChoiceSelected = getPrefs().getInt(Constants.FOOD_CHOICE_SELECTED, 0);
         ON_BOARDING_DONE = getPrefs().getBoolean(Constants.ON_BOARDING_DONE, false);
-        //favCuisineCount = getPrefs().getInt(Constants.FAV_CUISINE_COUNT, 0);
         registerActivityLifecycleCallbacks(activityCallbacks);
     }
 
@@ -94,15 +82,6 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
             prefs = application.getSharedPreferences(Constants.DISHQ_APP_PREFS, MODE_PRIVATE);
         }
         return prefs;
-    }
-
-
-    public Boolean getUSER_RESTARTED_APP() {
-        return USER_RESTARTED_APP;
-    }
-
-    public void setUSER_RESTARTED_APP(Boolean USER_RESTARTED_APP) {
-        this.USER_RESTARTED_APP = USER_RESTARTED_APP;
     }
 
     public static void setAccessToken(String accessToken, String tokenType) {
@@ -118,32 +97,6 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     public static void setFavCuisineCount(int favCuisineCount) {
         DishqApplication.favCuisineCount = favCuisineCount;
     }
-
-//    public static ArrayList<DontEatSelect> getDontEatSelects() {
-//        return dontEatSelects;
-//    }
-//
-//    public static void setDontEatSelects(ArrayList<DontEatSelect> dontEatSelects) {
-//        DishqApplication.dontEatSelects = dontEatSelects;
-//    }
-//
-//    public static ArrayList<HomeCuisineSelect> getHomeCuisineSelects() {
-//        return DishqApplication.homeCuisineSelects;
-//    }
-//
-//
-//    public static ArrayList<FavCuisineSelect> getFavCuisineSelects() {
-//        return DishqApplication.favCuisineSelects;
-//    }
-//
-//    public static void setFavCuisineSelects(ArrayList<FavCuisineSelect> favCuisineSelects) {
-//        DishqApplication.favCuisineSelects = favCuisineSelects;
-//    }
-//
-//
-//    public static void setHomeCuisineSelects(ArrayList<HomeCuisineSelect> homeCuisineSelects) {
-//        DishqApplication.homeCuisineSelects = homeCuisineSelects;
-//    }
 
     public static String getAccessToken() {
         return Util.ACCESS_TOKEN;
@@ -198,15 +151,6 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         DishqApplication.foodChoiceSelected = foodChoiceSelected;
     }
 
-
-    public static int getFragmentSeen() {
-        return DishqApplication.fragmentSeen;
-    }
-
-    public static void setFragmentSeen(int fragmentSeen) {
-        DishqApplication.fragmentSeen = fragmentSeen;
-    }
-
     public static void setUniqueId(String uniqueId) {
         DishqApplication.uniqueId = uniqueId;
     }
@@ -246,19 +190,28 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 
         @Override
         public void onActivityStopped(Activity activity) {
-            RestApi restApi = Config.createService(RestApi.class);
-            Call<ResponseBody> request = restApi.appToBackground(DishqApplication.getUniqueID(), DishqApplication.getUserID());
-            request.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Log.d("DishqApplication", "Success");
-                }
+            try {
+                boolean foreground = new ForegroundCheckTask().execute(getApplicationContext()).get();
+                if(!foreground) {
+                    //App is in Background - do what you want
+                    RestApi restApi = Config.createService(RestApi.class);
+                    Call<ResponseBody> request = restApi.appToBackground(DishqApplication.getUniqueID(), DishqApplication.getUserID());
+                    request.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Log.d("DishqApplication", "Success");
+                        }
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.d("DishqApplication", "Failure");
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.d("DishqApplication", "Failure");
+                        }
+                    });
                 }
-            });
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override
@@ -268,22 +221,12 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
 
         @Override
         public void onActivityDestroyed(Activity activity) {
-
-            RestApi restApi = Config.createService(RestApi.class);
-            Call<ResponseBody> request = restApi.appClose(DishqApplication.getUniqueID(), DishqApplication.getUserID());
-            request.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Log.d("DishqApplication", "Success");
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.d("DishqApplication", "Failure");
-                }
-            });
         }
     };
+
+    public static void runOnUiThread(Runnable runnable){
+        application.mHandler.post(runnable);
+    }
 
     public static Context getContext() {
         return application;

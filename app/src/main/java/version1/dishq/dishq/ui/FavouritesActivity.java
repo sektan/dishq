@@ -35,7 +35,7 @@ public class FavouritesActivity extends BaseActivity {
     private static final String TAG = "FavouritesActivity";
     private TextView favHeader;
     private ImageView backButton;
-    private RelativeLayout rlNoFav;
+    public RelativeLayout rlNoFav;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private RecyclerView favRecyclerView;
     private ProgressBar progressBar;
@@ -70,6 +70,14 @@ public class FavouritesActivity extends BaseActivity {
         });
     }
 
+    public RelativeLayout getRlNoFav() {
+        return this.rlNoFav;
+    }
+
+    public void setRlNoFav(RelativeLayout rlNoFav) {
+        this.rlNoFav = rlNoFav;
+    }
+
     private void fetchDishFavourites() {
         RestApi restApi = Config.createService(RestApi.class);
         Call<FavouriteDishesResponse> call = restApi.getFavouriteDishes(DishqApplication.getAccessToken(),
@@ -97,7 +105,7 @@ public class FavouritesActivity extends BaseActivity {
                                 favRecyclerView.setVisibility(View.VISIBLE);
                                 recyclerViewLayoutManager = new GridLayoutManager(FavouritesActivity.this, 2);
                                 favRecyclerView.setLayoutManager(recyclerViewLayoutManager);
-                                FavGridViewAdapter favGridViewAdapter = new FavGridViewAdapter(FavouritesActivity.this);
+                                FavGridViewAdapter favGridViewAdapter = new FavGridViewAdapter(FavouritesActivity.this, rlNoFav);
                                 favRecyclerView.setAdapter(favGridViewAdapter);
                                 if(Util.favouriteDishesInfos.size() == 0) {
                                     rlNoFav.setVisibility(View.VISIBLE);
