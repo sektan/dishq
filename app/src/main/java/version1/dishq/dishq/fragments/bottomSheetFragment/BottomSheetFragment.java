@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,7 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import biz.laenger.android.vpbs.BottomSheetUtils;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
@@ -52,6 +54,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         }
     };
 
+
     @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +68,44 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             initViewPager();
         }
 
+        final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.d("page", position + " ");
+                if (tabLayout != null) {
+                    if (position == 0) {
+                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
+                        tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
+                        tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
+                    } else if (position == 1) {
+                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                        tabLayout.getTabAt(2).setIcon(R.drawable.delivery_active);
+                        tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
+                    } else if (position == 2) {
+                        tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
+                        tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
+                        tabLayout.getTabAt(1).setIcon(R.drawable.cooking_active);
+                    }
+                }
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                Log.d("page", position + " ");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
+        viewPager.addOnPageChangeListener(pageChangeListener);
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                pageChangeListener.onPageSelected(viewPager.getCurrentItem());
+            }
+        });
         return rootView;
     }
 
@@ -91,6 +131,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         FragmentManager manager = getChildFragmentManager();
         BottomSheetAdapter adapter = new BottomSheetAdapter(manager);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(10);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.post(new Runnable() {
@@ -102,8 +143,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                         tab.select();
                     }
                     tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
 
                 } else if (Util.getDefaultTab().equals("delivery")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(1);
@@ -111,67 +152,20 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                         tab.select();
                     }
                     tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
-                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.cooking_active);
+
                 } else if (Util.getDefaultTab().equals("recipe")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(2);
                     if (tab != null) {
                         tab.select();
                     }
                     tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.delivery_active);
                 }
-
-                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        Log.d("page", position + " ");
-                        if (tabLayout != null) {
-                            if (position == 0) {
-                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-                            } else if (position == 1) {
-                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
-                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-                            } else if (position == 2) {
-                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        Log.d("page", position + " ");
-                        if (tabLayout != null) {
-                            if (position == 0) {
-                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-                            } else if (position == 1) {
-                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
-                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
-                            } else if (position == 2) {
-                                tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                                tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
-                                tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-
-                    }
-                });
             }
         });
-
     }
 
     private class BottomSheetAdapter extends FragmentPagerAdapter {
@@ -203,7 +197,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
-                    frag = new DeliveryFragment();
+                    frag = new RecipeFragment();
                     break;
                 case 2:
                     try {
@@ -213,7 +207,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
-                    frag = new RecipeFragment();
+                    frag = new DeliveryFragment();
                     break;
             }
             return frag;

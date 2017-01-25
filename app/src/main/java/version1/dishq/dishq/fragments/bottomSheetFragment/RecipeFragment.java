@@ -45,7 +45,7 @@ public class RecipeFragment extends Fragment {
         noRecipeText.setTypeface(Util.opensansregular);
         progressBar = (ProgressBar) v.findViewById(R.id.recipe_bsf_progress);
         progressBar.setVisibility(View.VISIBLE);
-        if(Util.getRecipeUrl().equals("")) {
+        if(Util.getRecipeUrl() == null) {
             progressBar.setVisibility(View.GONE);
             rlNoRecipe.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
