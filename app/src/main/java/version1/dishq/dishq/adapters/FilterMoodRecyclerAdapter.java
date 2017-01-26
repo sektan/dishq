@@ -90,6 +90,7 @@ public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRe
             super(itemView);
 
             textFilterResults = (TextView) itemView.findViewById(R.id.text_filter_results);
+            textFilterResults.setTypeface(Util.opensansregular);
             layoutTextHolder = (ViewGroup) itemView.findViewById(R.id.layout_text_holder);
 
             layoutTextHolder.setOnClickListener(new View.OnClickListener() {

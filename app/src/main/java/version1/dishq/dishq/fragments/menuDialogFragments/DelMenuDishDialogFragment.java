@@ -1,7 +1,9 @@
 package version1.dishq.dishq.fragments.menuDialogFragments;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -53,7 +55,10 @@ public class DelMenuDishDialogFragment extends DialogFragment implements View.On
 
     @Override
     public void onResume() {
-        getDialog().getWindow().setLayout(dpToPx(380), dpToPx(480));
+        int width = getResources().getDisplayMetrics().widthPixels;
+        getDialog().getWindow().setLayout(width, dpToPx(480));
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         super.onResume();
     }
 
@@ -70,8 +75,9 @@ public class DelMenuDishDialogFragment extends DialogFragment implements View.On
         rlDelMenuView = (RelativeLayout) rootView.findViewById(R.id.rl_fav_dish);
         delMenuFrame = (FrameLayout) rootView.findViewById(R.id.fav_frame);
         delMenuDishName = (TextView) rootView.findViewById(R.id.fav_dish_name);
-        delMenuDishName.setTypeface(Util.opensanslight);
+        delMenuDishName.setTypeface(Util.opensansregular);
         delMenuDishType = (TextView) rootView.findViewById(R.id.fav_dish_type);
+        delMenuDishType.setTypeface(Util.opensansregular);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
         eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
         nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);
@@ -79,7 +85,7 @@ public class DelMenuDishDialogFragment extends DialogFragment implements View.On
         hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
         delMenuFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
         photoPopUp = (ImageView) rootView.findViewById(R.id.popup_photo);
-        photoPopUp.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        photoPopUp.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         delMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override

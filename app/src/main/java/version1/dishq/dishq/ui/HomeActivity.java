@@ -61,6 +61,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.FontsOverride;
 import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
@@ -91,6 +92,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private TextView greetingHeader, greetingContext, navUserName;
     private Button greetingButton;
     private RelativeLayout rlGreeting;
+    private RelativeLayout homeRlNoViews;
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
     private ProgressBar progressBar;
@@ -108,6 +110,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
+        FontsOverride.setDefaultFont(HomeActivity.this, "MONOSPACE", "opensanssemibold.ttf");
         final int playServicesStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (playServicesStatus != ConnectionResult.SUCCESS) {
             //If google play services in not available show an error dialog and return
@@ -140,10 +143,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         viewPager = (ViewPager) findViewById(R.id.homeViewPager);
         viewPager.setVisibility(View.VISIBLE);
         rlGreeting = (RelativeLayout) findViewById(R.id.rl_greeting);
-        rlNoResults = (RelativeLayout) findViewById(R.id.rl_home_no_results);
-        rlNoResults.setVisibility(View.GONE);
-        rlHamMood = (RelativeLayout) findViewById(R.id.home_rl_ham_mood);
-        rlHamMood.setVisibility(View.GONE);
+        homeRlNoViews = (RelativeLayout) findViewById(R.id.home_rl_no_views);
+        homeRlNoViews.setVisibility(View.GONE);
         greetingHeader = (TextView) findViewById(R.id.greeting_heading);
         greetingContext = (TextView) findViewById(R.id.greeting_context);
         greetingButton = (Button) findViewById(R.id.greeting_button);
@@ -159,10 +160,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         viewPager.setVisibility(View.GONE);
         rlGreeting = (RelativeLayout) findViewById(R.id.rl_greeting);
         rlGreeting.setVisibility(View.GONE);
-        rlNoResults = (RelativeLayout) findViewById(R.id.rl_home_no_results);
-        rlNoResults.setVisibility(View.VISIBLE);
-        rlHamMood = (RelativeLayout) findViewById(R.id.home_rl_ham_mood);
-        rlHamMood.setVisibility(View.VISIBLE);
+        homeRlNoViews = (RelativeLayout) findViewById(R.id.home_rl_no_views);
+        homeRlNoViews.setVisibility(View.VISIBLE);
         moodFilterText = (Button) findViewById(R.id.mood_filter);
         moodFilterText.setTypeface(Util.opensansregular);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -212,18 +211,18 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
         Boolean isNotEmpty = false;
         String moodText;
-        if (Util.getMoodName() != null) {
+        if (!Util.getMoodName().equals("")) {
             isNotEmpty = true;
             moodFilterText.setVisibility(View.VISIBLE);
-        } else if (Util.getFilterName() != null) {
+        } else if (!Util.getFilterName().equals("")) {
             isNotEmpty = true;
             moodFilterText.setVisibility(View.VISIBLE);
         }
 
         if (isNotEmpty) {
-            if (Util.getFilterName() == null) {
+            if (Util.getFilterName().equals("")) {
                 moodText = Util.getMoodName();
-            } else if (Util.getMoodName() == null) {
+            } else if (Util.getMoodName().equals("")) {
                 moodText = Util.getFilterName();
             } else {
                 moodText = Util.getMoodName() + " , " + Util.getFilterName();

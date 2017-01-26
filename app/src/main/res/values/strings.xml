@@ -44,7 +44,7 @@
     <string name="delivery_image_3">delivery image 3</string>
     <string name="home_screen_image">home screen image</string>
     <string name="no_delivery_msg">No delivery places found</string>
-    <string name="sorry_no_results_found">Sorry, no results found</string>
+    <string name="no_results_menu_finder">No Results</string>
     <string name="no_dineout_places_found">No dineout places found</string>
 
     <!-- HomeActivity -->
@@ -81,7 +81,7 @@
 
     <!--Menu Activity -->
     <string name="cost_of_dish">\u20B9%s</string>
-    <string name="personalized_menu_text">Personalized\nmenu for you</string>
+    <string name="personalized_menu_text">Personalized menu for you</string>
     <string name="order_now">ORDER NOW</string>
     <string name="order_from">ORDER FROM</string>
     <string name="swiggy">Swiggy</string>
@@ -119,5 +119,11 @@
     <string name="feedback_images">feedback_images</string>
     <string name="feedback_thanks">Thanks for your feedback!</string>
     <string name="no_recipes_available">No recipes available</string>
+    <string name="del_background_image">del background image</string>
+    <string name="dine_bg_image">dine bg image</string>
+    <string name="home_empty_bg">home empty bg</string>
+    <string name="nearby_rest">Nearby Restaurants :</string>
+    <string name="diff_rest">Try searching for different restaurant</string>
+    <string name="open_in_browser">OPEN IN BROWSER</string>
 
 </resources>

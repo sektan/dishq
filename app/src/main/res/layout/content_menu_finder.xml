@@ -35,24 +35,35 @@
 
     <LinearLayout
         android:id="@+id/noresult"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <TextView
             android:id="@+id/menufinder_no_results_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:gravity="center"
-            android:text="@string/sorry_no_results_found"
-            android:textColor="#000000"
+            android:text="@string/no_results_menu_finder"
+            android:textColor="@color/black"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/search_diff_rest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:visibility="visible"
+            android:text="@string/diff_rest"
+            android:textColor="#54000000"
+            android:textSize="@dimen/text_size_16" />
     </LinearLayout>
 
     <RelativeLayout
@@ -60,19 +71,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <!--
         <TextView
-            android:id="@+id/text_nearby_restaurants"
-            android:layout_width="match_parent"
+            android:id="@+id/nearby_rest_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nearby_restaurants" />
-            -->
+            android:text="@string/nearby_rest"
+            android:textSize="@dimen/text_size_16"
+            android:textColor="@color/black"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menu_finder_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="16dp" />
+            android:layout_below="@+id/nearby_rest_text"
+            android:layout_marginTop="14dp" />
 
     </RelativeLayout>
 

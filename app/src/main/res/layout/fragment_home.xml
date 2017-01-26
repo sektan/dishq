@@ -169,8 +169,8 @@
 
             <ToggleButton
                 android:id="@+id/favourites"
-                android:layout_width="34dp"
-                android:layout_height="31dp"
+                android:layout_width="37dp"
+                android:layout_height="34dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="14dp"
                 android:layout_marginStart="14dp"
@@ -182,8 +182,8 @@
 
             <Button
                 android:id="@+id/dining"
-                android:layout_width="28dp"
-                android:layout_height="31dp"
+                android:layout_width="31dp"
+                android:layout_height="34dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="14dp"
                 android:layout_marginEnd="14dp"
@@ -198,8 +198,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#80ffffff"
+        android:background="#90ffffff"
         android:fitsSystemWindows="true"
+        app:itemTextAppearance="@style/NavigationDrawerStyle"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 

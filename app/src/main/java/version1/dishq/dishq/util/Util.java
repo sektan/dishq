@@ -98,7 +98,7 @@ public class Util {
     private static String homeCuisineName = "";
     private static String feedbackQuestion = "";
     private static String MoodName = "";
-    private static String FilterName;
+    private static String FilterName = "";
     private static int currentPage = 200;
     private static int moodPosition = -1;
     private static int quickFilterPosition = -1;
@@ -330,9 +330,6 @@ public class Util {
             outRect.left = mSpace;
             outRect.right = mSpace;
             outRect.bottom = mSpace;
-            // Add top margin only for the first item to avoid double space between items
-            if (parent.getChildAdapterPosition(view) == 0)
-                outRect.top = mSpace;
         }
     }
 

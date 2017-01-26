@@ -75,16 +75,16 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                 if (tabLayout != null) {
                     if (position == 0) {
                         tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-                        tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
-                        tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
+                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
                     } else if (position == 1) {
                         tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                        tabLayout.getTabAt(2).setIcon(R.drawable.delivery_active);
-                        tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
+                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
                     } else if (position == 2) {
                         tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                        tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
-                        tabLayout.getTabAt(1).setIcon(R.drawable.cooking_active);
+                        tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                        tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
                     }
                 }
             }
@@ -143,8 +143,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                         tab.select();
                     }
                     tabLayout.getTabAt(0).setIcon(R.drawable.dineout_active);
-                    tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
 
                 } else if (Util.getDefaultTab().equals("delivery")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(1);
@@ -152,17 +152,16 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                         tab.select();
                     }
                     tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                    tabLayout.getTabAt(2).setIcon(R.drawable.delivery_inactive);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.cooking_active);
-
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_active);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_inactive);
                 } else if (Util.getDefaultTab().equals("recipe")) {
                     TabLayout.Tab tab = tabLayout.getTabAt(2);
                     if (tab != null) {
                         tab.select();
                     }
                     tabLayout.getTabAt(0).setIcon(R.drawable.dineout_inactive);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.cooking_inactive);
-                    tabLayout.getTabAt(2).setIcon(R.drawable.delivery_active);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.delivery_inactive);
+                    tabLayout.getTabAt(2).setIcon(R.drawable.cooking_active);
                 }
             }
         });
@@ -197,7 +196,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
-                    frag = new RecipeFragment();
+                    frag = new DeliveryFragment();
                     break;
                 case 2:
                     try {
@@ -207,7 +206,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
-                    frag = new DeliveryFragment();
+                    frag = new RecipeFragment();
                     break;
             }
             return frag;

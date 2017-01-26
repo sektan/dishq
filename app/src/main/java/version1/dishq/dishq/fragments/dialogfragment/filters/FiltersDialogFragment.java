@@ -99,11 +99,13 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         progressBar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
 
         buttonReset = (Button) view.findViewById(R.id.filter_button_reset);
+        buttonReset.setTypeface(Util.opensanssemibold);
         buttonReset.setOnClickListener(this);
         // Initially disable the buttons and click events
         buttonReset.setEnabled(false);
 
         buttonApply = (Button) view.findViewById(R.id.filter_button_apply);
+        buttonApply.setTypeface(Util.opensanssemibold);
         buttonApply.setOnClickListener(this);
         // Initially disable the buttons and click events
         buttonApply.setEnabled(false);
@@ -185,6 +187,9 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                 if (moodFragment.getRecyclerAdapter().getSelectedPos() >= 0) {
                     Util.setMoodFilterId(moodFilter.get(Util.getMoodPosition()).getFoodMoodId());
                     Util.setMoodName(moodFilter.get(Util.getMoodPosition()).getName());
+                }else {
+                    Util.setMoodFilterId(-1);
+                    Util.setMoodName("");
                 }
 
                 //Quick Filters
@@ -196,6 +201,10 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                     Util.setFilterName(quickFiltersFragment.getSelectedFilterName());
                     Util.setFilterClassName(quickFiltersFragment.getSelectedFilterClassName());
                     Util.setFilterEntityId(quickFiltersFragment.getSelectedFilterEntityId());
+                } else {
+                    Util.setFilterName("");
+                    Util.setFilterClassName("");
+                    Util.setFilterEntityId(-1);
                 }
                 Util.setHomeRefreshRequired(true);
                 Util.setCurrentPage(0);

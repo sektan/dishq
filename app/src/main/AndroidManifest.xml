@@ -55,7 +55,15 @@
         <activity
             android:name=".ui.HomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+            </intent-filter>
+
+            </activity>
 
         <activity
             android:name=".ui.OnBoardingActivity"
@@ -70,30 +78,10 @@
             android:name=".ui.DeliveryMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="https"
-                    android:host="www.swiggy.com"
-                    android:pathPrefix="/bangalore" />
-                <!--
-                <data
-                    android:scheme="https"
-                    android:host="www.zomato.com"
-                    android:pathPattern="/*" />
-                    -->
-                <data
-                    android:scheme="https"
-                    android:host="runnr.in"
-                    android:pathPrefix="/food/restaurants" />
-                <data
-                    android:scheme="https"
-                    android:host="www.foodpanda.in"
-                    android:pathPrefix="/restaurant" />
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
 

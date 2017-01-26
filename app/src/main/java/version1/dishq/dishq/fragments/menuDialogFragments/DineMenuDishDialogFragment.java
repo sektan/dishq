@@ -81,7 +81,7 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
         rlDineMenuView = (RelativeLayout) rootView.findViewById(R.id.rl_fav_dish);
         dineMenuFrame = (FrameLayout) rootView.findViewById(R.id.fav_frame);
         photoPopUp = (ImageView) rootView.findViewById(R.id.popup_photo);
-        photoPopUp.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        photoPopUp.setScaleType(ImageView.ScaleType.FIT_CENTER);
         dineMenuDishName = (TextView) rootView.findViewById(R.id.fav_dish_name);
         dineMenuDishName.setTypeface(Util.opensansregular);
         dineMenuDishType = (TextView) rootView.findViewById(R.id.fav_dish_type);
@@ -92,7 +92,6 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
         isSpicyTag = (ImageView) rootView.findViewById(R.id.spicy_tag);
         hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
         dineMenuFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
-        dineMenuDishType.setTypeface(Util.opensansregular);
 
         dineMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -65,6 +67,8 @@ public class DeliveryMenuActivity extends BaseActivity {
     private NestedScrollView nestedScrollView;
     private MixpanelAPI mixpanel = null;
     private ProgressBar progressBar;
+    private FrameLayout progressBg;
+    private TextView personalizedText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,8 @@ public class DeliveryMenuActivity extends BaseActivity {
         setContentView(R.layout.activity_delivery_menu);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
+        progressBg = (FrameLayout) findViewById(R.id.progress_bg_overlay_del);
+        progressBg.setVisibility(View.VISIBLE);
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
 
@@ -86,8 +92,11 @@ public class DeliveryMenuActivity extends BaseActivity {
     protected void setTags() {
 
         nestedScrollView = (NestedScrollView) findViewById(R.id.del_nested_scroll);
+        personalizedText = (TextView) findViewById(R.id.personalized_menu_text);
+        personalizedText.setTypeface(Util.opensansregular);
         rlOrderNow = (RelativeLayout) findViewById(R.id.rl_delmenu_ordernow);
         orderNow = (Button) findViewById(R.id.order_now);
+        orderNow.setTypeface(Util.opensanssemibold);
         delMenuRecyclerView = (RecyclerView) findViewById(R.id.del_menu_recyclerview);
         backButton = (ImageView) findViewById(R.id.del_menu_back_button);
         delMenuHeader = (TextView) findViewById(R.id.delmenu_toolbarTitle);
@@ -98,12 +107,15 @@ public class DeliveryMenuActivity extends BaseActivity {
         delMenuRp1 = (TextView) findViewById(R.id.delmenu_rup_1);
         delMenuRp1.setTypeface(Util.opensanssemibold);
         delMenuRp2 = (TextView) findViewById(R.id.delmenu_rup_2);
+        delMenuRp2.setTypeface(Util.opensanssemibold);
         delMenuRp3 = (TextView) findViewById(R.id.delmenu_rup_3);
+        delMenuRp3.setTypeface(Util.opensanssemibold);
         delMenuRp4 = (TextView) findViewById(R.id.delmenu_rup_4);
+        delMenuRp4.setTypeface(Util.opensanssemibold);
         delMenuDrive = (TextView) findViewById(R.id.delmenu_drive_time);
         delMenuDrive.setTypeface(Util.opensansregular);
         delMenuTags = (TextView) findViewById(R.id.delmenu_tags);
-        delMenuTags.setTypeface(Util.opensanssemibold);
+        delMenuTags.setTypeface(Util.opensansregular);
         delMenuRestAdd = (TextView) findViewById(R.id.delmenu_rest_addr);
         delMenuRestAdd.setTypeface(Util.opensansregular);
         swiggy = (TextView) findViewById(R.id.swiggy_text);
@@ -256,11 +268,7 @@ public class DeliveryMenuActivity extends BaseActivity {
         }
 
         if(Util.deliveryRestData.getDelMenuRunnrUrl()!=null) {
-            String runnrUrlText = "";
-            for (String s : Util.deliveryRestData.getDelMenuRunnrUrl()) {
-                runnrUrlText += s;
-            }
-            final String runnrUrl = runnrUrlText;
+            final String runnrUrl = Util.deliveryRestData.getDelMenuRunnrUrl();
             if(runnrUrl.equals("")) {
                 runnr.setVisibility(View.GONE);
             }else {
@@ -276,11 +284,10 @@ public class DeliveryMenuActivity extends BaseActivity {
                             throw new RuntimeException("Could not encode hour of the day in JSON");
                         }
                         Intent shareIntent = new Intent();
-                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.setAction(Intent.ACTION_VIEW);
                         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         shareIntent.setData(Uri.parse(runnrUrl));
-                        shareIntent.setType("*/*");
-                        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
+                        startActivity(shareIntent);
                     }
                 });
             }
@@ -289,11 +296,7 @@ public class DeliveryMenuActivity extends BaseActivity {
         }
 
         if(Util.deliveryRestData.getDelMenuFoodPandaUrl()!=null) {
-            String foodpandaUrlText = "";
-            for (String s : Util.deliveryRestData.getDelMenuFoodPandaUrl()) {
-                foodpandaUrlText += s;
-            }
-            final String foodpandaUrl = foodpandaUrlText;
+            final String foodpandaUrl = Util.deliveryRestData.getDelMenuFoodPandaUrl();
             if(foodpandaUrl.equals("")) {
                 foodpanda.setVisibility(View.GONE);
             }else {
@@ -310,11 +313,10 @@ public class DeliveryMenuActivity extends BaseActivity {
                         }
 
                         Intent shareIntent = new Intent();
-                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.setAction(Intent.ACTION_VIEW);
                         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         shareIntent.setData(Uri.parse(foodpandaUrl));
-                        shareIntent.setType("*/*");
-                        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
+                        startActivity(shareIntent);
                     }
                 });
             }
@@ -323,11 +325,7 @@ public class DeliveryMenuActivity extends BaseActivity {
         }
 
         if(Util.deliveryRestData.getDelMenuZomatoUrl()!=null) {
-            String zomatoUrlText = "";
-            for (String s : Util.deliveryRestData.getDelMenuZomatoUrl()) {
-                zomatoUrlText += s;
-            }
-            final String zomatoUrl = zomatoUrlText;
+            final String zomatoUrl = Util.deliveryRestData.getDelMenuZomatoUrl();
             Log.d(TAG, "The url is : " + zomatoUrl);
             if(zomatoUrl.equals("")) {
                 zomato.setVisibility(View.GONE);
@@ -345,15 +343,11 @@ public class DeliveryMenuActivity extends BaseActivity {
                             throw new RuntimeException("Could not encode hour of the day in JSON");
                         }
 
-//                    Intent shareIntent = new Intent();
-//                    shareIntent.setAction(Intent.ACTION_VIEW);
-//                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    shareIntent.setData(Uri.parse(zomatoUrl));
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.setComponent(ComponentName.unflattenFromString(zomatoUrl));
-                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                        startActivity(intent);
-//                    startActivity(shareIntent);
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_VIEW);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    shareIntent.setData(Uri.parse(zomatoUrl));
+                    startActivity(shareIntent);
                     }
                 });
             }
@@ -362,11 +356,7 @@ public class DeliveryMenuActivity extends BaseActivity {
         }
 
         if (Util.deliveryRestData.getDelMenuSwiggyUrl()!=null) {
-            String swiggyUrltext = "";
-            for (String s : Util.deliveryRestData.getDelMenuSwiggyUrl()) {
-                swiggyUrltext += s;
-            }
-            final String swiggyUrl = swiggyUrltext;
+            final String swiggyUrl = Util.deliveryRestData.getDelMenuSwiggyUrl();
             Log.d(TAG, "the url is : " + swiggyUrl);
             if(swiggyUrl.equals("")) {
                 swiggy.setVisibility(View.GONE);
@@ -385,11 +375,10 @@ public class DeliveryMenuActivity extends BaseActivity {
 
 
                         Intent shareIntent = new Intent();
-                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.setAction(Intent.ACTION_VIEW);
                         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        shareIntent.addCategory(Intent.CATEGORY_BROWSABLE);
                         shareIntent.setData(Uri.parse(swiggyUrl));
-                        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.chooser_title)));
+                        startActivity(shareIntent);
                     }
                 });
             }
@@ -420,24 +409,28 @@ public class DeliveryMenuActivity extends BaseActivity {
                                 Util.deliveryMenuInfos = body.deliveryMenuDatas;
                             }
                             setTags();
-                            recyclerViewLayoutManager = new StaggeredGridLayoutManager
-                                    (2, StaggeredGridLayoutManager.VERTICAL);
-                            Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(25);
+                            recyclerViewLayoutManager = new GridLayoutManager
+                                    (DeliveryMenuActivity.this, 2);
+                            Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(13);
                             delMenuRecyclerView.setLayoutManager(recyclerViewLayoutManager);
                             delMenuRecyclerView.addItemDecoration(decoration);
                             delMenuRecyclerView.setNestedScrollingEnabled(false);
                             DeliveryMenuMasonryAdapter masonryAdapter = new DeliveryMenuMasonryAdapter(DeliveryMenuActivity.this);
                             progressBar.setVisibility(View.GONE);
+                            progressBg.setVisibility(View.GONE);
                             delMenuRecyclerView.setAdapter(masonryAdapter);
                         }
                         progressBar.setVisibility(View.GONE);
+                        progressBg.setVisibility(View.GONE);
                     } else {
                         progressBar.setVisibility(View.GONE);
+                        progressBg.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                     }
                 } catch (IOException e) {
                     progressBar.setVisibility(View.GONE);
+                    progressBg.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
@@ -445,6 +438,7 @@ public class DeliveryMenuActivity extends BaseActivity {
             @Override
             public void onFailure(Call<DeliveryMenuResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
+                progressBg.setVisibility(View.GONE);
                 Log.d(TAG, "Failure");
             }
         });

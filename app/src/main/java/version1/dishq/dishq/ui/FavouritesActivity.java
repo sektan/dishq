@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -39,6 +40,7 @@ public class FavouritesActivity extends BaseActivity {
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
     private RecyclerView favRecyclerView;
     private ProgressBar progressBar;
+    private FrameLayout progressBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class FavouritesActivity extends BaseActivity {
         setContentView(R.layout.activity_favourites);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
+        progressBg = (FrameLayout) findViewById(R.id.progress_bg_overlay_fav);
+        progressBg.setVisibility(View.VISIBLE);
         fetchDishFavourites();
         setTags();
     }
@@ -70,14 +74,6 @@ public class FavouritesActivity extends BaseActivity {
         });
     }
 
-    public RelativeLayout getRlNoFav() {
-        return this.rlNoFav;
-    }
-
-    public void setRlNoFav(RelativeLayout rlNoFav) {
-        this.rlNoFav = rlNoFav;
-    }
-
     private void fetchDishFavourites() {
         RestApi restApi = Config.createService(RestApi.class);
         Call<FavouriteDishesResponse> call = restApi.getFavouriteDishes(DishqApplication.getAccessToken(),
@@ -89,6 +85,7 @@ public class FavouritesActivity extends BaseActivity {
                 try {
                     if (response.isSuccessful()) {
                         progressBar.setVisibility(View.GONE);
+                        progressBg.setVisibility(View.GONE);
                         Log.d(TAG, "response is successful");
                         ArrayList<FavouriteDishesResponse.FavouriteDishesInfo> body = response.body().favouriteDishesInfos;
                         if (body != null) {
@@ -104,7 +101,9 @@ public class FavouritesActivity extends BaseActivity {
                                 rlNoFav.setVisibility(View.GONE);
                                 favRecyclerView.setVisibility(View.VISIBLE);
                                 recyclerViewLayoutManager = new GridLayoutManager(FavouritesActivity.this, 2);
+                                Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(13);
                                 favRecyclerView.setLayoutManager(recyclerViewLayoutManager);
+                                favRecyclerView.addItemDecoration(decoration);
                                 FavGridViewAdapter favGridViewAdapter = new FavGridViewAdapter(FavouritesActivity.this, rlNoFav);
                                 favRecyclerView.setAdapter(favGridViewAdapter);
                                 if(Util.favouriteDishesInfos.size() == 0) {
@@ -117,6 +116,7 @@ public class FavouritesActivity extends BaseActivity {
                             favRecyclerView.setVisibility(View.GONE);
                         }
                     } else {
+                        progressBg.setVisibility(View.GONE);
                         progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
@@ -125,6 +125,7 @@ public class FavouritesActivity extends BaseActivity {
                     }
                 } catch (IOException e) {
                     progressBar.setVisibility(View.GONE);
+                    progressBg.setVisibility(View.GONE);
                     e.printStackTrace();
                     rlNoFav.setVisibility(View.VISIBLE);
                     favRecyclerView.setVisibility(View.GONE);
@@ -135,6 +136,7 @@ public class FavouritesActivity extends BaseActivity {
             public void onFailure(Call<FavouriteDishesResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
                 progressBar.setVisibility(View.GONE);
+                progressBg.setVisibility(View.GONE);
                 rlNoFav.setVisibility(View.VISIBLE);
                 favRecyclerView.setVisibility(View.GONE);
             }

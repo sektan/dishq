@@ -10,12 +10,14 @@ import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -66,6 +68,7 @@ public class DineoutMenuActivity extends BaseActivity {
     private MixpanelAPI mixpanel = null;
     private ProgressBar progressBar;
     private ImageView appbarImage;
+    private FrameLayout progressBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,8 @@ public class DineoutMenuActivity extends BaseActivity {
         setContentView(R.layout.activity_dineout_menu);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
+        progressBg = (FrameLayout) findViewById(R.id.progress_bg_overlay_dine);
+        progressBg.setVisibility(View.VISIBLE);
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
 
@@ -277,23 +282,27 @@ public class DineoutMenuActivity extends BaseActivity {
                                 Util.dineoutMenuInfos = body.dineoutMenuDatas;
                             }
                             setTags();
-                            recyclerViewLayoutManager = new StaggeredGridLayoutManager(2, 1);
+                            recyclerViewLayoutManager = new GridLayoutManager(DineoutMenuActivity.this, 2);
                             Util.SpacesItemDecoration decoration = new Util.SpacesItemDecoration(13);
                             dineMenuRecyclerView.setLayoutManager(recyclerViewLayoutManager);
                             dineMenuRecyclerView.addItemDecoration(decoration);
                             dineMenuRecyclerView.setNestedScrollingEnabled(false);
                             DineoutMenuMasonryAdapter masonryAdapter = new DineoutMenuMasonryAdapter(DineoutMenuActivity.this);
                             progressBar.setVisibility(View.GONE);
+                            progressBg.setVisibility(View.GONE);
                             dineMenuRecyclerView.setAdapter(masonryAdapter);
                         }
                         progressBar.setVisibility(View.GONE);
+                        progressBg.setVisibility(View.GONE);
                     }else {
                         progressBar.setVisibility(View.GONE);
+                        progressBg.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "response error: " +error);
                     }
                 }catch (IOException e){
                     progressBar.setVisibility(View.GONE);
+                    progressBg.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
@@ -301,6 +310,7 @@ public class DineoutMenuActivity extends BaseActivity {
             @Override
             public void onFailure(Call<DineoutMenuResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
+                progressBg.setVisibility(View.GONE);
                 Log.d(TAG, "Failure");
             }
         });

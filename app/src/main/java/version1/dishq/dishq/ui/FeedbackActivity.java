@@ -43,6 +43,7 @@ import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.adapters.HorizontalAdapter;
+import version1.dishq.dishq.custom.FontsOverride;
 import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.server.Config;
@@ -78,6 +79,7 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FontsOverride.setDefaultFont(FeedbackActivity.this, "MONOSPACE", "opensanssemibold.ttf");
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
         try {
@@ -104,7 +106,7 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         feedbackThanks = (TextView) findViewById(R.id.feedback_thanks);
         feedbackThanks.setTypeface(Util.opensanslight);
         TextView thatIt = (TextView) findViewById(R.id.that_it);
-        thatIt.setTypeface(Util.opensanssemibold);
+        thatIt.setTypeface(Util.opensansregular);
         TextView textBrowsed = (TextView) findViewById(R.id.text_browse_done);
         textBrowsed.setTypeface(Util.opensanslight);
         drawer = (DrawerLayout) findViewById(R.id.feedback_drawer_layout);

@@ -196,7 +196,7 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
             cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
             favFrame = (FrameLayout) view.findViewById(R.id.fav_frame);
             favDishName = (TextView) view.findViewById(R.id.fav_dish_name);
-            favDishName.setTypeface(Util.opensanslight);
+            favDishName.setTypeface(Util.opensansregular);
             vegTag = (ImageView) view.findViewById(R.id.veg_tag);
             eggTag = (ImageView) view.findViewById(R.id.egg_tag);
             nonVegTag = (ImageView) view.findViewById(R.id.non_veg_tag);

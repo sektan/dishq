@@ -239,19 +239,19 @@ public class DeliveryMenuResponse {
 
         @SerializedName("swiggy_delivery_url")
         @Expose
-        private ArrayList<String> delMenuSwiggyUrl;
+        private String delMenuSwiggyUrl;
 
         @SerializedName("zomato_delivery_url")
         @Expose
-        private ArrayList<String> delMenuZomatoUrl;
+        private String delMenuZomatoUrl;
 
         @SerializedName("runnr_delivery_url")
         @Expose
-        private ArrayList<String> delMenuRunnrUrl;
+        private String delMenuRunnrUrl;
 
         @SerializedName("foodpanda_delivery_url")
         @Expose
-        private ArrayList<String> delMenuFoodPandaUrl;
+        private String delMenuFoodPandaUrl;
 
         public String getDelMenuRestLatLong() {
             return delMenuRestLatLong;
@@ -317,35 +317,35 @@ public class DeliveryMenuResponse {
             this.delMenuRestAddr = delMenuRestAddr;
         }
 
-        public ArrayList<String> getDelMenuSwiggyUrl() {
+        public String getDelMenuSwiggyUrl() {
             return delMenuSwiggyUrl;
         }
 
-        public void setDelMenuSwiggyUrl(ArrayList<String> delMenuSwiggyUrl) {
+        public void setDelMenuSwiggyUrl(String delMenuSwiggyUrl) {
             this.delMenuSwiggyUrl = delMenuSwiggyUrl;
         }
 
-        public ArrayList<String> getDelMenuZomatoUrl() {
+        public String getDelMenuZomatoUrl() {
             return delMenuZomatoUrl;
         }
 
-        public void setDelMenuZomatoUrl(ArrayList<String> delMenuZomatoUrl) {
+        public void setDelMenuZomatoUrl(String delMenuZomatoUrl) {
             this.delMenuZomatoUrl = delMenuZomatoUrl;
         }
 
-        public ArrayList<String> getDelMenuRunnrUrl() {
+        public String getDelMenuRunnrUrl() {
             return delMenuRunnrUrl;
         }
 
-        public void setDelMenuRunnrUrl(ArrayList<String> delMenuRunnrUrl) {
+        public void setDelMenuRunnrUrl(String delMenuRunnrUrl) {
             this.delMenuRunnrUrl = delMenuRunnrUrl;
         }
 
-        public ArrayList<String> getDelMenuFoodPandaUrl() {
+        public String getDelMenuFoodPandaUrl() {
             return delMenuFoodPandaUrl;
         }
 
-        public void setDelMenuFoodPandaUrl(ArrayList<String> delMenuFoodPandaUrl) {
+        public void setDelMenuFoodPandaUrl(String delMenuFoodPandaUrl) {
             this.delMenuFoodPandaUrl = delMenuFoodPandaUrl;
         }
     }

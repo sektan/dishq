@@ -8,4 +8,23 @@ tools:context="ui.DineoutMenuActivity">
 
 <include layout="@layout/content_dinemenu_full"/>
 
+    <FrameLayout
+        android:id="@+id/progress_bg_overlay_dine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:alpha="0.8"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleInverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/progress"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+
 </android.support.design.widget.CoordinatorLayout>

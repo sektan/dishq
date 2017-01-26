@@ -112,6 +112,13 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             holder.nonVegTag.setVisibility(View.VISIBLE);
         }
 
+        Boolean isFavourited = Util.deliveryMenuInfos.get(position).getAddedToFavdel();
+        if(isFavourited) {
+            holder.delMenuFav.setChecked(true);
+        }else {
+            holder.delMenuFav.setChecked(false);
+        }
+
         if (Util.deliveryMenuInfos.get(position).getDelMenuIsSpicy()) {
             holder.isSpicyTag.setVisibility(View.VISIBLE);
         } else {
@@ -122,13 +129,6 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             holder.hasAlcoholTag.setVisibility(View.VISIBLE);
         } else {
             holder.hasAlcoholTag.setVisibility(View.GONE);
-        }
-
-        Boolean isFavourited = Util.deliveryMenuInfos.get(position).getAddedToFavdel();
-        if(isFavourited) {
-            holder.delMenuFav.setChecked(true);
-        }else {
-            holder.delMenuFav.setChecked(false);
         }
 
         final int delMenuGenericDishId = Util.deliveryMenuInfos.get(position).getDelMenuGenericDishId();
@@ -144,9 +144,9 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
                 }
                 String source = "deliverymenu";
                 if(isChecked) {
-                    addRemoveDishFromFav(source, delMenuGenericDishId, 1);
+                    Util.addRemoveDishFromFav(source, delMenuGenericDishId, 1, TAG);
                 }else {
-                    addRemoveDishFromFav(source, delMenuGenericDishId, 0);
+                    Util.addRemoveDishFromFav(source, delMenuGenericDishId, 0, TAG);
                 }
             }
         });
@@ -182,27 +182,11 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             isSpicyTag = (ImageView) view.findViewById(R.id.spicy_tag);
             hasAlcoholTag = (ImageView) view.findViewById(R.id.alcohol_tag);
             delMenuDishName = (TextView) view.findViewById(R.id.menu_dish_name);
+            delMenuDishName.setTypeface(Util.opensansregular);
             delMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
+            delMenuDishCost.setTypeface(Util.opensansregular);
             delMenuFav = (ToggleButton) view.findViewById(R.id.menu_favourites);
             delMenuFrame = (FrameLayout) view.findViewById(R.id.menu_frame);
         }
-    }
-
-    private void addRemoveDishFromFav(String source, int delGenericDishId, int checked) {
-        final FavDishAddRemHelper favDishAddRemHelper = new FavDishAddRemHelper(DishqApplication.getUniqueID(),
-                source, delGenericDishId, checked);
-        RestApi restApi = Config.createService(RestApi.class);
-        Call<ResponseBody> call = restApi.addRemoveFavDish(DishqApplication.getAccessToken(), favDishAddRemHelper);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d(TAG, "Success");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "Failure");
-            }
-        });
     }
 }

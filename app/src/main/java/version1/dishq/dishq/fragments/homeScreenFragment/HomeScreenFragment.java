@@ -43,6 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.FontsOverride;
 import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.bottomSheetFragment.BottomSheetFragment;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
@@ -86,6 +87,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     ImageView homeBgImage;
     private Button moodFilterText;
     private FrameLayout goingToNextCard;
+    private ImageView navBarBg;
 
     public HomeScreenFragment() {
     }
@@ -95,7 +97,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         super.onCreate(savedInstanceState);
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(getActivity(), getResources().getString(R.string.mixpanel_token));
-
+        FontsOverride.setDefaultFont(getActivity(), "MONOSPACE", "opensanssemibold.ttf");
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             dishDataInfo = new DishDataInfo();
@@ -108,12 +110,6 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        int number = viewPager.getAdapter().getCount();
-        Log.d(TAG, "The page number is : " + number);
-        int CurrentPage = viewPager.getCurrentItem();
-        Log.d(TAG, "the current page is :" + CurrentPage);
-        final int count = Util.dishDataModals.size();
-        Log.d(TAG, "The total count is : " + count);
         goingToNextCard = (FrameLayout) rootView.findViewById(R.id.home_frame_new_card);
         rlHomeScreen = (RelativeLayout) rootView.findViewById(R.id.rl_home_screen);
         homeBgImage = (ImageView) rootView.findViewById(R.id.home_screen_bg_image);
@@ -141,13 +137,13 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         if(!Util.getMoodName().equals("")) {
             isNotEmpty = true;
             moodFilterText.setVisibility(View.VISIBLE);
-        }else if(Util.getFilterName()!=null) {
+        }else if(!Util.getFilterName().equals("")) {
             isNotEmpty = true;
             moodFilterText.setVisibility(View.VISIBLE);
         }
 
         if(isNotEmpty) {
-            if(Util.getFilterName() == null) {
+            if(Util.getFilterName().equals("")) {
                 moodText = Util.getMoodName();
             }else if(Util.getMoodName().equals("")) {
                 moodText = Util.getFilterName();

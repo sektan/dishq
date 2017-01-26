@@ -75,6 +75,7 @@ public class MenuFinder extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_menu_finder);
         Toolbar toolbar = (Toolbar) findViewById(R.id.menu_finder_toolbar);
+
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
@@ -90,12 +91,16 @@ public class MenuFinder extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.suggest_recyclerview);
         recyclerView = (RecyclerView) findViewById(R.id.menu_finder_recycler_view);
         txtAutoComplete = (EditText) findViewById(R.id.menufinder_autosuggest);
+        txtAutoComplete.setTypeface(Util.opensansregular);
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(txtAutoComplete.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
         rlNearByRest = (RelativeLayout) findViewById(R.id.rl_nearby_rest);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mfTextView = (TextView) findViewById(R.id.menufinder_no_results_text);
-        //nearbyTextView = (TextView) findViewById(R.id.text_nearby_restaurants);
+        nearbyTextView = (TextView) findViewById(R.id.nearby_rest_text);
+        nearbyTextView.setTypeface(Util.opensansregular);
+        TextView searchDiffRest = (TextView) findViewById(R.id.search_diff_rest);
+        searchDiffRest.setTypeface(Util.opensansregular);
         norestaurant = (LinearLayout) findViewById(R.id.noresult);
         setFunctionality();
     }
@@ -226,9 +231,10 @@ public class MenuFinder extends AppCompatActivity {
                         if(body!=null) {
                             if(body.size()!=0) {
                                 Log.d(TAG, "body is not null");
+
                                 norestaurant.setVisibility(View.GONE);
                                 Util.menuFinderRestInfos.clear();
-                                recyclerView.setVisibility(View.GONE);
+                                rlNearByRest.setVisibility(View.GONE);
                                 for (int i = 0; i < body.size(); i++) {
                                     Util.menuFinderRestInfos = body;
                                 }

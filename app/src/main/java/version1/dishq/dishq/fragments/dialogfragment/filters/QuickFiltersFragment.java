@@ -33,6 +33,7 @@ import version1.dishq.dishq.R;
 import version1.dishq.dishq.adapters.QuickFiltersRecyclerAdapter;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.QuickFilter;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilters.Datum;
+import version1.dishq.dishq.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,6 +87,7 @@ public class QuickFiltersFragment extends Fragment implements
 
         textView = (TextView) view.findViewById(R.id.filter_quick_no_item_text);
         searchAutoCompleteText = (AutoCompleteTextView) view.findViewById(R.id.filter_quick_search_auto_complete);
+        searchAutoCompleteText.setTypeface(Util.opensansregular);
         searchAutoCompleteText.setThreshold(1);
         searchAutoCompleteText.addTextChangedListener(this);
         searchAutoCompleteText.setOnItemClickListener(this);

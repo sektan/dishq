@@ -75,7 +75,7 @@ dependencies {
 
 
     // For converting authCode to accessToken
-   //compile 'com.google.apis:google-api-services-oauth2:v1-rev129-1.22.0'
+   compile 'com.google.apis:google-api-services-oauth2:v1-rev129-1.22.0'
 
     compile 'com.android.support:support-v4:25.1.0'
     testCompile 'junit:junit:4.12'
