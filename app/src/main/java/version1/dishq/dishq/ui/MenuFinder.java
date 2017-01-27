@@ -74,8 +74,8 @@ public class MenuFinder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_menu_finder);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.menu_finder_toolbar);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.menu_finder_toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
@@ -83,6 +83,8 @@ public class MenuFinder extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
         showNearbyRest();
         setTags();
     }
@@ -95,7 +97,6 @@ public class MenuFinder extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(txtAutoComplete.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
         rlNearByRest = (RelativeLayout) findViewById(R.id.rl_nearby_rest);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mfTextView = (TextView) findViewById(R.id.menufinder_no_results_text);
         nearbyTextView = (TextView) findViewById(R.id.nearby_rest_text);
         nearbyTextView.setTypeface(Util.opensansregular);
@@ -198,20 +199,24 @@ public class MenuFinder extends AppCompatActivity {
                             recyclerView.setAdapter(adapter);
                             mLayoutManager = new LinearLayoutManager(MenuFinder.this);
                             mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                            progressBar.setVisibility(View.GONE);
                             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                             adapter.notifyDataSetChanged();
                         }
                     }else {
+                        progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
+                    progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(Call<MenuFinderNearbyRestResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "Failure");
             }
         });

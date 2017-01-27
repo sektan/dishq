@@ -12,7 +12,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,9 +23,7 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import biz.laenger.android.vpbs.BottomSheetUtils;
 import version1.dishq.dishq.R;
-import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
 /**

@@ -116,7 +116,7 @@ public class DineoutMenuActivity extends BaseActivity {
         directions.setTypeface(Util.opensanssemibold);
         rlDineoutToolbar = (AppBarLayout) findViewById(R.id.dinemenu_appbar);
         appbarImage = (ImageView) findViewById(R.id.dineout_appbar_bg_image);
-        appbarImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //appbarImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         setFunctionality();
     }
 

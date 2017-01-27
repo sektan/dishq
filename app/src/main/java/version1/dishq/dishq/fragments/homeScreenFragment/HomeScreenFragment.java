@@ -202,25 +202,25 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     .centerCrop()
                     .into(homeBgImage);
 
-            frameClick.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        final JSONObject properties = new JSONObject();
-                        properties.put("Dineoptions nonbutton home screen", "homescreen");
-                        mixpanel.track("Dineoptions nonbutton home screen", properties);
-                    } catch (final JSONException e) {
-                        throw new RuntimeException("Could not encode hour of the day in JSON");
-                    }
-                    if (drawer.isDrawerOpen(GravityCompat.START)) {
-                        drawer.closeDrawer(GravityCompat.START);
-                    }
-                    Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
-                    Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
-                    Util.setCurrentPage(viewPager.getCurrentItem());
-                    new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
-                }
-            });
+//            frameClick.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    try {
+//                        final JSONObject properties = new JSONObject();
+//                        properties.put("Dineoptions nonbutton home screen", "homescreen");
+//                        mixpanel.track("Dineoptions nonbutton home screen", properties);
+//                    } catch (final JSONException e) {
+//                        throw new RuntimeException("Could not encode hour of the day in JSON");
+//                    }
+//                    if (drawer.isDrawerOpen(GravityCompat.START)) {
+//                        drawer.closeDrawer(GravityCompat.START);
+//                    }
+//                    Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
+//                    Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
+//                    Util.setCurrentPage(viewPager.getCurrentItem());
+//                    new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
+//                }
+//            });
 
             dineButton.setOnClickListener(new View.OnClickListener() {
                 @Override

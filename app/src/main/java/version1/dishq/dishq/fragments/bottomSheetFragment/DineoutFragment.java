@@ -64,17 +64,6 @@ public class DineoutFragment extends Fragment {
         rlNoDine = (RelativeLayout) v.findViewById(R.id.rl_no_dine);
         noDineText = (TextView) v.findViewById(R.id.no_dine_text);
         noDineText.setTypeface(Util.opensansregular);
-        if (hasMoreResults) {
-            showMore.setVisibility(View.VISIBLE);
-            showMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showMoreClicked = true;
-                    dineoutAdapter.notifyDataSetChanged();
-                    fetchDineoutRest(1);
-                }
-            });
-        }
         return v;
     }
 
@@ -119,24 +108,49 @@ public class DineoutFragment extends Fragment {
                             if (body.dineoutRestInfo.size() != 0) {
                                 Log.d(TAG, "body is not null");
                                 hasMoreResults = body.isHasMoreResults();
-                                Util.dineoutRestInfos.clear();
-                                for (int i = 0; i < body.dineoutRestInfo.size(); i++) {
-                                    Util.dineoutRestInfos = body.dineoutRestInfo;
+                                if(showMoreClicked) {
+                                    //do nothing
+                                }else {
+                                    Util.dineoutRestInfos.clear();
                                 }
-                                if (showMoreOptions == 1) {
-                                    if (!showMoreClicked) {
-                                        showMore.setVisibility(View.VISIBLE);
-                                    } else {
+                                    if(hasMoreResults) {
+                                        if(showMoreClicked) {
+                                            showMore.setVisibility(View.GONE);
+                                            Util.dineoutRestInfos.addAll(body.dineoutRestInfo);
+                                            showMoreClicked = false;
+                                        }else {
+                                            showMore.setVisibility(View.VISIBLE);
+                                            for (int i = 0; i < body.dineoutRestInfo.size(); i++) {
+                                                Util.dineoutRestInfos = body.dineoutRestInfo;
+                                            }
+
+                                        }
+                                        showMore.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                progressBar.setVisibility(View.VISIBLE);
+                                                showMoreClicked = true;
+                                                dineoutAdapter.notifyDataSetChanged();
+                                                fetchDineoutRest(1);
+                                            }
+                                        });
+                                    }else {
                                         showMore.setVisibility(View.GONE);
+                                        for (int i = 0; i < body.dineoutRestInfo.size(); i++) {
+                                            Util.dineoutRestInfos = body.dineoutRestInfo;
+                                        }
                                     }
-                                } else {
-                                    showMore.setVisibility(View.GONE);
+
+
+                                if(dineoutAdapter == null) {
+                                    dineoutAdapter = new DineoutAdapter(getActivity());
                                 }
-                                progressBar.setVisibility(View.GONE);
-                                dineoutAdapter = new DineoutAdapter(getActivity());
                                 mRecyclerView.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.GONE);
                                 mRecyclerView.setAdapter(dineoutAdapter);
-                                mLayoutManager = new LinearLayoutManager(getActivity());
+                                if(mLayoutManager==null) {
+                                    mLayoutManager = new LinearLayoutManager(getActivity());
+                                }
                                 mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                                 setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                             }else {

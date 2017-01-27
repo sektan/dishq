@@ -3,6 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/dine_bsf_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="200dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,30 +32,22 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/dineout_rest_cardlist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/dineout_show"
-        android:layout_marginEnd="13.7dp"
-        android:layout_marginStart="13.7dp"
-        android:layout_marginTop="8dp" />
-
-    <ProgressBar
-        android:id="@+id/dine_bsf_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
-        android:layout_marginTop="200dp"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:layout_marginEnd="13.7dp"
+        android:layout_marginStart="13.7dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="4dp" />
 
     <Button
         android:id="@+id/dineout_show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/dineout_rest_cardlist"
         android:layout_centerHorizontal="true"
         android:background="#00000000"
         android:text="@string/show_more"
+        android:drawableBottom="@drawable/eat_show_more"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:visibility="gone" />

@@ -63,18 +63,6 @@ public class DeliveryFragment extends Fragment {
         rlNoDel = (RelativeLayout) v.findViewById(R.id.rl_no_del);
         noDelText = (TextView) v.findViewById(R.id.no_del_text);
         noDelText.setTypeface(Util.opensansregular);
-
-        if (hasMoreResults) {
-            showMore.setVisibility(View.VISIBLE);
-            showMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showMoreClicked = true;
-                    deliveryAdapter.notifyDataSetChanged();
-                    fetchDeliveryRest(1);
-                }
-            });
-        }
         return v;
     }
 
@@ -112,29 +100,54 @@ public class DeliveryFragment extends Fragment {
                 Log.d(TAG, "Success");
                 try {
                     if(response.isSuccessful()) {
-                        if (showMoreOptions == 1) {
-                            if(!showMoreClicked) {
-                                showMore.setVisibility(View.VISIBLE);
-                            }else{
-                                showMore.setVisibility(View.GONE);
-                            }
-                        } else {
-                            showMore.setVisibility(View.GONE);
-                        }
                         DeliveryTabResponse.DeliveryRestaurants body = response.body().deliveryRestaurants;
-                        Util.deliveryRestInfos.clear();
                         if(body!=null) {
                             if(body.deliveryRestInfo.size()!=0) {
                                 Log.d(TAG, "the body is not empty");
+                                hasMoreResults = body.isHasMoreResults();
+                                if(showMoreClicked) {
+                                    //do nothing
+                                    
+                                }else {
+                                    Util.deliveryRestInfos.clear();
+                                }
+                                if (hasMoreResults) {
+                                    if(showMoreClicked) {
+                                        Util.deliveryRestInfos.addAll(body.deliveryRestInfo);
+                                        showMoreClicked = false;
+                                        showMore.setVisibility(View.GONE);
+                                    }else {
+                                        showMore.setVisibility(View.VISIBLE);
+                                        for (int i = 0; i < body.deliveryRestInfo.size(); i++) {
+                                            Util.deliveryRestInfos = body.deliveryRestInfo;
+                                        }
+                                    }
+
+                                    showMore.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            progressBar.setVisibility(View.VISIBLE);
+                                            showMoreClicked = true;
+                                            deliveryAdapter.notifyDataSetChanged();
+                                            fetchDeliveryRest(1);
+                                        }
+                                    });
+                                }else {
+                                    showMore.setVisibility(View.GONE);
+                                    for (int i = 0; i < body.deliveryRestInfo.size(); i++) {
+                                        Util.deliveryRestInfos = body.deliveryRestInfo;
+                                    }
+                                }
                                 rlNoDel.setVisibility(View.GONE);
                                 mRecyclerView.setVisibility(View.VISIBLE);
-                                for (int i = 0; i < body.deliveryRestInfo.size(); i++) {
-                                    Util.deliveryRestInfos = body.deliveryRestInfo;
-                                }
                                 progressBar.setVisibility(View.GONE);
-                                deliveryAdapter = new DeliveryAdapter(getActivity());
+                                if(deliveryAdapter == null) {
+                                    deliveryAdapter = new DeliveryAdapter(getActivity());
+                                }
                                 mRecyclerView.setAdapter(deliveryAdapter);
-                                mLayoutManager = new LinearLayoutManager(getActivity());
+                                if(mLayoutManager==null) {
+                                    mLayoutManager = new LinearLayoutManager(getActivity());
+                                }
                                 mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                                 setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                             }else {
