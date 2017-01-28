@@ -4,6 +4,8 @@
     <string name="app_name">dishq</string>
 
     <string name="mixpanel_token">972575a59683072771e5130cbe977d05</string>
+    <string name="appsflyer_dev_key">eazqXbf84E6ua5iCc2S3Ec</string>
+    <string name="appsflyer_sender_id">1065480470289</string>
 
     <!-- signIn -->
     <string name="connect_with">Connect with</string>

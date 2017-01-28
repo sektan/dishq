@@ -17,3 +17,4 @@
 #}
 
 -optimizations !code/allocation/variable
+-dontwarn com.appsflyer.AFKeystoreWrapper

@@ -1,8 +1,10 @@
 package version1.dishq.dishq.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -19,10 +21,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -83,6 +87,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     private Location mLastLocation;
     private MixpanelAPI mixpanel = null;
 
+    @SuppressLint("HardwareIds")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +110,11 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
         DishqApplication.getPrefs().edit().putString(Constants.UNIQUE_IDENTIFIER, uniqueIdentifier).apply();
         DishqApplication.setUniqueId(uniqueIdentifier);
         Log.d(TAG, "Unique number: " + uniqueIdentifier);
+
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+
+        AppsFlyerLib.getInstance().setImeiData(telephonyManager.getDeviceId());
+        AppsFlyerLib.getInstance().setAndroidIdData(uniqueIdentifier);
         // The following helps in obtaining the current version number and version code
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -140,6 +150,10 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     @Override
     protected void onResume() {
         super.onResume();
+        AppsFlyerLib.getInstance().startTracking(this.getApplication(),
+                getResources().getString(R.string.appsflyer_dev_key));
+        AppsFlyerLib.getInstance().setCustomerUserId(uniqueIdentifier);
+        AppsFlyerLib.getInstance().setGCMProjectNumber(this, getResources().getString(R.string.appsflyer_sender_id));
         try {
             final JSONObject properties = new JSONObject();
             properties.put("Splash Screen", "splashscreen");

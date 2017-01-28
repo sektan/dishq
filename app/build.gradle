@@ -3,7 +3,6 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
-    maven { url "https://raw.github.com/laenger/maven-releases/master/releases" }
 }
 
 android {
@@ -25,7 +24,6 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -44,8 +42,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
-
-    compile "biz.laenger.android:vpbs:0.0.4"
+    //Appsflye library
+    compile 'com.appsflyer:af-android-sdk:4.6.7'
 
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:multidex:1.0.1'
@@ -66,9 +64,9 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     //fireBase & google
     compile 'com.google.firebase:firebase-core:10.0.1'
+    compile "com.google.firebase:firebase-messaging:9.0.0"
     compile 'com.google.android.gms:play-services-base:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
-    compile 'com.google.android.gms:play-services-gcm:10.0.1'
     compile 'com.google.android.gms:play-services-maps:10.0.1'
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
