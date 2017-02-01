@@ -114,6 +114,14 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         }
 
         holder.dineDriveTime.setText(Util.dineoutRestInfos.get(position).getDineDriveTime());
+
+        String dineRestType = "";
+        if(Util.dineoutRestInfos.get(position).getDineRestType()!=null) {
+            for (String s : Util.dineoutRestInfos.get(position).getDineRestType()) {
+                dineRestType += s;
+            }
+        }
+        holder.dineRestType.setText(dineRestType);
     }
 
 
@@ -125,7 +133,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
     public static class DineoutRestInfoAdapter extends RecyclerView.ViewHolder {
 
         protected TextView dineRestName, dineRestAddr, dineRestCuisine, dineRup1,
-                dineRup2, dineRup3, dineRup4, dineDriveTime;
+                dineRup2, dineRup3, dineRup4, dineDriveTime, dineRestType;
 
         protected RelativeLayout rlDineout;
 
@@ -146,6 +154,8 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             dineRup4 = (TextView) view.findViewById(R.id.dineout_rup_4);
             dineDriveTime = (TextView) view.findViewById(R.id.dineout_drive_time);
             dineDriveTime.setTypeface(Util.opensanssemibold);
+            dineRestType = (TextView) view.findViewById(R.id.dineout_rest_type);
+            dineRestType.setTypeface(Util.opensanssemibold);
             rlDineout = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
             dineoutCardBgImage = (ImageView) view.findViewById(R.id.card_bg_image);
             dineoutCardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);

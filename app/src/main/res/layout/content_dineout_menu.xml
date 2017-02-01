@@ -10,6 +10,7 @@
     tools:showIn="@layout/content_dinemenu_full">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/dine_nested_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill_vertical"
@@ -82,15 +83,6 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_20" />
 
-                        <ImageView
-                            android:id="@+id/delivery_option"
-                            android:layout_width="46dp"
-                            android:layout_height="46dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="16dp"
-                            android:contentDescription="@string/delivery"
-                            android:padding="10dp"
-                            android:src="@drawable/menu_bike_light" />
                     </LinearLayout>
 
                 </android.support.v7.widget.Toolbar>
@@ -194,16 +186,16 @@
                                 android:textSize="@dimen/text_size_12" />
 
                             <TextView
-                                android:id="@+id/dinemenu_drive_time"
+                                android:id="@+id/dinemenu_rest_type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="3dp"
-                                android:textColor="@color/white"
-                                android:shadowColor="@color/black"
-                                android:shadowDx="1"
-                                android:shadowDy="1"
-                                android:shadowRadius="5"
-                                android:textSize="@dimen/text_size_12" />
+                                android:layout_marginTop="12dp"
+                                android:paddingStart="12.7dp"
+                                android:paddingEnd="20dp"
+                                android:textColor="#70000000"
+                                android:textSize="@dimen/text_size_13"/>
+
+
                         </LinearLayout>
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>

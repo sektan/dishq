@@ -253,6 +253,138 @@ public class DineoutMenuResponse {
         @Expose
         private ArrayList<String> dineMenuRestAddr;
 
+        @SerializedName("swiggy_delivery_url")
+        @Expose
+        private String delMenuSwiggyUrl;
+
+        @SerializedName("zomato_delivery_url")
+        @Expose
+        private String delMenuZomatoUrl;
+
+        @SerializedName("runnr_delivery_url")
+        @Expose
+        private String delMenuRunnrUrl;
+
+        @SerializedName("foodpanda_delivery_url")
+        @Expose
+        private String delMenuFoodPandaUrl;
+
+        @SerializedName("dineout_tablebooking_url")
+        @Expose
+        private String tbMenuDineoutUrl;
+
+        @SerializedName("zomato_tablebooking_url")
+        @Expose
+        private String tbMenuZomatoUrl;
+
+        @SerializedName("easydiner_tablebooking_url")
+        @Expose
+        private String tbMenuEazydinerUrl;
+
+        @SerializedName("ambience_text")
+        @Expose
+        private ArrayList<String> menuAmbienceText;
+
+        @SerializedName("has_table_booking")
+        @Expose
+        private Boolean hasTableBooking;
+
+        @SerializedName("can_be_delivered")
+        @Expose
+        private Boolean canBeDelivered;
+
+        @SerializedName("delivery_time")
+        @Expose
+        private String menuDeliveryTime;
+
+        public String getMenuDeliveryTime() {
+            return menuDeliveryTime;
+        }
+
+        public void setMenuDeliveryTime(String menuDeliveryTime) {
+            this.menuDeliveryTime = menuDeliveryTime;
+        }
+
+        public String getDelMenuSwiggyUrl() {
+            return delMenuSwiggyUrl;
+        }
+
+        public void setDelMenuSwiggyUrl(String delMenuSwiggyUrl) {
+            this.delMenuSwiggyUrl = delMenuSwiggyUrl;
+        }
+
+        public String getDelMenuZomatoUrl() {
+            return delMenuZomatoUrl;
+        }
+
+        public void setDelMenuZomatoUrl(String delMenuZomatoUrl) {
+            this.delMenuZomatoUrl = delMenuZomatoUrl;
+        }
+
+        public String getDelMenuRunnrUrl() {
+            return delMenuRunnrUrl;
+        }
+
+        public void setDelMenuRunnrUrl(String delMenuRunnrUrl) {
+            this.delMenuRunnrUrl = delMenuRunnrUrl;
+        }
+
+        public String getDelMenuFoodPandaUrl() {
+            return delMenuFoodPandaUrl;
+        }
+
+        public void setDelMenuFoodPandaUrl(String delMenuFoodPandaUrl) {
+            this.delMenuFoodPandaUrl = delMenuFoodPandaUrl;
+        }
+
+        public String getTbMenuDineoutUrl() {
+            return tbMenuDineoutUrl;
+        }
+
+        public void setTbMenuDineoutUrl(String tbMenuDineoutUrl) {
+            this.tbMenuDineoutUrl = tbMenuDineoutUrl;
+        }
+
+        public String getTbMenuZomatoUrl() {
+            return tbMenuZomatoUrl;
+        }
+
+        public void setTbMenuZomatoUrl(String tbMenuZomatoUrl) {
+            this.tbMenuZomatoUrl = tbMenuZomatoUrl;
+        }
+
+        public String getTbMenuEazydinerUrl() {
+            return tbMenuEazydinerUrl;
+        }
+
+        public void setTbMenuEazydinerUrl(String tbMenuEazydinerUrl) {
+            this.tbMenuEazydinerUrl = tbMenuEazydinerUrl;
+        }
+
+        public ArrayList<String> getMenuAmbienceText() {
+            return menuAmbienceText;
+        }
+
+        public void setMenuAmbienceText(ArrayList<String> menuAmbienceText) {
+            this.menuAmbienceText = menuAmbienceText;
+        }
+
+        public Boolean getHasTableBooking() {
+            return hasTableBooking;
+        }
+
+        public void setHasTableBooking(Boolean hasTableBooking) {
+            this.hasTableBooking = hasTableBooking;
+        }
+
+        public Boolean getCanBeDelivered() {
+            return canBeDelivered;
+        }
+
+        public void setCanBeDelivered(Boolean canBeDelivered) {
+            this.canBeDelivered = canBeDelivered;
+        }
+
         public ArrayList<String> getDineMenuRestTags() {
             return dineMenuRestTags;
         }

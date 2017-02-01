@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Config {
 
     //Server Address
-    private static final String serverAddress = "https://dishq.co/";
+    private static final String serverAddress = "https://dishq.tech/";
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private static Retrofit.Builder builder =

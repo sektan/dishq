@@ -1,6 +1,7 @@
 package version1.dishq.dishq.fragments.dialogfragment.filters;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,10 +15,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -57,6 +60,7 @@ public class QuickFiltersFragment extends Fragment implements
     Datum datum = null;
     QuickFilter quickFilter = null;
 
+    private View view = null;
     TextView textView;
     AutoCompleteTextView searchAutoCompleteText;
     ProgressBar progressBar;
@@ -85,6 +89,7 @@ public class QuickFiltersFragment extends Fragment implements
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_filters, container, false);
+        this.view = view;
 
         return view;
     }
@@ -97,7 +102,7 @@ public class QuickFiltersFragment extends Fragment implements
         textView.setTypeface(Util.opensansregular);
         searchAutoCompleteText = (AutoCompleteTextView) view.findViewById(R.id.filter_quick_search_auto_complete);
         searchAutoCompleteText.setTypeface(Util.opensansregular);
-        searchAutoCompleteText.setThreshold(0);
+        searchAutoCompleteText.setThreshold(1);
         searchAutoCompleteText.addTextChangedListener(this);
         searchAutoCompleteText.setOnItemClickListener(this);
 
@@ -155,12 +160,25 @@ public class QuickFiltersFragment extends Fragment implements
 
     @Override
     public void afterTextChanged(Editable s) {
-        String searchString = s.toString();
-        if (searchString.length() > 0) {
+        final String searchString = s.toString();
+        if (searchString.length() > 1) {
             if (progressBar != null && !progressBar.isShown())
                 progressBar.setVisibility(View.VISIBLE);
 
             checkInternetConnection(searchString);
+            searchAutoCompleteText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+                @Override
+                public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                    if(actionId== EditorInfo.IME_ACTION_DONE) {
+                        checkInternetConnection(searchString);
+                        hideKeypad();
+                    }
+                    return true;
+
+                }
+            });
+
             setRecyclerAdapter();
             datum = null;
             recyclerView.setVisibility(View.INVISIBLE);
@@ -207,10 +225,10 @@ public class QuickFiltersFragment extends Fragment implements
     }
 
 
-    public void hideSoftKeyboard() {
-        if (getActivity().getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+    public void hideKeypad() {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         }
     }
 
@@ -236,9 +254,10 @@ public class QuickFiltersFragment extends Fragment implements
             for (Datum datum : data)
                 stringData.add(datum.getName());
             textView.setVisibility(View.GONE);
-            arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_dropdown_food_search_item, stringData);
+            arrayAdapter = new ArrayAdapter<>(DishqApplication.getContext(), R.layout.simple_dropdown_food_search_item, stringData);
             searchAutoCompleteText.setAdapter(arrayAdapter);
         }else {
+//            if(data.size()>1)
             textView.setVisibility(View.VISIBLE);
         }
     }
@@ -256,9 +275,11 @@ public class QuickFiltersFragment extends Fragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (datumList != null && datumList.size() > 0) {
+        hideKeypad();
+        if (datumList != null && datumList.size() > 1) {
             this.datum = datumList.get(position);
             this.recyclerAdapter.clearSelection();
+
             // Toggle the apply button depends on the selection
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
@@ -274,11 +295,11 @@ public class QuickFiltersFragment extends Fragment implements
     public void onItemClicked(int position, boolean isAnyItemSelected) {
         if (quickFilterList != null && quickFilterList.size() > 0) {
             this.quickFilter = quickFilterList.get(position);
+            hideKeypad();
             // Toggle the apply button depends on the selection
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
                     if (isAnyItemSelected) {
-                        searchAutoCompleteText.clearFocus();
                         ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
                         ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
                     }

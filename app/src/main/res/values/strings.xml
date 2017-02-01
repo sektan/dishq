@@ -91,8 +91,8 @@
     <string name="zomato">Zomato</string>
     <string name="dineout">dineout</string>
     <string name="chooser_title">Open With</string>
-    <string name="call">CALL</string>
-    <string name="dineout_menu_directions">DIRECTIONS</string>
+    <string name="order">ORDER</string>
+    <string name="book_table">BOOK TABLE</string>
     <string name="delivery">delivery</string>
     <string name="delmenu_back_button">delmenu back button</string>
     <string name="dineout_back_button">dineout back button</string>
@@ -139,5 +139,8 @@
     <string name="view_recipe">View recipe:</string>
     <string name="home_or">OR</string>
     <string name="home_feeling_lucky">Surprise me</string>
+    <string name="menu_serves">Serves:</string>
+    <string name="vibe">Vibe:</string>
+    <string name="book_table_via">BOOK TABLE VIA</string>
 
 </resources>

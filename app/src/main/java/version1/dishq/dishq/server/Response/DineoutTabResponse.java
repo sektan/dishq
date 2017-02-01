@@ -57,6 +57,10 @@ public class DineoutTabResponse {
         @Expose
         public String dineDriveTime;
 
+        @SerializedName("restaurant_type_text")
+        @Expose
+        public ArrayList<String> dineRestType;
+
         @SerializedName("photo")
         @Expose
         public ArrayList<String> dineRestPhoto;
@@ -124,6 +128,15 @@ public class DineoutTabResponse {
         public void setDineDriveTime(String dineDriveTime) {
             this.dineDriveTime = dineDriveTime;
         }
+
+        public ArrayList<String> getDineRestType() {
+            return dineRestType;
+        }
+
+        public void setDineRestType(ArrayList<String> dineRestType) {
+            this.dineRestType = dineRestType;
+        }
+
 
         public int getDineoutPriceLvl() {
             return dineoutPriceLvl;

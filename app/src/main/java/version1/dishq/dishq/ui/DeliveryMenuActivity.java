@@ -176,7 +176,6 @@ public class DeliveryMenuActivity extends BaseActivity implements GoogleApiClien
         delMenuTags.setTypeface(Util.opensansregular);
         delMenuRestAdd = (TextView) findViewById(R.id.delmenu_rest_addr);
         delMenuRestAdd.setTypeface(Util.opensansregular);
-        swiggy = (TextView) findViewById(R.id.swiggy_text);
         orderFrom = (TextView) findViewById(R.id.delmenu_order_text);
         orderFrom.setTypeface(Util.opensansregular);
         swiggy = (TextView) findViewById(R.id.swiggy_text);

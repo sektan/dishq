@@ -8,14 +8,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,11 +19,10 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +47,6 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,18 +91,25 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
     private ProgressBar progressBar;
     private ImageView appbarImage;
     private FrameLayout progressBg;
+    private NestedScrollView nestedScrollView;
+    private RelativeLayout rlOrderBook;
 
     //Checking for gps and internet
     LocationRequest mLocationRequest;
     private boolean networkFailed;
     private GoogleApiClient googleApiClient;
     private Location mLastLocation;
+    private Button orderButton, bookTableButton;
+    private TextView swiggy, foodpanda, runnr, zomato;
+    private TextView btEazydiner, btDineout, btZomato;
+    private TextView ambienceText, deliveryTimeText;
     protected static final int REQUEST_CHECK_SETTINGS = 1000;
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
     private static String lat = "0.0";
     private static String lang = "0.0";
     final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,13 +138,15 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
     }
 
     protected void setTags() {
-        dineMenuRecyclerView = (RecyclerView) findViewById(R.id.dine_menu_recyclerview);
+
+        rlOrderBook = (RelativeLayout) findViewById(R.id.rl_dine_order_book);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.dine_nested_scroll);
+        dineMenuRecyclerView = (RecyclerView) findViewById(R.id.menu_recyclerview);
         tvPersonalizedMenu = (TextView) findViewById(R.id.personalized_menu_text);
         tvPersonalizedMenu.setTypeface(Util.opensanslight);
         backButton = (ImageView) findViewById(R.id.dine_menu_back_button);
         dineMenuHeader = (TextView) findViewById(R.id.dinemenu_toolbarTitle);
         dineMenuHeader.setTypeface(Util.opensanssemibold);
-        deliveryButton = (ImageView) findViewById(R.id.delivery_option);
         dineMenuRestTypeText = (TextView) findViewById(R.id.dinemenu_rest_type_text);
         dineMenuRestTypeText.setTypeface(Util.opensansregular);
         dineMenuRestType = (TextView) findViewById(R.id.dinemenu_rest_type);
@@ -152,18 +155,52 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
         dineMenuRp2 = (TextView) findViewById(R.id.dinemenu_rup_2);
         dineMenuRp3 = (TextView) findViewById(R.id.dinemenu_rup_3);
         dineMenuRp4 = (TextView) findViewById(R.id.dinemenu_rup_4);
-        dineMenuDrive = (TextView) findViewById(R.id.dinemenu_drive_time);
-        dineMenuDrive.setTypeface(Util.opensansregular);
+
+        orderButton = (Button) findViewById(R.id.dinemenu_order);
+        orderButton.setTypeface(Util.opensanssemibold);
+        bookTableButton = (Button) findViewById(R.id.dinemenu_book_table);
+        bookTableButton.setTypeface(Util.opensanssemibold);
+
+        TextView serves = (TextView) findViewById(R.id.menu_serves);
+        serves.setTypeface(Util.opensanslight);
         dineMenuTags = (TextView) findViewById(R.id.dinemenu_tags);
         dineMenuTags.setTypeface(Util.opensansregular);
+        TextView vibes = (TextView) findViewById(R.id.menu_vibe);
+        vibes.setTypeface(Util.opensanslight);
+        ambienceText = (TextView) findViewById(R.id.ambience_text);
+        ambienceText.setTypeface(Util.opensansregular);
+
+        dineMenuDrive = (TextView) findViewById(R.id.dinemenu_drive_time);
+        dineMenuDrive.setTypeface(Util.opensansregular);
+        deliveryTimeText = (TextView) findViewById(R.id.menu_delivery_time);
+        deliveryTimeText.setTypeface(Util.opensansregular);
+
         dineMenuRestAdd = (TextView) findViewById(R.id.dinemenu_rest_addr);
         dineMenuRestAdd.setTypeface(Util.opensansregular);
         call = (Button) findViewById(R.id.dinemenu_call);
-        call.setTypeface(Util.opensanssemibold);
         directions = (Button) findViewById(R.id.dinemenu_directions);
-        directions.setTypeface(Util.opensanssemibold);
         rlDineoutToolbar = (AppBarLayout) findViewById(R.id.dinemenu_appbar);
         appbarImage = (ImageView) findViewById(R.id.dineout_appbar_bg_image);
+
+        TextView orderFrom = (TextView) findViewById(R.id.delmenu_order_text);
+        orderFrom.setTypeface(Util.opensansregular);
+        swiggy = (TextView) findViewById(R.id.swiggy_text);
+        swiggy.setTypeface(Util.opensansregular);
+        foodpanda = (TextView) findViewById(R.id.foodpanda_text);
+        foodpanda.setTypeface(Util.opensansregular);
+        runnr = (TextView) findViewById(R.id.runnr_text);
+        runnr.setTypeface(Util.opensansregular);
+        zomato = (TextView) findViewById(R.id.zomato_text);
+        zomato.setTypeface(Util.opensansregular);
+
+        TextView bookTable = (TextView) findViewById(R.id.menu_book_table_text);
+        bookTable.setTypeface(Util.opensansregular);
+        btEazydiner = (TextView) findViewById(R.id.eazydiner_book);
+        btEazydiner.setTypeface(Util.opensansregular);
+        btDineout = (TextView) findViewById(R.id.dineout_book);
+        btDineout.setTypeface(Util.opensansregular);
+        btZomato = (TextView) findViewById(R.id.zomato_book);
+        btZomato.setTypeface(Util.opensansregular);
         //appbarImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         setFunctionality();
     }
@@ -188,31 +225,8 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
         if (Util.dineoutRestData != null) {
             dineMenuHeader.setText(Util.dineoutRestData.getDineMenuRestName());
 
-            if(Util.dineoutRestData.getHasHomeDelivery()) {
-                deliveryButton.setVisibility(View.VISIBLE);
-                deliveryButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            final JSONObject properties = new JSONObject();
-                            properties.put("Delivery menu flipbutton", "dineoutmenu");
-                            mixpanel.track("Delivery menu flipbutton", properties);
-                        } catch (final JSONException e) {
-                            throw new RuntimeException("Could not encode hour of the day in JSON");
-                        }
-                        Util.setDelRestId(Util.dineoutRestData.getDineMenuRestId());
-                        Intent intent = new Intent(DineoutMenuActivity.this, DeliveryMenuActivity.class);
-                        overridePendingTransition(R.anim.from_middle, R.anim.to_middle);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            } else{
-                deliveryButton.setVisibility(View.GONE);
-            }
-
             StringBuilder sb = new StringBuilder();
-            if(Util.dineoutRestData.getDineMenuCusineText()!=null) {
+            if (Util.dineoutRestData.getDineMenuCusineText() != null) {
                 for (String s : Util.dineoutRestData.getDineMenuCusineText()) {
                     if (sb.length() > 0) {
                         sb.append(',' + " ");
@@ -239,18 +253,33 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                 dineMenuRp3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
                 dineMenuRp4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             }
+
             dineMenuDrive.setText(Util.dineoutRestData.getDineMenuDriveTime());
+            deliveryTimeText.setText(Util.dineoutRestData.getMenuDeliveryTime());
+            if (Util.dineoutRestData.getHasHomeDelivery()) {
+                deliveryTimeText.setTextColor(ContextCompat.getColor(this, R.color.black));
+            } else {
+                deliveryTimeText.setTextColor(ContextCompat.getColor(this, R.color.red));
+            }
 
             String dishTags = "";
-            if(Util.dineoutRestData.getDineMenuRestTags()!=null) {
+            if (Util.dineoutRestData.getDineMenuRestTags() != null) {
                 for (String s : Util.dineoutRestData.getDineMenuRestTags()) {
                     dishTags += s + " ";
                 }
             }
             dineMenuTags.setText(String.valueOf(dishTags));
 
+            String ambience = "";
+            if (Util.dineoutRestData.getMenuAmbienceText() != null) {
+                for (String s : Util.dineoutRestData.getMenuAmbienceText()) {
+                    ambience += s;
+                }
+            }
+            ambienceText.setText(ambience);
+
             StringBuilder stringBuilder = new StringBuilder();
-            if(Util.dineoutRestData.getDineMenuRestTypeText()!=null) {
+            if (Util.dineoutRestData.getDineMenuRestTypeText() != null) {
                 for (String st : Util.dineoutRestData.getDineMenuRestTypeText()) {
                     if (stringBuilder.length() > 0) {
                         stringBuilder.append(',' + " ");
@@ -263,7 +292,7 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             dineMenuRestType.setText(String.valueOf(restTypeText));
 
             String dineRestAddress = "";
-            if(Util.dineoutRestData.getDineMenuRestAddr()!=null) {
+            if (Util.dineoutRestData.getDineMenuRestAddr() != null) {
                 for (String s : Util.dineoutRestData.getDineMenuRestAddr()) {
                     dineRestAddress += s;
                 }
@@ -281,7 +310,7 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                     } catch (final JSONException e) {
                         throw new RuntimeException("Could not encode hour of the day in JSON");
                     }
-                    String uri = "tel:" + finalDineRestContactNo.trim() ;
+                    String uri = "tel:" + finalDineRestContactNo.trim();
                     Uri number = Uri.parse(uri);
                     Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
                     startActivity(callIntent);
@@ -305,14 +334,261 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                     String currentLatitude = Util.getLatitude();
                     String currentLongitude = Util.getLongitude();
 
-                    String url = "http://maps.google.com/maps?saddr="+currentLatitude+","+currentLongitude+"&daddr="+targetLat+","+targetLang+"&mode=driving";
+                    String url = "http://maps.google.com/maps?saddr=" + currentLatitude + "," + currentLongitude + "&daddr=" + targetLat + "," + targetLang + "&mode=driving";
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
                     intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                     startActivity(intent);
                 }
             });
+
+            //DeepLinking buttons
+            if (Util.dineoutRestData.getDelMenuRunnrUrl() != null) {
+                final String runnrUrl = Util.dineoutRestData.getDelMenuRunnrUrl();
+                if (runnrUrl.equals("")) {
+                    runnr.setVisibility(View.GONE);
+                } else {
+                    runnr.setVisibility(View.VISIBLE);
+                    runnr.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Runnr order", "deliverymenu");
+                                mixpanel.track("Runnr order", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            deepLinkUrl(runnrUrl);
+                        }
+                    });
+                }
+            } else {
+                runnr.setVisibility(View.GONE);
+            }
+
+            if (Util.dineoutRestData.getDelMenuFoodPandaUrl() != null) {
+                final String foodpandaUrl = Util.dineoutRestData.getDelMenuFoodPandaUrl();
+                if (foodpandaUrl.equals("")) {
+                    foodpanda.setVisibility(View.GONE);
+                } else {
+                    foodpanda.setVisibility(View.VISIBLE);
+                    foodpanda.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Foodpanda order", "deliverymenu");
+                                mixpanel.track("Foodpanda order", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            deepLinkUrl(foodpandaUrl);
+                        }
+                    });
+                }
+            } else {
+                foodpanda.setVisibility(View.GONE);
+            }
+
+            if (Util.dineoutRestData.getDelMenuZomatoUrl() != null) {
+                final String zomatoUrl = Util.dineoutRestData.getDelMenuZomatoUrl();
+                Log.d(TAG, "The url is : " + zomatoUrl);
+                if (zomatoUrl.equals("")) {
+                    zomato.setVisibility(View.GONE);
+                } else {
+                    zomato.setVisibility(View.VISIBLE);
+
+                    zomato.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Zomato order", "deliverymenu");
+                                mixpanel.track("Zomato order", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            deepLinkUrl(zomatoUrl);
+                        }
+                    });
+                }
+            } else {
+                zomato.setVisibility(View.GONE);
+            }
+
+            if (Util.dineoutRestData.getDelMenuSwiggyUrl() != null) {
+                final String swiggyUrl = Util.dineoutRestData.getDelMenuSwiggyUrl();
+                Log.d(TAG, "the url is : " + swiggyUrl);
+                if (swiggyUrl.equals("")) {
+                    swiggy.setVisibility(View.GONE);
+                } else {
+                    swiggy.setVisibility(View.VISIBLE);
+                    swiggy.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Swiggy order", "deliverymenu");
+                                mixpanel.track("Swiggy order", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            deepLinkUrl(swiggyUrl);
+                        }
+                    });
+                }
+            } else {
+                swiggy.setVisibility(View.GONE);
+            }
+
+            if (Util.dineoutRestData.getTbMenuEazydinerUrl() != null) {
+                final String eazydinerUrl = Util.dineoutRestData.getTbMenuEazydinerUrl();
+                Log.d(TAG, "the url is : " + eazydinerUrl);
+                if (eazydinerUrl.equals("")) {
+                    btEazydiner.setVisibility(View.GONE);
+                } else {
+                    btEazydiner.setVisibility(View.VISIBLE);
+                    btEazydiner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Swiggy order", "deliverymenu");
+                                mixpanel.track("Swiggy order", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            deepLinkUrl(eazydinerUrl);
+                        }
+                    });
+                }
+            } else {
+                btEazydiner.setVisibility(View.GONE);
+            }
+
+            if (Util.dineoutRestData.getTbMenuDineoutUrl() != null) {
+                final String dineoutUrl = Util.dineoutRestData.getTbMenuDineoutUrl();
+                Log.d(TAG, "the url is : " + dineoutUrl);
+                if (dineoutUrl.equals("")) {
+                    btDineout.setVisibility(View.GONE);
+                } else {
+                    btDineout.setVisibility(View.VISIBLE);
+                    btDineout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Swiggy order", "deliverymenu");
+                                mixpanel.track("Swiggy order", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            deepLinkUrl(dineoutUrl);
+                        }
+                    });
+                }
+            } else {
+                btDineout.setVisibility(View.GONE);
+            }
+
+            if (Util.dineoutRestData.getTbMenuZomatoUrl() != null) {
+                final String tbZomatoUrl = Util.dineoutRestData.getTbMenuZomatoUrl();
+                Log.d(TAG, "the url is : " + tbZomatoUrl);
+                if (tbZomatoUrl.equals("")) {
+                    btZomato.setVisibility(View.GONE);
+                } else {
+                    btZomato.setVisibility(View.VISIBLE);
+                    btZomato.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Swiggy order", "deliverymenu");
+                                mixpanel.track("Swiggy order", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            deepLinkUrl(tbZomatoUrl);
+                        }
+                    });
+                }
+            } else {
+                btZomato.setVisibility(View.GONE);
+            }
         }
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                final int position = v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight();
+                orderButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            final JSONObject properties = new JSONObject();
+                            properties.put("Order now button in delivery menu", "deliverymenu");
+                            mixpanel.track("Order now button in delivery menu", properties);
+                        } catch (final JSONException e) {
+                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                        }
+                        rlOrderBook.setVisibility(View.GONE);
+                        nestedScrollView.scrollTo(0, position);
+                    }
+                });
+
+                bookTableButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            final JSONObject properties = new JSONObject();
+                            properties.put("book table button in dineout menu", "deliverymenu");
+                            mixpanel.track("book table button in dineout menu", properties);
+                        } catch (final JSONException e) {
+                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                        }
+                        rlOrderBook.setVisibility(View.GONE);
+                        nestedScrollView.scrollTo(0, position);
+                    }
+                });
+
+                if (scrollY > oldScrollY) {
+                    Log.i(TAG, "Scroll DOWN");
+                    rlOrderBook.setVisibility(View.VISIBLE);
+
+                }
+                if (scrollY < oldScrollY) {
+                    Log.i(TAG, "Scroll UP");
+                    rlOrderBook.setVisibility(View.VISIBLE);
+                }
+
+                if (scrollY == 0) {
+                    Log.i(TAG, "TOP SCROLL");
+                    rlOrderBook.setVisibility(View.VISIBLE);
+                }
+
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    Log.i(TAG, "BOTTOM SCROLL");
+
+                    rlOrderBook.setVisibility(View.GONE);
+                }
+
+            }
+
+        });
+
+
     }
+
+    //Method for deepLinking
+    protected void deepLinkUrl(String url) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_VIEW);
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        shareIntent.setData(Uri.parse(url));
+        startActivity(shareIntent);
+    }
+
 
     //Method to check if the internet is connected or not
     private void checkInternetConnection() {
@@ -359,14 +635,14 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             public void onResponse(Call<DineoutMenuResponse> call, Response<DineoutMenuResponse> response) {
                 Log.d(TAG, "Success");
                 try {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         Log.d(TAG, "Response is successful");
                         DineoutMenuResponse.DineoutMenuInfo body = response.body().dineoutMenuInfo;
-                        if(body!=null) {
+                        if (body != null) {
                             Log.d(TAG, "body is nt null");
                             Util.dineoutMenuInfos.clear();
                             Util.dineoutRestData = body.dineoutRestData;
-                            for (int i = 0; i<body.dineoutMenuDatas.size(); i++) {
+                            for (int i = 0; i < body.dineoutMenuDatas.size(); i++) {
                                 Util.dineoutMenuInfos = body.dineoutMenuDatas;
                             }
                             setTags();
@@ -382,13 +658,13 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                         }
                         progressBar.setVisibility(View.GONE);
                         progressBg.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         progressBar.setVisibility(View.GONE);
                         progressBg.setVisibility(View.GONE);
                         String error = response.errorBody().string();
-                        Log.d(TAG, "response error: " +error);
+                        Log.d(TAG, "response error: " + error);
                     }
-                }catch (IOException e){
+                } catch (IOException e) {
                     progressBar.setVisibility(View.GONE);
                     progressBg.setVisibility(View.GONE);
                     e.printStackTrace();
@@ -697,7 +973,7 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
         try {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         } catch (Exception e) {
-            Log.d(TAG, "Exception:" +e);
+            Log.d(TAG, "Exception:" + e);
         }
     }
 

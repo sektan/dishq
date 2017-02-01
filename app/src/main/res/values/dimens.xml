@@ -21,6 +21,7 @@
     <dimen name="text_size_34">34sp</dimen>
     <dimen name="text_size_40">40sp</dimen>
     <dimen name="text_size_45">45sp</dimen>
+    <dimen name="text_size_42">42sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="activity_margin">16dp</dimen>
 </resources>

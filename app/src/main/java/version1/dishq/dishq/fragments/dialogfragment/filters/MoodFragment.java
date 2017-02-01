@@ -1,6 +1,7 @@
 package version1.dishq.dishq.fragments.dialogfragment.filters;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import java.util.List;
@@ -42,9 +44,13 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mood, container, false);
-
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         return view;
     }
+
 
     public FilterMoodRecyclerAdapter getRecyclerAdapter() {
         return recyclerAdapter;
@@ -58,14 +64,20 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        textView = (TextView) view.findViewById(R.id.filter_mood_no_item_text);
-        TextView feelingText = (TextView) view.findViewById(R.id.how_are_you_feeling);
-        feelingText.setTypeface(Util.opensansregular);
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.filter_mood_recycler_view);
-        recyclerView.setHasFixedSize(true);
 
-        setRecyclerAdapter();
+            textView = (TextView) view.findViewById(R.id.filter_mood_no_item_text);
+            TextView feelingText = (TextView) view.findViewById(R.id.how_are_you_feeling);
+            feelingText.setTypeface(Util.opensansregular);
+
+            recyclerView = (RecyclerView) view.findViewById(R.id.filter_mood_recycler_view);
+            recyclerView.setHasFixedSize(true);
+
+            setRecyclerAdapter();
+        }
     }
 
     private void setRecyclerAdapter() {

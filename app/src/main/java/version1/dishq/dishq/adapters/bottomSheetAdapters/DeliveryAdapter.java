@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.server.Response.DeliveryTabResponse;
 import version1.dishq.dishq.ui.DeliveryMenuActivity;
+import version1.dishq.dishq.ui.DineoutMenuActivity;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -121,13 +122,13 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
             public void onClick(View view) {
                 try {
                     final JSONObject properties = new JSONObject();
-                    properties.put("Delivery restaurants menu", "bottomsheet");
-                    mixpanel.track("Delivery restaurants menu", properties);
+                    properties.put("Delivery Dineout restaurants menu", "bottomsheet");
+                    mixpanel.track("Delivery Dineout restaurants menu", properties);
                 } catch (final JSONException e) {
                     throw new RuntimeException("Could not encode hour of the day in JSON");
                 }
                 Util.setDelRestId(restId);
-                Intent intent = new Intent(context, DeliveryMenuActivity.class);
+                Intent intent = new Intent(context, DineoutMenuActivity.class);
                 context.startActivity(intent);
             }
         });

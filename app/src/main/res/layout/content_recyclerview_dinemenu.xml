@@ -9,73 +9,164 @@
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/rl_cv_dine_menu_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="21dp"
-        android:layout_marginTop="10.7dp"
         card_view:cardElevation="0dp">
 
         <RelativeLayout
-            android:layout_width="310dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="11.7dp"
+            android:paddingBottom="11.7dp"
             android:background="#15000000">
 
-            <!--
-            <ImageView
-                android:id="@+id/dine_menu_tags"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/menu_background"
-                android:alpha="0.1"
-                android:contentDescription="@string/dine_bg_image"
-                android:scaleType="matrix"
-                android:cropToPadding="false"
-                android:adjustViewBounds="false" />
-
-                -->
-
-            <TextView
-                android:id="@+id/dinemenu_tags"
+            <LinearLayout
+                android:id="@+id/ll_menu_serves"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/menu_serves"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12.7dp"
+                    android:textColor="@color/black"
+                    android:text="@string/menu_serves"
+                    android:textSize="@dimen/text_size_16"/>
+
+                <TextView
+                    android:id="@+id/dinemenu_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="12.7dp"
+                    android:paddingEnd="13dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_16" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_menu_serves"
                 android:layout_marginTop="9.3dp"
-                android:paddingStart="12.7dp"
-                android:paddingEnd="20dp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_16" />
+                android:layout_marginStart="12.7dp"
+                android:layout_marginEnd="12.7dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/dinemenu_rest_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/dinemenu_tags"
-                android:layout_marginTop="12dp"
-                android:paddingStart="12.7dp"
-                android:paddingEnd="20dp"
-                android:textColor="#70000000"
-                android:textSize="@dimen/text_size_13"/>
+                <TextView
+                    android:id="@+id/menu_vibe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/vibe"
+                    android:textSize="@dimen/text_size_16"/>
 
-            <TextView
-                android:id="@+id/dinemenu_rest_addr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/dinemenu_rest_type"
-                android:layout_marginBottom="8.7dp"
-                android:layout_marginTop="12dp"
-                android:paddingStart="12.7dp"
-                android:paddingEnd="20dp"
-                android:textColor="#70000000"
-                android:textSize="@dimen/text_size_13"/>
+                <TextView
+                    android:id="@+id/ambience_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_16" />
+
+            </LinearLayout>
+
+
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/drive_del_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_cv_dine_menu_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dinemenu_call"
+            android:layout_width="24.7dp"
+            android:layout_height="24.7dp"
+            android:layout_marginBottom="7.3dp"
+            android:layout_marginEnd="11.3dp"
+            android:layout_marginStart="11.3dp"
+            android:layout_marginTop="9.3dp"
+            android:background="@drawable/call"
+            style="?android:attr/borderlessButtonStyle" />
+
+        <Button
+            android:id="@+id/dinemenu_directions"
+            android:layout_width="32.7dp"
+            android:layout_height="27.3dp"
+            android:layout_marginBottom="7.3dp"
+            android:layout_marginEnd="11.3dp"
+            android:layout_marginTop="9.3dp"
+            android:background="@drawable/directions"
+            style="?android:attr/borderlessButtonStyle" />
+
+        <TextView
+            android:id="@+id/dinemenu_drive_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/black"
+            android:shadowColor="@color/white"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="5"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/vertical_line"
+            android:textColor="@color/black"
+            android:shadowColor="@color/white"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="5"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/menu_delivery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/black"
+            android:shadowColor="@color/white"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="5"
+            android:textSize="@dimen/text_size_14" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dinemenu_rest_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/drive_del_info"
+        android:layout_marginBottom="8.7dp"
+        android:layout_marginTop="12dp"
+        android:paddingStart="12.7dp"
+        android:paddingEnd="20dp"
+        android:textColor="#70000000"
+        android:textSize="@dimen/text_size_13"/>
 
     <TextView
         android:id="@+id/personalized_menu_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_cv_dine_menu_content"
+        android:layout_below="@+id/dinemenu_rest_addr"
         android:maxLines="1"
         android:layout_marginStart="12.7dp"
         android:layout_marginEnd="12.7dp"
@@ -84,7 +175,7 @@
         android:textSize="@dimen/text_size_20" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/dine_menu_recyclerview"
+        android:id="@+id/menu_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
@@ -92,8 +183,147 @@
         android:layout_marginTop="10dp"
         android:layout_below="@+id/personalized_menu_text" />
 
+    <RelativeLayout
+        android:id="@+id/rl_delmenu_order_from"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/menu_recyclerview"
+        android:background="#10000000">
+
+        <TextView
+            android:id="@+id/delmenu_order_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/order_from"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14" />
+
+        <LinearLayout
+            android:id="@+id/delmenu_deloptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/delmenu_order_text"
+            android:layout_marginTop="25dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/zomato_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_zomato"
+                android:text="@string/zomato"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/swiggy_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_swiggy"
+                android:text="@string/swiggy"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/foodpanda_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_foodpanda"
+                android:text="@string/foodpanda"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/runnr_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_runnr"
+                android:text="@string/runnr"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/menu_book_table_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:text="@string/book_table_via"
+            android:layout_below="@+id/delmenu_deloptions"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14" />
+
+        <LinearLayout
+            android:id="@+id/menu_book_table_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/menu_book_table_text"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="25dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/eazydiner_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/eazydiner"
+                android:text="@string/swiggy"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/dineout_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/dineout"
+                android:text="@string/foodpanda"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/zomato_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginBottom="25dp"
+                android:drawableTop="@drawable/order_zomato"
+                android:text="@string/zomato"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
     <FrameLayout
-        android:layout_below="@+id/dine_menu_recyclerview"
+        android:layout_below="@+id/menu_recyclerview"
         android:layout_width="match_parent"
         android:background="@null"
         android:layout_height="80dp"/>
