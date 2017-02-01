@@ -12,8 +12,8 @@ android {
         applicationId "version1.dishq.dishq"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.1.9"
+        versionCode 5
+        versionName "2.0.0"
         // Enabling multidex support.
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -23,7 +23,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     buildTypes {
+
         release {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -42,8 +44,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
-    //Appsflye library
-    compile 'com.appsflyer:af-android-sdk:4.6.7'
+    //Appsflyer library
+   // compile 'com.appsflyer:af-android-sdk:4.6.7'
 
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:multidex:1.0.1'
@@ -60,11 +62,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     //Incorporating Picasso for loading images
-    compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     //fireBase & google
     compile 'com.google.firebase:firebase-core:10.0.1'
-    compile "com.google.firebase:firebase-messaging:9.0.0"
+    compile 'com.google.firebase:firebase-messaging:9.0.0'
     compile 'com.google.android.gms:play-services-base:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.google.android.gms:play-services-maps:10.0.1'
@@ -73,13 +75,12 @@ dependencies {
 
 
     // For converting authCode to accessToken
-   compile 'com.google.apis:google-api-services-oauth2:v1-rev129-1.22.0'
+   //compile 'com.google.apis:google-api-services-oauth2:v1-rev129-1.22.0'
 
     compile 'com.android.support:support-v4:25.1.0'
     testCompile 'junit:junit:4.12'
 
     compile 'com.google.code.gson:gson:2.4'
-    compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
 
     //mixpanel
     compile 'com.mixpanel.android:mixpanel-android:4.9.2'

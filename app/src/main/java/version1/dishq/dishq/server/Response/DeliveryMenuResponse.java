@@ -217,6 +217,10 @@ public class DeliveryMenuResponse {
         @Expose
         private int delMenuPriceLvl;
 
+        @SerializedName("dish_data")
+        @Expose
+        public ArrayList<DeliveryMenuDishData> deliveryMenuDishDatas;
+
         @SerializedName("restaurant_id")
         @Expose
         private int delMenuRestId;
@@ -252,6 +256,16 @@ public class DeliveryMenuResponse {
         @SerializedName("foodpanda_delivery_url")
         @Expose
         private String delMenuFoodPandaUrl;
+
+
+        public ArrayList<DeliveryMenuDishData> getDeliveryMenuDishDatas() {
+            return deliveryMenuDishDatas;
+        }
+
+        public void setDeliveryMenuDishDatas(ArrayList<DeliveryMenuDishData> deliveryMenuDishDatas) {
+            this.deliveryMenuDishDatas = deliveryMenuDishDatas;
+        }
+
 
         public String getDelMenuRestLatLong() {
             return delMenuRestLatLong;
@@ -347,6 +361,33 @@ public class DeliveryMenuResponse {
 
         public void setDelMenuFoodPandaUrl(String delMenuFoodPandaUrl) {
             this.delMenuFoodPandaUrl = delMenuFoodPandaUrl;
+        }
+    }
+
+    public class DeliveryMenuDishData {
+
+        @SerializedName("photo")
+        @Expose
+        public ArrayList<String> delivPhoto;
+
+        @SerializedName("dish_id")
+        @Expose
+        public int delivDishId;
+
+        public ArrayList<String> getDelivPhoto() {
+            return delivPhoto;
+        }
+
+        public void setDelivPhoto(ArrayList<String> delivPhoto) {
+            this.delivPhoto = delivPhoto;
+        }
+
+        public int getDelivDishId() {
+            return delivDishId;
+        }
+
+        public void setDelivDishId(int delivDishId) {
+            this.delivDishId = delivDishId;
         }
     }
 }

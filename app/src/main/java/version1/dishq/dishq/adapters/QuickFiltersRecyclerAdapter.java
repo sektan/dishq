@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.List;
@@ -96,6 +97,7 @@ public class QuickFiltersRecyclerAdapter extends RecyclerView.Adapter<QuickFilte
                 @Override
                 public void onClick(View v) {
                     // If the clicked item is already selected then remove the selection
+
                     if (selectedPos == getAdapterPosition()) {
                         selectedPos = lastSelectedPos = -1;
                         isItemAlreadySelected = false;

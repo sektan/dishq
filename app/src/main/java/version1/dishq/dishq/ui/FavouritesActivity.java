@@ -1,5 +1,7 @@
 package version1.dishq.dishq.ui;
 
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +43,7 @@ public class FavouritesActivity extends BaseActivity {
     private RecyclerView favRecyclerView;
     private ProgressBar progressBar;
     private FrameLayout progressBg;
+    private boolean networkFailed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class FavouritesActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
         progressBg = (FrameLayout) findViewById(R.id.progress_bg_overlay_fav);
         progressBg.setVisibility(View.VISIBLE);
-        fetchDishFavourites();
+        checkInternetConnection();
         setTags();
     }
 
@@ -72,6 +75,40 @@ public class FavouritesActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    //Method to check if the internet is connected or not
+    private void checkInternetConnection() {
+        SharedPreferences settings;
+        final String PREFS_NAME = "MyPrefsFile";
+        settings = getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("android_M", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", " android_M");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                checkNetwork();
+            } else {
+                checkNetwork();
+            }
+            settings.edit().putBoolean("android_M", false).apply();
+        } else {
+            checkNetwork();
+        }
+    }
+
+    //Check for internet
+    private void checkNetwork() {
+        if (!Util.checkAndShowNetworkPopup(this)) {
+            //Check for version
+            Log.d(TAG, "Checking for GPS");
+            //Check for gps
+            fetchDishFavourites();
+
+        } else {
+            networkFailed = true;
+        }
     }
 
     private void fetchDishFavourites() {

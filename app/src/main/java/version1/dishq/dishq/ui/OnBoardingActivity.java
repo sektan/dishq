@@ -1,5 +1,7 @@
 package version1.dishq.dishq.ui;
 
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +40,7 @@ public class OnBoardingActivity extends BaseActivity {
 
     private String TAG = "OnBoardingActivity";
     public static CustomViewPager pager;
+    private boolean networkFailed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class OnBoardingActivity extends BaseActivity {
         setContentView(R.layout.activity_onboarding);
         pager = (CustomViewPager) findViewById(R.id.customViewPager);
         pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
-        fetchTastePref();
+        checkInternetConnection();
 
     }
 
@@ -59,6 +62,40 @@ public class OnBoardingActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         hideSoftKeyboard();
+    }
+
+    //Method to check if the internet is connected or not
+    private void checkInternetConnection() {
+        SharedPreferences settings;
+        final String PREFS_NAME = "MyPrefsFile";
+        settings = getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("android_M", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", " android_M");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                checkNetwork();
+            } else {
+                checkNetwork();
+            }
+            settings.edit().putBoolean("android_M", false).apply();
+        } else {
+            checkNetwork();
+        }
+    }
+
+    //Check for internet
+    private void checkNetwork() {
+        if (!Util.checkAndShowNetworkPopup(this)) {
+            //Check for version
+            Log.d(TAG, "Checking for GPS");
+            //Check for gps
+            fetchTastePref();
+
+        } else {
+            networkFailed = true;
+        }
     }
 
     public void hideSoftKeyboard() {

@@ -6,11 +6,22 @@
     android:layout_marginStart="16dp"
     tools:context="version1.dishq.dishq.fragments.dialogfragment.filters.MoodFragment">
 
+    <TextView
+        android:id="@+id/how_are_you_feeling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/how_are_you_feeling"
+        android:textSize="@dimen/text_size_14"
+        android:textColor="@color/black"
+        android:layout_marginTop="5dp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/filter_mood_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
+        android:layout_below="@+id/how_are_you_feeling"
+        android:layout_marginTop="6dp"
         android:visibility="gone" />
 
     <TextView

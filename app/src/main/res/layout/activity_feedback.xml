@@ -16,15 +16,8 @@
         android:id="@+id/rl_feedback_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#343433">
+        android:background="@color/black">
 
-    <ImageView
-        android:id="@+id/feedback_bg_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background_doodle"
-        android:alpha="0.15"
-        android:contentDescription="@string/home_bg_image" />
 
     <RelativeLayout
         android:id="@+id/feedback_rl_ham_mood"
@@ -68,6 +61,10 @@
                 android:layout_height="wrap_content"
                 tools:ignore="UselessParent">
 
+                <RelativeLayout
+                    android:id="@+id/rl_ques_asked"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/that_it"
@@ -85,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
-                    android:textColor="#54000000"
+                    android:textColor="#000000"
                     android:textSize="@dimen/text_size_12"
                     android:text="@string/text_browsed"
                     android:layout_below="@+id/that_it"/>
@@ -107,20 +104,12 @@
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/feedback_line"
-                    android:layout_width="244dp"
-                    android:layout_height="2dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:background="#12000000"
-                    android:layout_below="@+id/ll_feedback_recyclerview"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_feeback_ques_ui"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/feedback_line"
+                    android:layout_below="@+id/ll_feedback_recyclerview"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="13dp"
                     android:layout_marginEnd="13dp"
@@ -170,20 +159,32 @@
                         android:text="@string/feedback_no"/>
                 </LinearLayout>
                 </RelativeLayout>
+                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/feedback_thanks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/feedback_line"
-                    android:layout_marginTop="65dp"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_20"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:visibility="gone"
-                    android:text="@string/feedback_thanks"/>
+                <RelativeLayout
+                    android:id="@+id/rl_load_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/fb_load_more"
+                        android:layout_width="233dp"
+                        android:layout_height="38dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="17dp"
+                        android:background="@drawable/feedback_button_shape"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16"
+                        android:textAlignment="center"
+                        android:text="@string/feedback_load_more"/>
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -205,8 +206,8 @@
             android:layout_marginBottom="14dp"
             android:layout_marginStart="14dp"
             android:layout_marginTop="25dp"
-            android:alpha="0.3"
-            android:background="@drawable/homescreen_fav_filled_1" />
+            android:alpha="0.2"
+            android:background="@drawable/homescreen_fav_filled" />
 
         <Button
             android:id="@+id/dining"
@@ -216,7 +217,7 @@
             android:layout_marginBottom="14dp"
             android:layout_marginEnd="14dp"
             android:layout_marginTop="25dp"
-            android:alpha="0.3"
+            android:alpha="0.2"
             android:background="@drawable/homescreen_eat" />
 
     </RelativeLayout>

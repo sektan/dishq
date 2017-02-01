@@ -17,7 +17,7 @@
     <color name="greyButton">#dfdfdf</color>
     <color name="disabledTextColor">#b3b3b3</color>
     <color name="searchBarBackground">#5a000000</color>
-    <color name="menuFinderSearchBarBackground">#5a8b8b8b</color>
-    <color name="menuFinderSearchHintColor">#5affffff</color>
+    <color name="menuFinderSearchBarBackground">#5affffff</color>
+    <color name="menuFinderSearchHintColor">#ffffff</color>
     <color name="rupeeGreen">#8ac651</color>
 </resources>

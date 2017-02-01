@@ -34,10 +34,10 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+//import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
+//import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+//import com.google.api.client.http.javanet.NetHttpTransport;
+//import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
@@ -280,41 +280,41 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             String idToken = acct.getIdToken();
             Log.d(TAG, "the idToken is:" + idToken);
 
-            AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-                @Override
-                protected String doInBackground(Void... voids) {
-                    try {
-                        GoogleTokenResponse tokenResponse =
-                                new GoogleAuthorizationCodeTokenRequest(
-                                        new NetHttpTransport(),
-                                        JacksonFactory.getDefaultInstance(),
-                                        "https://www.googleapis.com/oauth2/v4/token",
-                                        "1065480470289-kljstaji734o68q9m39f0mm4mpt4t2j1.apps.googleusercontent.com",
-                                        "tPGq94hKDyxW0Tgbufd8ZE2K",
-                                        authCode, "")
-                                        .execute();
-
-                        accessToken = tokenResponse.getAccessToken();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    return accessToken;
-                }
-
-                @Override
-                protected void onPostExecute(String token) {
-                    Log.i(TAG, "Access token retrieved:" + accessToken);
-                    DishqApplication.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            fetchAccessToken(accessToken);
-                        }
-                    });
-                }
-
-            };
-            task.execute();
+//            AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+//                @Override
+//                protected String doInBackground(Void... voids) {
+//                    try {
+//                        GoogleTokenResponse tokenResponse =
+//                                new GoogleAuthorizationCodeTokenRequest(
+//                                        new NetHttpTransport(),
+//                                        JacksonFactory.getDefaultInstance(),
+//                                        "https://www.googleapis.com/oauth2/v4/token",
+//                                        "1065480470289-kljstaji734o68q9m39f0mm4mpt4t2j1.apps.googleusercontent.com",
+//                                        "tPGq94hKDyxW0Tgbufd8ZE2K",
+//                                        authCode, "")
+//                                        .execute();
+//
+//                        accessToken = tokenResponse.getAccessToken();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    return accessToken;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(String token) {
+//                    Log.i(TAG, "Access token retrieved:" + accessToken);
+//                    DishqApplication.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            fetchAccessToken(accessToken);
+//                        }
+//                    });
+//                }
+//
+//            };
+//            task.execute();
 
         } else {
             Log.e(TAG, result + "");

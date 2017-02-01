@@ -17,6 +17,7 @@ import version1.dishq.dishq.OnClickCallbacks;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.adapters.FilterMoodRecyclerAdapter;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.FoodMoodFilter;
+import version1.dishq.dishq.util.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +59,8 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
         super.onViewCreated(view, savedInstanceState);
 
         textView = (TextView) view.findViewById(R.id.filter_mood_no_item_text);
+        TextView feelingText = (TextView) view.findViewById(R.id.how_are_you_feeling);
+        feelingText.setTypeface(Util.opensansregular);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.filter_mood_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -91,6 +94,7 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
                     if (isAnyItemSelected) {
+                        ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
                         ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
                     }
                 }

@@ -24,8 +24,8 @@
 
     <!-- OnBoarding -->
     <string name="hi_name">Hi %s</string>
-    <string name="tell_about_prefs">Tell us a bit about your food \n preferences</string>
-    <string name="are_you">Are you&#46;&#46;&#46;</string>
+    <string name="tell_about_prefs">Tell us about food and you</string>
+    <string name="are_you">I\'m&#46;&#46;&#46;</string>
     <string name="vegetarian">VEGETARIAN</string>
     <string name="eggetarian">EGGETARIAN</string>
     <string name="non_veg">NON VEG</string>
@@ -45,9 +45,9 @@
     <string name="delivery_image_2">delivery image 2</string>
     <string name="delivery_image_3">delivery image 3</string>
     <string name="home_screen_image">home screen image</string>
-    <string name="no_delivery_msg">No delivery places found</string>
+    <string name="no_delivery_msg">No delivery option nearby</string>
     <string name="no_results_menu_finder">No Results</string>
-    <string name="no_dineout_places_found">No dineout places found</string>
+    <string name="no_dineout_places_found">Dish not served nearby</string>
 
     <!-- HomeActivity -->
     <string name="action_settings">Settings</string>
@@ -55,22 +55,21 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="user">user</string>
     <string name="favourites">FAVOURITES</string>
-    <string name="menu_finder">MENU FINDER</string>
+    <string name="menu_finder">RESTAURANT SEARCH</string>
     <string name="settings">SETTINGS</string>
     <string name="rate">RATE</string>
     <string name="share">SHARE</string>
     <string name="about">ABOUT</string>
-    <string name="oops">OOPS!</string>
-    <string name="no_results">No results were found for the given filters</string>
-    <string name="please_try_selecting_different_filter_or_moods">Please try selecting different filter or moods</string>
+    <string name="oops">No dishes available</string>
+    <string name="no_results">Try a different filter</string>
 
     <!-- Toolbar -->
     <string name="toolbar_back_button">toolbar back button</string>
     <string name="toolbar_search_button">toolbar search button</string>
 
     <!--FavouritesActivity -->
-    <string name="fav_header">My Favourites</string>
-    <string name="no_fav">Oops! Add dishes to favourites to see them here!</string>
+    <string name="fav_header">Favourites</string>
+    <string name="no_fav">When you favourite a dish, it will be here</string>
     <string name="veg_tag">veg_tag</string>
     <string name="egg_tag">egg tag</string>
     <string name="non_veg_tag">non-veg tag</string>
@@ -83,9 +82,9 @@
 
     <!--Menu Activity -->
     <string name="cost_of_dish">\u20B9%s</string>
-    <string name="personalized_menu_text">Personalized menu for you</string>
-    <string name="order_now">ORDER NOW</string>
-    <string name="order_from">ORDER FROM</string>
+    <string name="personalized_menu_text">Personalised menu for you</string>
+    <string name="order_now">ORDER VIA</string>
+    <string name="order_from">ORDER VIA</string>
     <string name="swiggy">Swiggy</string>
     <string name="foodpanda">Foodpanda</string>
     <string name="runnr">Runnr</string>
@@ -101,31 +100,44 @@
     <!-- MenuFinderActivity -->
     <string name="title_activity_menu_finder">MenuFinder</string>
     <string name="nearby_restaurants">Nearby Restaurants :</string>
-    <string name="search_for_restaurant">Search for Restaurant</string>
+    <string name="search_for_restaurant">Enter restaurant name</string>
 
     <!-- AboutUsActivity -->
     <string name="about_us">About</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="blog">Blog</string>
-    <string name="explore_now">Explore Now!</string>
+    <string name="explore_now">GO DISCOVER</string>
     <string name="pop_up_photo">pop up photo</string>
     <string name="home_bg_image">home screen bg image</string>
     <string name="card_bg_image">card bg image</string>
     <string name="card_favbg_image">card favbg image</string>
     <string name="dine_appbar_image">appbar_bg_image</string>
-    <string name="that_s_it">That\'s it!</string>
-    <string name="text_browsed">You browsed through all 10 recommended dishes</string>
+    <string name="that_s_it">Want more dishes?</string>
+    <string name="text_browsed">Just answer the following&#58;</string>
     <string name="feedback_yes">YES</string>
+    <string name="feedback_load_more">Load More Dishes</string>
     <string name="feedback_no">NO</string>
     <string name="feedback_images">feedback_images</string>
-    <string name="feedback_thanks">Thanks for your feedback!</string>
-    <string name="no_recipes_available">No recipes available</string>
+    <string name="feedback_thanks">Thanks!</string>
+    <string name="no_recipes_available">Recipe coming soon</string>
     <string name="del_background_image">del background image</string>
     <string name="dine_bg_image">dine bg image</string>
     <string name="home_empty_bg">home empty bg</string>
     <string name="nearby_rest">Nearby Restaurants :</string>
     <string name="diff_rest">Try searching for different restaurant</string>
     <string name="open_in_browser">OPEN IN BROWSER</string>
+    <string name="how_are_you_feeling">How are you feeling?</string>
+    <string name="filters_search_text">Enter cuisine (Thai) or dish type (Biryani)</string>
+    <string name="filters_search_icon">filters search icon</string>
+    <string name="no_filters_to_display">No results found</string>
+    <string name="log_out">Log Out</string>
+    <string name="logout_icon">logout icon</string>
+    <string name="settings_title">Settings</string>
+    <string name="served_at">Served at:</string>
+    <string name="delivered_by">Delivered by:</string>
+    <string name="view_recipe">View recipe:</string>
+    <string name="home_or">OR</string>
+    <string name="home_feeling_lucky">Surprise me</string>
 
 </resources>

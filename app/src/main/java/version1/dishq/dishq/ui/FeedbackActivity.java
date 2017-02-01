@@ -2,9 +2,11 @@ package version1.dishq.dishq.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -58,8 +60,7 @@ import static version1.dishq.dishq.ui.HomeActivity.viewPager;
  * Package name version1.dishq.dishq.
  */
 
-public class FeedbackActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class FeedbackActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "FeedbackActivity";
     private Button hamButton, moodButton;
@@ -67,7 +68,6 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     private NavigationView navigationView;
     private TextView navUserName;
     private MixpanelAPI mixpanel = null;
-    private ImageView fbBgImage;
     private RecyclerView recyclerView;
     HorizontalAdapter horizontalAdapter;
     private TextView feedbackQuestion;
@@ -75,6 +75,9 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     private TextView feedbackThanks;
     private RelativeLayout rlFeedbackQuest;
     private FrameLayout feedbackFrame;
+    private Button fbLoadMore;
+    private boolean networkFailed;
+    private RelativeLayout rlQuesAsked, rlLoadMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +105,11 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         feedbackYes.setTypeface(Util.opensanslight);
         feedbackNo = (Button) findViewById(R.id.feedback_no);
         feedbackNo.setTypeface(Util.opensanslight);
+        rlQuesAsked = (RelativeLayout) findViewById(R.id.rl_ques_asked);
+        rlLoadMore = (RelativeLayout) findViewById(R.id.rl_load_more);
         rlFeedbackQuest = (RelativeLayout) findViewById(R.id.rl_feeback_ques_ui);
-        feedbackThanks = (TextView) findViewById(R.id.feedback_thanks);
-        feedbackThanks.setTypeface(Util.opensanslight);
+        fbLoadMore = (Button) findViewById(R.id.fb_load_more);
+        fbLoadMore.setTypeface(Util.opensanslight);
         TextView thatIt = (TextView) findViewById(R.id.that_it);
         thatIt.setTypeface(Util.opensansregular);
         TextView textBrowsed = (TextView) findViewById(R.id.text_browse_done);
@@ -113,13 +118,19 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         hamButton = (Button) findViewById(R.id.feedback_hamburger);
         moodButton = (Button) findViewById(R.id.feedback_mood);
-        fbBgImage = (ImageView) findViewById(R.id.feedback_bg_image);
-        fbBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         if(Util.isShowFeedbackQues()) {
-            rlFeedbackQuest.setVisibility(View.VISIBLE);
+            rlQuesAsked.setVisibility(View.VISIBLE);
+            rlLoadMore.setVisibility(View.GONE);
         }else {
-            rlFeedbackQuest.setVisibility(View.GONE);
+            rlQuesAsked.setVisibility(View.GONE);
+            rlLoadMore.setVisibility(View.VISIBLE);
+            fbLoadMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    loadMoreClicked();
+                }
+            });
         }
 
         feedbackQuestion.setText(Util.getFeedbackQuestion());
@@ -130,26 +141,40 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
                 int currentPage = viewPager.getCurrentItem();
                 Util.setCurrentPage(currentPage);
                 Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
-                finish();
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
         feedbackYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rlFeedbackQuest.setVisibility(View.GONE);
-                feedbackThanks.setVisibility(View.VISIBLE);
-                sendFeedback(1);
+                rlQuesAsked.setVisibility(View.GONE);
+                rlLoadMore.setVisibility(View.VISIBLE);
+                checkInternetConnection(1);
+                fbLoadMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        loadMoreClicked();
+                    }
+                });
             }
         });
 
         feedbackNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rlFeedbackQuest.setVisibility(View.GONE);
-                feedbackThanks.setVisibility(View.VISIBLE);
-                sendFeedback(0);
+                rlQuesAsked.setVisibility(View.GONE);
+                rlLoadMore.setVisibility(View.VISIBLE);
+                checkInternetConnection(0);
+                fbLoadMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        loadMoreClicked();
+                    }
+                });
             }
         });
 
@@ -198,6 +223,40 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(FeedbackActivity.this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
         recyclerView.setAdapter(horizontalAdapter);
+    }
+
+    //Method to check if the internet is connected or not
+    private void checkInternetConnection(int feedBack) {
+        SharedPreferences settings;
+        final String PREFS_NAME = "MyPrefsFile";
+        settings = getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("android_M", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", " android_M");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                checkNetwork(feedBack);
+            } else {
+                checkNetwork(feedBack);
+            }
+            settings.edit().putBoolean("android_M", false).apply();
+        } else {
+            checkNetwork(feedBack);
+        }
+    }
+
+    //Check for internet
+    private void checkNetwork(int feedBack) {
+        if (!Util.checkAndShowNetworkPopup(this)) {
+            //Check for version
+            Log.d(TAG, "Checking for GPS");
+            //Check for gps
+            sendFeedback(feedBack);
+
+        } else {
+            networkFailed = true;
+        }
     }
 
     @Override
@@ -250,15 +309,15 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
             title.setTypeface(Util.opensanslight);
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(FeedbackActivity.this);
             builder.setTitle("Like the dishq app?");
-            builder.setMessage("Tell us what you think").setCancelable(true)
+            builder.setMessage("").setCancelable(true)
                     .setPositiveButton("Love it", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + FeedbackActivity.this.getPackageName())));
                         }
                     });
-            builder.setNegativeButton("Not Happy", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Could Be Better", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    Sendemail("App Feedback", "food@dishq.in");
+                    Sendemail("App Feedback", "help@dishq.in");
                 }
             });
             android.app.AlertDialog alert = builder.create();
@@ -328,33 +387,26 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Util.setHomeRefreshRequired(false);
         int currentPage = viewPager.getCurrentItem();
         Util.setCurrentPage(currentPage);
         Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    protected void loadMoreClicked() {
+        Util.setHomeRefreshRequired(true);
+        int currentPage = 0;
+        Util.setCurrentPage(currentPage);
+        Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

@@ -112,7 +112,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
 
         tabLayout = (TabLayout) view.findViewById(R.id.filters_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("MOOD"), 0, true);
-        tabLayout.addTab(tabLayout.newTab().setText("FILTERS"), 1);
+        tabLayout.addTab(tabLayout.newTab().setText("FOOD"), 1);
         // Initially disable the tab click events
         tabLayout.setClickable(false);
         tabLayout.setEnabled(false);
@@ -178,6 +178,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
 
                 // Set the apply button to be clickable
                 toggleApplyButton(true, true);
+                toggleResetButton(false);
                 break;
 
             case R.id.filter_button_apply:
@@ -259,7 +260,17 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         tabLayout.setEnabled(true);
 
         // Enable reset button
-        buttonReset.setEnabled(true);
+        if(!Util.getMoodName().equals("")) {
+            toggleResetButton(true);
+        }else if(!Util.getFilterName().equals("")) {
+            toggleResetButton(true);
+        }else {
+            toggleResetButton(false);
+        }
+    }
+
+    public void toggleResetButton(boolean isEnabled) {
+        buttonReset.setEnabled(isEnabled);
     }
 
     public void toggleApplyButton(boolean isEnabled, boolean shouldOverRideToogleStatus) {

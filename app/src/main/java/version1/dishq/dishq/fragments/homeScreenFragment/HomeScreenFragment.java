@@ -1,12 +1,14 @@
 package version1.dishq.dishq.fragments.homeScreenFragment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -33,28 +36,20 @@ import android.widget.ToggleButton;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.custom.FontsOverride;
-import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.bottomSheetFragment.BottomSheetFragment;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
-import version1.dishq.dishq.server.Config;
-import version1.dishq.dishq.server.Request.FavDishAddRemHelper;
 import version1.dishq.dishq.server.Response.DishDataInfo;
-import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.ui.AboutUsActivity;
 import version1.dishq.dishq.ui.FavouritesActivity;
-import version1.dishq.dishq.ui.FeedbackActivity;
-import version1.dishq.dishq.ui.HomeActivity;
 import version1.dishq.dishq.ui.MenuFinder;
 import version1.dishq.dishq.ui.SettingsActivity;
 import version1.dishq.dishq.util.DishqApplication;
@@ -88,6 +83,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     private Button moodFilterText;
     private FrameLayout goingToNextCard;
     private ImageView navBarBg;
+    private boolean networkFailed;
 
     public HomeScreenFragment() {
     }
@@ -172,6 +168,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         hamburgerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 try {
                     final JSONObject properties = new JSONObject();
                     properties.put("Burger Menu", "homescreen");
@@ -182,6 +179,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                 ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
                 drawer.setDrawerListener(toggle);
                 toggle.syncState();
+
                 navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
                 navUserName = (TextView) rootView.findViewById(R.id.nav_user_name);
                 if (navUserName != null) {
@@ -238,6 +236,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     Util.setRecipeUrl(dishDataInfo.getRecipeUrl());
                     Util.setGenericDishIdTab(dishDataInfo.getGenericDishId());
                     Util.setCurrentPage(viewPager.getCurrentItem());
+
                     new BottomSheetFragment().show(getActivity().getSupportFragmentManager(), "dialog");
 
                 }
@@ -267,9 +266,9 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                         } catch (final JSONException e) {
                             throw new RuntimeException("Could not encode hour of the day in JSON");
                         }
-                        Util.addRemoveDishFromFav(source, genericDishId, 1, TAG);
+                        checkInternetConnection(source, genericDishId, 1, TAG);
                     } else {
-                        Util.addRemoveDishFromFav(source, genericDishId, 0, TAG);
+                        checkInternetConnection(source, genericDishId, 0, TAG);
                     }
                 }
             });
@@ -384,15 +383,15 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
             title.setTypeface(Util.opensanslight);
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             builder.setTitle("Like the dishq app?");
-            builder.setMessage("Tell us what you think").setCancelable(true)
+            builder.setMessage("").setCancelable(true)
                     .setPositiveButton("Love it", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
                         }
                     });
-            builder.setNegativeButton("Not Happy", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Could Be Better", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    Sendemail("App Feedback", "food@dishq.in");
+                    Sendemail("App Feedback", "help@dishq.in");
                 }
             });
             android.app.AlertDialog alert = builder.create();
@@ -442,4 +441,39 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         mixpanel.flush();
         super.onDestroy();
     }
+
+    //Method to check if the internet is connected or not
+    private void checkInternetConnection(String source, int genericDishId, int addRemove, String tag) {
+        SharedPreferences settings;
+        final String PREFS_NAME = "MyPrefsFile";
+        settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("android_M", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", " android_M");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                checkNetwork(source, genericDishId, addRemove, tag);
+            } else {
+                checkNetwork(source, genericDishId, addRemove, tag);
+            }
+            settings.edit().putBoolean("android_M", false).apply();
+        } else {
+            checkNetwork(source, genericDishId, addRemove, tag);
+        }
+    }
+
+    //Check for internet
+    private void checkNetwork(String source, int genericDishId, int addRemove, String tag) {
+        if (!Util.checkAndShowNetworkPopup(getActivity())) {
+            //Check for version
+            Log.d(TAG, "Checking for GPS");
+            //Check for gps
+            Util.addRemoveDishFromFav(source, genericDishId, addRemove, tag);
+
+        } else {
+            networkFailed = true;
+        }
+    }
+
 }

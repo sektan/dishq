@@ -66,6 +66,6 @@
         android:textAllCaps="true"
         android:textSize="@dimen/text_size_15"
         style="?android:attr/borderlessButtonStyle"
-        android:textColor="@color/black" />
+        android:textColor="@color/white" />
 
 </RelativeLayout>

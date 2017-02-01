@@ -17,4 +17,6 @@
 #}
 
 -optimizations !code/allocation/variable
--dontwarn com.appsflyer.AFKeystoreWrapper
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+#-dontwarn com.appsflyer.AFKeystoreWrapper

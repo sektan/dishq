@@ -213,6 +213,10 @@ public class DineoutMenuResponse {
         @Expose
         private String dineMenuDriveTime;
 
+        @SerializedName("has_home_delivery")
+        @Expose
+        private Boolean hasHomeDelivery;
+
         @SerializedName("restaurant_type_text")
         @Expose
         private ArrayList<String> dineMenuRestTypeText;
@@ -271,6 +275,14 @@ public class DineoutMenuResponse {
 
         public void setDineMenuRestLatLong(String dineMenuRestLatLong) {
             this.dineMenuRestLatLong = dineMenuRestLatLong;
+        }
+
+        public Boolean getHasHomeDelivery() {
+            return hasHomeDelivery;
+        }
+
+        public void setHasHomeDelivery(Boolean hasHomeDelivery) {
+            this.hasHomeDelivery = hasHomeDelivery;
         }
 
         public String getDineMenuDriveTime() {

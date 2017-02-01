@@ -1,14 +1,15 @@
 package version1.dishq.dishq.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
@@ -40,9 +41,8 @@ import version1.dishq.dishq.util.Util;
  */
 public class SettingsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ConnectionCallbacks {
     TextView Logout;
-    Toolbar toolbar;
-    String email = "";
-    TextView toolbarTitle, user_email;
+    private ImageView backButton;
+    TextView toolbarTitle, userName, versionNam;
     GoogleApiClient mGoogleApiClient;
     private MixpanelAPI mixpanel = null;
 
@@ -55,15 +55,28 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_settings);
             Logout = (TextView) findViewById(R.id.fblogout);
-            user_email = (TextView) findViewById(R.id.user_email);
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            user_email.setTypeface(Util.opensanslight);
-            user_email.setText(DishqApplication.getUserName());
-            toolbarTitle = (TextView) findViewById(R.id.toolbarTitle);
-            toolbarTitle.setTypeface(Util.opensanslight);
-            toolbarTitle.setText("Settings");
-            user_email.setText(email);
-            setSupportActionBar(toolbar);
+            Logout.setTypeface(Util.opensanslight);
+            userName = (TextView) findViewById(R.id.user_name);
+            userName.setTypeface(Util.opensansregular);
+            userName.setText(DishqApplication.getUserName());
+            toolbarTitle = (TextView) findViewById(R.id.settings_toolbarTitle);
+            toolbarTitle.setTypeface(Util.opensanssemibold);
+            backButton = (ImageView) findViewById(R.id.settings_back_button);
+            versionNam = (TextView) findViewById(R.id.version_name);
+            versionNam.setTypeface(Util.opensansregular);
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+
+            versionNam.setText("v" +version);
+
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Util.setHomeRefreshRequired(false);
+                    finish();
+                }
+            });
+
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .requestScopes(new Scope(Scopes.PROFILE))
@@ -167,18 +180,6 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
 
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                //Write your logic here
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

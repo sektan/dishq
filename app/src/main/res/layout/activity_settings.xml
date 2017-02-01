@@ -1,26 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <include
-             layout="@layout/general_toolbar"/>
-<TextView android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="20dp"
-          android:id="@+id/user_email"
-          android:text="ankurmishra.bit@gmail.com"
-/>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/settings_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56.3dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/settings_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="0dp"
+                android:background="@drawable/black_back"
+                android:contentDescription="@string/toolbar_back_button"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/settings_toolbarTitle"
+                android:layout_width="230dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/settings_title"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_20" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:drawableLeft="@drawable/navigationmenu_logout_selected"
-        android:padding="5dp"
-        android:layout_marginLeft="20dp"
-        android:drawablePadding="5dp"
-        android:id="@+id/fblogout"
-        android:layout_marginTop="20dp"
-        android:text="Log Out"
-    />
-</LinearLayout>
+        android:id="@+id/user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17.7dp"
+        android:layout_marginTop="35dp"
+        android:textColor="@color/black"
+        android:layout_below="@+id/settings_toolbar"
+        android:textSize="@dimen/text_size_20" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_name"
+        android:layout_marginStart="17.7dp"
+        android:layout_marginTop="31dp"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/logout_icon"
+            android:src="@drawable/log_out" />
+
+        <TextView
+            android:id="@+id/fblogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/log_out"
+            android:textSize="@dimen/text_size_16" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/version_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#54000000"
+        android:layout_marginBottom="22.3dp"
+        android:textSize="@dimen/text_size_16" />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -86,7 +86,7 @@ public class Util {
     private static int favCuisineTotal = 0;
     private static String latitude = "";
     private static String longitude = "";
-    private static int genericDishIdTab = 0;
+    private static int genericDishIdTab = -1;
     private static String defaultTab = "";
     private static String recipeUrl = "";
     private static int favPosition = 0;

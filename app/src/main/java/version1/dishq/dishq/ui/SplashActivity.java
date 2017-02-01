@@ -26,7 +26,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appsflyer.AppsFlyerLib;
+//import com.appsflyer.AppsFlyerLib;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -111,10 +111,10 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
         DishqApplication.setUniqueId(uniqueIdentifier);
         Log.d(TAG, "Unique number: " + uniqueIdentifier);
 
-        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        //TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 
-        AppsFlyerLib.getInstance().setImeiData(telephonyManager.getDeviceId());
-        AppsFlyerLib.getInstance().setAndroidIdData(uniqueIdentifier);
+       // AppsFlyerLib.getInstance().setImeiData(telephonyManager.getDeviceId());
+        //AppsFlyerLib.getInstance().setAndroidIdData(uniqueIdentifier);
         // The following helps in obtaining the current version number and version code
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -137,12 +137,8 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                if (networkFailed) {
                     Log.d(TAG, "Checking if there is an internet connection");
                     checkInternetConnection();
-                } else {
-                    checkVersion();
-                }
             }
         }
     };
@@ -150,10 +146,10 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     @Override
     protected void onResume() {
         super.onResume();
-        AppsFlyerLib.getInstance().startTracking(this.getApplication(),
-                getResources().getString(R.string.appsflyer_dev_key));
-        AppsFlyerLib.getInstance().setCustomerUserId(uniqueIdentifier);
-        AppsFlyerLib.getInstance().setGCMProjectNumber(this, getResources().getString(R.string.appsflyer_sender_id));
+//        AppsFlyerLib.getInstance().startTracking(this.getApplication(),
+//                getResources().getString(R.string.appsflyer_dev_key));
+//        AppsFlyerLib.getInstance().setCustomerUserId(uniqueIdentifier);
+//        AppsFlyerLib.getInstance().setGCMProjectNumber(this, getResources().getString(R.string.appsflyer_sender_id));
         try {
             final JSONObject properties = new JSONObject();
             properties.put("Splash Screen", "splashscreen");

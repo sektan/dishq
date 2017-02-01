@@ -1,5 +1,7 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,9 +44,11 @@ public class DeliveryFragment extends Fragment {
     private Button showMore;
     private RelativeLayout rlNoDel;
     private TextView noDelText;
+    private TextView deliveredBy;
     private Boolean hasMoreResults = false;
     private DeliveryAdapter deliveryAdapter;
     Boolean showMoreClicked = false;
+    private boolean networkFailed;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +60,10 @@ public class DeliveryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_delivery, container, false);
         progressBar = (ProgressBar) v.findViewById(R.id.del_bsf_progress);
         progressBar.setVisibility(View.VISIBLE);
-        fetchDeliveryRest(0);
+        checkInternetConnection(0);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.delivery_rest_cardlist);
+        deliveredBy = (TextView) v.findViewById(R.id.delivered_by);
+        deliveredBy.setTypeface(Util.opensansregular);
         showMore = (Button) v.findViewById(R.id.delivery_show);
         showMore.setTypeface(Util.opensanssemibold);
         rlNoDel = (RelativeLayout) v.findViewById(R.id.rl_no_del);
@@ -88,8 +94,41 @@ public class DeliveryFragment extends Fragment {
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 
+    //Method to check if the internet is connected or not
+    private void checkInternetConnection(final int showMoreOptions) {
+        SharedPreferences settings;
+        final String PREFS_NAME = "MyPrefsFile";
+        settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("android_M", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", " android_M");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                checkNetwork(showMoreOptions);
+            } else {
+                checkNetwork(showMoreOptions);
+            }
+            settings.edit().putBoolean("android_M", false).apply();
+        } else {
+            checkNetwork(showMoreOptions);
+        }
+    }
+
+    //Check for internet
+    private void checkNetwork(final int showMoreOptions) {
+        if (!Util.checkAndShowNetworkPopup(getActivity())) {
+            //Check for version
+            Log.d(TAG, "Implementing a Version Check");
+            fetchDeliveryRest(showMoreOptions);
+
+        } else {
+            networkFailed = true;
+        }
+    }
+
     public void fetchDeliveryRest(final int showMoreOptions) {
-        String latitude = "12.92923258", longitude = "77.63082482", source = "homescreen";
+        String latitude = Util.getLatitude(), longitude = Util.getLongitude(), source = "homescreen";
 
         RestApi restApi = Config.createService(RestApi.class);
         Call<DeliveryTabResponse> call = restApi.addDelivRestOptions(DishqApplication.getAccessToken(), Util.getGenericDishIdTab(),
@@ -140,6 +179,7 @@ public class DeliveryFragment extends Fragment {
                                 }
                                 rlNoDel.setVisibility(View.GONE);
                                 mRecyclerView.setVisibility(View.VISIBLE);
+                                deliveredBy.setVisibility(View.VISIBLE);
                                 progressBar.setVisibility(View.GONE);
                                 if(deliveryAdapter == null) {
                                     deliveryAdapter = new DeliveryAdapter(getActivity());
@@ -154,18 +194,21 @@ public class DeliveryFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 rlNoDel.setVisibility(View.VISIBLE);
                                 mRecyclerView.setVisibility(View.GONE);
+                                deliveredBy.setVisibility(View.GONE);
                             }
 
                         }else{
                             progressBar.setVisibility(View.GONE);
                             rlNoDel.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
+                            deliveredBy.setVisibility(View.GONE);
                         }
                     }else {
                         progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         rlNoDel.setVisibility(View.VISIBLE);
                         mRecyclerView.setVisibility(View.GONE);
+                        deliveredBy.setVisibility(View.GONE);
                         Log.d(TAG, "Error: " + error);
                     }
                 }catch (IOException e) {
@@ -173,6 +216,7 @@ public class DeliveryFragment extends Fragment {
                     e.printStackTrace();
                     rlNoDel.setVisibility(View.VISIBLE);
                     mRecyclerView.setVisibility(View.GONE);
+                    deliveredBy.setVisibility(View.GONE);
                 }
             }
 
@@ -182,6 +226,7 @@ public class DeliveryFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 rlNoDel.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.GONE);
+                deliveredBy.setVisibility(View.GONE);
             }
         });
     }

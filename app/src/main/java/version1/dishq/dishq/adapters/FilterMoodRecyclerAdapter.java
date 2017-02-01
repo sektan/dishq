@@ -13,6 +13,7 @@ import java.util.List;
 
 import version1.dishq.dishq.OnClickCallbacks;
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.fragments.dialogfragment.filters.models.quickfilters.FoodMoodFilter;
 import version1.dishq.dishq.util.Util;
 
@@ -96,6 +97,7 @@ public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRe
             layoutTextHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     // If the clicked item is already selected then remove the selection
                     if (selectedPos == getAdapterPosition()) {
                         selectedPos = lastSelectedPos = -1;

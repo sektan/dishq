@@ -1,5 +1,7 @@
 package version1.dishq.dishq.fragments.bottomSheetFragment;
 
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,7 +42,9 @@ public class DineoutFragment extends Fragment {
     private Button showMore;
     private RelativeLayout rlNoDine;
     private TextView noDineText;
+    private TextView servedAt;
     private ProgressBar progressBar;
+    private boolean networkFailed;
     private Boolean hasMoreResults = false;
     Boolean showMoreClicked = false;
     private DineoutAdapter dineoutAdapter;
@@ -57,8 +61,10 @@ public class DineoutFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_dineout, container, false);
         progressBar = (ProgressBar) v.findViewById(R.id.dine_bsf_progress);
         progressBar.setVisibility(View.VISIBLE);
-        fetchDineoutRest(0);
+        checkInternetConnection(0);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.dineout_rest_cardlist);
+        servedAt = (TextView) v.findViewById(R.id.served_at);
+        servedAt.setTypeface(Util.opensansregular);
         showMore = (Button) v.findViewById(R.id.dineout_show);
         showMore.setTypeface(Util.opensanssemibold);
         rlNoDine = (RelativeLayout) v.findViewById(R.id.rl_no_dine);
@@ -89,10 +95,43 @@ public class DineoutFragment extends Fragment {
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 
+    //Method to check if the internet is connected or not
+    private void checkInternetConnection(final int showMoreOptions) {
+        SharedPreferences settings;
+        final String PREFS_NAME = "MyPrefsFile";
+        settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("android_M", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", " android_M");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                checkNetwork(showMoreOptions);
+            } else {
+                checkNetwork(showMoreOptions);
+            }
+            settings.edit().putBoolean("android_M", false).apply();
+        } else {
+            checkNetwork(showMoreOptions);
+        }
+    }
+
+    //Check for internet
+    private void checkNetwork(final int showMoreOptions) {
+        if (!Util.checkAndShowNetworkPopup(getActivity())) {
+            //Check for version
+            Log.d(TAG, "Implementing a Version Check");
+            fetchDineoutRest(showMoreOptions);
+
+        } else {
+            networkFailed = true;
+        }
+    }
+
     public void fetchDineoutRest(final int showMoreOptions) {
 
         int genericDishId = Util.getGenericDishIdTab();
-        String latitude = "12.92923258", longitude = "77.63082482", source = "homescreen";
+        String latitude = Util.getLatitude(), longitude = Util.getLongitude(), source = "homescreen";
         RestApi restApi = Config.createService(RestApi.class);
         Call<DineoutTabResponse> call = restApi.addDineRestOptions(DishqApplication.getAccessToken(),
                 genericDishId, DishqApplication.getUniqueID(), source, latitude,
@@ -146,6 +185,7 @@ public class DineoutFragment extends Fragment {
                                     dineoutAdapter = new DineoutAdapter(getActivity());
                                 }
                                 mRecyclerView.setVisibility(View.VISIBLE);
+                                servedAt.setVisibility(View.VISIBLE);
                                 progressBar.setVisibility(View.GONE);
                                 mRecyclerView.setAdapter(dineoutAdapter);
                                 if(mLayoutManager==null) {
@@ -157,16 +197,19 @@ public class DineoutFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 rlNoDine.setVisibility(View.VISIBLE);
                                 mRecyclerView.setVisibility(View.GONE);
+                                servedAt.setVisibility(View.GONE);
                             }
                         }else {
                             progressBar.setVisibility(View.GONE);
                             rlNoDine.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
+                            servedAt.setVisibility(View.GONE);
                         }
                     }else {
                         progressBar.setVisibility(View.GONE);
                         rlNoDine.setVisibility(View.VISIBLE);
                         mRecyclerView.setVisibility(View.GONE);
+                        servedAt.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
@@ -174,6 +217,7 @@ public class DineoutFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     rlNoDine.setVisibility(View.VISIBLE);
                     mRecyclerView.setVisibility(View.GONE);
+                    servedAt.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }
@@ -184,6 +228,7 @@ public class DineoutFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 rlNoDine.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.GONE);
+                servedAt.setVisibility(View.GONE);
             }
         });
     }

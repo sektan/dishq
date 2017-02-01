@@ -7,9 +7,11 @@
         android:id="@+id/dine_bsf_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
-        android:layout_marginTop="200dp"
-        android:layout_gravity="center"
+        style="?android:attr/progressBarStyleInverse"
+        android:indeterminateDrawable="@drawable/progress"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:visibility="gone"/>
 
     <RelativeLayout
@@ -30,6 +32,16 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/served_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13.7dp"
+        android:layout_marginTop="7dp"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/black"
+        android:text="@string/served_at"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/dineout_rest_cardlist"
         android:layout_width="wrap_content"
@@ -37,7 +49,8 @@
         android:layout_marginEnd="13.7dp"
         android:layout_marginStart="13.7dp"
         android:layout_marginBottom="12dp"
-        android:layout_marginTop="4dp" />
+        android:layout_below="@+id/served_at"
+        android:layout_marginTop="1dp" />
 
     <Button
         android:id="@+id/dineout_show"

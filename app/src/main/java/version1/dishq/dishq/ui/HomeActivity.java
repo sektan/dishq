@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -97,12 +98,13 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private Location mLastLocation;
     private ProgressBar progressBar;
     private RelativeLayout rlNoResults, rlHamMood;
-    private Button hamButton, moodButton;
+    private Button hamButton, moodButton, feelingLucky;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private MixpanelAPI mixpanel = null;
     private Button moodFilterText;
     private FrameLayout goingToNextCard;
+    private FrameLayout progressBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         setContentView(R.layout.activity_home);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
+        progressBg = (FrameLayout) findViewById(R.id.progress_bg_overlay_home);
+        progressBg.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -172,8 +176,10 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         oops.setTypeface(Util.opensanssemibold);
         TextView noResults = (TextView) findViewById(R.id.home_no_results_text);
         noResults.setTypeface(Util.opensansregular);
-        TextView filterText = (TextView) findViewById(R.id.home_diff_filter);
-        filterText.setTypeface(Util.opensansregular);
+        TextView homeOr = (TextView) findViewById(R.id.home_or);
+        homeOr.setTypeface(Util.opensanslight);
+        feelingLucky = (Button) findViewById(R.id.feeling_lucky);
+        feelingLucky.setTypeface(Util.opensanslight);
         showTopRlHamMood();
     }
 
@@ -245,11 +251,30 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 dialogFragment.show(fragmentManager, "filters_dialog_fragment");
             }
         });
+
+        feelingLucky.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Util.setHomeRefreshRequired(true);
+                Util.setCurrentPage(0);
+                Util.setMoodFilterId(-1);
+                Util.setMoodName("");
+                Util.setFilterName("");
+                Util.setFilterClassName("");
+                Util.setFilterEntityId(-1);
+                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
+
+                finish();
+                startActivity(intent);
+            }
+        });
     }
 
     public void greetingsShownView(HomeDishesResponse.HomeData body) {
         setViews();
+
         rlGreeting.setVisibility(View.VISIBLE);
+
         if (body != null) {
             greetingHeader.setText(body.greetingsInfo.getGreetingMessage());
             greetingContext.setText(body.greetingsInfo.getContextMessage());
@@ -298,22 +323,26 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                 Boolean showGreeting = body.getShowGreeting();
                                 if (showGreeting) {
                                     progressBar.setVisibility(View.GONE);
+                                    progressBg.setVisibility(View.GONE);
                                     greetingsShownView(body);
                                 } else {
                                     setViews();
                                 }
                                 if (progressBar != null) {
                                     progressBar.setVisibility(View.GONE);
+                                    progressBg.setVisibility(View.GONE);
                                 }
                             } else {
                                 if (progressBar != null) {
                                     progressBar.setVisibility(View.GONE);
+                                    progressBg.setVisibility(View.GONE);
                                 }
                                 setNoResultTags();
                             }
                         } else {
                             if (progressBar != null) {
                                 progressBar.setVisibility(View.GONE);
+                                progressBg.setVisibility(View.GONE);
                             }
                             setNoResultTags();
                         }
@@ -321,6 +350,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                     } else {
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);
+                            progressBg.setVisibility(View.GONE);
                         }
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
@@ -328,6 +358,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 } catch (IOException e) {
                     if (progressBar != null) {
                         progressBar.setVisibility(View.GONE);
+                        progressBg.setVisibility(View.GONE);
                     }
                     e.printStackTrace();
                 }
@@ -338,6 +369,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 Log.d(TAG, "Failure");
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
+                    progressBg.setVisibility(View.GONE);
                 }
                 setNoResultTags();
             }
@@ -379,6 +411,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                         Log.d(TAG, "Setting the current Page");
                         Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     }
                 }
                 if(state == 1) {
@@ -392,6 +425,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         createLocationRequest();
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
+            progressBg.setVisibility(View.GONE);
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // first check
@@ -747,15 +781,15 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             title.setTypeface(Util.opensanslight);
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(HomeActivity.this);
             builder.setTitle("Like the dishq app?");
-            builder.setMessage("Tell us what you think").setCancelable(true)
+            builder.setMessage("").setCancelable(true)
                     .setPositiveButton("Love it", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + HomeActivity.this.getPackageName())));
                         }
                     });
-            builder.setNegativeButton("Not Happy", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Could Be Better", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    Sendemail("App Feedback", "food@dishq.in");
+                    Sendemail("App Feedback", "help@dishq.in");
                 }
             });
             android.app.AlertDialog alert = builder.create();
@@ -827,5 +861,11 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     protected void onDestroy() {
         mixpanel.flush();
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.exit(0);
     }
 }

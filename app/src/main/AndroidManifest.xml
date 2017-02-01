@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+   <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />-->
 
     <application
         android:name=".util.DishqApplication"
@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar.BlackActionBar">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -25,16 +25,18 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="c8ad48328109a75e8b8208bf3c3f72c38d228d0b"/>
-
+<!--
         <receiver android:name="com.appsflyer.SingleInstallBroadcastReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+        -->
 
         <activity
             android:name=".ui.SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,16 +56,16 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar"/>
         <activity
             android:name=".ui.SignInActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar"/>
 
         <activity
             android:name=".ui.HomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar" >
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -76,16 +78,16 @@
         <activity
             android:name=".ui.OnBoardingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar" />
         <activity
             android:name=".ui.FavouritesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar" />
 
         <activity
             android:name=".ui.DeliveryMenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -96,7 +98,7 @@
         <activity
             android:name=".ui.DineoutMenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -107,25 +109,26 @@
         <activity
             android:name=".ui.MenuFinder"
             android:label="@string/title_activity_menu_finder"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.BlackActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".ui.AboutUsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar" />
 
         <activity
             android:name=".ui.SettingsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar" />
 
         <activity
             android:name=".ui.FeedbackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.BlackActionBar" />
 
-        <meta-data android:name="com.google.android.gms.version"
+     <!--   <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <receiver
@@ -140,6 +143,7 @@
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
+        -->
 
     </application>
 

@@ -6,9 +6,18 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.DineoutMenuActivity"
     tools:showIn="@layout/content_dinemenu_full">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill_vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/dinemenu_appbar"
@@ -24,7 +33,6 @@
             android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:background="#38000000"
-            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
@@ -91,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/dinemenu_toolbar"
-                    android:layout_marginTop="96dp"
+                    android:layout_marginTop="123dp"
                     card_view:cardBackgroundColor="#90000000"
                     card_view:cardCornerRadius="3dp"
                     android:layout_alignParentEnd="true">
@@ -134,7 +142,8 @@
                                 android:shadowDx="1"
                                 android:shadowDy="1"
                                 android:shadowRadius="5"
-                                android:textSize="@dimen/text_size_12" />
+                                android:textSize="@dimen/text_size_12"
+                                tools:ignore="TooDeepLayout" />
 
                             <TextView
                                 android:id="@+id/dinemenu_rup_2"
@@ -205,13 +214,15 @@
 
         </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill_vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dinemenu_appbar">
 
         <include layout="@layout/content_recyclerview_dinemenu" />
+            </RelativeLayout>
+
+        </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

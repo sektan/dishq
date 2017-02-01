@@ -24,6 +24,7 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 
 import version1.dishq.dishq.R;
+import version1.dishq.dishq.custom.RoundedTransformation;
 import version1.dishq.dishq.util.Util;
 
 /**
@@ -105,6 +106,7 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
                 .load(imageUrls.get(0))
                 .fit()
                 .centerCrop()
+                .transform(new RoundedTransformation(14, 0))
                 .into(photoPopUp);
 
         dineMenuDishName.setText(Util.dineoutMenuInfos.get(Util.getFavPosition()).getDineMenuDishName());

@@ -40,6 +40,8 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recipe, container, false);
         RelativeLayout rlNoRecipe = (RelativeLayout) v.findViewById(R.id.rl_no_recipe);
+        TextView viewRecipe = (TextView) v.findViewById(R.id.view_recipe);
+        viewRecipe.setTypeface(Util.opensansregular);
         Button loadInBrowser = (Button) v.findViewById(R.id.button_recipe);
         loadInBrowser.setTypeface(Util.opensansregular);
         TextView noRecipeText = (TextView) v.findViewById(R.id.no_recipe_text);
@@ -50,10 +52,12 @@ public class RecipeFragment extends Fragment {
             progressBar.setVisibility(View.GONE);
             rlNoRecipe.setVisibility(View.VISIBLE);
             loadInBrowser.setVisibility(View.GONE);
+            viewRecipe.setVisibility(View.GONE);
         } else {
             rlNoRecipe.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             loadInBrowser.setVisibility(View.VISIBLE);
+            viewRecipe.setVisibility(View.VISIBLE);
             loadInBrowser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

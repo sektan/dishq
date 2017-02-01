@@ -78,7 +78,10 @@ public interface RestApi {
     @GET("api/search/suggest/foodmood/")
     Call<SearchFilter> getSearchFilters(@Query("query") String searchKey,
                                         @Query("uid") String UniqueIdentifier,
-                                        @Query("user_id") int UserId);
+                                        @Query("user_id") int UserId,
+                                        @Query("latitude") String latitude,
+                                        @Query("longitude") String longitude);
+
 
     @GET("api/restaurant/dish/{generic_dish_id}/dineout/")
     Call<DineoutTabResponse> addDineRestOptions(@Header("Authorization") String authorization,
@@ -129,7 +132,7 @@ public interface RestApi {
     @GET("api/search/restaurantsuggest/")
     Call<MenuFinderRestSuggestResponse> getRestSuggestion(@Query("query") String query,
                                                           @Query("uid") String uid,
-                                                          @Query("user_id") int UserId);
+                                                          @Query("user_id") int UserId, String currentLatitude, String currentLongitude);
 
     //Api call for sending the feedback response to the server
     @GET("api/ugc/feedback/")

@@ -26,7 +26,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="0dp"
                 android:padding="10dp"
-                android:background="@drawable/back_dark"
+                android:background="@drawable/black_back"
                 android:contentDescription="@string/toolbar_back_button" />
 
             <TextView
@@ -58,14 +58,26 @@
         android:layout_height="match_parent"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/favourites_toolbar"
         android:visibility="gone">
+
+        <Button
+            android:id="@+id/favourites"
+            android:layout_width="37dp"
+            android:layout_height="34dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/homescreen_fav_filled_1" />
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:gravity="center_vertical"
             android:layout_marginTop="80dp"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_20"
