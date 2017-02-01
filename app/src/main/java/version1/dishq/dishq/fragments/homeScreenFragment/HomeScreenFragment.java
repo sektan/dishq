@@ -101,6 +101,22 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(dineButton!=null) {
+            dineButton.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(dineButton!=null) {
+            dineButton.setEnabled(false);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

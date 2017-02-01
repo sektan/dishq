@@ -44,7 +44,7 @@
             android:textSize="@dimen/text_size_12"
             android:textColorHint="#ffffff"
             android:inputType="text"
-            android:textCursorDrawable="@null" />
+            android:textCursorDrawable="@drawable/cursor_color" />
 
         <ProgressBar
             android:id="@+id/filter_quick_search_progress_bar"

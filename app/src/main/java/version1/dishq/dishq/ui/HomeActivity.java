@@ -866,6 +866,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finish();
         System.exit(0);
     }
 }

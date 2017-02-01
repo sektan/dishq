@@ -97,6 +97,15 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         }
 
         holder.mfDriveTime.setText(Util.nearbyRestInfos.get(position).getDriveTime());
+
+        String nearByRestType = "";
+        if(Util.nearbyRestInfos.get(position).getNearByRestTypeText()!=null) {
+            for (String s : Util.nearbyRestInfos.get(position).getNearByRestTypeText()) {
+                nearByRestType += s + " ";
+            }
+        }
+        holder.nearByRestTypeText.setText(nearByRestType);
+
     }
 
 
@@ -108,7 +117,7 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
     public static class MenuFinderRestInfoAdapter extends RecyclerView.ViewHolder {
 
         protected TextView mfRestName, mfRestAddr, mfRestCuisine, mfRup1,
-                mfRup2, mfRup3, mfRup4, mfDriveTime;
+                mfRup2, mfRup3, mfRup4, mfDriveTime, nearByRestTypeText;
 
         protected RelativeLayout rlNearbyRest;
 
@@ -121,6 +130,8 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
             mfRestName.setTypeface(Util.opensanssemibold);
             mfRestAddr = (TextView) view.findViewById(R.id.dineout_rest_addr);
             mfRestAddr.setTypeface(Util.opensansregular);
+            nearByRestTypeText = (TextView) view.findViewById(R.id.dineout_rest_type);
+            nearByRestTypeText.setTypeface(Util.opensansregular);
             mfRestCuisine = (TextView) view.findViewById(R.id.dineout_rest_cuisine);
             mfRup1 = (TextView) view.findViewById(R.id.dineout_rup_1);
             mfRup2 = (TextView) view.findViewById(R.id.dineout_rup_2);

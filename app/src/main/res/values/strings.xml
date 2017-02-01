@@ -82,7 +82,7 @@
 
     <!--Menu Activity -->
     <string name="cost_of_dish">\u20B9%s</string>
-    <string name="personalized_menu_text">Personalised menu for you</string>
+    <string name="personalized_menu_text">Your personalised menu</string>
     <string name="order_now">ORDER VIA</string>
     <string name="order_from">ORDER VIA</string>
     <string name="swiggy">Swiggy</string>
@@ -142,5 +142,6 @@
     <string name="menu_serves">Serves:</string>
     <string name="vibe">Vibe:</string>
     <string name="book_table_via">BOOK TABLE VIA</string>
+    <string name="load_more_image">load more image</string>
 
 </resources>

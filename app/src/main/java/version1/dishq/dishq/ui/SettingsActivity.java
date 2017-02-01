@@ -2,6 +2,7 @@ package version1.dishq.dishq.ui;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,7 +42,7 @@ import version1.dishq.dishq.util.Util;
  * Package name version1.dishq.dishq.
  */
 public class SettingsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ConnectionCallbacks {
-    TextView Logout;
+    private Button logoutButton;
     private ImageView backButton;
     TextView toolbarTitle, userName, versionNam;
     GoogleApiClient mGoogleApiClient;
@@ -50,12 +52,10 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
     protected void onCreate(Bundle savedInstanceState) {
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
-
-        try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_settings);
-            Logout = (TextView) findViewById(R.id.fblogout);
-            Logout.setTypeface(Util.opensanslight);
+            logoutButton = (Button) findViewById(R.id.fblogout);
+            logoutButton.setTypeface(Util.opensanslight);
             userName = (TextView) findViewById(R.id.user_name);
             userName.setTypeface(Util.opensansregular);
             userName.setText(DishqApplication.getUserName());
@@ -64,8 +64,14 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
             backButton = (ImageView) findViewById(R.id.settings_back_button);
             versionNam = (TextView) findViewById(R.id.version_name);
             versionNam.setTypeface(Util.opensansregular);
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            String version = pInfo.versionName;
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert pInfo != null;
+        String version = pInfo.versionName;
 
             versionNam.setText("v" +version);
 
@@ -93,11 +99,8 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .addApi(Plus.API)
                     .build();
-            if (getSupportActionBar() != null)
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            Logout.setOnClickListener(
-                    new View.OnClickListener() {
+
+            logoutButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             try {
@@ -110,9 +113,6 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
                             Logout();
                         }
                     });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void Logout() {
@@ -173,7 +173,7 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
         DishqApplication.setAccessToken(null, null);
         DishqApplication.getPrefs().edit().clear().apply();
         getApplicationContext().getSharedPreferences("dish_app_prefs", MODE_PRIVATE).edit().clear().apply();
-        Intent intent = new Intent(this, SplashActivity.class);
+        Intent intent = new Intent(SettingsActivity.this, SplashActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
         startActivity(intent);

@@ -66,7 +66,7 @@
 
                         <ImageView
                             android:id="@+id/dine_menu_back_button"
-                            android:layout_width="23.3dp"
+                            android:layout_width="21.4dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="0dp"
@@ -75,11 +75,12 @@
 
                         <TextView
                             android:id="@+id/dinemenu_toolbarTitle"
-                            android:layout_width="230dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
                             android:gravity="center_vertical"
                             android:maxLines="1"
+                            android:ellipsize="marquee"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_20" />
 

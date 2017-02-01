@@ -257,7 +257,6 @@ public class QuickFiltersFragment extends Fragment implements
             arrayAdapter = new ArrayAdapter<>(DishqApplication.getContext(), R.layout.simple_dropdown_food_search_item, stringData);
             searchAutoCompleteText.setAdapter(arrayAdapter);
         }else {
-//            if(data.size()>1)
             textView.setVisibility(View.VISIBLE);
         }
     }
@@ -320,7 +319,7 @@ public class QuickFiltersFragment extends Fragment implements
         } else if (selectedItem instanceof QuickFilter) {
             return ((QuickFilter) selectedItem).getName();
         }
-        return null;
+        return "";
     }
 
     public String getSelectedFilterClassName() {
@@ -331,7 +330,7 @@ public class QuickFiltersFragment extends Fragment implements
         } else if (selectedItem instanceof QuickFilter) {
             return ((QuickFilter) selectedItem).getClassName();
         }
-        return null;
+        return "";
     }
 
     public int getSelectedFilterEntityId() {

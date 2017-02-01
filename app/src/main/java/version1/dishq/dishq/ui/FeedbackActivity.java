@@ -110,10 +110,6 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         rlFeedbackQuest = (RelativeLayout) findViewById(R.id.rl_feeback_ques_ui);
         fbLoadMore = (Button) findViewById(R.id.fb_load_more);
         fbLoadMore.setTypeface(Util.opensanslight);
-        TextView thatIt = (TextView) findViewById(R.id.that_it);
-        thatIt.setTypeface(Util.opensansregular);
-        TextView textBrowsed = (TextView) findViewById(R.id.text_browse_done);
-        textBrowsed.setTypeface(Util.opensanslight);
         drawer = (DrawerLayout) findViewById(R.id.feedback_drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         hamButton = (Button) findViewById(R.id.feedback_hamburger);
@@ -390,8 +386,10 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
     public void onBackPressed() {
         super.onBackPressed();
         Util.setHomeRefreshRequired(false);
-        int currentPage = viewPager.getCurrentItem();
-        Util.setCurrentPage(currentPage);
+        if(viewPager!=null) {
+            int currentPage = viewPager.getCurrentItem();
+            Util.setCurrentPage(currentPage);
+        }
         Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
@@ -404,7 +402,7 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
         int currentPage = 0;
         Util.setCurrentPage(currentPage);
         Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

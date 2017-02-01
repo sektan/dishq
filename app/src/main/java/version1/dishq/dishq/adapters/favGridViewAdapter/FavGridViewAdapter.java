@@ -191,6 +191,7 @@ public class FavGridViewAdapter extends RecyclerView.Adapter<FavGridViewAdapter.
 
             rlFavCarview = (RelativeLayout) view.findViewById(R.id.cv_rl_favs);
             cardBgImage = (ImageView) view.findViewById(R.id.card_favbg_image);
+            cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
             favFrame = (FrameLayout) view.findViewById(R.id.fav_frame);
             favDishName = (TextView) view.findViewById(R.id.fav_dish_name);
             favDishName.setTypeface(Util.opensansregular);

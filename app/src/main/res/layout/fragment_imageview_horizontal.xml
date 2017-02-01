@@ -2,8 +2,8 @@
 <ImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/feedback_images"
-    android:layout_width="96dp"
-    android:layout_height="130dp"
-    android:layout_marginStart="11dp"
+    android:layout_width="126dp"
+    android:layout_height="160dp"
+    android:layout_marginStart="8dp"
     android:contentDescription="@string/feedback_images"
     />

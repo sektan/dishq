@@ -109,6 +109,7 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
     private static String lat = "0.0";
     private static String lang = "0.0";
     final int MY_PERMISSIONS_REQUEST_GPS_ACCESS = 0;
+    private Boolean orderClickable = false;
 
 
     @Override
@@ -237,6 +238,14 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             String dishTypeText = sb.toString();
             dineMenuRestTypeText.setText(String.valueOf(dishTypeText));
 
+            String restTypeText = "";
+            if (Util.dineoutRestData.getDineMenuRestTypeText() != null) {
+                for (String s : Util.dineoutRestData.getDineMenuRestTypeText()) {
+                    restTypeText += s + " ";
+                }
+            }
+            dineMenuRestType.setText(restTypeText);
+
             int dinePriceLvl = Util.dineoutRestData.getDineMenuPriceLvl();
             if (dinePriceLvl == 1) {
                 dineMenuRp1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
@@ -258,8 +267,14 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             deliveryTimeText.setText(Util.dineoutRestData.getMenuDeliveryTime());
             if (Util.dineoutRestData.getHasHomeDelivery()) {
                 deliveryTimeText.setTextColor(ContextCompat.getColor(this, R.color.black));
+                orderButton.getBackground().setAlpha(255);
+                orderButton.setClickable(true);
+                orderClickable = true;
             } else {
                 deliveryTimeText.setTextColor(ContextCompat.getColor(this, R.color.red));
+                orderButton.getBackground().setAlpha(100);
+                orderButton.setClickable(false);
+                orderClickable = false;
             }
 
             String dishTags = "";
@@ -273,23 +288,10 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             String ambience = "";
             if (Util.dineoutRestData.getMenuAmbienceText() != null) {
                 for (String s : Util.dineoutRestData.getMenuAmbienceText()) {
-                    ambience += s;
+                    ambience += s + " ";
                 }
             }
             ambienceText.setText(ambience);
-
-            StringBuilder stringBuilder = new StringBuilder();
-            if (Util.dineoutRestData.getDineMenuRestTypeText() != null) {
-                for (String st : Util.dineoutRestData.getDineMenuRestTypeText()) {
-                    if (stringBuilder.length() > 0) {
-                        stringBuilder.append(',' + " ");
-                    }
-                    stringBuilder.append(st);
-
-                }
-            }
-            String restTypeText = stringBuilder.toString();
-            dineMenuRestType.setText(String.valueOf(restTypeText));
 
             String dineRestAddress = "";
             if (Util.dineoutRestData.getDineMenuRestAddr() != null) {
@@ -522,20 +524,22 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 final int position = v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight();
-                orderButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            final JSONObject properties = new JSONObject();
-                            properties.put("Order now button in delivery menu", "deliverymenu");
-                            mixpanel.track("Order now button in delivery menu", properties);
-                        } catch (final JSONException e) {
-                            throw new RuntimeException("Could not encode hour of the day in JSON");
+                if(orderClickable) {
+                    orderButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                final JSONObject properties = new JSONObject();
+                                properties.put("Order now button in delivery menu", "deliverymenu");
+                                mixpanel.track("Order now button in delivery menu", properties);
+                            } catch (final JSONException e) {
+                                throw new RuntimeException("Could not encode hour of the day in JSON");
+                            }
+                            rlOrderBook.setVisibility(View.GONE);
+                            nestedScrollView.scrollTo(0, position);
                         }
-                        rlOrderBook.setVisibility(View.GONE);
-                        nestedScrollView.scrollTo(0, position);
-                    }
-                });
+                    });
+                }
 
                 bookTableButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -576,7 +580,6 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             }
 
         });
-
 
     }
 

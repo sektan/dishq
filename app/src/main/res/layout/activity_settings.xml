@@ -72,11 +72,14 @@
             android:contentDescription="@string/logout_icon"
             android:src="@drawable/log_out" />
 
-        <TextView
+        <Button
             android:id="@+id/fblogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:layout_marginTop="-12dp"
+            android:background="@null"
+            android:textAllCaps="false"
             android:text="@string/log_out"
             android:textSize="@dimen/text_size_16" />
 

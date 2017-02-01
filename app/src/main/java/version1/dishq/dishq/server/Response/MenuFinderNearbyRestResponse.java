@@ -57,6 +57,18 @@ public class MenuFinderNearbyRestResponse {
         @Expose
         private ArrayList<String> nearByRestAddress;
 
+        @SerializedName("restaurant_type_text")
+        @Expose
+        public ArrayList<String> nearByRestTypeText;
+
+        public ArrayList<String> getNearByRestTypeText() {
+            return nearByRestTypeText;
+        }
+
+        public void setNearByRestTypeText(ArrayList<String> nearByRestTypeText) {
+            this.nearByRestTypeText = nearByRestTypeText;
+        }
+
         public String getRestaurantLatLon() {
             return restaurantLatLon;
         }
