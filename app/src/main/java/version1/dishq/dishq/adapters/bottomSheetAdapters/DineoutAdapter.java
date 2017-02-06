@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,6 +64,17 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
                 .centerCrop()
                 .into(holder.dineoutCardBgImage);
 
+        /**
+         * Setting the UI in case the restaurant is closed
+         */
+        if(Util.dineoutRestInfos.get(position).getDineIsOpenNow()) {
+            holder.dineClosedFrame.setVisibility(View.GONE);
+            holder.dineClosed.setVisibility(View.GONE);
+        }else {
+            holder.dineClosedFrame.setVisibility(View.VISIBLE);
+            holder.dineClosed.setVisibility(View.VISIBLE);
+        }
+
         final int restId = Util.dineoutRestInfos.get(position).getDineRestId();
         holder.rlDineout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +110,10 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         }
         String dineCusineText = sb.toString();
         holder.dineRestCuisine.setText(dineCusineText);
+
+        /**
+         * Setting the price level for the restaurant
+         */
         int dinePriceLvl = Util.dineoutRestInfos.get(position).getDineoutPriceLvl();
         if (dinePriceLvl == 1) {
             holder.dineRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
@@ -112,8 +130,29 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             holder.dineRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.dineRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
         }
+        /***************************************************************************************************************/
 
+        /**
+         * Setting the drive time for the restaurant
+         */
         holder.dineDriveTime.setText(Util.dineoutRestInfos.get(position).getDineDriveTime());
+        /****************************************************************************************************************/
+
+        /**
+         * Setting the delivery time of the restaurant
+         */
+        holder.dineDeliveryTime.setText(Util.dineoutRestInfos.get(position).getDineDeliveryTime());
+        if(Util.dineoutRestInfos.get(position).getDineHasHomeDelivery()) {
+            if(Util.dineoutRestInfos.get(position).getDineCanBeDelivered()) {
+                holder.dineDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            }else {
+                holder.dineDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
+            }
+
+        }else {
+            holder.dineDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
+        }
+        /********************************************************************************************************************/
 
         String dineRestType = "";
         if(Util.dineoutRestInfos.get(position).getDineRestType()!=null) {
@@ -130,16 +169,16 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         return Util.dineoutRestInfos.size();
     }
 
-    public static class DineoutRestInfoAdapter extends RecyclerView.ViewHolder {
+    static class DineoutRestInfoAdapter extends RecyclerView.ViewHolder {
 
-        protected TextView dineRestName, dineRestAddr, dineRestCuisine, dineRup1,
-                dineRup2, dineRup3, dineRup4, dineDriveTime, dineRestType;
-
-        protected RelativeLayout rlDineout;
-
+        TextView dineRestName, dineRestAddr, dineRestCuisine, dineRup1,
+                dineRup2, dineRup3, dineRup4, dineDriveTime, dineRestType, dineDeliveryTime;
+        RelativeLayout rlDineout;
         ImageView dineoutCardBgImage;
+        FrameLayout dineClosedFrame;
+        Button dineClosed;
 
-        public DineoutRestInfoAdapter(View view) {
+        DineoutRestInfoAdapter(View view) {
             super(view);
 
             dineRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
@@ -159,6 +198,11 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             rlDineout = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
             dineoutCardBgImage = (ImageView) view.findViewById(R.id.card_bg_image);
             dineoutCardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            dineDeliveryTime = (TextView) view.findViewById(R.id.dineout_delivery_time);
+            dineDeliveryTime.setTypeface(Util.opensanssemibold);
+            dineClosedFrame = (FrameLayout) view.findViewById(R.id.frame_dine_rest_closed);
+            dineClosed = (Button) view.findViewById(R.id.dine_rest_closed_button);
+            dineClosed.setTypeface(Util.opensansregular);
         }
     }
 }

@@ -249,6 +249,10 @@ public class DineoutMenuResponse {
         @Expose
         private ArrayList<String> dineMenuCusineText;
 
+        @SerializedName("food_tags")
+        @Expose
+        private ArrayList<String> restFoodTags;
+
         @SerializedName("restaurant_address")
         @Expose
         private ArrayList<String> dineMenuRestAddr;
@@ -296,6 +300,14 @@ public class DineoutMenuResponse {
         @SerializedName("delivery_time")
         @Expose
         private String menuDeliveryTime;
+
+        public ArrayList<String> getRestFoodTags() {
+            return restFoodTags;
+        }
+
+        public void setRestFoodTags(ArrayList<String> restFoodTags) {
+            this.restFoodTags = restFoodTags;
+        }
 
         public String getMenuDeliveryTime() {
             return menuDeliveryTime;

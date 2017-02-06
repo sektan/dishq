@@ -116,7 +116,7 @@
     <string name="that_s_it">Want more dishes?</string>
     <string name="text_browsed">Just answer the following&#58;</string>
     <string name="feedback_yes">YES</string>
-    <string name="feedback_load_more">Load More Dishes</string>
+    <string name="feedback_load_more">See More Dishes</string>
     <string name="feedback_no">NO</string>
     <string name="feedback_images">feedback_images</string>
     <string name="feedback_thanks">Thanks!</string>
@@ -143,5 +143,11 @@
     <string name="vibe">Vibe:</string>
     <string name="book_table_via">BOOK TABLE VIA</string>
     <string name="load_more_image">load more image</string>
+    <string name="delivery_icon">delivery icon</string>
+    <string name="directions">DIRECTIONS</string>
+    <string name="call">CALL</string>
+    <string name="dineout_book">Dineout</string>
+    <string name="eazydiner_book">Eazydiner</string>
+    <string name="closed">CLOSED</string>
 
 </resources>

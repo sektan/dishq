@@ -168,13 +168,20 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.filter_container);
         switch (v.getId()) {
             case R.id.filter_button_reset:
+                Util.setResetClicked(true);
+                Util.setFoodResetClicked(true);
+                Util.setFilterName("");
+                Util.setFilterClassName("");
+                Util.setFilterEntityId(-1);
+                Util.setMoodFilterId(-1);
+                Util.setMoodName("");
+
+
                 boolean isMoodFragment = fragment instanceof MoodFragment;
                 moodFragment.clearSelection(isMoodFragment);
 
                 boolean isQuickFiltersFragment = fragment instanceof QuickFiltersFragment;
-                if(quickFiltersFragment!=null) {
-                    quickFiltersFragment.clearSelection(isQuickFiltersFragment);
-                }
+                quickFiltersFragment.clearSelection(isQuickFiltersFragment);
 
                 // Set the apply button to be clickable
                 toggleApplyButton(true, true);
@@ -184,24 +191,31 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
             case R.id.filter_button_apply:
                 //Mood Filters
                 List<FoodMoodFilter> moodFilter = moodFragment.getFoodMoodFilterList();
-                Util.setMoodPosition(moodFragment.getRecyclerAdapter().getSelectedPos());
-                if (moodFragment.getRecyclerAdapter().getSelectedPos() >= 0) {
-                    Util.setMoodFilterId(moodFilter.get(Util.getMoodPosition()).getFoodMoodId());
-                    Util.setMoodName(moodFilter.get(Util.getMoodPosition()).getName());
-                }else {
+                if (moodFragment.getRecyclerAdapter() != null) {
+                    Util.setMoodPosition(moodFragment.getRecyclerAdapter().getSelectedPos());
+                    if (moodFragment.getRecyclerAdapter().getSelectedPos() >= 0) {
+                        Util.setMoodFilterId(moodFilter.get(Util.getMoodPosition()).getFoodMoodId());
+                        Util.setMoodName(moodFilter.get(Util.getMoodPosition()).getName());
+                    }
+                } else {
                     Util.setMoodFilterId(-1);
                     Util.setMoodName("");
                 }
 
                 //Quick Filters
+
                 Object selectedItem = quickFiltersFragment.getSelectedItem();
-                if(quickFiltersFragment.getRecyclerAdapter()!=null) {
+                if (quickFiltersFragment.getRecyclerAdapter() != null) {
                     Util.setQuickFilterPosition(quickFiltersFragment.getRecyclerAdapter().getSelectedPos());
                 }
                 if (selectedItem != null) {
                     Util.setFilterName(quickFiltersFragment.getSelectedFilterName());
                     Util.setFilterClassName(quickFiltersFragment.getSelectedFilterClassName());
                     Util.setFilterEntityId(quickFiltersFragment.getSelectedFilterEntityId());
+                } else if (quickFiltersFragment.datumList != null) {
+                    Util.setFilterName(Util.getFilterName());
+                    Util.setFilterClassName(Util.getFilterClassName());
+                    Util.setFilterEntityId(Util.getFilterEntityId());
                 } else {
                     Util.setFilterName("");
                     Util.setFilterClassName("");
@@ -260,11 +274,11 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         tabLayout.setEnabled(true);
 
         // Enable reset button
-        if(!Util.getMoodName().equals("")) {
+        if (!Util.getMoodName().equals("")) {
             toggleResetButton(true);
-        }else if(!Util.getFilterName().equals("")) {
+        } else if (!Util.getFilterName().equals("")) {
             toggleResetButton(true);
-        }else {
+        } else {
             toggleResetButton(false);
         }
     }
@@ -274,7 +288,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
     }
 
     public void toggleApplyButton(boolean isEnabled, boolean shouldOverRideToogleStatus) {
-        if(shouldOverRideToogleStatus) {
+        if (shouldOverRideToogleStatus) {
             hasToggleBeenApplied = isEnabled;
         }
 

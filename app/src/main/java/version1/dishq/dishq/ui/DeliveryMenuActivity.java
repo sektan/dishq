@@ -826,7 +826,7 @@ public class DeliveryMenuActivity extends BaseActivity implements GoogleApiClien
     public void alertNoForward(final Activity activity) {
         if (!(DeliveryMenuActivity.this).isFinishing()) {
             AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setMessage("Can't update without GPS")
+                    .setMessage("You can't continue without GPS")
                     .setCancelable(false)
                     .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
 

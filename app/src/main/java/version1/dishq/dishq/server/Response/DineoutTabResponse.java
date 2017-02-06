@@ -51,35 +51,84 @@ public class DineoutTabResponse {
 
         @SerializedName("price_level")
         @Expose
-        public int dineoutPriceLvl;
+        int dineoutPriceLvl;
 
         @SerializedName("drive_time")
         @Expose
-        public String dineDriveTime;
+        String dineDriveTime;
+
+        @SerializedName("delivery_time")
+        @Expose
+        String dineDeliveryTime;
+
+        @SerializedName("is_open_now")
+        @Expose
+        Boolean dineIsOpenNow;
+
+        @SerializedName("has_home_delivery")
+        @Expose
+        Boolean dineHasHomeDelivery;
+
+        @SerializedName("can_be_delivered")
+        @Expose
+        Boolean dineCanBeDelivered;
 
         @SerializedName("restaurant_type_text")
         @Expose
-        public ArrayList<String> dineRestType;
+        ArrayList<String> dineRestType;
 
         @SerializedName("photo")
         @Expose
-        public ArrayList<String> dineRestPhoto;
+        ArrayList<String> dineRestPhoto;
 
         @SerializedName("restaurant_id")
         @Expose
-        public int dineRestId;
+        int dineRestId;
 
         @SerializedName("restaurant_name")
         @Expose
-        public String dineRestName;
+        String dineRestName;
 
         @SerializedName("cuisine_text")
         @Expose
-        public ArrayList<String> dineCuisineText;
+        ArrayList<String> dineCuisineText;
 
         @SerializedName("restaurant_address")
         @Expose
-        public ArrayList<String> dineRestAddr;
+        ArrayList<String> dineRestAddr;
+
+
+        public String getDineDeliveryTime() {
+            return dineDeliveryTime;
+        }
+
+        public void setDineDeliveryTime(String dineDeliveryTime) {
+            this.dineDeliveryTime = dineDeliveryTime;
+        }
+
+        public Boolean getDineIsOpenNow() {
+            return dineIsOpenNow;
+        }
+
+        public void setDineIsOpenNow(Boolean dineIsOpenNow) {
+            this.dineIsOpenNow = dineIsOpenNow;
+        }
+
+        public Boolean getDineHasHomeDelivery() {
+            return dineHasHomeDelivery;
+        }
+
+        public void setDineHasHomeDelivery(Boolean dineHasHomeDelivery) {
+            this.dineHasHomeDelivery = dineHasHomeDelivery;
+        }
+
+        public Boolean getDineCanBeDelivered() {
+            return dineCanBeDelivered;
+        }
+
+        public void setDineCanBeDelivered(Boolean dineCanBeDelivered) {
+            this.dineCanBeDelivered = dineCanBeDelivered;
+        }
 
         public ArrayList<String> getDineRestAddr() {
             return dineRestAddr;

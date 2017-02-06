@@ -51,6 +51,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
     private static String facebookOrGoogle;
     private static Boolean IS_NEW_USER;
     private static Boolean ON_BOARDING_DONE;
+    private static long appWentToBg = 0;
     public boolean wasInBackground;
     private static String userName;
     private Handler mHandler;
@@ -68,6 +69,7 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         uniqueId = getPrefs().getString(Constants.UNIQUE_IDENTIFIER, null);
         accessToken = getPrefs().getString(Constants.ACCESS_TOKEN, null);
         tokenType = getPrefs().getString(Constants.TOKEN_TYPE, null);
+        appWentToBg = getPrefs().getLong(Constants.APP_WENT_TO_BACKGROUND, 0);
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
         userName = getPrefs().getString(Constants.USER_NAME, null);
         facebookOrGoogle = getPrefs().getString(Constants.FACEBOOK_OR_GOOGLE, null);
@@ -88,6 +90,14 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
         DishqApplication.accessToken = accessToken;
         DishqApplication.tokenType = tokenType;
         Util.ACCESS_TOKEN = tokenType + " " + accessToken;
+    }
+
+    public static long getAppWentToBg() {
+        return DishqApplication.appWentToBg;
+    }
+
+    public static void setAppWentToBg(long appWentToBg) {
+        DishqApplication.appWentToBg = appWentToBg;
     }
 
     public static int getFavCuisineCount() {
@@ -194,6 +204,9 @@ public final class DishqApplication extends android.support.multidex.MultiDexApp
                 boolean foreground = new ForegroundCheckTask().execute(getApplicationContext()).get();
                 if(!foreground) {
                     //App is in Background - do what you want
+                    long appWentToBgTime = System.currentTimeMillis();
+                    DishqApplication.getPrefs().edit().putLong(Constants.APP_WENT_TO_BACKGROUND, appWentToBgTime).apply();
+                    DishqApplication.setAppWentToBg(appWentToBgTime);
                     RestApi restApi = Config.createService(RestApi.class);
                     Call<ResponseBody> request = restApi.appToBackground(DishqApplication.getUniqueID(), DishqApplication.getUserID());
                     request.enqueue(new Callback<ResponseBody>() {

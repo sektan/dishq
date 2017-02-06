@@ -127,7 +127,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
                 } catch (final JSONException e) {
                     throw new RuntimeException("Could not encode hour of the day in JSON");
                 }
-                Util.setDelRestId(restId);
+                //Util.setDelRestId(restId);
+                Util.setDineRestId(restId);
                 Intent intent = new Intent(context, DineoutMenuActivity.class);
                 context.startActivity(intent);
             }

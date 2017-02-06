@@ -620,7 +620,7 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
             case MY_PERMISSIONS_REQUEST_GPS_ACCESS: {
 
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocation();
+                    getTheLocale();
                 } else {
                     showAlert("", "That permission is needed in order to update wait time. Tap Retry.");
                 }
@@ -662,7 +662,7 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
     public void alertNoForward(final Activity activity) {
         if (!(MenuFinder.this).isFinishing()) {
             android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(activity)
-                    .setMessage("Can't update without GPS")
+                    .setMessage("You can't continue without GPS")
                     .setCancelable(false)
                     .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
 

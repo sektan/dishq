@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,6 +54,22 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         Picasso.with(DishqApplication.getContext())
                 .load(imageUrl)
                 .into(holder.cardBgImage);
+
+        /**
+         * Setting the UI in case the restaurant is closed
+        */
+        if(Util.nearbyRestInfos.get(position).getNbIsOpenNow()) {
+            holder.mfClosedFrame.setVisibility(View.GONE);
+            holder.mfClosed.setVisibility(View.GONE);
+        }else {
+            holder.mfClosedFrame.setVisibility(View.VISIBLE);
+            holder.mfClosed.setVisibility(View.VISIBLE);
+        }
+        /**********************************************************************/
+
+        /**
+         * Setting the onClickListener for when the restaurant card is clicked
+         */
         holder.rlNearbyRest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +78,8 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
                 context.startActivity(intent);
             }
         });
+        /***********************************************************************************/
+
         holder.mfRestName.setText(Util.nearbyRestInfos.get(position).getNearByRestName());
         String nearByRestAddress = "";
         if(Util.nearbyRestInfos.get(position).getNearByRestAddress()!=null) {
@@ -79,6 +99,10 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         }
         String dineCusineText = sb.toString();
         holder.mfRestCuisine.setText(dineCusineText);
+
+        /**
+         * Setting the price level for the restaurant
+         */
         int dinePriceLvl = Util.nearbyRestInfos.get(position).getPriceLevel();
         if (dinePriceLvl == 1) {
             holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
@@ -95,8 +119,30 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
             holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.mfRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
         }
+        /***************************************************************************************************************/
 
+        /**
+         * Setting the drive time for the restaurant
+         */
         holder.mfDriveTime.setText(Util.nearbyRestInfos.get(position).getDriveTime());
+        /****************************************************************************************************************/
+
+        /**
+         * Setting the delivery time of the restaurant
+         */
+        holder.mfDeliveryTime.setText(Util.nearbyRestInfos.get(position).getNbDeliveryTime());
+        if(Util.nearbyRestInfos.get(position).getNbHasHomeDelivery()) {
+            if(Util.nearbyRestInfos.get(position).getNbCanBeDelivered()) {
+                holder.mfDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            }else {
+                holder.mfDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
+            }
+
+        }else {
+            holder.mfDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
+        }
+        /********************************************************************************************************************/
+
 
         String nearByRestType = "";
         if(Util.nearbyRestInfos.get(position).getNearByRestTypeText()!=null) {
@@ -114,16 +160,21 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         return Util.nearbyRestInfos.size();
     }
 
-    public static class MenuFinderRestInfoAdapter extends RecyclerView.ViewHolder {
+    static class MenuFinderRestInfoAdapter extends RecyclerView.ViewHolder {
 
-        protected TextView mfRestName, mfRestAddr, mfRestCuisine, mfRup1,
-                mfRup2, mfRup3, mfRup4, mfDriveTime, nearByRestTypeText;
+        TextView mfRestName, mfRestAddr, mfRestCuisine, mfRup1,
+                mfRup2, mfRup3, mfRup4, mfDriveTime, nearByRestTypeText,
+                mfDeliveryTime;
 
-        protected RelativeLayout rlNearbyRest;
+        RelativeLayout rlNearbyRest;
 
         private ImageView cardBgImage;
 
-        public MenuFinderRestInfoAdapter(View view) {
+        FrameLayout mfClosedFrame;
+
+        Button mfClosed;
+
+        MenuFinderRestInfoAdapter(View view) {
             super(view);
 
             mfRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
@@ -142,6 +193,11 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
             rlNearbyRest = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
             cardBgImage = (ImageView) view.findViewById(R.id.card_bg_image);
             cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            mfDeliveryTime = (TextView) view.findViewById(R.id.dineout_delivery_time);
+            mfDeliveryTime.setTypeface(Util.opensanssemibold);
+            mfClosedFrame = (FrameLayout) view.findViewById(R.id.frame_dine_rest_closed);
+            mfClosed = (Button) view.findViewById(R.id.dine_rest_closed_button);
+            mfClosed.setTypeface(Util.opensansregular);
         }
     }
 }

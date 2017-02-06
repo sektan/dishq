@@ -7,10 +7,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -69,6 +71,7 @@ import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.RestApi;
+import version1.dishq.dishq.util.Constants;
 import version1.dishq.dishq.util.DishqApplication;
 import version1.dishq.dishq.util.Util;
 
@@ -84,6 +87,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private static final String TAG = "HomeActivity";
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
+    private static final long THIRTY_MINUTES = 30 * 60 * 1000;
     @SuppressLint("StaticFieldLeak")
     public static ViewPager viewPager;
     private static String lat = "0.0";
@@ -130,16 +134,75 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     @Override
     protected void onResume() {
         super.onResume();
-        if (Util.getLatitude().equals("") && Util.getLongitude().equals("")) {
-            Util.setHomeRefreshRequired(false);
-            checkGPS();
+        if (DishqApplication.getAppWentToBg() != 0) {
+            long currentTime = System.currentTimeMillis();
+            long difference = currentTime - DishqApplication.getAppWentToBg();
+            DishqApplication.getPrefs().edit().putLong(Constants.APP_WENT_TO_BACKGROUND, 0).apply();
+            DishqApplication.setAppWentToBg(0);
+            if (difference > THIRTY_MINUTES) {
+                int currentPage = 0;
+                Util.setCurrentPage(currentPage);
+                checkInternetConnection();
+            } else {
+                Log.d(TAG, "Checking where to go");
+                checkWhereToGo();
+            }
+        } else {
+            Log.d(TAG, "Checking where to go");
+            checkWhereToGo();
         }
+    }
+
+    protected void checkWhereToGo() {
         if (Util.isHomeRefreshRequired()) {
             Util.setHomeRefreshRequired(false);
             Util.setHomeLastPage(-1);
-            fetchHomeDishResults();
+            int currentPage = 0;
+            Util.setCurrentPage(currentPage);
+            Log.d(TAG, "Checking for internet");
+            checkInternetConnection();
         } else {
+            if (viewPager != null) {
+                int currentPage = viewPager.getCurrentItem();
+                Util.setCurrentPage(currentPage);
+            }
             setViews();
+        }
+    }
+
+    //Method to check if the internet is connected or not
+    private void checkInternetConnection() {
+        SharedPreferences settings;
+        final String PREFS_NAME = "MyPrefsFile";
+        settings = getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("android_M", true)) {
+            //the app is being launched for first time, do something
+            Log.d("Comments", " android_M");
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                checkNetwork();
+            } else {
+                checkNetwork();
+            }
+            settings.edit().putBoolean("android_M", false).apply();
+        } else {
+            checkNetwork();
+        }
+    }
+
+    //Check for internet
+    private void checkNetwork() {
+        if (!Util.checkAndShowNetworkPopup(this)) {
+            //Check for version
+            Log.d(TAG, "checking for GPS");
+            if (Util.getLatitude().equals("") && Util.getLongitude().equals("")) {
+                Util.setHomeRefreshRequired(false);
+                checkGPS();
+            } else {
+                fetchHomeDishResults();
+            }
+
         }
     }
 
@@ -320,6 +383,13 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                     Util.dishDataModals = body.dishDataInfos;
                                     Util.dishSmallPic.add(body.dishDataInfos.get(i).getDishPhoto().get(0));
                                 }
+
+                                Util.setShowBanner(body.getAreaOutOfCoverage());
+                                if(Util.getShowBanner()){
+                                    Util.setBannerText(body.getOutOfCoverageText());
+                                }else {
+                                    Util.setBannerText("");
+                                }
                                 Boolean showGreeting = body.getShowGreeting();
                                 if (showGreeting) {
                                     progressBar.setVisibility(View.GONE);
@@ -378,6 +448,10 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
     private void setViews() {
         setTags();
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+            progressBg.setVisibility(View.GONE);
+        }
         viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
         if (Util.getCurrentPage() != 200) {
             viewPager.setCurrentItem(Util.getCurrentPage());
@@ -392,7 +466,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d(TAG, "onPageScrolled is called : "+ position);
+                Log.d(TAG, "onPageScrolled is called : " + position);
+
             }
 
             @Override
@@ -405,7 +480,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 Log.d(TAG, "onPageScrollStateChanged is called" + viewPager.getCurrentItem() + " state : " + state);
                 if (state == 0) {
                     int currentPage = viewPager.getCurrentItem();
-                    if ((currentPage == Util.getHomeLastPage())&& (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1)) {
+                    Util.setCurrentPage(currentPage);
+                    if ((currentPage == Util.getHomeLastPage()) && (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1)) {
                         Log.d(TAG, "Going into the swipeLeft");
                         Util.setCurrentPage(viewPager.getCurrentItem());
                         Log.d(TAG, "Setting the current Page");
@@ -414,7 +490,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     }
                 }
-                if(state == 1) {
+                if (state == 1) {
                     Util.setHomeLastPage(viewPager.getCurrentItem());
                 }
             }
@@ -433,6 +509,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
 
         } else if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            Log.d(TAG, "self permission invoked");
             selfPermission();
         }
     }
@@ -603,6 +680,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                 Util.setLongitude(lang);
                 Util.setLatitude(lat);
                 Log.d("LOCATION", "LOCATION" + mLastLocation.getLatitude());
+                Log.d(TAG, "fetching home results");
                 fetchHomeDishResults();
 
             } else {
@@ -620,7 +698,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         if (ActivityCompat.shouldShowRequestPermissionRationale(HomeActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
             Log.e("accept", "accept");
-            Toast.makeText(this, "Enable Location Permission to access this feature", Toast.LENGTH_SHORT).show(); // Something like this
+            Toast.makeText(this, "Enable Location Permission to access this feature", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -687,7 +765,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     public void alertNoForward(final Activity activity) {
         if (!(HomeActivity.this).isFinishing()) {
             AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setMessage("Can't update without GPS")
+                    .setMessage("You can't continue without GPS")
                     .setCancelable(false)
                     .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
 

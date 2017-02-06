@@ -84,6 +84,7 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
     private FrameLayout goingToNextCard;
     private ImageView navBarBg;
     private boolean networkFailed;
+    private Button noCoverageBanner;
 
     public HomeScreenFragment() {
     }
@@ -143,6 +144,8 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
         frameClick = (FrameLayout) rootView.findViewById(R.id.frame_click);
         drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        noCoverageBanner = (Button) rootView.findViewById(R.id.no_coverage_banner);
+        noCoverageBanner.setTypeface(Util.opensansregular);
 
         Boolean isNotEmpty = false;
         String moodText;
@@ -163,6 +166,17 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                 moodText = Util.getMoodName() + " , " + Util.getFilterName();
             }
             moodFilterText.setText(moodText);
+        }
+
+        if(Util.getShowBanner()) {
+            if(isNotEmpty) {
+                noCoverageBanner.setVisibility(View.GONE);
+            }else {
+                noCoverageBanner.setVisibility(View.VISIBLE);
+                noCoverageBanner.setText(Util.getBannerText());
+            }
+        }else {
+            noCoverageBanner.setVisibility(View.GONE);
         }
 
         moodButton.setOnClickListener(new View.OnClickListener() {

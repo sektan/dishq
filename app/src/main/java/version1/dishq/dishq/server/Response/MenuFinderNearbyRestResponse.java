@@ -37,6 +37,22 @@ public class MenuFinderNearbyRestResponse {
         @SerializedName("drive_time")
         @Expose
         private String driveTime;
+        @SerializedName("delivery_time")
+        @Expose
+        String nbDeliveryTime;
+
+        @SerializedName("is_open_now")
+        @Expose
+        Boolean nbIsOpenNow;
+
+        @SerializedName("has_home_delivery")
+        @Expose
+        Boolean nbHasHomeDelivery;
+
+        @SerializedName("can_be_delivered")
+        @Expose
+        Boolean nbCanBeDelivered;
+
         @SerializedName("price_level")
         @Expose
         private Integer priceLevel;
@@ -60,6 +76,41 @@ public class MenuFinderNearbyRestResponse {
         @SerializedName("restaurant_type_text")
         @Expose
         public ArrayList<String> nearByRestTypeText;
+
+
+        public String getNbDeliveryTime() {
+            return nbDeliveryTime;
+        }
+
+        public void setNbDeliveryTime(String nbDeliveryTime) {
+            this.nbDeliveryTime = nbDeliveryTime;
+        }
+
+        public Boolean getNbIsOpenNow() {
+            return nbIsOpenNow;
+        }
+
+        public void setNbIsOpenNow(Boolean nbIsOpenNow) {
+            this.nbIsOpenNow = nbIsOpenNow;
+        }
+
+        public Boolean getNbHasHomeDelivery() {
+            return nbHasHomeDelivery;
+        }
+
+        public void setNbHasHomeDelivery(Boolean nbHasHomeDelivery) {
+            this.nbHasHomeDelivery = nbHasHomeDelivery;
+        }
+
+        public Boolean getNbCanBeDelivered() {
+            return nbCanBeDelivered;
+        }
+
+        public void setNbCanBeDelivered(Boolean nbCanBeDelivered) {
+            this.nbCanBeDelivered = nbCanBeDelivered;
+        }
+
+
 
         public ArrayList<String> getNearByRestTypeText() {
             return nearByRestTypeText;

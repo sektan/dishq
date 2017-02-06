@@ -10,6 +10,7 @@ import version1.dishq.dishq.fragments.dialogfragment.filters.models.searchfilter
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.DishqApplication;
+import version1.dishq.dishq.util.Util;
 
 /**
  * Created by kavin.prabhu on 01/01/17.

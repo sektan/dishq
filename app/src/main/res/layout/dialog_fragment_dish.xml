@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_fav_dish"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,15 +19,15 @@
             android:id="@+id/popup_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/pop_up_photo"/>
+            android:contentDescription="@string/pop_up_photo"
+            android:scaleType="fitXY" />
 
         <ImageView
-            android:src="@drawable/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/pop_up_photo" />
+            android:contentDescription="@string/pop_up_photo"
+            android:src="@drawable/frame" />
 
     </FrameLayout>
 
@@ -37,79 +38,88 @@
         android:layout_marginStart="15dp">
 
 
-    <RelativeLayout
-        android:id="@+id/rl_dish_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="4dp">
+        <RelativeLayout
+            android:id="@+id/rl_dish_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cardview_background">
 
-        <include
-            android:id="@+id/fav_rl_veg_egg_non"
-            layout="@layout/dish_type_tags" />
+            <RelativeLayout
 
-        <TextView
-            android:id="@+id/fav_dish_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="4dp"
+                tools:ignore="UselessParent">
+
+                <include
+                    android:id="@+id/fav_rl_veg_egg_non"
+                    layout="@layout/dish_type_tags" />
+
+                <TextView
+                    android:id="@+id/fav_dish_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toEndOf="@+id/fav_rl_veg_egg_non"
+                    android:maxLines="2"
+                    android:shadowColor="#60000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_20" />
+
+                <TextView
+                    android:id="@+id/fav_dish_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fav_dish_name"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="13dp"
+                    android:shadowColor="#60000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fav_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rl_dish_name"
+            android:layout_marginStart="10dp"
+            android:background="#00000000" />
+
+        <Button
+            android:id="@+id/fav_food_tags"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="18dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="0dp"
-            android:layout_toEndOf="@+id/fav_rl_veg_egg_non"
-            android:maxLines="2"
-            android:textColor="@color/white"
-            android:shadowColor="#60000000"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/food_tags_button_shape"
+            android:gravity="start|center_vertical"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="5"
+            android:paddingBottom="3dp"
+            android:paddingEnd="14dp"
+            android:paddingStart="14dp"
+            android:paddingTop="3dp"
+            android:shadowColor="#50000000"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:textSize="@dimen/text_size_20" />
-
-        <TextView
-            android:id="@+id/fav_dish_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/fav_dish_name"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="13dp"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:shadowColor="#60000000"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="1"
-            android:textSize="@dimen/text_size_14" />
-
-    </RelativeLayout>
-
-    <FrameLayout
-        android:id="@+id/fav_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_dish_name"
-        android:layout_marginStart="10dp"
-        android:background="#00000000" />
-
-    <Button
-        android:id="@+id/fav_food_tags"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="22dp"
-        android:background="@drawable/food_tags_button_shape"
-        android:gravity="start|center_vertical"
-        android:maxLines="5"
-        android:paddingEnd="14dp"
-        android:paddingStart="14dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:lineSpacingExtra="2dp"
-        android:shadowColor="#50000000"
-        android:shadowDx="1"
-        android:shadowDy="1"
-        android:shadowRadius="1"
-        style="?android:attr/borderlessButtonStyle"
-        android:textSize="@dimen/text_size_13" />
+            android:textSize="@dimen/text_size_13" />
 
     </RelativeLayout>
 

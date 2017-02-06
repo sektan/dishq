@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="11.7dp"
             android:paddingBottom="11.7dp"
-            android:background="#15000000">
+            android:background="#20000000">
 
             <LinearLayout
                 android:id="@+id/ll_menu_serves"
@@ -44,7 +44,7 @@
                     android:paddingStart="12.7dp"
                     android:paddingEnd="13dp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_16" />
+                    android:textSize="@dimen/text_size_14" />
 
             </LinearLayout>
 
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12.7dp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_16" />
+                    android:textSize="@dimen/text_size_14" />
 
             </LinearLayout>
 
@@ -87,68 +87,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_cv_dine_menu_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <Button
             android:id="@+id/dinemenu_call"
-            android:layout_width="24.7dp"
-            android:layout_height="24.7dp"
+            android:layout_width="164dp"
+            android:layout_height="34dp"
             android:layout_marginBottom="7.3dp"
             android:layout_marginEnd="11.3dp"
             android:layout_marginStart="11.3dp"
             android:layout_marginTop="9.3dp"
-            android:background="@drawable/call"
-            style="?android:attr/borderlessButtonStyle" />
+            android:background="@drawable/delmenu_order_button_shape"
+            android:text="@string/call"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_12"
+            android:weightSum="0.5"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:id="@+id/dinemenu_directions"
-            android:layout_width="32.7dp"
-            android:layout_height="27.3dp"
+            android:layout_width="164dp"
+            android:layout_height="34dp"
             android:layout_marginBottom="7.3dp"
             android:layout_marginEnd="11.3dp"
             android:layout_marginTop="9.3dp"
-            android:layout_marginStart="5dp"
-            android:background="@drawable/directions"
-            style="?android:attr/borderlessButtonStyle" />
-
-        <TextView
-            android:id="@+id/dinemenu_drive_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/black"
-            android:shadowColor="@color/white"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="5"
-            android:textSize="@dimen/text_size_14" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/vertical_line"
-            android:textColor="@color/black"
-            android:shadowColor="@color/white"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="5"
-            android:textSize="@dimen/text_size_14" />
-
-        <TextView
-            android:id="@+id/menu_delivery_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/black"
-            android:shadowColor="@color/white"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="5"
-            android:textSize="@dimen/text_size_14" />
+            android:background="@drawable/delmenu_order_button_shape"
+            android:text="@string/directions"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_12"
+            style="?android:attr/borderlessButtonStyle"
+            android:weightSum="0.5"/>
 
     </LinearLayout>
 
@@ -182,7 +155,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="2dp"
         android:layout_below="@+id/personalized_menu_text" />
 
     <RelativeLayout
@@ -208,7 +181,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/delmenu_order_text"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:gravity="center_horizontal|center_vertical"
             android:orientation="horizontal">
 
@@ -216,8 +189,9 @@
                 android:id="@+id/zomato_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
                 android:drawableTop="@drawable/order_zomato"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:text="@string/zomato"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_12"
@@ -227,8 +201,9 @@
                 android:id="@+id/swiggy_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
                 android:drawableTop="@drawable/order_swiggy"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:text="@string/swiggy"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_12"
@@ -238,8 +213,9 @@
                 android:id="@+id/foodpanda_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
                 android:drawableTop="@drawable/order_foodpanda"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:text="@string/foodpanda"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_12"
@@ -249,8 +225,9 @@
                 android:id="@+id/runnr_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
                 android:drawableTop="@drawable/order_runnr"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:text="@string/runnr"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_12"
@@ -262,7 +239,7 @@
             android:id="@+id/menu_book_table_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="31dp"
+            android:layout_marginTop="20dp"
             android:text="@string/book_table_via"
             android:layout_below="@+id/delmenu_deloptions"
             android:textAlignment="center"
@@ -283,10 +260,10 @@
                 android:id="@+id/eazydiner_book"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="44dp"
-                android:layout_marginBottom="25dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:drawableTop="@drawable/eazydiner"
-                android:text="@string/swiggy"
+                android:text="@string/eazydiner_book"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_12"
                 android:visibility="gone"/>
@@ -295,10 +272,10 @@
                 android:id="@+id/dineout_book"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="45dp"
-                android:layout_marginBottom="25dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:drawableTop="@drawable/dineout"
-                android:text="@string/foodpanda"
+                android:text="@string/dineout_book"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_12"
                 android:visibility="gone"/>
@@ -307,8 +284,8 @@
                 android:id="@+id/zomato_book"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="44dp"
-                android:layout_marginBottom="25dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:drawableTop="@drawable/order_zomato"
                 android:text="@string/zomato"
                 android:textColor="@color/black"

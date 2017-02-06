@@ -13,6 +13,8 @@
     <color name="rowGreen">#e8f6f4</color>
     <color name="rowPurple">#f1eef6</color>
     <color name="greyWhite">#fafafa</color>
+    <color name="bannerColor">#f24a4a</color>
+    <color name="noDelivery">#ff4800</color>
 
     <color name="greyButton">#dfdfdf</color>
     <color name="disabledTextColor">#b3b3b3</color>

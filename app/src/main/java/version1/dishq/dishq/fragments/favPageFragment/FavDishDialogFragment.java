@@ -73,6 +73,7 @@ public class FavDishDialogFragment extends DialogFragment implements View.OnClic
         favDishName = (TextView) rootView.findViewById(R.id.fav_dish_name);
         favDishName.setTypeface(Util.opensanslight);
         favDishType = (TextView) rootView.findViewById(R.id.fav_dish_type);
+        favDishType.setTypeface(Util.opensansregular);
         vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
         eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
         nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);

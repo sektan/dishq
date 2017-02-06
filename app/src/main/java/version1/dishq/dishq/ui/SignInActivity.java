@@ -272,7 +272,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         Log.e(TAG, "Handle: " + "1");
         if (result.isSuccess()) {
             Log.d(TAG, "result is a success" + result.toString());
-            // Signed in successfully, show authenticated UI.
+            // Signed in successfully.
             final GoogleSignInAccount acct = result.getSignInAccount();
             assert acct != null;
             final String authCode = acct.getServerAuthCode();

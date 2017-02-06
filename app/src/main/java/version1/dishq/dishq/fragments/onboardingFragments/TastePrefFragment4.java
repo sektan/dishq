@@ -3,6 +3,8 @@ package version1.dishq.dishq.fragments.onboardingFragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +95,8 @@ public class TastePrefFragment4 extends Fragment {
                 } catch (final JSONException e) {
                     throw new RuntimeException("Could not encode hour of the day in JSON");
                 }
+                doneButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.done_button_after_clicked, null));
+                doneButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
                 OnBoardingActivity.pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
                 sendUserPrefData();
             }
@@ -159,6 +163,7 @@ public class TastePrefFragment4 extends Fragment {
                 Log.d(TAG, "Success");
                 DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, true).apply();
                 DishqApplication.setOnBoardingDone(true);
+                Util.setHomeRefreshRequired(true);
                 Intent startHomeActivity = new Intent(DishqApplication.getContext(), HomeActivity.class);
                 startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().finish();

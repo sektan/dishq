@@ -43,6 +43,7 @@ import version1.dishq.dishq.server.Response.DineoutMenuResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
+import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.MenuFinderNearbyRestResponse;
 import version1.dishq.dishq.server.Response.MenuFinderRestSuggestResponse;
 import version1.dishq.dishq.server.RestApi;
@@ -104,6 +105,42 @@ public class Util {
     private static int quickFilterPosition = -1;
     private static boolean showFeedbackQues = false;
     private static int homeLastPage = -1;
+    private static Boolean showBanner = false;
+    private static String bannerText = "";
+    private static Boolean resetClicked = false;
+    private static Boolean foodResetClicked = false;
+
+    public static Boolean getFoodResetClicked() {
+        return foodResetClicked;
+    }
+
+    public static void setFoodResetClicked(Boolean foodResetClicked) {
+        Util.foodResetClicked = foodResetClicked;
+    }
+
+    public static Boolean getResetClicked() {
+        return resetClicked;
+    }
+
+    public static void setResetClicked(Boolean resetClicked) {
+        Util.resetClicked = resetClicked;
+    }
+
+    public static Boolean getShowBanner() {
+        return showBanner;
+    }
+
+    public static void setShowBanner(Boolean showBanner) {
+        Util.showBanner = showBanner;
+    }
+
+    public static String getBannerText() {
+        return bannerText;
+    }
+
+    public static void setBannerText(String bannerText) {
+        Util.bannerText = bannerText;
+    }
 
     public static boolean isShowFeedbackQues() {
         return showFeedbackQues;

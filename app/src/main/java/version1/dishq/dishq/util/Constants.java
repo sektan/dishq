@@ -19,7 +19,7 @@ public class Constants {
     public static final String FOOD_CHOICE_SELECTED = "food_choice_selected";
     public static final String USER_NAME = "user_name";
     public static final String ON_BOARDING_DONE = "on_boarding_done";
-    public static final String HOME_CUISINE_SELECTS = "home_cuisine_selects";
+    public static final String APP_WENT_TO_BACKGROUND = "app_went_to_background";
     public static final String FAV_CUISINE_SELECTS = "fav_cuisine_selects";
     public static final String ALLERGY_SELECTS = "allergy_selects";
     public static final String FAV_CUISINE_COUNT = "fav_cuisine_count";

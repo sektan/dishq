@@ -135,7 +135,6 @@ public class QuickFiltersFragment extends Fragment implements
     }
 
 
-
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -143,23 +142,7 @@ public class QuickFiltersFragment extends Fragment implements
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        try {
-            final JSONObject properties = new JSONObject();
-            properties.put("Mood filter search", "moodfilters");
-            mixpanel.track("Mood filter search", properties);
-        } catch (final JSONException e) {
-            throw new RuntimeException("Could not encode hour of the day in JSON");
-        }
-        if (getParentFragment() != null) {
-            if (getParentFragment() instanceof FiltersDialogFragment) {
-                ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
-                ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, false);
-            }
-        }
-    }
 
-    @Override
-    public void afterTextChanged(Editable s) {
         final String searchString = s.toString();
         if (searchString.length() > 1) {
             if (progressBar != null && !progressBar.isShown())
@@ -170,25 +153,40 @@ public class QuickFiltersFragment extends Fragment implements
 
                 @Override
                 public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
-                    if(actionId== EditorInfo.IME_ACTION_DONE) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
                         checkInternetConnection(searchString);
                         hideKeypad();
                     }
                     return true;
-
                 }
             });
-
             setRecyclerAdapter();
             datum = null;
             recyclerView.setVisibility(View.INVISIBLE);
+            if (getParentFragment() != null) {
+                if (getParentFragment() instanceof FiltersDialogFragment) {
+                    ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
+                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
+                }
+            }
         } else {
-            searchAutoCompleteText.clearFocus();
             if (progressBar != null && progressBar.isShown())
                 progressBar.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
+            if (getParentFragment() != null) {
+                if (getParentFragment() instanceof FiltersDialogFragment) {
+                    ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
+                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, false);
+                }
+            }
         }
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 
     //Method to check if the internet is connected or not
@@ -215,8 +213,14 @@ public class QuickFiltersFragment extends Fragment implements
     //Check for internet
     private void checkNetwork(String searchString) {
         if (!Util.checkAndShowNetworkPopup(getActivity())) {
-            //Check for version
-            Log.d("", "Checking for GPS");
+            try {
+                final JSONObject properties = new JSONObject();
+                properties.put("Mood filter search", "moodfilters");
+                mixpanel.track("Mood filter search", properties);
+            } catch (final JSONException e) {
+                throw new RuntimeException("Could not encode hour of the day in JSON");
+            }
+            //datumList.clear();
             presenter.getSearchQueryResults(searchString, this);
 
         } else {
@@ -243,20 +247,22 @@ public class QuickFiltersFragment extends Fragment implements
 
     @Override
     public void onSuccess(List<Datum> data) {
+        //datumList.clear();
         if (progressBar != null && progressBar.isShown())
             progressBar.setVisibility(View.INVISIBLE);
 
-        datumList.clear();
+        //datumList.clear();
         datumList.addAll(data);
 
         List<String> stringData = new ArrayList<>();
         if (data.size() > 0) {
-            for (Datum datum : data)
+            for (Datum datum : data) {
                 stringData.add(datum.getName());
+            }
             textView.setVisibility(View.GONE);
             arrayAdapter = new ArrayAdapter<>(DishqApplication.getContext(), R.layout.simple_dropdown_food_search_item, stringData);
             searchAutoCompleteText.setAdapter(arrayAdapter);
-        }else {
+        } else {
             textView.setVisibility(View.VISIBLE);
         }
     }
@@ -278,11 +284,12 @@ public class QuickFiltersFragment extends Fragment implements
         if (datumList != null && datumList.size() > 1) {
             this.datum = datumList.get(position);
             this.recyclerAdapter.clearSelection();
+            fillOptions(position);
 
             // Toggle the apply button depends on the selection
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
-                    searchAutoCompleteText.clearFocus();
+                    //searchAutoCompleteText.clearFocus();
                     ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
                     ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
                 }
@@ -304,7 +311,21 @@ public class QuickFiltersFragment extends Fragment implements
                     }
                 }
             }
+        } else {
+            if (getParentFragment() instanceof FiltersDialogFragment) {
+                if (!isAnyItemSelected) {
+                    ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
+                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, false);
+                }
+            }
         }
+    }
+
+    public void fillOptions(int position) {
+        Util.setFilterName(datumList.get(position).getName());
+        Util.setFilterClassName(datumList.get(position).getClassName());
+        Util.setFilterEntityId(datumList.get(position).getEntityId());
+
     }
 
     public Object getSelectedItem() {
@@ -319,7 +340,7 @@ public class QuickFiltersFragment extends Fragment implements
         } else if (selectedItem instanceof QuickFilter) {
             return ((QuickFilter) selectedItem).getName();
         }
-        return "";
+        return null;
     }
 
     public String getSelectedFilterClassName() {
@@ -347,6 +368,9 @@ public class QuickFiltersFragment extends Fragment implements
     public void clearSelection(boolean isBeingShown) {
         if (this.recyclerAdapter != null) {
             this.recyclerAdapter.clearSelection();
+            if(this.datumList!=null) {
+                this.datumList = null;
+            }
         }
         if (isBeingShown) {
             setRecyclerAdapter();

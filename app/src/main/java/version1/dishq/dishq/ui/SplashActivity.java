@@ -245,26 +245,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
 
     //Method to find out which activity to open next
     private void checkWhereToGo() {
-        if (!DishqApplication.getAccessToken().equals("null null")) {
-
-            if (!DishqApplication.getOnBoardingDone()) {
-                    //Intent to start OnBoarding
-                Intent startHomeActivity = new Intent(SplashActivity.this, OnBoardingActivity.class);
-                startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
-                startActivity(startHomeActivity);
-            } else {
-                //Check for gps
-                checkGPS();
-            }
-
-        } else {
-            //Intent to start the SignIn Activity after the splash screen
-            Intent i = new Intent(SplashActivity.this, SignInActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(i);
-        }
+       checkGPS();
     }
 
     //Method to show an alert when an update of the app is required
@@ -390,7 +371,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
+
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 googleApiClient);
@@ -457,7 +438,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
-                return;
+
             }
             mLastLocation = LocationServices.FusedLocationApi
                     .getLastLocation(googleApiClient);
@@ -469,10 +450,29 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 Util.setLongitude(lang);
                 Util.setLatitude(lat);
                 Log.d("LOCATION", "LOCATION" + mLastLocation.getLatitude());
-                Intent startHomeActivity = new Intent(SplashActivity.this, HomeActivity.class);
-                startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
-                startActivity(startHomeActivity);
+                if (!DishqApplication.getAccessToken().equals("null null")) {
+
+                    if (!DishqApplication.getOnBoardingDone()) {
+                        //Intent to start OnBoarding
+                        Intent startHomeActivity = new Intent(SplashActivity.this, OnBoardingActivity.class);
+                        startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(startHomeActivity);
+                    } else {
+                        //Check for gps
+                        Intent startHomeActivity = new Intent(SplashActivity.this, HomeActivity.class);
+                        startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(startHomeActivity);
+                    }
+
+                } else {
+                    //Intent to start the SignIn Activity after the splash screen
+                    Intent i = new Intent(SplashActivity.this, SignInActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(i);
+                }
 
             } else {
                 startLocationUpdates();
@@ -504,6 +504,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
             ActivityCompat.requestPermissions(SplashActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_GPS_ACCESS);
+            //getTheLocale();
         }
     }
 
@@ -515,7 +516,8 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
             case MY_PERMISSIONS_REQUEST_GPS_ACCESS: {
 
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLocation();
+                    Log.d(TAG, "Permission granted");
+                    getTheLocale();
                 } else {
                     showAlert("", "That permission is needed in order to update wait time. Tap Retry.");
                 }
@@ -557,7 +559,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     public void alertNoForward(final Activity activity) {
         if (!(SplashActivity.this).isFinishing()) {
             AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setMessage("Can't update without GPS")
+                    .setMessage("You can't continue without GPS")
                     .setCancelable(false)
                     .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
 
@@ -592,7 +594,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
+
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
     }

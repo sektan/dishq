@@ -57,6 +57,12 @@ public class QuickFiltersRecyclerAdapter extends RecyclerView.Adapter<QuickFilte
         holder.textFilterResults.setText(filterList.get(position).getName());
 
         if (selectedPos == position) {
+            if(Util.getFoodResetClicked()) {
+                Util.setFoodResetClicked(false);
+                lastSelectedPos = -1;
+                holder.textFilterResults.setBackgroundResource(R.drawable.filter_quick_item_state_unselected);
+                holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.white));
+            }
             holder.textFilterResults.setBackgroundResource(R.drawable.filter_quick_item_state_selected);
             holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.black));
         } else if (lastSelectedPos != -1) {

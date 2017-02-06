@@ -21,6 +21,15 @@ public class HomeDishesResponse {
     private String homeResponse;
 
     public class HomeData {
+
+        @SerializedName("is_area_out_of_coverage")
+        @Expose
+        private Boolean isAreaOutOfCoverage;
+
+        @SerializedName("out_of_coverage_text")
+        @Expose
+        private String outOfCoverageText;
+
         @SerializedName("greeting_info")
         @Expose
         public GreetingsInfo greetingsInfo;
@@ -40,6 +49,22 @@ public class HomeDishesResponse {
         @SerializedName("feedback_question")
         @Expose
         private String homeFeedbackQues;
+
+        public Boolean getAreaOutOfCoverage() {
+            return isAreaOutOfCoverage;
+        }
+
+        public void setAreaOutOfCoverage(Boolean areaOutOfCoverage) {
+            isAreaOutOfCoverage = areaOutOfCoverage;
+        }
+
+        public String getOutOfCoverageText() {
+            return outOfCoverageText;
+        }
+
+        public void setOutOfCoverageText(String outOfCoverageText) {
+            this.outOfCoverageText = outOfCoverageText;
+        }
 
         public String getDefaultTab() {
             return defaultTab;

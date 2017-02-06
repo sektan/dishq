@@ -19,6 +19,24 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/home_bg_image" />
 
+        <FrameLayout
+            android:id="@+id/frame_dine_rest_closed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="#40000000"/>
+
+        <Button
+            android:id="@+id/dine_rest_closed_button"
+            android:layout_width="130.7dp"
+            android:layout_height="37.3dp"
+            android:layout_marginTop="45dp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:background="@drawable/greeting_button_shape"
+            android:text="@string/closed"
+            android:textColor="#ff5027"/>
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,14 +86,14 @@
                 android:id="@+id/dineout_cv_drive_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                card_view:cardBackgroundColor="#50000000"
+                card_view:cardBackgroundColor="#60000000"
                 card_view:cardCornerRadius="3dp"
                 card_view:cardElevation="0dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="3dp">
+                    android:background="#60000000">
 
                     <TextView
                         android:id="@+id/dineout_rest_cuisine"
@@ -161,7 +179,7 @@
                             android:textSize="@dimen/text_size_12" />
 
                         <TextView
-                            android:id="@+id/dineout_drive_time"
+                            android:id="@+id/dineout_rest_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
@@ -174,18 +192,52 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/dineout_rest_type"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ll_cost_drive"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="3dp"
                         android:layout_marginStart="11dp"
-                        android:textColor="@color/white"
-                        android:shadowColor="@color/black"
-                        android:shadowDx="1"
-                        android:shadowDy="1"
-                        android:shadowRadius="5"
-                        android:textSize="@dimen/text_size_12" />
+                        android:layout_marginTop="3dp"
+                        android:layout_below="@+id/ll_cost_drive">
+
+                        <TextView
+                            android:id="@+id/dineout_drive_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:text="@string/vertical_line"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <TextView
+                            android:id="@+id/dineout_delivery_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginEnd="3dp"
+                            android:textColor="@color/white"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="5"
+                            android:textSize="@dimen/text_size_12" />
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
