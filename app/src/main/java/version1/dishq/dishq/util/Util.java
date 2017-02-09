@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +44,11 @@ import version1.dishq.dishq.server.Response.DineoutMenuResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
+import version1.dishq.dishq.server.Response.FoodFilterSearchResponse;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.MenuFinderNearbyRestResponse;
 import version1.dishq.dishq.server.Response.MenuFinderRestSuggestResponse;
+import version1.dishq.dishq.server.Response.MoodFoodFiltersResponse;
 import version1.dishq.dishq.server.RestApi;
 
 /**
@@ -69,6 +72,9 @@ public class Util {
     public static ArrayList<DineoutMenuResponse.DineoutMenuData> dineoutMenuInfos = new ArrayList<>();
     public static ArrayList<MenuFinderNearbyRestResponse.NearbyRestInfo> nearbyRestInfos = new ArrayList<>();
     public static ArrayList<MenuFinderRestSuggestResponse.MenuFinderRestInfo> menuFinderRestInfos = new ArrayList<>();
+    public static ArrayList<MoodFoodFiltersResponse.MoodFiltersInfo> moodFiltersInfos = new ArrayList<>();
+    public static ArrayList<MoodFoodFiltersResponse.FoodFiltersInfo> foodFiltersInfos = new ArrayList<>();
+    public static ArrayList<FoodFilterSearchResponse.FoodFilterSearchInfo> foodFilterSearchInfos = new ArrayList<>();
     public static ArrayList<HomeCuisineSelect> homeCuisineSelects = new ArrayList<>();
     public static ArrayList<FavCuisineSelect> favCuisineSelects = new ArrayList<>();
     private static HashMap<String,FavCuisineSelect> favCuisineMap = new HashMap<>();
@@ -109,6 +115,33 @@ public class Util {
     private static String bannerText = "";
     private static Boolean resetClicked = false;
     private static Boolean foodResetClicked = false;
+    private static Boolean itemSetFromSearch = false;
+    private static int pageNumber = 1;
+    private static int onBoardingPagerNumber = -1;
+
+    public static int getOnBoardingPagerNumber() {
+        return onBoardingPagerNumber;
+    }
+
+    public static void setOnBoardingPagerNumber(int onBoardingPagerNumber) {
+        Util.onBoardingPagerNumber = onBoardingPagerNumber;
+    }
+
+    public static int getPageNumber() {
+        return pageNumber;
+    }
+
+    public static void setPageNumber(int pageNumber) {
+        Util.pageNumber = pageNumber;
+    }
+
+    public static Boolean getItemSetFromSearch() {
+        return itemSetFromSearch;
+    }
+
+    public static void setItemSetFromSearch(Boolean itemSetFromSearch) {
+        Util.itemSetFromSearch = itemSetFromSearch;
+    }
 
     public static Boolean getFoodResetClicked() {
         return foodResetClicked;
@@ -370,6 +403,11 @@ public class Util {
         }
     }
 
+    /**
+     * Checking for internet connection
+     * @param activity context
+     * @return if online or not
+     */
     public static boolean checkAndShowNetworkPopup(final Activity activity) {
         currentAct = activity;
         if (!isOnline(false)) {
@@ -416,34 +454,22 @@ public class Util {
 
         return true;
     }
+    /***************************************************************************************************/
 
-    public static void showAlert(String title, String message, final Activity activity) {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
-        builder.setTitle(title);
-        builder.setMessage(message).setCancelable(false)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+    /**
+     * Hiding the soft keyboard
+     * @param ctx context
+     */
+    public static void hideKeyboard(Context ctx) {
+        InputMethodManager inputManager = (InputMethodManager) ctx
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                    }
-                })
-                .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_DENIED) {
-                            ActivityCompat.requestPermissions(activity,
-                                    new String[]{Manifest.permission.GET_ACCOUNTS},
-                                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                        }
-                    }
-                });
+        // check if no view has focus:
+        View v = ((Activity) ctx).getCurrentFocus();
+        if (v == null)
+            return;
 
-
-        android.app.AlertDialog alert = builder.create();
-        alert.show();
-        TextView message1 = (TextView) alert.findViewById(android.R.id.message);
-        assert message != null;
-        message1.setLineSpacing(0, 1.5f);
-
+        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
 }

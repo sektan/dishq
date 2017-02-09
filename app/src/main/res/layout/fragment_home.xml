@@ -176,7 +176,7 @@
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="1"
-            android:textSize="@dimen/text_size_13" />
+            android:textSize="@dimen/text_size_10" />
 
         <RelativeLayout
             android:id="@+id/rl_fav_dine"

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/food_search_text1"
+    android:id="@+id/food_search_text"
     style="?android:attr/dropDownItemStyle"
     android:maxLines="1"
     android:textColor="@color/black"
     android:textSize="@dimen/text_size_14"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="45dp"
     android:ellipsize="marquee" />

@@ -57,12 +57,6 @@ public class FilterMoodRecyclerAdapter extends RecyclerView.Adapter<FilterMoodRe
         holder.textFilterResults.setText(filterList.get(position).getName());
 
         if (selectedPos == position) {
-            if(Util.getResetClicked()) {
-                Util.setResetClicked(false);
-                lastSelectedPos = -1;
-                holder.textFilterResults.setBackgroundResource(R.drawable.filter_mood_item_state_unselected);
-                holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.white));
-            }
             holder.textFilterResults.setBackgroundResource(R.drawable.filter_mood_item_state_selected);
             holder.textFilterResults.setTextColor(ContextCompat.getColor(context, R.color.black));
         } else if (lastSelectedPos != -1) {

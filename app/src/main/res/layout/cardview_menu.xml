@@ -66,11 +66,10 @@
 
         <RelativeLayout
             android:id="@+id/menu_rl_fav_dine"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@drawable/hs_rl_button_bg_bottom">
-
 
             <ToggleButton
                 android:id="@+id/menu_favourites"
@@ -85,6 +84,7 @@
                 android:textOff="@null"
                 android:textOn="@null" />
 
+            <!--
             <TextView
                 android:id="@+id/menu_cost"
                 android:layout_width="wrap_content"
@@ -101,6 +101,7 @@
                 android:shadowDy="1"
                 android:shadowRadius="4"
                 tools:ignore="RelativeOverlap" />
+                -->
 
         </RelativeLayout>
     </RelativeLayout>

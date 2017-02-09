@@ -88,7 +88,6 @@ public class TastePrefFragment3 extends Fragment {
         FlowLayout favCuisineContainer = (FlowLayout) view.findViewById(R.id.fav_cuisine_container);
         favCuisineContainer.removeAllViews();
         for (FavCuisinesModal model : Util.favCuisinesModals) {
-            String name = Util.getHomeCuisineName();
             if (Util.getHomeCuisineName().equals(model.getFavCuisName())) {
                 continue;
             }
@@ -97,9 +96,8 @@ public class TastePrefFragment3 extends Fragment {
             child.setTypeface(Util.opensansregular);
             child.setTag(model);
 
-            if (model.getFavCuisCurrentSelect()) {
-                child.setChecked(true);
-            }
+            child.setChecked(model.getFavCuisCurrentSelect());
+
             favCuisineContainer.addView(child);
 
                 child.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +150,7 @@ public class TastePrefFragment3 extends Fragment {
     //For setting the font of the text visible to the user
     protected void setTypeFace() {
         favCuisine.setTypeface(Util.opensanslight);
-        pickThree.setTypeface(Util.opensanslight);
+        pickThree.setTypeface(Util.opensanssemibold);
     }
 
     void showNext() {

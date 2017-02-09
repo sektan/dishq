@@ -11,7 +11,7 @@
         android:indeterminateDrawable="@drawable/progress"
         android:indeterminate="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="70dp"
         android:visibility="gone"/>
 
     <RelativeLayout

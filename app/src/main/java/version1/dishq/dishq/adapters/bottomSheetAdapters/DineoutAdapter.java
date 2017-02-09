@@ -117,13 +117,19 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
         int dinePriceLvl = Util.dineoutRestInfos.get(position).getDineoutPriceLvl();
         if (dinePriceLvl == 1) {
             holder.dineRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+            holder.dineRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            holder.dineRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            holder.dineRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
         }else if(dinePriceLvl == 2) {
             holder.dineRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.dineRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+            holder.dineRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            holder.dineRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
         }else if(dinePriceLvl == 3) {
             holder.dineRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.dineRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.dineRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+            holder.dineRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
         }else if (dinePriceLvl == 4) {
             holder.dineRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.dineRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
@@ -142,16 +148,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
          * Setting the delivery time of the restaurant
          */
         holder.dineDeliveryTime.setText(Util.dineoutRestInfos.get(position).getDineDeliveryTime());
-        if(Util.dineoutRestInfos.get(position).getDineHasHomeDelivery()) {
-            if(Util.dineoutRestInfos.get(position).getDineCanBeDelivered()) {
-                holder.dineDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
-            }else {
-                holder.dineDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
-            }
 
-        }else {
-            holder.dineDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
-        }
         /********************************************************************************************************************/
 
         String dineRestType = "";
@@ -202,7 +199,7 @@ public class DineoutAdapter extends RecyclerView.Adapter<DineoutAdapter.DineoutR
             dineDeliveryTime.setTypeface(Util.opensanssemibold);
             dineClosedFrame = (FrameLayout) view.findViewById(R.id.frame_dine_rest_closed);
             dineClosed = (Button) view.findViewById(R.id.dine_rest_closed_button);
-            dineClosed.setTypeface(Util.opensansregular);
+            dineClosed.setTypeface(Util.opensanssemibold);
         }
     }
 }

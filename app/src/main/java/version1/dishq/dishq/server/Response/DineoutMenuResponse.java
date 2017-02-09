@@ -301,6 +301,18 @@ public class DineoutMenuResponse {
         @Expose
         private String menuDeliveryTime;
 
+        @SerializedName("is_open_now")
+        @Expose
+        private Boolean isOpenNow;
+
+        public Boolean getOpenNow() {
+            return isOpenNow;
+        }
+
+        public void setOpenNow(Boolean openNow) {
+            isOpenNow = openNow;
+        }
+
         public ArrayList<String> getRestFoodTags() {
             return restFoodTags;
         }

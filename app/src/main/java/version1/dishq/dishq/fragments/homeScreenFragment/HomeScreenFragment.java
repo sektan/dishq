@@ -47,6 +47,7 @@ import version1.dishq.dishq.R;
 import version1.dishq.dishq.custom.FontsOverride;
 import version1.dishq.dishq.fragments.bottomSheetFragment.BottomSheetFragment;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
+import version1.dishq.dishq.fragments.moodFoodFiltersFragments.MoodFoodDialogFragment;
 import version1.dishq.dishq.server.Response.DishDataInfo;
 import version1.dishq.dishq.ui.AboutUsActivity;
 import version1.dishq.dishq.ui.FavouritesActivity;
@@ -190,7 +191,8 @@ public class HomeScreenFragment extends Fragment implements NavigationView.OnNav
                     throw new RuntimeException("Could not encode hour of the day in JSON");
                 }
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+                //FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+                MoodFoodDialogFragment dialogFragment = MoodFoodDialogFragment.getInstance();
                 dialogFragment.show(fragmentManager, "filters_dialog_fragment");
             }
         });

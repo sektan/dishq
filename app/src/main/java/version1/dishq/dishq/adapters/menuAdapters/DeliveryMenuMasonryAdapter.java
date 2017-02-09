@@ -152,9 +152,9 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             }
         });
 
-        Resources res = context.getResources();
-        String text = String.format(res.getString(R.string.cost_of_dish), Util.deliveryMenuInfos.get(position).getDelMenuDishPrice());
-        holder.delMenuDishCost.setText(text);
+//        Resources res = context.getResources();
+//        String text = String.format(res.getString(R.string.cost_of_dish), Util.deliveryMenuInfos.get(position).getDelMenuDishPrice());
+//        holder.delMenuDishCost.setText(text);
     }
 
     @Override
@@ -183,8 +183,8 @@ public class DeliveryMenuMasonryAdapter extends RecyclerView.Adapter<DeliveryMen
             isSpicyTag = (ImageView) view.findViewById(R.id.spicy_tag);
             hasAlcoholTag = (ImageView) view.findViewById(R.id.alcohol_tag);
             delMenuDishName = (TextView) view.findViewById(R.id.menu_dish_name);
-            delMenuDishName.setTypeface(Util.opensansregular);
-            delMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
+//            delMenuDishName.setTypeface(Util.opensansregular);
+//            delMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
             delMenuDishCost.setTypeface(Util.opensansregular);
             delMenuFav = (ToggleButton) view.findViewById(R.id.menu_favourites);
             delMenuFrame = (FrameLayout) view.findViewById(R.id.menu_frame);

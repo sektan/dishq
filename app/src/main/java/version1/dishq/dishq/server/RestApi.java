@@ -17,9 +17,11 @@ import version1.dishq.dishq.server.Response.DeliveryTabResponse;
 import version1.dishq.dishq.server.Response.DineoutMenuResponse;
 import version1.dishq.dishq.server.Response.DineoutTabResponse;
 import version1.dishq.dishq.server.Response.FavouriteDishesResponse;
+import version1.dishq.dishq.server.Response.FoodFilterSearchResponse;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.Response.MenuFinderNearbyRestResponse;
 import version1.dishq.dishq.server.Response.MenuFinderRestSuggestResponse;
+import version1.dishq.dishq.server.Response.MoodFoodFiltersResponse;
 import version1.dishq.dishq.server.Response.SignUpResponse;
 import version1.dishq.dishq.server.Response.TastePrefData;
 import version1.dishq.dishq.server.Response.VersionCheckResponse;
@@ -66,7 +68,8 @@ public interface RestApi {
                                                  @Query("longitude") String longitude,
                                                  @Query("food_mood_id") int foodMoodId,
                                                  @Query("class_name") String quickFilterName,
-                                                 @Query("entity_id") int quickFilterEntityId);
+                                                 @Query("entity_id") int quickFilterEntityId,
+                                                 @Query("page") int pageNumber);
 
     @POST("api/ugc/dishfavourite/")
     Call<ResponseBody> addRemoveFavDish(@Header("Authorization") String authorization,
@@ -75,10 +78,18 @@ public interface RestApi {
     @GET("api/search/filters/")
     Call<FoodFilters> getFoodFilters(@Header("Authorization") String authorization);
 
+    @GET("api/search/filters/")
+    Call<MoodFoodFiltersResponse> getMoodFoodFilters(@Header("Authorization") String authorization);
+
     @GET("api/search/suggest/foodmood/")
     Call<SearchFilter> getSearchFilters(@Query("query") String searchKey,
                                         @Query("uid") String UniqueIdentifier,
                                         @Query("user_id") int UserId);
+
+    @GET("api/search/suggest/foodmood/")
+    Call<FoodFilterSearchResponse> getFoodFilterSuggestion(@Query("query") String searchKey,
+                                                           @Query("uid") String UniqueIdentifier,
+                                                           @Query("user_id") int UserId);
 
 
     @GET("api/restaurant/dish/{generic_dish_id}/dineout/")

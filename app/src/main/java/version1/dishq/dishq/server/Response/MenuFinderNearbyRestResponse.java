@@ -55,13 +55,13 @@ public class MenuFinderNearbyRestResponse {
 
         @SerializedName("price_level")
         @Expose
-        private Integer priceLevel;
+        private int priceLevel;
         @SerializedName("photo")
         @Expose
         private ArrayList<String> nearByRestPhoto;
         @SerializedName("restaurant_id")
         @Expose
-        private Integer nearByRestId;
+        private int nearByRestId;
         @SerializedName("restaurant_name")
         @Expose
         private String nearByRestName;
@@ -75,7 +75,7 @@ public class MenuFinderNearbyRestResponse {
 
         @SerializedName("restaurant_type_text")
         @Expose
-        public ArrayList<String> nearByRestTypeText;
+        private ArrayList<String> nearByRestTypeText;
 
 
         public String getNbDeliveryTime() {
@@ -136,11 +136,11 @@ public class MenuFinderNearbyRestResponse {
             this.driveTime = driveTime;
         }
 
-        public Integer getPriceLevel() {
+        public int getPriceLevel() {
             return priceLevel;
         }
 
-        public void setPriceLevel(Integer priceLevel) {
+        public void setPriceLevel(int priceLevel) {
             this.priceLevel = priceLevel;
         }
 
@@ -152,11 +152,11 @@ public class MenuFinderNearbyRestResponse {
             this.nearByRestPhoto = nearByRestPhoto;
         }
 
-        public Integer getNearByRestId() {
+        public int getNearByRestId() {
             return nearByRestId;
         }
 
-        public void setNearByRestId(Integer nearByRestId) {
+        public void setNearByRestId(int nearByRestId) {
             this.nearByRestId = nearByRestId;
         }
 

@@ -34,9 +34,21 @@ public class MenuFinderRestSuggestResponse {
         @Expose
         private int mfRestId;
 
-        @SerializedName("open_now")
+        @SerializedName("is_open_now")
         @Expose
         private Boolean mfOpenNow;
+
+        @SerializedName("has_home_delivery")
+        @Expose
+        Boolean mfHasHomeDelivery;
+
+        @SerializedName("can_be_delivered")
+        @Expose
+        Boolean mfCanBeDelivered;
+
+        @SerializedName("delivery_time")
+        @Expose
+        String mfDeliveryTime;
 
         @SerializedName("price_level")
         @Expose
@@ -61,6 +73,42 @@ public class MenuFinderRestSuggestResponse {
         @SerializedName("cuisine_text")
         @Expose
         private ArrayList<String> mfRestCuisineText;
+
+        @SerializedName("restaurant_type_text")
+        @Expose
+        private ArrayList<String> mfRestTypeText;
+
+        public ArrayList<String> getMfRestTypeText() {
+            return mfRestTypeText;
+        }
+
+        public void setMfRestTypeText(ArrayList<String> mfRestTypeText) {
+            this.mfRestTypeText = mfRestTypeText;
+        }
+
+        public Boolean getMfHasHomeDelivery() {
+            return mfHasHomeDelivery;
+        }
+
+        public void setMfHasHomeDelivery(Boolean mfHasHomeDelivery) {
+            this.mfHasHomeDelivery = mfHasHomeDelivery;
+        }
+
+        public Boolean getMfCanBeDelivered() {
+            return mfCanBeDelivered;
+        }
+
+        public void setMfCanBeDelivered(Boolean mfCanBeDelivered) {
+            this.mfCanBeDelivered = mfCanBeDelivered;
+        }
+
+        public String getMfDeliveryTime() {
+            return mfDeliveryTime;
+        }
+
+        public void setMfDeliveryTime(String mfDeliveryTime) {
+            this.mfDeliveryTime = mfDeliveryTime;
+        }
 
         public String getMfRestLatLon() {
             return mfRestLatLon;

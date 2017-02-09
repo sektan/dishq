@@ -34,7 +34,6 @@
             android:layout_height="wrap_content"
             android:layout_weight=".9"
             android:background="@null"
-            android:completionThreshold="1"
             android:dropDownVerticalOffset="7dp"
             android:imeOptions="actionDone"
             android:dropDownHeight="wrap_content"

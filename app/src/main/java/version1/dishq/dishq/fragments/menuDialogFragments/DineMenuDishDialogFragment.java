@@ -1,10 +1,7 @@
 package version1.dishq.dishq.fragments.menuDialogFragments;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -19,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -32,21 +28,12 @@ import version1.dishq.dishq.util.Util;
  * Package name version1.dishq.dishq.
  */
 
-public class DineMenuDishDialogFragment extends DialogFragment implements View.OnClickListener{
+public class DineMenuDishDialogFragment extends DialogFragment{
 
     TextView dineMenuDishName, dineMenuDishType;
-    private ImageView vegTag, eggTag, nonVegTag, isSpicyTag, hasAlcoholTag;
-    private Button dineMenuFoodTags;
-    private RelativeLayout rlDineMenuView;
-    private FrameLayout dineMenuFrame;
     protected ImageView photoPopUp;
 
     public DineMenuDishDialogFragment() {
-
-    }
-
-    @Override
-    public void onClick(View view) {
 
     }
 
@@ -79,21 +66,20 @@ public class DineMenuDishDialogFragment extends DialogFragment implements View.O
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
 
-        rlDineMenuView = (RelativeLayout) rootView.findViewById(R.id.rl_fav_dish);
-        dineMenuFrame = (FrameLayout) rootView.findViewById(R.id.fav_frame);
+        FrameLayout dineMenuFrame = (FrameLayout) rootView.findViewById(R.id.fav_frame);
         photoPopUp = (ImageView) rootView.findViewById(R.id.popup_photo);
         photoPopUp.setScaleType(ImageView.ScaleType.FIT_CENTER);
         dineMenuDishName = (TextView) rootView.findViewById(R.id.fav_dish_name);
         dineMenuDishName.setTypeface(Util.opensansregular);
         dineMenuDishType = (TextView) rootView.findViewById(R.id.fav_dish_type);
         dineMenuDishType.setTypeface(Util.opensansregular);
-        vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
-        eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
-        nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);
-        isSpicyTag = (ImageView) rootView.findViewById(R.id.spicy_tag);
-        hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
-        dineMenuFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
-
+        ImageView vegTag = (ImageView) rootView.findViewById(R.id.veg_tag);
+        ImageView eggTag = (ImageView) rootView.findViewById(R.id.egg_tag);
+        ImageView nonVegTag = (ImageView) rootView.findViewById(R.id.non_veg_tag);
+        ImageView isSpicyTag = (ImageView) rootView.findViewById(R.id.spicy_tag);
+        ImageView hasAlcoholTag = (ImageView) rootView.findViewById(R.id.alcohol_tag);
+        Button dineMenuFoodTags = (Button) rootView.findViewById(R.id.fav_food_tags);
+        dineMenuFoodTags.setTypeface(Util.opensansregular);
         dineMenuFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

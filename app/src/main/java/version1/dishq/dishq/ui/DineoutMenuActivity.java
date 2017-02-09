@@ -18,6 +18,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
@@ -60,6 +62,8 @@ import retrofit2.Response;
 import version1.dishq.dishq.BaseActivity;
 import version1.dishq.dishq.R;
 import version1.dishq.dishq.adapters.menuAdapters.DineoutMenuMasonryAdapter;
+import version1.dishq.dishq.fragments.menuDialogFragments.DineMenuDishDialogFragment;
+import version1.dishq.dishq.fragments.menuDialogFragments.MenuRestImageDialogFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.DineoutMenuResponse;
 import version1.dishq.dishq.server.RestApi;
@@ -102,9 +106,11 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
     private Button orderButton, bookTableButton;
     private TextView swiggy, foodpanda, runnr, zomato;
     private TextView btEazydiner, btDineout, btZomato;
-    private TextView ambienceText, deliveryTimeText;
+    private TextView ambienceText, deliveryTimeText, driveTimeText;
     private TextView orderFrom, bookTable;
     private RelativeLayout rlDineoutMenu;
+    private FrameLayout dineClosedFrame;
+    private Button dineClosed;
     protected static final int REQUEST_CHECK_SETTINGS = 1000;
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
@@ -160,6 +166,10 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
         dineMenuRp2 = (TextView) findViewById(R.id.dinemenu_rup_2);
         dineMenuRp3 = (TextView) findViewById(R.id.dinemenu_rup_3);
         dineMenuRp4 = (TextView) findViewById(R.id.dinemenu_rup_4);
+        driveTimeText = (TextView) findViewById(R.id.dinemenu_drive_time);
+        driveTimeText.setTypeface(Util.opensansregular);
+        deliveryTimeText = (TextView) findViewById(R.id.dinemenu_delivery_time);
+        deliveryTimeText.setTypeface(Util.opensansregular);
 
         orderButton = (Button) findViewById(R.id.dinemenu_order);
         orderButton.setTypeface(Util.opensanssemibold);
@@ -203,11 +213,21 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
         btDineout.setTypeface(Util.opensansregular);
         btZomato = (TextView) findViewById(R.id.zomato_book);
         btZomato.setTypeface(Util.opensansregular);
-        //appbarImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        dineClosedFrame = (FrameLayout) findViewById(R.id.frame_dine_rest_closed);
+        dineClosed = (Button) findViewById(R.id.dine_rest_closed_button);
+        dineClosed.setTypeface(Util.opensanssemibold);
         setFunctionality();
     }
 
     protected void setFunctionality() {
+
+        if (Util.dineoutRestData.getOpenNow()) {
+            dineClosedFrame.setVisibility(View.GONE);
+            dineClosed.setVisibility(View.GONE);
+        } else {
+            dineClosedFrame.setVisibility(View.VISIBLE);
+            dineClosed.setVisibility(View.VISIBLE);
+        }
 
         //Setting the image
         String imageUrl = Util.dineoutRestData.getDineRestPhoto().get(0);
@@ -216,6 +236,15 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                 .fit()
                 .centerCrop()
                 .into(appbarImage);
+
+        appbarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                MenuRestImageDialogFragment dialogFragment = MenuRestImageDialogFragment.getInstance();
+                dialogFragment.show(fm, "rest_image_dialog_fragment");
+            }
+        });
 
         //Setting the back button
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -247,7 +276,7 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             /************************************************************************/
 
             /**
-             * Setting the restaurant type hastags
+             * Setting the restaurant type
              */
 
             String restTypeText = "";
@@ -282,15 +311,28 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             /********************************************************************************************************/
 
             /**
+             * Setting the drive time for the restaurant
+             */
+            driveTimeText.setText(Util.dineoutRestData.getDineMenuDriveTime());
+            /****************************************************************************************************************/
+
+            /**
+             * Setting the delivery time of the restaurant
+             */
+            deliveryTimeText.setText(Util.dineoutRestData.getMenuDeliveryTime());
+
+            /********************************************************************************************************************/
+
+            /**
              * Setting the UI for getting the delivery options available
              */
             if (Util.dineoutRestData.getHasHomeDelivery()) {
-                if(Util.dineoutRestData.getCanBeDelivered()) {
+                if (Util.dineoutRestData.getCanBeDelivered()) {
                     orderFrom.setVisibility(View.VISIBLE);
                     orderButton.getBackground().setAlpha(255);
                     orderButton.setClickable(true);
                     orderClickable = true;
-                }else {
+                } else {
                     orderFrom.setVisibility(View.GONE);
                     orderButton.getBackground().setAlpha(100);
                     orderButton.setClickable(false);
@@ -307,20 +349,22 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             /**
              *Setting the UI for Dineout Options
              */
-        if(Util.dineoutRestData.getHasTableBooking()) {
-            bookTableButton.setClickable(true);
-            bookTable.setVisibility(View.VISIBLE);
-        }else {
-            bookTableButton.setClickable(false);
-            bookTable.setVisibility(View.GONE);
-        }
+            if (Util.dineoutRestData.getHasTableBooking()) {
+                bookTableButton.setClickable(true);
+                bookTableButton.getBackground().setAlpha(255);
+                bookTable.setVisibility(View.VISIBLE);
+            } else {
+                bookTableButton.setClickable(false);
+                bookTableButton.getBackground().setAlpha(100);
+                bookTable.setVisibility(View.GONE);
+            }
 
             /****************************************************************/
 
             String dishTags = "";
             if (Util.dineoutRestData.getRestFoodTags() != null) {
                 for (String s : Util.dineoutRestData.getRestFoodTags()) {
-                    dishTags += s + " ";
+                    dishTags += s + " " + " ";
                 }
             }
             dineMenuTags.setText(String.valueOf(dishTags));
@@ -331,7 +375,7 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             String ambience = "";
             if (Util.dineoutRestData.getDineMenuRestTags() != null) {
                 for (String s : Util.dineoutRestData.getDineMenuRestTags()) {
-                    ambience += s + " ";
+                    ambience += s + " " + " ";
                 }
             }
             ambienceText.setText(ambience);
@@ -396,10 +440,10 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                     if (Util.dineoutRestData.getHasHomeDelivery()) {
                         if (Util.dineoutRestData.getCanBeDelivered()) {
                             runnr.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             runnr.setVisibility(View.GONE);
                         }
-                    }else {
+                    } else {
                         runnr.setVisibility(View.GONE);
                     }
 
@@ -429,10 +473,10 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                     if (Util.dineoutRestData.getHasHomeDelivery()) {
                         if (Util.dineoutRestData.getCanBeDelivered()) {
                             foodpanda.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             foodpanda.setVisibility(View.GONE);
                         }
-                    }else {
+                    } else {
                         foodpanda.setVisibility(View.GONE);
                     }
                     foodpanda.setOnClickListener(new View.OnClickListener() {
@@ -462,10 +506,10 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                     if (Util.dineoutRestData.getHasHomeDelivery()) {
                         if (Util.dineoutRestData.getCanBeDelivered()) {
                             zomato.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             zomato.setVisibility(View.GONE);
                         }
-                    }else {
+                    } else {
                         zomato.setVisibility(View.GONE);
                     }
 
@@ -496,10 +540,10 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                     if (Util.dineoutRestData.getHasHomeDelivery()) {
                         if (Util.dineoutRestData.getCanBeDelivered()) {
                             swiggy.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             swiggy.setVisibility(View.GONE);
                         }
-                    }else {
+                    } else {
                         swiggy.setVisibility(View.GONE);
                     }
                     swiggy.setOnClickListener(new View.OnClickListener() {
@@ -596,45 +640,44 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
             }
         }
 
+        if (orderClickable) {
+            orderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("Order now button in delivery menu", "deliverymenu");
+                        mixpanel.track("Order now button in delivery menu", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
+                    rlOrderBook.setVisibility(View.GONE);
+                    nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
+        }
+
+        if (Util.dineoutRestData.getHasTableBooking()) {
+            bookTableButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        final JSONObject properties = new JSONObject();
+                        properties.put("book table button in dineout menu", "deliverymenu");
+                        mixpanel.track("book table button in dineout menu", properties);
+                    } catch (final JSONException e) {
+                        throw new RuntimeException("Could not encode hour of the day in JSON");
+                    }
+                    rlOrderBook.setVisibility(View.GONE);
+                    nestedScrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
+        }
+
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                final int position = v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight();
-                if (orderClickable) {
-                    orderButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            try {
-                                final JSONObject properties = new JSONObject();
-                                properties.put("Order now button in delivery menu", "deliverymenu");
-                                mixpanel.track("Order now button in delivery menu", properties);
-                            } catch (final JSONException e) {
-                                throw new RuntimeException("Could not encode hour of the day in JSON");
-                            }
-                            rlOrderBook.setVisibility(View.GONE);
-                            nestedScrollView.scrollTo(0, position);
-                        }
-                    });
-                }
-
-                if(Util.dineoutRestData.getHasTableBooking()) {
-                    bookTableButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            try {
-                                final JSONObject properties = new JSONObject();
-                                properties.put("book table button in dineout menu", "deliverymenu");
-                                mixpanel.track("book table button in dineout menu", properties);
-                            } catch (final JSONException e) {
-                                throw new RuntimeException("Could not encode hour of the day in JSON");
-                            }
-                            rlOrderBook.setVisibility(View.GONE);
-                            nestedScrollView.scrollTo(0, position);
-                        }
-                    });
-                }
-
                 if (scrollY > oldScrollY) {
                     Log.i(TAG, "Scroll DOWN");
                     rlOrderBook.setVisibility(View.VISIBLE);
@@ -648,6 +691,7 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                 if (scrollY == 0) {
                     Log.i(TAG, "TOP SCROLL");
                     rlOrderBook.setVisibility(View.VISIBLE);
+
                 }
 
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {

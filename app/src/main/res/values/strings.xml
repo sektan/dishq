@@ -30,7 +30,7 @@
     <string name="eggetarian">EGGETARIAN</string>
     <string name="non_veg">NON VEG</string>
     <string name="your_home_cuisine">Your home cuisine&#63;</string>
-    <string name="your_fav_cuisine">Your fav cuisine&#63;</string>
+    <string name="your_fav_cuisine">Your fav cuisines&#63;</string>
     <string name="pick_one">&#40;Pick 1&#41;</string>
     <string name="pick_three">&#40;Pick 3&#41;</string>
     <string name="allergy">Food you avoid or are\nallergic to&#63;</string>
@@ -140,7 +140,7 @@
     <string name="home_or">OR</string>
     <string name="home_feeling_lucky">Surprise me</string>
     <string name="menu_serves">Serves:</string>
-    <string name="vibe">Vibe:</string>
+    <string name="vibe">Features:</string>
     <string name="book_table_via">BOOK TABLE VIA</string>
     <string name="load_more_image">load more image</string>
     <string name="delivery_icon">delivery icon</string>
@@ -148,6 +148,7 @@
     <string name="call">CALL</string>
     <string name="dineout_book">Dineout</string>
     <string name="eazydiner_book">Eazydiner</string>
-    <string name="closed">CLOSED</string>
+    <string name="closed">CLOSED NOW</string>
+    <string name="close_cross">close cross</string>
 
 </resources>

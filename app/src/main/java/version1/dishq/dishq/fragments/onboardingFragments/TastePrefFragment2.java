@@ -142,7 +142,7 @@ public class TastePrefFragment2 extends Fragment {
     //For setting the font of the text visible to the user
     protected void setTypeFace() {
         homeCuisine.setTypeface(Util.opensanslight);
-        pickOne.setTypeface(Util.opensanslight);
+        pickOne.setTypeface(Util.opensanssemibold);
     }
 
     //Calling the next Fragment

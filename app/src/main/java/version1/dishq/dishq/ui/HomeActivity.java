@@ -68,6 +68,7 @@ import version1.dishq.dishq.custom.FontsOverride;
 import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
 import version1.dishq.dishq.fragments.homeScreenFragment.HomeScreenFragment;
+import version1.dishq.dishq.fragments.moodFoodFiltersFragments.MoodFoodDialogFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.Response.HomeDishesResponse;
 import version1.dishq.dishq.server.RestApi;
@@ -108,6 +109,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     private MixpanelAPI mixpanel = null;
     private Button moodFilterText;
     private FrameLayout goingToNextCard;
+    private int currentPageOfViewPager = -1;
+    private Boolean wasEmptyScreen = false;
     private FrameLayout progressBg;
 
     @Override
@@ -163,10 +166,22 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             checkInternetConnection();
         } else {
             if (viewPager != null) {
-                int currentPage = viewPager.getCurrentItem();
-                Util.setCurrentPage(currentPage);
+                currentPageOfViewPager = viewPager.getCurrentItem();
+                Util.setCurrentPage(currentPageOfViewPager);
+                if(wasEmptyScreen) {
+                    setNoResultTags();
+                }else {
+                    if(currentPageOfViewPager > -1) {
+                        currentPageOfViewPager = -1;
+                        setViews();
+                    }else {
+                        setNoResultTags();
+                    }
+                }
+            } else{
+                setNoResultTags();
             }
-            setViews();
+
         }
     }
 
@@ -202,11 +217,11 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             } else {
                 fetchHomeDishResults();
             }
-
         }
     }
 
     protected void setTags() {
+        wasEmptyScreen = false;
         viewPager = (ViewPager) findViewById(R.id.homeViewPager);
         viewPager.setVisibility(View.VISIBLE);
         rlGreeting = (RelativeLayout) findViewById(R.id.rl_greeting);
@@ -223,6 +238,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     }
 
     protected void setNoResultTags() {
+        wasEmptyScreen = true;
         viewPager = (ViewPager) findViewById(R.id.homeViewPager);
         viewPager.setVisibility(View.GONE);
         rlGreeting = (RelativeLayout) findViewById(R.id.rl_greeting);
@@ -310,7 +326,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                     throw new RuntimeException("Could not encode hour of the day in JSON");
                 }
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+                //FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+                MoodFoodDialogFragment dialogFragment = MoodFoodDialogFragment.getInstance();
                 dialogFragment.show(fragmentManager, "filters_dialog_fragment");
             }
         });
@@ -362,7 +379,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         int filterEntityId = Util.getFilterEntityId();
         RestApi restApi = Config.createService(RestApi.class);
         Call<HomeDishesResponse> call = restApi.fetchPersonalDishes(DishqApplication.getAccessToken(), DishqApplication.getUniqueID(),
-                latitude, longitude, moodId, filterClassName, filterEntityId);
+                latitude, longitude, moodId, filterClassName, filterEntityId, Util.getPageNumber());
         call.enqueue(new Callback<HomeDishesResponse>() {
             @Override
             public void onResponse(Call<HomeDishesResponse> call, Response<HomeDishesResponse> response) {
@@ -407,6 +424,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                     progressBar.setVisibility(View.GONE);
                                     progressBg.setVisibility(View.GONE);
                                 }
+                                Util.dishDataModals.clear();
+                                Util.dishSmallPic.clear();
                                 setNoResultTags();
                             }
                         } else {
@@ -414,6 +433,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                                 progressBar.setVisibility(View.GONE);
                                 progressBg.setVisibility(View.GONE);
                             }
+                            Util.dishDataModals.clear();
+                            Util.dishSmallPic.clear();
                             setNoResultTags();
                         }
 
@@ -422,6 +443,9 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                             progressBar.setVisibility(View.GONE);
                             progressBg.setVisibility(View.GONE);
                         }
+                        Util.dishDataModals.clear();
+                        Util.dishSmallPic.clear();
+                        setNoResultTags();
                         String error = response.errorBody().string();
                         Log.d(TAG, error);
                     }
@@ -429,7 +453,11 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                     if (progressBar != null) {
                         progressBar.setVisibility(View.GONE);
                         progressBg.setVisibility(View.GONE);
+
                     }
+                    Util.dishDataModals.clear();
+                    Util.dishSmallPic.clear();
+                    setNoResultTags();
                     e.printStackTrace();
                 }
             }
@@ -441,6 +469,8 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
                     progressBar.setVisibility(View.GONE);
                     progressBg.setVisibility(View.GONE);
                 }
+                Util.dishDataModals.clear();
+                Util.dishSmallPic.clear();
                 setNoResultTags();
             }
         });
@@ -456,12 +486,6 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
         if (Util.getCurrentPage() != 200) {
             viewPager.setCurrentItem(Util.getCurrentPage());
         }
-        int number = viewPager.getAdapter().getCount();
-        Log.d(TAG, "The page number is : " + number);
-        int CurrentPage = viewPager.getCurrentItem();
-        Log.d(TAG, "the current page is :" + CurrentPage);
-        final int count = Util.dishDataModals.size() - 2;
-        Log.d(TAG, "The current count is : " + count);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -923,7 +947,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
             HomeScreenFragment fragment = new HomeScreenFragment();
             fragment.setArguments(Util.dishDataModals.get(position).toBundle());
             // getItem is called to instantiate the fragment for the given page.
-            // Return a HomeScreenFragment (defined as a static inner class below).
+            // Return a HomeScreenFragment.
             return fragment;
         }
 
@@ -944,7 +968,7 @@ public class HomeActivity extends BaseActivity implements GoogleApiClient.Connec
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        //finish();
         System.exit(0);
     }
 }

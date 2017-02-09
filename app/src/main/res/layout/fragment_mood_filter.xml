@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:windowSoftInputMode="stateHidden"
+    tools:context="version1.dishq.dishq.fragments.moodFoodFiltersFragments.MoodFilterFragment">
+
+    <TextView
+        android:id="@+id/how_are_you_feeling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/how_are_you_feeling"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/black"
+        android:layout_marginTop="20dp"/>
+
+    <ProgressBar
+        android:id="@+id/filter_progress_bar"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/filter_mood_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_below="@+id/how_are_you_feeling"
+        android:layout_marginTop="6dp"
+        android:visibility="gone" />
+</RelativeLayout>

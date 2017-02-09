@@ -36,7 +36,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -91,7 +93,7 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
     protected RecyclerView.LayoutManager mLayoutManager;
     private EditText txtAutoComplete;
     private ProgressBar progressBar;
-    private String str="";
+    private String str = "";
     private TextView nearbyTextView, mfTextView;
     private MyAdapter myAdapter;
     private LinearLayout norestaurant;
@@ -144,9 +146,10 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
         recyclerView = (RecyclerView) findViewById(R.id.menu_finder_recycler_view);
         txtAutoComplete = (EditText) findViewById(R.id.menufinder_autosuggest);
         txtAutoComplete.setTypeface(Util.opensansregular);
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(txtAutoComplete.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
         rlNearByRest = (RelativeLayout) findViewById(R.id.rl_nearby_rest);
+        rlNearByRest.setVisibility(View.GONE);
         mfTextView = (TextView) findViewById(R.id.menufinder_no_results_text);
         nearbyTextView = (TextView) findViewById(R.id.nearby_rest_text);
         nearbyTextView.setTypeface(Util.opensansregular);
@@ -204,7 +207,7 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                   getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 }
             });
 
@@ -214,7 +217,7 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
 
                 }
             });
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -246,11 +249,11 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
             //Check for version
             Log.d(TAG, "Checking for GPS");
 
-            if(!fetchSearchOptions) {
+            if (!fetchSearchOptions) {
                 //Check for gps
                 checkGPS();
 
-            }else {
+            } else {
                 fetchRestaurant(query);
             }
 
@@ -277,28 +280,32 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
                                    Response<MenuFinderNearbyRestResponse> response) {
                 Log.d(TAG, "Success");
                 try {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         ArrayList<MenuFinderNearbyRestResponse.NearbyRestInfo> body = response.body().nearbyRestInfos;
-                        if(body!=null) {
+                        if (body != null) {
                             Log.d(TAG, "body is not null");
                             Util.nearbyRestInfos.clear();
-                            for(int i = 0; i <body.size(); i++) {
+                            for (int i = 0; i < body.size(); i++) {
                                 Util.nearbyRestInfos = body;
+                                Log.d(TAG, "the restaurant" + Util.nearbyRestInfos.get(i).getNearByRestName()+
+                                        "the price level is: " + Util.nearbyRestInfos.get(i).getPriceLevel());
+
                             }
                             MenuFinderNearbyRestAdapter adapter = new MenuFinderNearbyRestAdapter(MenuFinder.this);
                             recyclerView.setAdapter(adapter);
                             mLayoutManager = new LinearLayoutManager(MenuFinder.this);
                             mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                             progressBar.setVisibility(View.GONE);
+                            rlNearByRest.setVisibility(View.VISIBLE);
                             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
                             adapter.notifyDataSetChanged();
                         }
-                    }else {
+                    } else {
                         progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
-                }catch (IOException e) {
+                } catch (IOException e) {
                     progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
@@ -323,10 +330,10 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
             public void onResponse(Call<MenuFinderRestSuggestResponse> call, Response<MenuFinderRestSuggestResponse> response) {
                 Log.d(TAG, "Success");
                 try {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         ArrayList<MenuFinderRestSuggestResponse.MenuFinderRestInfo> body = response.body().menuFinderRestInfos;
-                        if(body!=null) {
-                            if(body.size()!=0) {
+                        if (body != null) {
+                            if (body.size() != 0) {
                                 Log.d(TAG, "body is not null");
 
                                 norestaurant.setVisibility(View.GONE);
@@ -340,19 +347,19 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
                                 listView.setVisibility(View.VISIBLE);
                                 listView.setAdapter(myAdapter);
 
-                            }else {
+                            } else {
                                 progressBar.setVisibility(View.GONE);
                                 Util.menuFinderRestInfos.clear();
                                 norestaurant.setVisibility(View.VISIBLE);
                                 listView.setVisibility(View.GONE);
                             }
                         }
-                    }else {
+                    } else {
                         progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "Error: " + error);
                     }
-                }catch (IOException e) {
+                } catch (IOException e) {
                     progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
@@ -361,7 +368,7 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
             @Override
             public void onFailure(Call<MenuFinderRestSuggestResponse> call, Throwable t) {
                 Log.d(TAG, "Failure");
-                if(t instanceof SocketTimeoutException) {
+                if (t instanceof SocketTimeoutException) {
                     progressBar.setVisibility(View.GONE);
                     Log.e("timeout", "timeout" + t.getMessage());
                     AlertDialog.Builder builder = new AlertDialog.Builder(MenuFinder.this);
@@ -685,7 +692,7 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
         try {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         } catch (Exception e) {
-            Log.d(TAG, "Exception:" +e);
+            Log.d(TAG, "Exception:" + e);
         }
     }
 
@@ -715,12 +722,16 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
     class MyAdapter extends BaseAdapter {
         LayoutInflater layoutInflater;
         Context context;
-        protected TextView mfRestName, mfRestAddr, mfRestCuisine, mfRup1,
-                mfRup2, mfRup3, mfRup4, mfDriveTime;
+        TextView mfRestName, mfRestAddr, mfRestCuisine, mfRup1,
+                mfRup2, mfRup3, mfRup4, mfDriveTime, mfRestTypeText, mfDeliveryTime;
 
-        protected RelativeLayout rlNearbyRest;
+        RelativeLayout rlNearbyRest;
 
         ImageView cardBgImage;
+
+        FrameLayout mfClosedFrame;
+
+        Button mfClosed;
 
         MyAdapter(Context context) {
             this.context = context;
@@ -745,12 +756,14 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = null;
-            if(view == null) {
+            if (view == null) {
                 view = layoutInflater.inflate(R.layout.cardview_dineout, parent, false);
                 mfRestName = (TextView) view.findViewById(R.id.dineout_rest_name);
                 mfRestName.setTypeface(Util.opensanssemibold);
                 mfRestAddr = (TextView) view.findViewById(R.id.dineout_rest_addr);
                 mfRestAddr.setTypeface(Util.opensansregular);
+                mfRestTypeText = (TextView) view.findViewById(R.id.dineout_rest_type);
+                mfRestTypeText.setTypeface(Util.opensansregular);
                 mfRestCuisine = (TextView) view.findViewById(R.id.dineout_rest_cuisine);
                 mfRup1 = (TextView) view.findViewById(R.id.dineout_rup_1);
                 mfRup2 = (TextView) view.findViewById(R.id.dineout_rup_2);
@@ -758,11 +771,31 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
                 mfRup4 = (TextView) view.findViewById(R.id.dineout_rup_4);
                 mfDriveTime = (TextView) view.findViewById(R.id.dineout_drive_time);
                 mfDriveTime.setTypeface(Util.opensanssemibold);
+                mfDeliveryTime = (TextView) view.findViewById(R.id.dineout_delivery_time);
+                mfDeliveryTime.setTypeface(Util.opensanssemibold);
                 rlNearbyRest = (RelativeLayout) view.findViewById(R.id.cv_rl_dineout);
                 cardBgImage = (ImageView) view.findViewById(R.id.card_bg_image);
                 cardBgImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                mfClosedFrame = (FrameLayout) view.findViewById(R.id.frame_dine_rest_closed);
+                mfClosed = (Button) view.findViewById(R.id.dine_rest_closed_button);
+                mfClosed.setTypeface(Util.opensanssemibold);
             }
 
+            /**
+             * Setting the UI in case the restaurant is closed
+             */
+            if (Util.menuFinderRestInfos.get(position).getMfOpenNow()) {
+                mfClosedFrame.setVisibility(View.GONE);
+                mfClosed.setVisibility(View.GONE);
+            } else {
+                mfClosedFrame.setVisibility(View.VISIBLE);
+                mfClosed.setVisibility(View.VISIBLE);
+            }
+            /**********************************************************************/
+
+            /**
+             * Setting the background image
+             */
             ArrayList<String> imageUrls = Util.menuFinderRestInfos.get(position).getMfPhotoThumbnail();
             String imageUrl = imageUrls.get(0);
             Picasso.with(DishqApplication.getContext())
@@ -771,6 +804,8 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
                     .centerCrop()
                     .noPlaceholder()
                     .into(cardBgImage);
+            /*********************************************************************************************/
+
             final int posn = position;
             rlNearbyRest.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -781,15 +816,20 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
                 }
             });
             mfRestName.setText(Util.menuFinderRestInfos.get(position).getMfRestName());
+
+            /**
+             * Setting the restaurant address
+             */
             String mfRestAddress = "";
-            if(Util.menuFinderRestInfos.get(position).getMfRestAddr()!=null) {
+            if (Util.menuFinderRestInfos.get(position).getMfRestAddr() != null) {
                 for (String s : Util.menuFinderRestInfos.get(position).getMfRestAddr()) {
                     mfRestAddress += s;
                 }
             }
             mfRestAddr.setText(mfRestAddress);
+
             StringBuilder sb = new StringBuilder();
-            if(Util.menuFinderRestInfos.get(position).getMfRestCuisineText()!=null) {
+            if (Util.menuFinderRestInfos.get(position).getMfRestCuisineText() != null) {
                 for (String s : Util.menuFinderRestInfos.get(position).getMfRestCuisineText()) {
                     if (sb.length() > 0) {
                         sb.append(',' + " ");
@@ -799,24 +839,46 @@ public class MenuFinder extends BaseActivity implements GoogleApiClient.Connecti
             }
             String mfCusineText = sb.toString();
             mfRestCuisine.setText(mfCusineText);
+
+            /**
+             * Setting the price level for the restaurant
+             */
             int mfPriceLvl = Util.menuFinderRestInfos.get(position).getMfPriceLvl();
             if (mfPriceLvl == 1) {
                 mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            }else if(mfPriceLvl == 2) {
+            } else if (mfPriceLvl == 2) {
                 mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
                 mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            }else if(mfPriceLvl == 3) {
+            } else if (mfPriceLvl == 3) {
                 mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
                 mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
                 mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
-            }else if (mfPriceLvl == 4) {
+            } else if (mfPriceLvl == 4) {
                 mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
                 mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
                 mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
                 mfRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             }
+            /***************************************************************************************************************/
 
+            /**
+             * Setting the drive time for the restaurant
+             */
             mfDriveTime.setText(Util.menuFinderRestInfos.get(position).getMfDriveTime());
+            /****************************************************************************************************************/
+
+            /**
+             * Setting the delivery time of the restaurant
+             */
+            mfDeliveryTime.setText(Util.menuFinderRestInfos.get(position).getMfDeliveryTime());
+
+            String mfRestType = "";
+            if (Util.menuFinderRestInfos.get(position).getMfRestTypeText() != null) {
+                for (String s : Util.menuFinderRestInfos.get(position).getMfRestTypeText()) {
+                    mfRestType += s + " ";
+                }
+            }
+            mfRestTypeText.setText(mfRestType);
             return view;
         }
     }

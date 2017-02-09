@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,6 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         return new FiltersDialogFragment();
     }
 
-    private static final String TAG = "FiltersDialogFragment";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +67,9 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("FilterFragment", "Filters fragment is created");
         return inflater.inflate(R.layout.dialog_fragment_filter, container, false);
+
     }
 
     @Override
@@ -114,8 +116,8 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         tabLayout.addTab(tabLayout.newTab().setText("MOOD"), 0, true);
         tabLayout.addTab(tabLayout.newTab().setText("FOOD"), 1);
         // Initially disable the tab click events
-        tabLayout.setClickable(false);
-        tabLayout.setEnabled(false);
+//        tabLayout.setClickable(false);
+//        tabLayout.setEnabled(false);
 
         presenter.getFilterResults(new FilterPresenter.FilterResultsCallback() {
             @Override
@@ -158,8 +160,7 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
             FragmentManager fm = getChildFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.filter_container, fragment, fragment.getTag());
-            if (getActivity() != null)
-                ft.commit();
+            ft.commit();
         }
     }
 
@@ -168,8 +169,6 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.filter_container);
         switch (v.getId()) {
             case R.id.filter_button_reset:
-                Util.setResetClicked(true);
-                Util.setFoodResetClicked(true);
                 Util.setFilterName("");
                 Util.setFilterClassName("");
                 Util.setFilterEntityId(-1);
@@ -203,7 +202,6 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
                 }
 
                 //Quick Filters
-
                 Object selectedItem = quickFiltersFragment.getSelectedItem();
                 if (quickFiltersFragment.getRecyclerAdapter() != null) {
                     Util.setQuickFilterPosition(quickFiltersFragment.getRecyclerAdapter().getSelectedPos());
@@ -264,10 +262,6 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
             case 1:
                 setCurrentTabFragment(1);
                 break;
-
-            default:
-                setCurrentTabFragment(0);
-                break;
         }
 
         tabLayout.setClickable(true);
@@ -293,6 +287,22 @@ public class FiltersDialogFragment extends DialogFragment implements View.OnClic
         }
 
         buttonApply.setEnabled(isEnabled);
+    }
+
+    public MoodFragment getMoodFragment() {
+        return moodFragment;
+    }
+
+    public void setMoodFragment(MoodFragment moodFragment) {
+        this.moodFragment = moodFragment;
+    }
+
+    public QuickFiltersFragment getQuickFiltersFragment() {
+        return quickFiltersFragment;
+    }
+
+    public void setQuickFiltersFragment(QuickFiltersFragment quickFiltersFragment) {
+        this.quickFiltersFragment = quickFiltersFragment;
     }
 
 }

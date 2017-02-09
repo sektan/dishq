@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -89,6 +90,7 @@ public class QuickFiltersFragment extends Fragment implements
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_filters, container, false);
+        Log.d("FilterFragment", "Food fragment is created");
         this.view = view;
 
         return view;
@@ -154,14 +156,13 @@ public class QuickFiltersFragment extends Fragment implements
                 @Override
                 public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        checkInternetConnection(searchString);
                         hideKeypad();
                     }
                     return true;
                 }
             });
             setRecyclerAdapter();
-            datum = null;
+//            datum = null;
             recyclerView.setVisibility(View.INVISIBLE);
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
@@ -174,14 +175,13 @@ public class QuickFiltersFragment extends Fragment implements
                 progressBar.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
-            if (getParentFragment() != null) {
-                if (getParentFragment() instanceof FiltersDialogFragment) {
-                    ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
-                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, false);
-                }
-            }
+//            if (getParentFragment() != null) {
+//                if (getParentFragment() instanceof FiltersDialogFragment) {
+//                    ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
+//                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, true);
+//                }
+//            }
         }
-
     }
 
     @Override
@@ -251,17 +251,26 @@ public class QuickFiltersFragment extends Fragment implements
         if (progressBar != null && progressBar.isShown())
             progressBar.setVisibility(View.INVISIBLE);
 
-        //datumList.clear();
+        datumList.clear();
         datumList.addAll(data);
 
         List<String> stringData = new ArrayList<>();
         if (data.size() > 0) {
+            textView.setVisibility(View.GONE);
             for (Datum datum : data) {
                 stringData.add(datum.getName());
+                Log.d("SearchResults", "Item name: " + datum.getName());
             }
-            textView.setVisibility(View.GONE);
             arrayAdapter = new ArrayAdapter<>(DishqApplication.getContext(), R.layout.simple_dropdown_food_search_item, stringData);
             searchAutoCompleteText.setAdapter(arrayAdapter);
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    searchAutoCompleteText.showDropDown();
+                }
+            }, 100);
+
         } else {
             textView.setVisibility(View.VISIBLE);
         }
@@ -289,7 +298,6 @@ public class QuickFiltersFragment extends Fragment implements
             // Toggle the apply button depends on the selection
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
-                    //searchAutoCompleteText.clearFocus();
                     ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
                     ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
                 }
@@ -306,16 +314,22 @@ public class QuickFiltersFragment extends Fragment implements
             if (getParentFragment() != null) {
                 if (getParentFragment() instanceof FiltersDialogFragment) {
                     if (isAnyItemSelected) {
+                        datum = null;
+                        ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
+                        ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
+                    }else if(FiltersDialogFragment.getInstance().getMoodFragment()==null ||
+                            FiltersDialogFragment.getInstance().getMoodFragment().getRecyclerAdapter().getSelectedPos()==-1){
+                        if(datum==null) {
+                            ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
+                            ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, true);
+                        }else {
+                            ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
+                            ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
+                        }
+                    }else {
                         ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
                         ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
                     }
-                }
-            }
-        } else {
-            if (getParentFragment() instanceof FiltersDialogFragment) {
-                if (!isAnyItemSelected) {
-                    ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
-                    ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, false);
                 }
             }
         }
@@ -340,7 +354,7 @@ public class QuickFiltersFragment extends Fragment implements
         } else if (selectedItem instanceof QuickFilter) {
             return ((QuickFilter) selectedItem).getName();
         }
-        return null;
+        return "";
     }
 
     public String getSelectedFilterClassName() {

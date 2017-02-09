@@ -110,6 +110,14 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
                             } catch (final JSONException e) {
                                 throw new RuntimeException("Could not encode hour of the day in JSON");
                             }
+                            Util.setMoodFilterId(-1);
+                            Util.setMoodName("");
+                            Util.setFilterName("");
+                            Util.setFilterClassName("");
+                            Util.setFilterEntityId(-1);
+                            Util.setQuickFilterPosition(-1);
+                            Util.setMoodPosition(-1);
+                            Util.setHomeRefreshRequired(true);
                             Logout();
                         }
                     });

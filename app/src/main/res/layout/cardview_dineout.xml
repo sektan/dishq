@@ -19,24 +19,6 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/home_bg_image" />
 
-        <FrameLayout
-            android:id="@+id/frame_dine_rest_closed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="#40000000"/>
-
-        <Button
-            android:id="@+id/dine_rest_closed_button"
-            android:layout_width="130.7dp"
-            android:layout_height="37.3dp"
-            android:layout_marginTop="45dp"
-            android:textAlignment="center"
-            android:visibility="gone"
-            android:background="@drawable/greeting_button_shape"
-            android:text="@string/closed"
-            android:textColor="#ff5027"/>
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -245,6 +227,24 @@
             </android.support.v7.widget.CardView>
         </RelativeLayout>
 
+        <FrameLayout
+            android:id="@+id/frame_dine_rest_closed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="#70000000"/>
+
+        <Button
+            android:id="@+id/dine_rest_closed_button"
+            android:layout_width="130.7dp"
+            android:layout_height="37.3dp"
+            android:layout_centerVertical="true"
+            android:textAlignment="center"
+            android:visibility="gone"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/greeting_button_shape"
+            android:text="@string/closed"
+            android:textColor="#ff5027"/>
 
     </RelativeLayout>
 

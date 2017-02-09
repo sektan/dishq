@@ -63,6 +63,8 @@ public class FavouritesActivity extends BaseActivity {
         favHeader.setTypeface(Util.opensanssemibold);
         backButton = (ImageView) findViewById(R.id.fav_back_button);
         rlNoFav = (RelativeLayout) findViewById(R.id.rl_no_fav);
+        TextView noFavsTextView = (TextView) findViewById(R.id.no_fav_text_view);
+        noFavsTextView.setTypeface(Util.opensansregular);
         favRecyclerView = (RecyclerView) findViewById(R.id.fav_recyclerView);
         setFunctionality();
     }
@@ -178,5 +180,12 @@ public class FavouritesActivity extends BaseActivity {
                 favRecyclerView.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Util.setHomeRefreshRequired(false);
+        finish();
     }
 }

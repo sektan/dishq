@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
@@ -41,6 +42,7 @@ public class OnBoardingActivity extends BaseActivity {
     private String TAG = "OnBoardingActivity";
     public static CustomViewPager pager;
     private boolean networkFailed;
+    private int posn = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class OnBoardingActivity extends BaseActivity {
         setContentView(R.layout.activity_onboarding);
         pager = (CustomViewPager) findViewById(R.id.customViewPager);
         pager.setPagingEnabled(CustomViewPager.SwipeDirection.NONE);
-        checkInternetConnection();
+
 
     }
 
@@ -56,6 +58,7 @@ public class OnBoardingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         hideSoftKeyboard();
+        checkInternetConnection();
     }
 
     @Override
@@ -91,7 +94,13 @@ public class OnBoardingActivity extends BaseActivity {
             //Check for version
             Log.d(TAG, "Checking for GPS");
             //Check for gps
-            fetchTastePref();
+            if(Util.allergyModals.size() == 0) {
+                fetchTastePref();
+            }else {
+                MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+                pager.setAdapter(adapter);
+            }
+
 
         } else {
             networkFailed = true;
@@ -118,10 +127,13 @@ public class OnBoardingActivity extends BaseActivity {
                         TastePrefData.FoodPreferencesInfo body = response.body().foodPreferencesinfo;
                         if (body != null) {
                             Log.d(TAG, "");
-                            Util.allergyModals.clear();
-                            Util.foodChoicesModals.clear();
-                            Util.favCuisinesModals.clear();
-                            Util.homeCuisinesModals.clear();
+
+
+                                Util.allergyModals.clear();
+                                Util.foodChoicesModals.clear();
+                                Util.favCuisinesModals.clear();
+                                Util.homeCuisinesModals.clear();
+
                             Log.d(TAG, "Length of Food Allergies: " + body.foodAllergiesInfos.size());
                             for (int i = 0; i < body.foodAllergiesInfos.size(); i++) {
                                 Util.allergyModals.add(new AllergyModal(body.foodAllergiesInfos.get(i).getAllergyClassName(),
@@ -146,10 +158,10 @@ public class OnBoardingActivity extends BaseActivity {
                                         body.homeCuisineInfos.get(l).getHomeCuisName()));
                                 Log.d(TAG, "Data has been filled: " + Util.homeCuisinesModals.size());
                             }
-//                            PageListener pageListener = new PageListener();
-//                            pager.addOnPageChangeListener(pageListener);
+
                             MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
                             pager.setAdapter(adapter);
+
                         }
                     } else {
                         String error = response.errorBody().string();

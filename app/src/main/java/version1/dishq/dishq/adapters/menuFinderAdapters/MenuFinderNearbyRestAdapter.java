@@ -106,13 +106,19 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
         int dinePriceLvl = Util.nearbyRestInfos.get(position).getPriceLevel();
         if (dinePriceLvl == 1) {
             holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+            holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            holder.mfRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
         }else if(dinePriceLvl == 2) {
             holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+            holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
+            holder.mfRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
         }else if(dinePriceLvl == 3) {
             holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.mfRup3.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
+            holder.mfRup4.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
         }else if (dinePriceLvl == 4) {
             holder.mfRup1.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
             holder.mfRup2.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.rupeeGreen));
@@ -131,16 +137,6 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
          * Setting the delivery time of the restaurant
          */
         holder.mfDeliveryTime.setText(Util.nearbyRestInfos.get(position).getNbDeliveryTime());
-        if(Util.nearbyRestInfos.get(position).getNbHasHomeDelivery()) {
-            if(Util.nearbyRestInfos.get(position).getNbCanBeDelivered()) {
-                holder.mfDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.white));
-            }else {
-                holder.mfDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
-            }
-
-        }else {
-            holder.mfDeliveryTime.setTextColor(ContextCompat.getColor(DishqApplication.getContext(), R.color.noDelivery));
-        }
         /********************************************************************************************************************/
 
 
@@ -184,6 +180,8 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
             nearByRestTypeText = (TextView) view.findViewById(R.id.dineout_rest_type);
             nearByRestTypeText.setTypeface(Util.opensansregular);
             mfRestCuisine = (TextView) view.findViewById(R.id.dineout_rest_cuisine);
+            mfRestCuisine.setTypeface(Util.opensansregular);
+            mfRestAddr.setTypeface(Util.opensansregular);
             mfRup1 = (TextView) view.findViewById(R.id.dineout_rup_1);
             mfRup2 = (TextView) view.findViewById(R.id.dineout_rup_2);
             mfRup3 = (TextView) view.findViewById(R.id.dineout_rup_3);
@@ -197,7 +195,7 @@ public class MenuFinderNearbyRestAdapter extends RecyclerView.Adapter<MenuFinder
             mfDeliveryTime.setTypeface(Util.opensanssemibold);
             mfClosedFrame = (FrameLayout) view.findViewById(R.id.frame_dine_rest_closed);
             mfClosed = (Button) view.findViewById(R.id.dine_rest_closed_button);
-            mfClosed.setTypeface(Util.opensansregular);
+            mfClosed.setTypeface(Util.opensanssemibold);
         }
     }
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -50,6 +51,7 @@ public class TastePrefFragment4 extends Fragment {
     private final static String TAG = "TastePrefFragment4";
     CheckedTextView child;
     Button allergyCuisine, doneButton;
+    ProgressBar progressBar;
     TextView optional;
     private FlowLayout allergyContainer;
     private MixpanelAPI mixpanel = null;
@@ -84,10 +86,12 @@ public class TastePrefFragment4 extends Fragment {
         doneButton = (Button) view.findViewById(R.id.done);
         allergyCuisine = (Button) view.findViewById(R.id.allergy_cuisine);
         optional = (TextView) view.findViewById(R.id.optional);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         setTypeFace();
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 try {
                     final JSONObject properties = new JSONObject();
                     properties.put("Done button", "onboarding");
@@ -104,7 +108,7 @@ public class TastePrefFragment4 extends Fragment {
         allergyContainer = (FlowLayout) view.findViewById(R.id.allergy_container);
         allergyContainer.removeAllViews();
         for (AllergyModal model : Util.allergyModals) {
-            if (DishqApplication.getFoodChoiceSelected() < model.getAllergyFoodChoice()) {
+            if ((DishqApplication.getFoodChoiceSelected()== 2 && model.getAllergyFoodChoice() == 2) || DishqApplication.getFoodChoiceSelected() < model.getAllergyFoodChoice()) {
                 continue;
             }
             child = (CheckedTextView) LayoutInflater.from(getContext()).inflate(R.layout.simple_selectable_list_item, allergyContainer, false);
@@ -146,7 +150,7 @@ public class TastePrefFragment4 extends Fragment {
             allergyCuisine.setTypeface(Util.opensanslight);
         }
         if (optional != null) {
-            optional.setTypeface(Util.opensanslight);
+            optional.setTypeface(Util.opensanssemibold);
         }
         doneButton.setTypeface(Util.opensanssemibold);
     }
@@ -164,6 +168,7 @@ public class TastePrefFragment4 extends Fragment {
                 DishqApplication.getPrefs().edit().putBoolean(Constants.ON_BOARDING_DONE, true).apply();
                 DishqApplication.setOnBoardingDone(true);
                 Util.setHomeRefreshRequired(true);
+                progressBar.setVisibility(View.GONE);
                 Intent startHomeActivity = new Intent(DishqApplication.getContext(), HomeActivity.class);
                 startHomeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().finish();
@@ -173,7 +178,9 @@ public class TastePrefFragment4 extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "Failure");
+                progressBar.setVisibility(View.GONE);
             }
+
         });
     }
 

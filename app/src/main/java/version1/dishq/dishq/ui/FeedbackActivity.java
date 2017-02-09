@@ -48,6 +48,7 @@ import version1.dishq.dishq.adapters.HorizontalAdapter;
 import version1.dishq.dishq.custom.FontsOverride;
 import version1.dishq.dishq.custom.OnSwipeTouchListener;
 import version1.dishq.dishq.fragments.dialogfragment.filters.FiltersDialogFragment;
+import version1.dishq.dishq.fragments.moodFoodFiltersFragments.MoodFoodDialogFragment;
 import version1.dishq.dishq.server.Config;
 import version1.dishq.dishq.server.RestApi;
 import version1.dishq.dishq.util.DishqApplication;
@@ -209,7 +210,7 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
                     throw new RuntimeException("Could not encode hour of the day in JSON");
                 }
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                FiltersDialogFragment dialogFragment = FiltersDialogFragment.getInstance();
+                MoodFoodDialogFragment dialogFragment = MoodFoodDialogFragment.getInstance();
                 dialogFragment.show(fragmentManager, "filters_dialog_fragment");
             }
         });
@@ -399,6 +400,8 @@ public class FeedbackActivity extends BaseActivity implements NavigationView.OnN
 
     protected void loadMoreClicked() {
         Util.setHomeRefreshRequired(true);
+        int page = Util.getPageNumber();
+        Util.setPageNumber(++page);
         int currentPage = 0;
         Util.setCurrentPage(currentPage);
         Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);

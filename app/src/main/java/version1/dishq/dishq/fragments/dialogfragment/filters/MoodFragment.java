@@ -2,15 +2,19 @@ package version1.dishq.dishq.fragments.dialogfragment.filters;
 
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -30,6 +34,8 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
     FilterMoodRecyclerAdapter recyclerAdapter = null;
     List<FoodMoodFilter> foodMoodFilterList;
     TextView textView;
+    ProgressBar progressBar;
+    View view;
 
     public MoodFragment() {
         // Required empty public constructor
@@ -44,13 +50,13 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mood, container, false);
+        Log.d("FilterFragment", "Mood fragment is created");
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
         return view;
     }
-
 
     public FilterMoodRecyclerAdapter getRecyclerAdapter() {
         return recyclerAdapter;
@@ -67,6 +73,7 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
 
 
             textView = (TextView) view.findViewById(R.id.filter_mood_no_item_text);
@@ -108,6 +115,14 @@ public class MoodFragment extends Fragment implements OnClickCallbacks.OnClickMo
                     if (isAnyItemSelected) {
                         ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
                         ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
+                    }else {
+                        if(FiltersDialogFragment.getInstance().getQuickFiltersFragment()== null || FiltersDialogFragment.getInstance().getQuickFiltersFragment().getSelectedItem()==null) {
+                            ((FiltersDialogFragment) getParentFragment()).toggleResetButton(false);
+                            ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(false, true);
+                        }else {
+                            ((FiltersDialogFragment) getParentFragment()).toggleResetButton(true);
+                            ((FiltersDialogFragment) getParentFragment()).toggleApplyButton(true, true);
+                        }
                     }
                 }
             }

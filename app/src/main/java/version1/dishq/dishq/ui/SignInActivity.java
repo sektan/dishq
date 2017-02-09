@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -72,6 +73,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private static GoogleApiClient googleApiClient;
     private static String facebookOrGoogle = "";
     LoginButton loginButton;
+    private FrameLayout progressFrame;
     private ProgressBar progressBar;
     private CallbackManager callbackManager;
     private String facebookAccessToken = "";
@@ -156,6 +158,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         facebookButton.setTypeface(Util.opensanssemibold);
         googleButton = (Button) findViewById(R.id.google_sign_up);
         googleButton.setTypeface(Util.opensanssemibold);
+        progressFrame = (FrameLayout) findViewById(R.id.progress_bg_overlay);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         TextView connectWith = (TextView) findViewById(R.id.connect_with);
@@ -189,6 +192,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         AccessToken accessToken = AccessToken.getCurrentAccessToken();
                         if (accessToken != null && accessToken.getToken() != null) {
                             FACEBOOK_BUTTON_SELECTED = true;
+                            progressFrame.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.VISIBLE);
                             fetchAccessToken(accessToken.getToken());
                         }
@@ -214,6 +218,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 DishqApplication.setFacebookOrGoogle(facebookOrGoogle);
                 DishqApplication.getPrefs().edit().putString(Constants.FACEBOOK_OR_GOOGLE, facebookOrGoogle).apply();
                 facebookAccessToken = loginResult.getAccessToken().getToken();
+                progressFrame.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 fetchAccessToken(facebookAccessToken);
                 Log.d(TAG, "Facebook Access Token: " + facebookAccessToken);
@@ -254,6 +259,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         switch (view.getId()) {
             case R.id.google_sign_up:
+                progressFrame.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 GOOGLE_BUTTON_SELECTED = true;
                 FACEBOOK_BUTTON_SELECTED = false;
@@ -323,12 +329,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     public void checkWhichActivity() {
         if (!DishqApplication.getOnBoardingDone()) {
+            progressFrame.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             Intent i = new Intent(SignInActivity.this, OnBoardingActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(i);
         } else {
+            progressFrame.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             Intent i = new Intent(SignInActivity.this, HomeActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -419,11 +427,13 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             checkWhichActivity();
                         }
                     } else {
+                        progressFrame.setVisibility(View.GONE);
                         progressBar.setVisibility(View.GONE);
                         String error = response.errorBody().string();
                         Log.d(TAG, "The error: " + error);
                     }
                 } catch (IOException e) {
+                    progressFrame.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
@@ -432,6 +442,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onFailure(Call<SignUpResponse> call, Throwable t) {
+                progressFrame.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "failure");
             }

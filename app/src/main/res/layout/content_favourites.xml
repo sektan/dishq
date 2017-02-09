@@ -56,30 +56,41 @@
         android:id="@+id/rl_no_fav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/favourites_toolbar"
         android:visibility="gone">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/home_empty_bg"
+            android:alpha="0.05"
+            android:contentDescription="@string/home_empty_bg" />
+
         <Button
             android:id="@+id/favourites"
-            android:layout_width="37dp"
-            android:layout_height="34dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
             android:layout_marginStart="14dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="130dp"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/homescreen_fav_filled_1" />
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/fav_black" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/no_fav_text_view"
             android:textAlignment="center"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_below="@+id/favourites"
             android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
             android:textSize="@dimen/text_size_20"
             android:text="@string/no_fav"/>
 

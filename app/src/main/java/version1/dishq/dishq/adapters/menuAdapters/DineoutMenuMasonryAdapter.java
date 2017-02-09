@@ -142,9 +142,9 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
             }
         });
 
-        Resources res = context.getResources();
-        String text = String.format(res.getString(R.string.cost_of_dish), Util.dineoutMenuInfos.get(position).getDineMenuDishPrice());
-        holder.dineMenuDishCost.setText(text);
+//        Resources res = context.getResources();
+//        String text = String.format(res.getString(R.string.cost_of_dish), Util.dineoutMenuInfos.get(position).getDineMenuDishPrice());
+//        holder.dineMenuDishCost.setText(text);
     }
 
     @Override
@@ -173,8 +173,8 @@ public class DineoutMenuMasonryAdapter extends RecyclerView.Adapter<DineoutMenuM
             hasAlcoholTag = (ImageView) view.findViewById(R.id.alcohol_tag);
             dineMenuDishName = (TextView) view.findViewById(R.id.menu_dish_name);
             dineMenuDishName.setTypeface(Util.opensansregular);
-            dineMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
-            dineMenuDishCost.setTypeface(Util.opensansregular);
+//            dineMenuDishCost = (TextView) view.findViewById(R.id.menu_cost);
+//            dineMenuDishCost.setTypeface(Util.opensansregular);
             dineMenuFav = (ToggleButton) view.findViewById(R.id.menu_favourites);
             dineMenuFrame = (FrameLayout) view.findViewById(R.id.menu_frame);
             cardBgImage = (ImageView) view.findViewById(R.id.cardmenu_bg_image);
