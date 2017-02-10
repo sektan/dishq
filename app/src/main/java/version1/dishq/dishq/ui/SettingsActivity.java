@@ -45,25 +45,25 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
     private Button logoutButton;
     private ImageView backButton;
     TextView toolbarTitle, userName, versionNam;
-    GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient googleApiClient;
     private MixpanelAPI mixpanel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //MixPanel Instantiation
         mixpanel = MixpanelAPI.getInstance(this, getResources().getString(R.string.mixpanel_token));
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_settings);
-            logoutButton = (Button) findViewById(R.id.fblogout);
-            logoutButton.setTypeface(Util.opensanslight);
-            userName = (TextView) findViewById(R.id.user_name);
-            userName.setTypeface(Util.opensansregular);
-            userName.setText(DishqApplication.getUserName());
-            toolbarTitle = (TextView) findViewById(R.id.settings_toolbarTitle);
-            toolbarTitle.setTypeface(Util.opensanssemibold);
-            backButton = (ImageView) findViewById(R.id.settings_back_button);
-            versionNam = (TextView) findViewById(R.id.version_name);
-            versionNam.setTypeface(Util.opensansregular);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+        logoutButton = (Button) findViewById(R.id.fblogout);
+        logoutButton.setTypeface(Util.opensanslight);
+        userName = (TextView) findViewById(R.id.user_name);
+        userName.setTypeface(Util.opensansregular);
+        userName.setText(DishqApplication.getUserName());
+        toolbarTitle = (TextView) findViewById(R.id.settings_toolbarTitle);
+        toolbarTitle.setTypeface(Util.opensanssemibold);
+        backButton = (ImageView) findViewById(R.id.settings_back_button);
+        versionNam = (TextView) findViewById(R.id.version_name);
+        versionNam.setTypeface(Util.opensansregular);
         PackageInfo pInfo = null;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -73,65 +73,66 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
         assert pInfo != null;
         String version = pInfo.versionName;
 
-            versionNam.setText("v" +version);
+        versionNam.setText("v" + version);
 
-            backButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Util.setHomeRefreshRequired(false);
-                    finish();
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Util.setHomeRefreshRequired(false);
+                finish();
+            }
+        });
+
+        String serverClientId = DishqApplication.getContext().getString(R.string.server_client_id);
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                .requestServerAuthCode(serverClientId, false)
+                .requestIdToken(serverClientId)
+                .build();
+
+        // [START build_client]
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                .addOnConnectionFailedListener(this)
+                .build();
+        // [END build_client]
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    final JSONObject properties = new JSONObject();
+                    properties.put("Logout in settings", "settings");
+                    mixpanel.track("Logout in settings", properties);
+                } catch (final JSONException e) {
+                    throw new RuntimeException("Could not encode hour of the day in JSON");
                 }
-            });
-
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .requestScopes(new Scope(Scopes.PROFILE))
-                    .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                    .requestProfile()
-                    .requestEmail()
-                    .requestIdToken("1065480470289-fa2sfel9s88t4svp6nee7l1cklol8nda.apps.googleusercontent.com")
-                    .build();
-
-            // Build a GoogleApiClient with access to the Google Sign-In API
-            // and the options specified by gGoogleSignInOptions.
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .addApi(Plus.API)
-                    .build();
-
-            logoutButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            try {
-                                final JSONObject properties = new JSONObject();
-                                properties.put("Logout in settings", "settings");
-                                mixpanel.track("Logout in settings", properties);
-                            } catch (final JSONException e) {
-                                throw new RuntimeException("Could not encode hour of the day in JSON");
-                            }
-                            Util.setMoodFilterId(-1);
-                            Util.setMoodName("");
-                            Util.setFilterName("");
-                            Util.setFilterClassName("");
-                            Util.setFilterEntityId(-1);
-                            Util.setQuickFilterPosition(-1);
-                            Util.setMoodPosition(-1);
-                            Util.setHomeRefreshRequired(true);
-                            Logout();
-                        }
-                    });
+                Util.setMoodFilterId(-1);
+                Util.setMoodName("");
+                Util.setFilterName("");
+                Util.setFilterClassName("");
+                Util.setFilterEntityId(-1);
+                Util.setQuickFilterPosition(-1);
+                Util.setMoodPosition(-1);
+                Util.setHomeRefreshRequired(true);
+                Logout();
+            }
+        });
     }
 
     public void Logout() {
-        String facebookOrGoogle = DishqApplication.getFacebookOrGoogle();
         try {
             final JSONObject properties = new JSONObject();
             properties.put("log out", "nav");
+            mixpanel.track("log out", properties);
         } catch (final JSONException e) {
             throw new RuntimeException("Could not encode hour of the day in JSON");
         }
-        if (facebookOrGoogle.equals("facebook")) {
+        if (DishqApplication.getFacebookOrGoogle().equals("facebook")) {
             facebookSignOut();
         } else {
             googleSignOut();
@@ -146,15 +147,15 @@ public class SettingsActivity extends AppCompatActivity implements GoogleApiClie
 
     public void googleSignOut() {
 
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-            mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+        if (googleApiClient != null) {
+            googleApiClient.connect();
+            googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                 @Override
                 public void onConnected(@Nullable Bundle bundle) {
 
                     FirebaseAuth.getInstance().signOut();
-                    if (mGoogleApiClient.isConnected()) {
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                    if (googleApiClient.isConnected()) {
+                        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
                             @Override
                             public void onResult(@NonNull Status status) {
                                 if (status.isSuccess()) {

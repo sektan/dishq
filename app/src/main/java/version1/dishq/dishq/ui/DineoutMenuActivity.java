@@ -576,8 +576,8 @@ public class DineoutMenuActivity extends BaseActivity implements GoogleApiClient
                         public void onClick(View view) {
                             try {
                                 final JSONObject properties = new JSONObject();
-                                properties.put("Swiggy order", "deliverymenu");
-                                mixpanel.track("Swiggy order", properties);
+                                properties.put("UserID", DishqApplication.getUniqueID());
+                                mixpanel.track("EazyDiner order", properties);
                             } catch (final JSONException e) {
                                 throw new RuntimeException("Could not encode hour of the day in JSON");
                             }
