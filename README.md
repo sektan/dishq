@@ -25,5 +25,4 @@ dishq_glide branch is being put aside for now. It should remain untouched unless
 
 ### Who do I talk to? ###
 
-* Sai Sreenivas
 * Tania Sekhon
