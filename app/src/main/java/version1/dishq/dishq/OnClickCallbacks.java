@@ -1,7 +1,7 @@
 package version1.dishq.dishq;
 
 /**
- * Created by kavin.prabhu on 30/12/16.
+ * Created by tania sekhon on 30/12/16.
  */
 
 public class OnClickCallbacks {
